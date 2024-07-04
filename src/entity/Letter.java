@@ -12,5 +12,11 @@ public class Letter {
     this.points = points;
   }
 
-  public getLetter
+  public char getLetter() {
+    return letter;
+  }
+
+  public int getPoints() {
+    return points;
+  }
 }
