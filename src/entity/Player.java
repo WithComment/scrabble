@@ -20,40 +20,34 @@ public class Player {
         this.inventory.addAll(tilesRedrawn);
     }
 
-    public void placeLetter(Letter letter, int x, int y) {
-        //TODO Add logic to place a letter on the board at position (x, y)
-        currentPlay.addLetter(letter, x, y);
-        inventory.remove(letter);
-    }
+//    public void placeLetter(Letter letter, int x, int y) {
+//        //TODO Add logic to place a letter on the board at position (x, y)
+//        currentPlay.addLetter(letter, x, y);
+//        inventory.remove(letter);
+//    }
+//
+//    public void removeLetter(int x, int y) {
+//        //TODO Add logic to remove a letter from the board at position (x, y)
+//        Letter removedLetter = currentPlay.removeLetter(x, y);
+//        if (removedLetter != null) {
+//            inventory.add(removedLetter);
+//        }
+//    }
 
-    public void removeLetter(int x, int y) {
-        //TODO Add logic to remove a letter from the board at position (x, y)
-        Letter removedLetter = currentPlay.removeLetter(x, y);
-        if (removedLetter != null) {
-            inventory.add(removedLetter);
-        }
-    }
-
-    public int getScore(ArrayList<Letter> lettersPlayed) {
+    public void UpdateScore(ArrayList<Letter> lettersPlayed) {
         // TODO Add logic to calculate the score based on letters played
-        int calculatedScore = 0;
+
         for (Letter letter : lettersPlayed) {
             calculatedScore += letter.getPoints();
         }
-        return calculatedScore;
+        return;
     }
 
-    public void endTurn() {
-        //TODO Add logic to end the player's turn
-        this.score += getScore(currentPlay.getLetters());
-        currentPlay.clear();
-    }
 
     public boolean contest() {
-        if (){
-            return true
-        }
-        return false;
+        boolean isValid = validatePlay(currentPlay);
+        System.out.println("Player " + id + " contest result: " + (isValid ? "Valid" : "Invalid"));
+        return isValid;
     }
 
 
