@@ -1,24 +1,14 @@
 package entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Board {
-    private List<List<Tile>> board;
+    private Tile[][] board;
     private int length;
     private int width;
 
     public Board(int length, int width) {
         this.length = length;
         this.width = width;
-        this.board = new ArrayList<List<Tile>>();
-        for (int i = 0; i < length; i++) {
-            List<Tile> row = new ArrayList<Tile>();
-            for (int j = 0; j < length; j++) {
-                row.add(new Tile());
-            }
-            this.board.add(row);
-        }
+        this.board = new Tile[length][width];
     }
 
     public int getLength() {
@@ -30,10 +20,10 @@ public class Board {
     }
 
     public void setCell(int x, int y, Tile tile) {
-        this.board.get(x).set(y, tile);
+        this.board[x][y] = tile;
     }
 
     public Tile getCell(int x, int y) {
-        return this.board.get(x).get(y);
+        return this.board[x][y];
     }
 }
