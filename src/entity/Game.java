@@ -13,7 +13,7 @@ public class Game {
 
     public Game() {
         this.id = nextId++;
-        this.board = new Board();
+        this.board = new Board(15, 15);
         this.players = new ArrayList<>();
         this.moves = new ArrayList<>();
         this.letterBag = new LetterBag();
