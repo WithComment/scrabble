@@ -48,6 +48,14 @@ public class Game {
         return players.size();
     }
 
+    public ArrayList<Integer> getPlayerIds() {
+        ArrayList<Integer> playerIds = new ArrayList<>();
+        for (Player player : players) {
+            playerIds.add(player.getId());
+        }
+        return playerIds;
+    }
+
     public int getPlayerScore(int playerId) {
         return players.get(playerId).getScore();
     }
