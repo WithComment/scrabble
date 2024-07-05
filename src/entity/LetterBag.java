@@ -4,10 +4,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class LetterBag {
-  private List<Letter> bag;
+  private ArrayList<Letter> bag;
 
   // main method for testing purposes
   public static void main(String[] args) {
@@ -60,15 +59,22 @@ public class LetterBag {
     }
   }
 
+  public void addLetters(ArrayList<Letter> letters){
+    for(Letter letter : letters){
+      bag.add(letter);
+    }
+  }
+
+
   //Overloaded method to draw a single letter
-  public ArrayList drawLetters() {
+  public ArrayList<Letter> drawLetters() {
     ArrayList<Letter> draws = new ArrayList<>();
     draws.add(drawLetter());
     return draws;
   }
 
   //Overloaded method to draw multiple letters
-  public ArrayList drawLetters(int num) {
+  public ArrayList<Letter> drawLetters(int num) {
     ArrayList<Letter> draws = new ArrayList<>();
     for (int i = 0; i < num; i++) {
       draws.add(drawLetter());
