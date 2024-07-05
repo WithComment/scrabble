@@ -17,13 +17,13 @@ public class Player {
         this.UnstableScore = 0;
     }
 
-    private void removeLetter(ArrayList<Letter> tiles) {
+    public void removeLetter(ArrayList<Letter> tiles) {
         for (Letter letter : tiles) {
             this.inventory.remove(letter);
         }
     }
 
-    private void addLetter(ArrayList<Letter> tiles) {
+    public void addLetter(ArrayList<Letter> tiles) {
         for (Letter letter : tiles) {
             this.inventory.add(letter);
         }
