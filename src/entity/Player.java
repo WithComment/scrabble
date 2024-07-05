@@ -7,18 +7,28 @@ public class Player {
     private ArrayList<Letter> inventory;
     private int score;
     private Play currentPlay;
+    private int UnstableScore
 
     public Player(int id) {
         this.id = id;
         this.inventory = new ArrayList<>();
         this.score = 0;
         this.currentPlay = new Play();
+        this.UnstableScore = 0;
     }
 
-    public void redrawTiles(ArrayList<Letter> tilesRedrawn) {
-        this.inventory.clear();
-        this.inventory.addAll(tilesRedrawn);
+    private void removeLetter(ArrayList<Letter> tiles) {
+        for (Letter letter : tiles) {
+            this.inventory.remove(letter);
+        }
     }
+
+    private void addLetter(ArrayList<Letter> tiles) {
+        for (Letter letter : tiles) {
+            this.inventory.add(letter);
+        }
+    }
+
 
 //    public void placeLetter(Letter letter, int x, int y) {
 //        //TODO Add logic to place a letter on the board at position (x, y)
@@ -34,20 +44,19 @@ public class Player {
 //        }
 //    }
 
-    public void UpdateScore(ArrayList<Letter> lettersPlayed) {
-        // TODO Add logic to calculate the score based on letters played
+    public void UpdateScore(ArrayList<Integer> ScoresOfWords) {
 
-        for (Letter letter : lettersPlayed) {
-            calculatedScore += letter.getPoints();
+        //Add scores to player
+        for (Integer score : ScoresOfWords) {
+            this.score += score;
+            UnstableScore += score;
         }
-        return;
     }
 
 
-    public boolean contest() {
-        boolean isValid = validatePlay(currentPlay);
-        System.out.println("Player " + id + " contest result: " + (isValid ? "Valid" : "Invalid"));
-        return isValid;
+    public void BeContested() {
+        this.score = this.score - this.UnstableScore;
+        this.UnstableScore = 0;
     }
 
 
