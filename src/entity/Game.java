@@ -68,6 +68,10 @@ public class Game {
         return scores;
     }
 
+    public void updatePlayerScore(int playerID, Play play) {
+        players.get(playerID).updateScore(play.getScore());
+    }
+
     public ArrayList<Letter> getPlayerInventory(int playerId) {
         return players.get(playerId).getInventory();
     }
