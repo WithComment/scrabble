@@ -41,11 +41,31 @@ public class Game {
     }
 
     public Play removePlay() {
-        return moves.removeLast();
+        return moves.remove(moves.size() - 1);
+    }
+
+    public int getNumPlayers() {
+        return players.size();
+    }
+
+    public ArrayList<Integer> getPlayerIds() {
+        ArrayList<Integer> playerIds = new ArrayList<>();
+        for (Player player : players) {
+            playerIds.add(player.getId());
+        }
+        return playerIds;
     }
 
     public int getPlayerScore(int playerId) {
         return players.get(playerId).getScore();
+    }
+
+    public ArrayList<Integer> getPlayerScore() {
+        ArrayList<Integer> scores = new ArrayList<>();
+        for (Player player : players) {
+            scores.add(player.getScore());
+        }
+        return scores;
     }
 
     public ArrayList<Letter> getPlayerInventory(int playerId) {
