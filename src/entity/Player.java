@@ -15,7 +15,19 @@ public class Player {
         this.currentPlay = new Play();
     }
 
-    public void redrawTiles(ArrayList<Letter> tilesRedrawn) {
+    private void removeLetter(ArrayList<Letter> tiles) {
+        for (Letter letter : tiles) {
+            this.inventory.remove(letter);
+        }
+    }
+
+    private void addLetter(ArrayList<Letter> tiles) {
+        for (Letter letter : tiles) {
+            this.inventory.add(letter);
+        }
+    }
+
+    public void redrawTiles(int num, ArrayList<Letter> tiles) {
         this.inventory.clear();
         this.inventory.addAll(tilesRedrawn);
     }
