@@ -20,9 +20,17 @@ public class TurnManager {
 
     public void CheckAndEndTurn() {
         if (endTurn) {
-            CurrentPlayer = Players.get(PlayerNumber + 1);
             PlayerNumber = PlayerNumber + 1;
+            if(PlayerNumber == Players.size()) {
+                PlayerNumber = 0;
+            }
+            CurrentPlayer = Players.get(PlayerNumber);
             endTurn = false;
         }
+    }
+
+    public Player ReturnCurrentPlayer() {
+        CurrentPlayer = Players.get(PlayerNumber);
+        return CurrentPlayer;
     }
 }
