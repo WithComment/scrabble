@@ -33,10 +33,12 @@ public class Game {
     }
 
     public void addPlayer() {
+
         players.add(new Player(nextPlayerId++));
     }
 
     public void addPlay(Play play) {
+
         moves.add(play);
     }
 
@@ -74,7 +76,7 @@ public class Game {
 
     public void startGame() {
         for (Player player : players) {
-            player.redrawTiles(letterBag.drawLetters(7));
+            player.addLetter(letterBag.drawLetters(7));
         }
     }
 }
