@@ -75,6 +75,10 @@ public class LetterBag {
     }
     return draws;
   }
+
+  public int getLength(){
+    return bag.size();
+  }
 }
 
 
