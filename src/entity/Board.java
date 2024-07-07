@@ -2,17 +2,17 @@ package entity;
 
 public class Board {
     private Tile[][] board;
-    private int length;
+    private int height;
     private int width;
 
-    public Board(int length, int width) {
-        this.length = length;
+    public Board(int height, int width) {
+        this.height = height;
         this.width = width;
-        this.board = new Tile[length][width];
+        this.board = new Tile[height][width];
     }
 
-    public int getLength() {
-        return this.length;
+    public int getHeight() {
+        return this.height;
     }
 
     public int getWidth() {

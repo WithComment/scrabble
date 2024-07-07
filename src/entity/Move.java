@@ -8,13 +8,11 @@ public class Move {
   private final int x;
   private final int y;
   private final Letter letter;
-  private final int score;
 
-  public Move(int x, int y, Letter letter, int score) {
+  public Move(int x, int y, Letter letter) {
     this.x = x;
     this.y = y;
     this.letter = letter;
-    this.score = score;
   }
 
   public int getX() {
@@ -27,9 +25,5 @@ public class Move {
 
   public Letter getLetter() {
     return letter;
-  }
-
-  public int getScore() {
-    return score;
   }
 }
