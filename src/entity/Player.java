@@ -44,13 +44,9 @@ public class Player {
 //        }
 //    }
 
-    public void UpdateScore(ArrayList<Integer> ScoresOfWords) {
-
-        //Add scores to player
-        for (Integer score : ScoresOfWords) {
-            this.score += score;
-            UnstableScore += score;
-        }
+    public void addScore(int score) {
+        this.score += score;
+        this.UnstableScore += score;
     }
 
 
