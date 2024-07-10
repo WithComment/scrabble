@@ -19,7 +19,6 @@ public class GetWinnerInteractor implements GetWinnerInputBoundary{
         for (Player player : input.getPlayers()) {
             leaderboard.add(new LeaderboardEntry(player.getId(), player.getScore()));
         }
-        Collections.sort(leaderboard, Collections.reverseOrder());
-        presenter.prepareView(new GetWinnerOutputData(leaderboard.get(0)));
+        presenter.prepareView(new GetWinnerOutputData(Collections.max(leaderboard)));
     }
 }
