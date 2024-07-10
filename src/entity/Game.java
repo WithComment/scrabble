@@ -71,7 +71,9 @@ public class Game {
     }
 
     public void updatePlayerScore(int playerID, Play play) {
-        players.get(playerID).updateScore(play.getScore());
+        ArrayList<Integer> scores = new ArrayList<>();
+        scores.add(play.getScore());
+        players.get(playerID).updateScore(scores);
     }
 
     public ArrayList<Letter> getPlayerInventory(int playerId) {
