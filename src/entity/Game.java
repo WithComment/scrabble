@@ -70,6 +70,12 @@ public class Game {
         return scores;
     }
 
+    public void updatePlayerScore(int playerID, Play play) {
+        ArrayList<Integer> scores = new ArrayList<>();
+        scores.add(play.getScore());
+        players.get(playerID).updateScore(scores);
+    }
+
     public ArrayList<Letter> getPlayerInventory(int playerId) {
         return players.get(playerId).getInventory();
     }
