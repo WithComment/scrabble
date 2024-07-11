@@ -21,6 +21,15 @@ public class Play {
     return moves.pop();
   }
 
+  public Move removeMove(int x, int y) {
+    for (int i = 0; i < moves.size(); i++) {
+      if (moves.get(i).getX() == x && moves.get(i).getY() == y) {
+        return moves.remove(i);
+      }
+    }
+    return null;
+  }
+
   public Player getPlayer() {
     return player;
   }
