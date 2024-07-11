@@ -7,7 +7,7 @@ public class Player {
     private ArrayList<Letter> inventory;
     private int score;
     private Play currentPlay;
-    private int UnstableScore
+    private int UnstableScore;
 
     public Player(int id) {
         this.id = id;
