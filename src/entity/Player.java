@@ -24,9 +24,7 @@ public class Player {
     }
 
     public void addLetter(ArrayList<Letter> tiles) {
-        for (Letter letter : tiles) {
-            this.inventory.add(letter);
-        }
+        this.inventory.addAll(tiles);
     }
 
 
