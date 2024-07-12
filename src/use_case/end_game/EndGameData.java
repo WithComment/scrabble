@@ -8,4 +8,8 @@ public class EndGameData {
     public EndGameData(Game game) {
         this.game = game;
     }
+
+    public Game getGame() {
+        return game;
+    }
 }
