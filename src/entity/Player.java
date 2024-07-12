@@ -8,7 +8,6 @@ public class Player {
     private int score;
     private Play currentPlay;
     private int unstableScore;
-
     public Player(int id) {
         this.id = id;
         this.inventory = new ArrayList<>();
