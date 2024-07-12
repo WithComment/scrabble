@@ -16,8 +16,8 @@ public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
     }
 
     public void execute(RemoveLetterInputData removeLetterInputData){
-        Player player = removeLetterInputData.getPlayer();
-        Play play = player.getCurrentPlay();
+        Play play = removeLetterInputData.getPlay();
+        Player player = play.getPlayer();
         Board board = removeLetterInputData.getBoard();
         Tile selectedTile = removeLetterInputData.getSelectedTile();
         int x = removeLetterInputData.getX();

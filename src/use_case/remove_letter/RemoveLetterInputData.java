@@ -8,25 +8,25 @@ import entity.Tile;
 public class RemoveLetterInputData {
     private int x;
     private int y;
-    private Player player;
+    private Play play;
     private Board board;
     private Tile selectedTile;
     public RemoveLetterInputData(
-            Player player,
+            Play play,
             Board board,
             Tile selectedTile,
             int x,
             int y
     ) {
-        this.player = player;
+        this.play = play;
         this.board = board;
         this.selectedTile = selectedTile;
         this.x = x;
         this.y = y;
     }
 
-    public Player getPlayer(){
-        return this.player;
+    public Play getPlay(){
+        return this.play;
     }
     public Board getBoard() {
         return board;
