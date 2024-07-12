@@ -1,10 +1,12 @@
 package entity;
 
+import java.io.*;
 import java.util.ArrayList;
 
-public class Game {
+public class Game implements Serializable {
+    // Serializable vars
+    private static final long serialVersionUID = 1L;
     private static int nextId = 0;
-
     private final int id;
     private int nextPlayerId = 0;
     private Board board;
