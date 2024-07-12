@@ -2,75 +2,112 @@ package entity;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a player in the game.
+ * A player has an ID, an inventory of letters, a score, and an unstable score.
+ */
 public class Player {
-    private int id;
+    private final int id;
     private ArrayList<Letter> inventory;
     private int score;
-    private Play currentPlay;
     private int unstableScore;
+
+    /**
+     * Constructs a Player with a specified ID.
+     *
+     * @param id the ID of the player
+     */
     public Player(int id) {
         this.id = id;
         this.inventory = new ArrayList<>();
         this.score = 0;
-        this.currentPlay = new Play(this);
         this.unstableScore = 0;
     }
 
-    public void removeLetter(ArrayList<Letter> tiles) {
+    /**
+     * Removes specified letters from the player's inventory.
+     *
+     * @param tiles an Iterable of letters to be removed
+     */
+    public void removeLetter(Iterable<Letter> tiles) {
         for (Letter letter : tiles) {
             this.inventory.remove(letter);
         }
+    }
+
+    /**
+     * Removes a specified letter from the player's inventory.
+     *
+     * @param letter the letter to be removed
+     */
+    public void removeLetter(Letter letter) {
+        this.inventory.remove(letter);
+    }
+
+    public void addLetter(Letter letter) {
+        this.inventory.add(letter);
     }
 
     public void addLetter(ArrayList<Letter> tiles) {
         this.inventory.addAll(tiles);
     }
 
-
-//    public void placeLetter(Letter letter, int x, int y) {
-//        //TODO Add logic to place a letter on the board at position (x, y)
-//        currentPlay.addLetter(letter, x, y);
-//        inventory.remove(letter);
-//    }
-//
-//    public void removeLetter(int x, int y) {
-//        //TODO Add logic to remove a letter from the board at position (x, y)
-//        Letter removedLetter = currentPlay.removeLetter(x, y);
-//        if (removedLetter != null) {
-//            inventory.add(removedLetter);
-//        }
-//    }
-
+    /**
+     * Updates the player's score by adding the scores of words played.
+     * The scores are added to both the main score and the unstable score.
+     *
+     * @param ScoresOfWords an ArrayList of scores to be added to the player's score
+     */
     public void updateScore(ArrayList<Integer> ScoresOfWords) {
-
-        //Add scores to player
+        // Add scores to player
         for (Integer score : ScoresOfWords) {
             this.score += score;
             unstableScore += score;
         }
     }
 
+    /**
+     * Resets the player's unstable score to 0, indicating the scores were not contested.
+     */
+    public void NotContested() {
+        this.unstableScore = 0;
+    }
 
+    /**
+     * Adjusts the player's score by subtracting the unstable score and then resets the unstable score to 0.
+     * This indicates the scores were contested and invalidated.
+     */
     public void BeContested() {
         this.score = this.score - this.unstableScore;
         this.unstableScore = 0;
     }
 
-
+    /**
+     * Returns the player's ID.
+     *
+     * @return the player's ID
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Returns the player's inventory of letters.
+     *
+     * @return the player's inventory of letters
+     */
     public ArrayList<Letter> getInventory() {
         return inventory;
     }
 
+    /**
+     * Returns the player's score.
+     *
+     * @return the player's score
+     */
     public int getScore() {
         return score;
     }
-
-    public Play getCurrentPlay() {
-        return currentPlay;
-    }
 }
+
 

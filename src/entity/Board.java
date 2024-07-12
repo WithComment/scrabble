@@ -1,12 +1,23 @@
 package entity;
 
 public class Board {
-    private Tile[][] board;
-    private int height;
-    private int width;
+    private final Tile[][] board;
+    private final int height;
+    private final int width;
+
+    public Board() {
+        height = 15;
+        width = 15;
+        board = getBlankBoard();
+    }
 
     private static Tile[][] getBlankBoard() {
         Tile[][] board = new Tile[15][15];
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                board[i][j] = new Tile(0, 0, null);
+            }
+        }
         addToBoardSymmetrically(0, 0, 3, 0, board);
         addToBoardSymmetrically(0, 7, 3, 0, board);
 
@@ -29,18 +40,13 @@ public class Board {
 
     private static void addToBoardSymmetrically(int x, int y, int wordMult, int letterMult, Tile[][] board) {
         board[x][y] = new Tile(wordMult, letterMult, null);
-        board[x][15 - y] = new Tile(wordMult, letterMult, null);
-        board[15 - x][y] = new Tile(wordMult, letterMult, null);
-        board[15 - x][15 - y] = new Tile(wordMult, letterMult, null);
+        board[x][14 - y] = new Tile(wordMult, letterMult, null);
+        board[14 - x][y] = new Tile(wordMult, letterMult, null);
+        board[14 - x][14 - y] = new Tile(wordMult, letterMult, null);
         board[y][x] = new Tile(wordMult, letterMult, null);
-        board[y][15 - x] = new Tile(wordMult, letterMult, null);
-        board[15 - y][x] = new Tile(wordMult, letterMult, null);
-        board[15 - y][15 - x] = new Tile(wordMult, letterMult, null);
-    }
-
-    public Board() {
-        height = width = 15;
-        board = getBlankBoard();
+        board[y][14 - x] = new Tile(wordMult, letterMult, null);
+        board[14 - y][x] = new Tile(wordMult, letterMult, null);
+        board[14 - y][14 - x] = new Tile(wordMult, letterMult, null);
     }
 
     public int getHeight() {

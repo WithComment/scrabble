@@ -19,4 +19,14 @@ public class Letter {
   public int getPoints() {
     return points;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    return (o instanceof Letter && ((Letter) o).getLetter() == getLetter());
+  }
+
+  @Override
+  public Letter clone() {
+    return new Letter(this.getLetter(), this.getPoints());
+  }
 }
