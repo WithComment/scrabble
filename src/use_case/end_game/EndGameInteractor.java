@@ -17,7 +17,7 @@ public class EndGameInteractor implements EndGameInputBoundary{
     }
 
     @Override
-    public void execute(EndGameInputData endGameInputData){
+    public void execute(EndGameInputData endGameInputData) throws Exception {
         Game game = endGameInputData.getGame();
         ArrayList<Player> players = endGameInputData.getPlayers();
 
@@ -37,7 +37,7 @@ public class EndGameInteractor implements EndGameInputBoundary{
         }
 
         int highestScore = 0;
-        Player winner;
+        Player winner = null;
         for (Player player : players) {
             int playerPoints = player.getScore();
             int playerFinalScore;
@@ -52,11 +52,11 @@ public class EndGameInteractor implements EndGameInputBoundary{
                 winner = player;
             }
 
+            presenter.prepareView(new EndGameOutputData(winner));
             EndGameData endGameData = new EndGameData(game);
-            EndGameDataAccessObject endGameDataAccessObject = new EndGameDataAccessObject;
+            EndGameDataAccessObject endGameDataAccessObject = new EndGameDataAccessObject();
             endGameDataAccessObject.write(endGameData);
 
-            presenter.prepareView(new EndGameOutputData(winner));
         }
     }
 }
