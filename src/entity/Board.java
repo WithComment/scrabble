@@ -39,7 +39,7 @@ public class Board {
         board[14 - x][y] = new Tile(wordMult, letterMult, null);
         board[14 - x][14 - y] = new Tile(wordMult, letterMult, null);
         board[y][x] = new Tile(wordMult, letterMult, null);
-        board[y][-x] = new Tile(wordMult, letterMult, null);
+        board[y][14 - x] = new Tile(wordMult, letterMult, null);
         board[14 - y][x] = new Tile(wordMult, letterMult, null);
         board[14 - y][14 - x] = new Tile(wordMult, letterMult, null);
     }
