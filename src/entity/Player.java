@@ -7,20 +7,23 @@ public class Player {
     private ArrayList<Letter> inventory;
     private int score;
     private Play currentPlay;
-    private int UnstableScore
+    private int UnstableScore;
 
     public Player(int id) {
         this.id = id;
         this.inventory = new ArrayList<>();
         this.score = 0;
-        this.currentPlay = new Play();
         this.UnstableScore = 0;
     }
 
-    public void removeLetter(ArrayList<Letter> tiles) {
+    public void removeLetter(Iterable<Letter> tiles) {
         for (Letter letter : tiles) {
             this.inventory.remove(letter);
         }
+    }
+
+    public void removeLetter(Letter letter) {
+        this.inventory.remove(letter);
     }
 
     public void addLetter(ArrayList<Letter> tiles) {

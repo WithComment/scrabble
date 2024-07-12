@@ -19,4 +19,9 @@ public class Letter {
   public int getPoints() {
     return points;
   }
+
+  public boolean equals(Object o) {
+    return o == this;
+    // return (o instanceof Letter && ((Letter) o).getLetter() == getLetter());
+  }
 }
