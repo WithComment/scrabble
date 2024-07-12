@@ -18,7 +18,7 @@ import use_case.place_letter.PlaceLetterOutputData;
 public class PlaceLetterInteractorTest {
   @Test
   void testSuccess() {
-    Board board = new Board(15, 15);
+    Board board = new Board();
     Player player = new Player(0);
     Play play = new Play(player);
     Letter a = new Letter('a', 0);
