@@ -8,7 +8,7 @@ public class TurnManager {
     private Boolean endTurn;
     private Player CurrentPlayer;
     private int PlayerNumber;
-    private ArrayList<Player> Players;
+    private final ArrayList<Player> Players;
     private ArrayList<Integer> NumContestFailed;
 
     public TurnManager() {
@@ -23,6 +23,8 @@ public class TurnManager {
     }
 
     public void CheckAndEndTurn() {
+        Player currentPlayer = ReturnCurrentPlayer();
+        currentPlayer.NotContested();
         while(NumContestFailed.get((PlayerNumber + 1) % Players.size()) > 0) {
             int NumContestFailedOfNextPlayer = NumContestFailed.get((PlayerNumber + 1) % Players.size());
             NumContestFailed.set((PlayerNumber + 1) % Players.size(), NumContestFailedOfNextPlayer-1);
@@ -37,6 +39,8 @@ public class TurnManager {
     public void ContestFailureUodate(int PlayerNumber) {
         int CurrentFailure = NumContestFailed.get(PlayerNumber);
         NumContestFailed.set(PlayerNumber, CurrentFailure + 1);
+        Player currentPlayer = ReturnCurrentPlayer();
+        currentPlayer.BeContested();
     }
 
     public Player ReturnCurrentPlayer() {

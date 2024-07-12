@@ -3,17 +3,14 @@ package entity;
 import java.util.ArrayList;
 
 public class Player {
-    private int id;
+    private final int id;
     private ArrayList<Letter> inventory;
     private int score;
-    private Play currentPlay;
     private int unstableScore;
-
     public Player(int id) {
         this.id = id;
         this.inventory = new ArrayList<>();
         this.score = 0;
-        this.currentPlay = new Play(this);
         this.unstableScore = 0;
     }
 
@@ -24,25 +21,10 @@ public class Player {
     }
 
     public void addLetter(ArrayList<Letter> tiles) {
-        for (Letter letter : tiles) {
-            this.inventory.add(letter);
-        }
+
+        this.inventory.addAll(tiles);
     }
 
-
-//    public void placeLetter(Letter letter, int x, int y) {
-//        //TODO Add logic to place a letter on the board at position (x, y)
-//        currentPlay.addLetter(letter, x, y);
-//        inventory.remove(letter);
-//    }
-//
-//    public void removeLetter(int x, int y) {
-//        //TODO Add logic to remove a letter from the board at position (x, y)
-//        Letter removedLetter = currentPlay.removeLetter(x, y);
-//        if (removedLetter != null) {
-//            inventory.add(removedLetter);
-//        }
-//    }
 
     public void updateScore(ArrayList<Integer> ScoresOfWords) {
 
@@ -53,6 +35,9 @@ public class Player {
         }
     }
 
+    public void NotContested(){
+        this.unstableScore = 0;
+    }
 
     public void BeContested() {
         this.score = this.score - this.unstableScore;
@@ -72,8 +57,5 @@ public class Player {
         return score;
     }
 
-    public Play getCurrentPlay() {
-        return currentPlay;
-    }
 }
 
