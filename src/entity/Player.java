@@ -24,6 +24,10 @@ public class Player {
         this.inventory.remove(letter);
     }
 
+    public void addLetter(Letter letter) {
+        this.inventory.add(letter);
+    }
+
     public void addLetter(ArrayList<Letter> tiles) {
 
         this.inventory.addAll(tiles);

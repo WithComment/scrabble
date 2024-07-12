@@ -20,8 +20,13 @@ public class Letter {
     return points;
   }
 
+  @Override
   public boolean equals(Object o) {
-    return o == this;
-    // return (o instanceof Letter && ((Letter) o).getLetter() == getLetter());
+    return (o instanceof Letter && ((Letter) o).getLetter() == getLetter());
+  }
+
+  @Override
+  public Letter clone() {
+    return new Letter(this.getLetter(), this.getPoints());
   }
 }

@@ -1,6 +1,5 @@
 package use_case.place_letter;
 
-import java.util.ArrayList;
 
 import entity.Board;
 import entity.Letter;
