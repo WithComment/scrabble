@@ -14,10 +14,14 @@ public class Player {
         this.unstableScore = 0;
     }
 
-    public void removeLetter(ArrayList<Letter> tiles) {
+    public void removeLetter(Iterable<Letter> tiles) {
         for (Letter letter : tiles) {
             this.inventory.remove(letter);
         }
+    }
+
+    public void removeLetter(Letter letter) {
+        this.inventory.remove(letter);
     }
 
     public void addLetter(ArrayList<Letter> tiles) {
