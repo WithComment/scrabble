@@ -7,14 +7,13 @@ public class Player {
     private ArrayList<Letter> inventory;
     private int score;
     private Play currentPlay;
-    private int UnstableScore;
-
+    private int unstableScore;
     public Player(int id) {
         this.id = id;
         this.inventory = new ArrayList<>();
         this.score = 0;
-        this.currentPlay = new Play();
-        this.UnstableScore = 0;
+        this.currentPlay = new Play(this);
+        this.unstableScore = 0;
     }
 
     public void removeLetter(ArrayList<Letter> tiles) {
@@ -24,9 +23,7 @@ public class Player {
     }
 
     public void addLetter(ArrayList<Letter> tiles) {
-        for (Letter letter : tiles) {
-            this.inventory.add(letter);
-        }
+        this.inventory.addAll(tiles);
     }
 
 
@@ -44,19 +41,19 @@ public class Player {
 //        }
 //    }
 
-    public void UpdateScore(ArrayList<Integer> ScoresOfWords) {
+    public void updateScore(ArrayList<Integer> ScoresOfWords) {
 
         //Add scores to player
         for (Integer score : ScoresOfWords) {
             this.score += score;
-            UnstableScore += score;
+            unstableScore += score;
         }
     }
 
 
     public void BeContested() {
-        this.score = this.score - this.UnstableScore;
-        this.UnstableScore = 0;
+        this.score = this.score - this.unstableScore;
+        this.unstableScore = 0;
     }
 
 
