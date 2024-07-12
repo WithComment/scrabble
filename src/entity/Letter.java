@@ -26,6 +26,11 @@ public class Letter {
   }
 
   @Override
+  public String toString() {
+    return Character.toString(getLetter());
+  }
+
+  @Override
   public Letter clone() {
     return new Letter(this.getLetter(), this.getPoints());
   }
