@@ -13,6 +13,11 @@ public class Board {
 
     private static Tile[][] getBlankBoard() {
         Tile[][] board = new Tile[15][15];
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                board[i][j] = new Tile(0, 0, null);
+            }
+        }
         addToBoardSymmetrically(0, 0, 3, 0, board);
         addToBoardSymmetrically(0, 7, 3, 0, board);
 
