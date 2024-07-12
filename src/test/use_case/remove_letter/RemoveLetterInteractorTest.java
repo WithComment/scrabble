@@ -1,6 +1,4 @@
-package temp_tests;
-
-import static org.junit.jupiter.api.Assertions.*;
+package test.use_case.remove_letter;
 
 class RemoveLetterInteractorTest {
 
