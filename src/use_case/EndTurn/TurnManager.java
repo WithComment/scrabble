@@ -5,6 +5,11 @@ import entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Manages the turns of players in the game.
+ * Keeps track of the current player, manages the end of turns,
+ * and handles the contesting process.
+ */
 
 public class TurnManager implements EndTurn, DealingContest, StartTurn {
     private Boolean endTurn;
@@ -13,6 +18,14 @@ public class TurnManager implements EndTurn, DealingContest, StartTurn {
     private final ArrayList<Player> Players;
     private ArrayList<Integer> NumContestFailed;
 
+    /**
+     * Constructs a TurnManager with a list of players.
+     * Initializes the endTurn flag, current player, players list, and contest failure counts.
+     *
+     *  List of players participating in the game
+     *  Duplicate list of players (not used in this implementation)
+     */
+
     public TurnManager(List<Player> players, ArrayList<Player> players1) {
         this.endTurn = false;
         this.CurrentPlayer = null;
@@ -20,16 +33,32 @@ public class TurnManager implements EndTurn, DealingContest, StartTurn {
         this.NumContestFailed = new ArrayList<>();
     }
 
+    /**
+     * Returns the current player.
+     *
+     * @return the current player
+     */
+
     public Player getCurrentPlayer() {
         this.CurrentPlayer = Players.get(this.PlayerNumber);
         return this.CurrentPlayer;
     }
+
+    /**
+     * Ends the current turn by setting the endTurn flag to true.
+     */
 
     @Override
     public void endTurn() {
         this.endTurn = true;
         // Additional game state updates can be
     }
+
+    /**
+     * Starts a new turn by setting the endTurn flag to false and
+     * updating the current player to the next player in the list,
+     * skipping any players who have failed a contest.
+     */
 
     @Override
     public void startTurn(){
@@ -48,6 +77,12 @@ public class TurnManager implements EndTurn, DealingContest, StartTurn {
 
     }
 
+    /**
+     * Handles the result of a contest.
+     * If the contest succeeds, updates the current player's score and contest failure count.
+     *
+     * @param ContestSucceed a boolean indicating whether the contest succeeded
+     */
 
     @Override
     public void dealContest(boolean ContestSucceed) {
@@ -59,6 +94,8 @@ public class TurnManager implements EndTurn, DealingContest, StartTurn {
         System.out.println("Player " + this.CurrentPlayer.getId() + " contest result: " + (ContestSucceed ? "Valid" : "Invalid"));
     }
 }
+
+
 
 
 
