@@ -28,7 +28,7 @@ public class TurnManager implements EndTurn, DealingContest, StartTurn {
     @Override
     public void endTurn() {
         this.endTurn = true;
-        // Additional game state updates can be added here
+        // Additional game state updates can be
     }
 
     @Override
@@ -59,7 +59,6 @@ public class TurnManager implements EndTurn, DealingContest, StartTurn {
         System.out.println("Player " + this.CurrentPlayer.getId() + " contest result: " + (ContestSucceed ? "Valid" : "Invalid"));
     }
 }
-
 
 
 
