@@ -14,7 +14,7 @@ public class Game {
 
     public Game() {
         this.id = nextId++;
-        this.board = new Board(15, 15);
+        this.board = new Board();
         this.players = new ArrayList<>();
         this.moves = new ArrayList<>();
         this.letterBag = new LetterBag();
@@ -70,13 +70,19 @@ public class Game {
         return scores;
     }
 
+    public void updatePlayerScore(int playerID, Play play) {
+        ArrayList<Integer> scores = new ArrayList<>();
+        scores.add(play.getScore());
+        players.get(playerID).updateScore(scores);
+    }
+
     public ArrayList<Letter> getPlayerInventory(int playerId) {
         return players.get(playerId).getInventory();
     }
 
     public void startGame() {
         for (Player player : players) {
-            player.addLetter(letterBag.drawLetters(7));
+            player.addLetter(   letterBag.drawLetters(7));
         }
     }
 }
