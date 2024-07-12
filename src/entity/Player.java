@@ -6,13 +6,11 @@ public class Player {
     private int id;
     private ArrayList<Letter> inventory;
     private int score;
-    private Play currentPlay;
     private int unstableScore;
     public Player(int id) {
         this.id = id;
         this.inventory = new ArrayList<>();
         this.score = 0;
-        this.currentPlay = new Play(this);
         this.unstableScore = 0;
     }
 
@@ -50,6 +48,9 @@ public class Player {
         }
     }
 
+    public void NotContested(){
+        this.unstableScore = 0;
+    }
 
     public void BeContested() {
         this.score = this.score - this.unstableScore;
@@ -69,8 +70,5 @@ public class Player {
         return score;
     }
 
-    public Play getCurrentPlay() {
-        return currentPlay;
-    }
 }
 
