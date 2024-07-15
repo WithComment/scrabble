@@ -12,11 +12,11 @@ import java.util.List;
  */
 
 public class TurnManager implements EndTurn, DealingContest, StartTurn {
-    private Boolean endTurn;
+    public Boolean endTurn;
     private Player CurrentPlayer;
-    private int PlayerNumber;
+    public int PlayerNumber;
     private final ArrayList<Player> Players;
-    private ArrayList<Integer> NumContestFailed;
+    public ArrayList<Integer> NumContestFailed;
 
     /**
      * Constructs a TurnManager with a list of players.

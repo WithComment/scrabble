@@ -10,7 +10,7 @@ public class Player {
     private final int id;
     private ArrayList<Letter> inventory;
     private int score;
-    private int unstableScore;
+    public int unstableScore;
 
     /**
      * Constructs a Player with a specified ID.
