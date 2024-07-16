@@ -41,4 +41,8 @@ public class Play {
   public int getScore() {
     return score;
   }
+
+  public void addScore(int score) {
+    this.score += score;
+  }
 }

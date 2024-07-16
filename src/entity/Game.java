@@ -11,14 +11,14 @@ public class Game implements Serializable {
     private int nextPlayerId = 0;
     private Board board;
     private ArrayList<Player> players;
-    private ArrayList<Play> moves;
+    private ArrayList<Play> history;
     protected LetterBag letterBag;
 
     public Game() {
         this.id = nextId++;
         this.board = new Board();
         this.players = new ArrayList<>();
-        this.moves = new ArrayList<>();
+        this.history = new ArrayList<>();
         this.letterBag = new LetterBag();
     }
 
@@ -41,11 +41,11 @@ public class Game implements Serializable {
 
     public void addPlay(Play play) {
 
-        moves.add(play);
+        history.add(play);
     }
 
     public Play removePlay() {
-        return moves.remove(moves.size() - 1);
+        return history.remove(history.size() - 1);
     }
 
     public int getNumPlayers() {
