@@ -15,24 +15,22 @@ public class Board {
         Tile[][] board = new Tile[15][15];
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
-                board[i][j] = new Tile(0, 0, null);
+                board[i][j] = new Tile(1, 1, null);
             }
         }
-        addToBoardSymmetrically(0, 0, 3, 0, board);
-        addToBoardSymmetrically(0, 7, 3, 0, board);
+        addToBoardSymmetrically(0, 0, 3, 1, board);
+        addToBoardSymmetrically(0, 7, 3, 1, board);
+        addToBoardSymmetrically(1, 1, 2, 1, board);
+        addToBoardSymmetrically(2, 2, 2, 1, board);
+        addToBoardSymmetrically(3, 3, 2, 1, board);
+        addToBoardSymmetrically(4, 4, 2, 1, board);
 
-        addToBoardSymmetrically(1, 1, 2, 0, board);
-        addToBoardSymmetrically(2, 2, 2, 0, board);
-        addToBoardSymmetrically(3, 3, 2, 0, board);
-        addToBoardSymmetrically(4, 4, 2, 0, board);
-
-        addToBoardSymmetrically(0, 3, 0, 2, board);
-        addToBoardSymmetrically(2, 6, 0, 2, board);
-        addToBoardSymmetrically(3, 7, 0, 2, board);
-        addToBoardSymmetrically(6, 6, 0, 2, board);
-
-        addToBoardSymmetrically(2, 5, 0, 3, board);
-        addToBoardSymmetrically(5, 5, 0, 3, board);
+        addToBoardSymmetrically(0, 3, 1, 2, board);
+        addToBoardSymmetrically(2, 6, 1, 2, board);
+        addToBoardSymmetrically(3, 7, 1, 2, board);
+        addToBoardSymmetrically(6, 6, 1, 2, board);
+        addToBoardSymmetrically(2, 5, 1, 3, board);
+        addToBoardSymmetrically(5, 5, 1, 3, board);
 
         board[7][7] = new Tile(2, 0, null);
         return board;
@@ -59,6 +57,10 @@ public class Board {
 
     public void setCell(int x, int y, Tile tile) {
         this.board[x][y] = tile;
+    }
+
+    public void setCell(int x, int y, Letter letter) {
+        this.board[x][y].setLetter(letter);
     }
 
     public Tile getCell(int x, int y) {

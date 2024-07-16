@@ -58,6 +58,7 @@ public class PlaceLetterInteractorTest {
     int cy = 13;
     int dx = 11;
     int dy = 4;
+    // TODO: refractor this PlaceLetterInputData to use Move entity
     PlaceLetterOutputBoundary tester = new PlaceLetterOutputBoundary() {
 
       @Override

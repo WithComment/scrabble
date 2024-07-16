@@ -13,6 +13,9 @@ import entity.Tile;
 public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
 
   private final ConfirmPlayOutputBoundary presenter;
+  public static final String INLINE_MSG = "All letters must be in-line.";
+  public static final String CONTINUOUS_MSG = "The letters must be continuous.";
+  public static final String CENTER_MSG = "The first word must cover the center.";
 
   public ConfirmPlayInteractor(ConfirmPlayOutputBoundary presenter) {
     this.presenter = presenter;
@@ -81,10 +84,10 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
   private boolean isNotCenter(List<Move> moves) {
     for (Move move : moves) {
       if (move.getX() == 7 && move.getY() == 7) {
-        return true;
+        return false;
       }
     }
-    return false;
+    return true;
   }
 
   private List<Tile> getVTiles(Move move, Board board) {
@@ -96,6 +99,7 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     while (y < board.getHeight() && !board.getCell(x, y).isEmpty()) {
       tiles.add(board.getCell(x, y++));
     }
+    if (tiles.size() <= 1) return null;
     return tiles;
   }
 
@@ -108,21 +112,29 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     while (x < board.getWidth() && !board.getCell(x, y).isEmpty()) {
       tiles.add(board.getCell(x++, y));
     }
+    if (tiles.size() <= 1) return null;
     return tiles;
   }
 
   private List<List<Tile>> getWords(List<Move> moves, Board board, boolean isVert) {
     List<List<Tile>> words = new LinkedList<>();
     Move fMove = moves.get(0);
+    List<Tile> word;
     if (isVert) {
       words.add(getVTiles(fMove, board));
       for (Move move : moves) {
-        words.add(getHTiles(move, board));
+        word = getHTiles(move, board);
+        if (word != null) {
+          words.add(word);
+        }
       }
     } else {
       words.add(getHTiles(fMove, board));
       for (Move move : moves) {
-        words.add(getVTiles(move, board));
+        word = getHTiles(move, board);
+        if (word != null) {
+          words.add(word);
+        }
       }
     }
     return words;
@@ -159,24 +171,26 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     
     if (moves.size() > 1) {
       if (isNotInline(moves)) {
-        presenter.prepareFailView("All letters must be in-line.");
+        presenter.prepareFailView(INLINE_MSG);
         return;
       }
       isVert = isVertical(moves);
 
       if (hasGap(moves, board)) {
-        presenter.prepareFailView("The letters must be continuous.");
-        return;
-      }
-
-      if (data.isFirstPlay() && isNotCenter(moves)) {
-        presenter.prepareFailView("The first word must cover the center.");
+        presenter.prepareFailView(CONTINUOUS_MSG);
         return;
       }
     }
 
+    if (data.isFirstPlay() && isNotCenter(moves)) {
+      presenter.prepareFailView(CENTER_MSG);
+      return;
+    }
+
     player.addScore(calcScore(getWords(moves, board, isVert)));
+    if (moves.size() >= 7) {
+      player.addScore(50);
+    }
     presenter.prepareSuccessView(new ConfirmPlayOutputData(board, player));
   }
-
 }

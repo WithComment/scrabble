@@ -37,7 +37,7 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
       presenter.prepareFailView("You don't have the letter in your inventory!");
     } else {
       play.addMove(new Move(x, y, letter));
-      board.getCell(x, y).setLetter(letter);
+      board.setCell(x, y, letter);
       player.removeLetter(letter);
       presenter.prepareSuccessView(new PlaceLetterOutputData(board));
     }

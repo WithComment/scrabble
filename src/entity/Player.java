@@ -66,6 +66,11 @@ public class Player {
         }
     }
 
+    public void addScore(int score) {
+        this.score += score;
+        unstableScore += score;
+    }
+
     /**
      * Resets the player's unstable score to 0, indicating the scores were not contested.
      */
