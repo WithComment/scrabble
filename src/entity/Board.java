@@ -59,11 +59,27 @@ public class Board {
         this.board[x][y] = tile;
     }
 
-    public void setCell(int x, int y, Letter letter) {
-        this.board[x][y].setLetter(letter);
+    public Tile setCell(int x, int y, Letter letter) {
+        return this.board[x][y].setLetter(letter);
     }
 
     public Tile getCell(int x, int y) {
         return this.board[x][y];
+    }
+
+    public boolean confirm(int x, int y) {
+        if (this.board[x][y].isEmpty()) {
+            return false;
+        }
+        this.board[x][y].confirm();
+        return true;
+    }
+
+    public void setAndConfirm(int x, int y, Letter letter) {
+        this.board[x][y].setAndConfirm(letter);
+    }
+
+    public boolean isConfirmed(int x, int y) {
+        return this.board[x][y].isConfirmed();
     }
 }

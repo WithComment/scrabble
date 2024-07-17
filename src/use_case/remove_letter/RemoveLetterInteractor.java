@@ -35,7 +35,7 @@ public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
             return; // TODO
         } else{
             play.removeMove(x, y);
-            selectedTile.setLetter(null);
+            selectedTile.removeLetter();
         }
     }
 }

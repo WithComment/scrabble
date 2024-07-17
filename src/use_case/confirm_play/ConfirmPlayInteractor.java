@@ -4,18 +4,31 @@ import java.util.LinkedList;
 import java.util.List;
 
 import entity.Board;
-import entity.Letter;
 import entity.Move;
 import entity.Play;
 import entity.Player;
 import entity.Tile;
 
+/**
+ * Usecase interactor for confirming a play.
+ * Responsible for checking if a play is valid and updating the player's score.
+ * *
+ * <p>
+ * Constants:
+ * <ul>
+ * <li>{@code INLINE_MSG} - Message indicating that all letters must be in-line.
+ * <li>{@code CONTINUOUS_MSG} - Message indicating that the.
+ * <li>{@code CENTER_MSG} - Message indicating that the first word must cover
+ * the center.
+ * </ul>
+ */
 public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
 
   private final ConfirmPlayOutputBoundary presenter;
   public static final String INLINE_MSG = "All letters must be in-line.";
   public static final String CONTINUOUS_MSG = "The letters must be continuous.";
   public static final String CENTER_MSG = "The first word must cover the center.";
+  public static final String CONNECTED_MSG = "The word must be connected to another word.";
 
   public ConfirmPlayInteractor(ConfirmPlayOutputBoundary presenter) {
     this.presenter = presenter;
@@ -24,18 +37,15 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
   private boolean isNotInline(List<Move> moves) {
     Move fMove = moves.get(0);
     Move lMove = moves.get(moves.size() - 1);
-    int fX = fMove.getX();
-    int fY = fMove.getY();
-    int lX = lMove.getX();
-    int lY = lMove.getY();
 
     int x, y;
     boolean inVLine, inHLine;
     for (Move move : moves) {
       x = move.getX();
       y = move.getY();
-      inVLine = lX == fX && x == lX;
-      inHLine = lY == fY && y == lY;
+      // If a move has the same x or y as the first and last moves, it is in-line.
+      inVLine = x == fMove.getX() && x == lMove.getX();
+      inHLine = y == fMove.getY() && y == lMove.getY();
       if (!(inVLine || inHLine)) {
         return true;
       }
@@ -47,18 +57,26 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     return moves.get(0).getX() == moves.get(moves.size() - 1).getX();
   }
 
+  /**
+   * Check if the letters form only one main word.
+   * @param moves
+   * @param board
+   * @return true if the letters form one main word, false otherwise.
+   */
   private boolean hasGap(List<Move> moves, Board board) {
-    int n = moves.size();
     Move fMove = moves.get(0);
     int start, end;
     if (isVertical(moves)) {
       int x = fMove.getX();
       start = fMove.getY();
       end = fMove.getY();
+
+      // Since the moves can be in any order, we need to find the start and end y values.
       for (Move move : moves) {
         start = Integer.min(start, move.getY());
         end = Integer.max(end, move.getY());
       }
+
       for (int i = start; i <= end; i++) {
         if (board.getCell(x, i).isEmpty()) {
           return true;
@@ -90,12 +108,28 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     return true;
   }
 
+  private boolean isIsolated(List<Move> moves, Board board) {
+    int x, y;
+    for (Move move : moves) {
+      x = move.getX();
+      y = move.getY();
+      if (x > 0 && board.isConfirmed(x - 1, y)) return false;
+      if (x < board.getWidth() - 1 && board.isConfirmed(x + 1, y)) return false;
+      if (y > 0 && board.isConfirmed(x, y - 1)) return false;
+      if (y < board.getHeight() - 1 && board.isConfirmed(x, y + 1)) return false;
+    }
+    return true;
+  }
+
   private List<Tile> getVTiles(Move move, Board board) {
     int x = move.getX();
     int y = move.getY();
     List<Tile> tiles = new LinkedList<Tile>();
+    // Go to the top of a set of continuous letters.
     while (y >= 0 && !board.getCell(x, y).isEmpty()) y--;
     y++;
+
+    // Go to the end, add tiles to the list along the way.
     while (y < board.getHeight() && !board.getCell(x, y).isEmpty()) {
       tiles.add(board.getCell(x, y++));
     }
@@ -116,11 +150,11 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     return tiles;
   }
 
-  private List<List<Tile>> getWords(List<Move> moves, Board board, boolean isVert) {
+  private List<List<Tile>> getWords(List<Move> moves, Board board) {
     List<List<Tile>> words = new LinkedList<>();
     Move fMove = moves.get(0);
     List<Tile> word;
-    if (isVert) {
+    if (isVertical(moves)) {
       words.add(getVTiles(fMove, board));
       for (Move move : moves) {
         word = getHTiles(move, board);
@@ -155,6 +189,13 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     return total;
   }
 
+  private boolean confirmAll(List<Move> moves, Board board) {
+    for (Move move : moves) {
+      if (!board.confirm(move.getX(), move.getY())) return false;
+    }
+    return true;
+  }
+
   @Override
   public void execute(ConfirmPlayInputData data) {
 
@@ -162,8 +203,7 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     Board board = data.getBoard();
     List<Move> moves = play.getMoves();
     Player player = play.getPlayer();
-    boolean isVert = false;
-
+ 
     if (moves.isEmpty()) {
       presenter.prepareSuccessView(new ConfirmPlayOutputData(board, player));
       return;
@@ -174,7 +214,6 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
         presenter.prepareFailView(INLINE_MSG);
         return;
       }
-      isVert = isVertical(moves);
 
       if (hasGap(moves, board)) {
         presenter.prepareFailView(CONTINUOUS_MSG);
@@ -187,7 +226,13 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
       return;
     }
 
-    player.addScore(calcScore(getWords(moves, board, isVert)));
+    if (!data.isFirstPlay() && isIsolated(moves, board)) {
+      presenter.prepareFailView(CONNECTED_MSG);
+      return; 
+    }
+
+    confirmAll(moves, board);
+    player.addScore(calcScore(getWords(moves, board)));
     if (moves.size() >= 7) {
       player.addScore(50);
     }
