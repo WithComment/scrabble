@@ -1,18 +1,29 @@
 package view;
 
-import java.awt.*;
+import entity.Tile;
+import view.panels.BoardPanel;
+
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 
 public class View extends JPanel implements MouseListener, ActionListener {
     private JFrame window;
+    private BoardPanel boardPanel;
 
     public View() {
         window = new JFrame("Scrabble");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(600, 600);
+        window.setSize(1000, 1000);
         window.setVisible(true);
         window.addMouseListener(this);
+        boardPanel = new BoardPanel(new GridLayout(15, 15));
+        window.add(boardPanel);
+        boardPanel.updateUI();
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -39,4 +50,7 @@ public class View extends JPanel implements MouseListener, ActionListener {
 
     }
 
+    public void setTile(int[] coords, Tile tile) {
+        boardPanel.setGridSpotToTile(coords, tile);
+    }
 }
