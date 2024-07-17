@@ -68,7 +68,7 @@ public class BoardPanel extends JPanel {
     }
 
     public void setGridSpotToTile(int[] coords, Tile tile){
-        JLabel tileLabel = labels[coords[0]][coords[1]]; //NOT FINDING COORDS BECAUSE REFERENCE NOT MATCHED
+        JLabel tileLabel = labels[coords[0]][coords[1]];
         System.out.println("Adding tile");
         setLabelToMatchTile(tileLabel, tile);
     }

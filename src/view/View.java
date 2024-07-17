@@ -35,7 +35,9 @@ public class View extends JPanel implements MouseListener, ActionListener {
     }
 
     public void mouseClicked(MouseEvent e) {
-
+        Point location = e.getLocationOnScreen();
+        int x = location.x;
+        int y = location.y;
     }
 
     public void mouseReleased(MouseEvent e) {

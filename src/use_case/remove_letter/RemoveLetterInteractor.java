@@ -12,7 +12,9 @@ public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
     private Player player;
     private Board board;
     private Tile selectedTile;
-    public RemoveLetterInteractor() {
+    private RemoveLetterOutputBoundary presenter;
+    public RemoveLetterInteractor(RemoveLetterOutputBoundary presenter) {
+        this.presenter = presenter;
     }
 
     public void execute(RemoveLetterInputData removeLetterInputData){
@@ -28,14 +30,16 @@ public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
                     && move.getX() == x
                     && move.getY() == y){
                 isValidClick = true;
+                break;
             }
         }
         if (!isValidClick){
-            //Failure!
-            return; // TODO
+            presenter.prepareFailureView(new RemoveLetterOutputData(false));
         } else{
             play.removeMove(x, y);
+            player.addLetter(selectedTile.getLetter());
             selectedTile.removeLetter();
+            presenter.prepareSuccessView(new RemoveLetterOutputData(true));
         }
     }
 }
