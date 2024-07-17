@@ -14,6 +14,6 @@ public class EndGameDataAccessObject implements EndGameDataAccessInterface{
         String filePath = "../database/" + endGameData.getGame().getId() + ".txt";
         FileOutputStream fileOutputStream = new FileOutputStream(filePath);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-        ObjectOutputStream.write(endGameData.getGame());
+        objectOutputStream.writeObject(endGameData.getGame());
     }
 }
