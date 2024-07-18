@@ -3,20 +3,16 @@ package entity;
 import java.io.*;
 import java.util.ArrayList;
 
-/**
- * Represents a game of Scrabble.
- * A game has an ID, a board, a list of players, a history of plays, and a letter bag.
- */
 public class Game implements Serializable {
     // Serializable vars
     private static final long serialVersionUID = 1L; // Unique version identifier for serialization
     private static int nextId = 0; // Static counter to assign unique IDs to each game instance
     private final int id; // Unique ID for the game instance
+    protected LetterBag letterBag; // Bag of letters available to draw from
     private int nextPlayerId = 0; // Counter to assign unique IDs to players within this game
     private Board board; // The game board
     private ArrayList<Player> players; // List of players in the game
     private ArrayList<Play> history; // History of plays made during the game
-    protected LetterBag letterBag; // Bag of letters available to draw from
 
     /**
      * Constructs a new Game instance.
@@ -32,6 +28,7 @@ public class Game implements Serializable {
 
     /**
      * Gets the unique ID of the game.
+     *
      * @return The unique ID of the game.
      */
     public int getId() {
@@ -40,8 +37,9 @@ public class Game implements Serializable {
 
     /**
      * Sets a tile at the specified position on the board.
-     * @param x The x-coordinate of the cell.
-     * @param y The y-coordinate of the cell.
+     *
+     * @param x    The x-coordinate of the cell.
+     * @param y    The y-coordinate of the cell.
      * @param tile The tile to place at the specified position.
      */
     public void setBoardCell(int x, int y, Tile tile) {
@@ -50,6 +48,7 @@ public class Game implements Serializable {
 
     /**
      * Retrieves the tile at the specified position on the board.
+     *
      * @param x The x-coordinate of the cell.
      * @param y The y-coordinate of the cell.
      * @return The tile at the specified position.
@@ -61,29 +60,46 @@ public class Game implements Serializable {
     /**
      * Adds a new player to the game.
      * Initializes the player with a unique ID and adds them to the player list.
+     *
+     * @return The player that was added to the game.
      */
-    public void addPlayer() {
-        players.add(new Player(nextPlayerId++));
+    public Player addPlayer() {
+        Player player = new Player(nextPlayerId++);
+        players.add(player);
+        return player;
     }
 
     /**
      * Adds a play to the game's history.
+     *
      * @param play The play to add to the history.
      */
     public void addPlay(Play play) {
+
         history.add(play);
     }
 
     /**
-     * Removes and returns the last play from the game's history.
+     * Returns the last play from the game's history.
+     *
      * @return The last play made in the game.
      */
-    public Play removePlay() {
+    public Play getLastPlay() {
+        return history.get(history.size() - 1);
+    }
+
+    /**
+     * Removes and returns the last play from the game's history.
+     *
+     * @return The last play made in the game.
+     */
+    public Play removeLastPlay() {
         return history.remove(history.size() - 1);
     }
 
     /**
      * Gets the number of players in the game.
+     *
      * @return The number of players.
      */
     public int getNumPlayers() {
@@ -92,6 +108,7 @@ public class Game implements Serializable {
 
     /**
      * Gets a list of player IDs for all players in the game.
+     *
      * @return A list of player IDs.
      */
     public ArrayList<Integer> getPlayerIds() {
@@ -104,6 +121,7 @@ public class Game implements Serializable {
 
     /**
      * Gets the score of a specific player by their ID.
+     *
      * @param playerId The ID of the player.
      * @return The score of the specified player.
      */
@@ -113,6 +131,7 @@ public class Game implements Serializable {
 
     /**
      * Gets a list of scores for all players in the game.
+     *
      * @return An ArrayList<Integer> containing the scores of all players.
      */
     public ArrayList<Integer> getPlayerScore() {
@@ -125,8 +144,9 @@ public class Game implements Serializable {
 
     /**
      * Updates the score of a specific player based on a play.
+     *
      * @param playerID The ID of the player whose score is to be updated.
-     * @param play The play containing the score to add to the player's total score.
+     * @param play     The play containing the score to add to the player's total score.
      */
     public void updatePlayerScore(int playerID, Play play) {
         ArrayList<Integer> scores = new ArrayList<>();
@@ -136,6 +156,7 @@ public class Game implements Serializable {
 
     /**
      * Retrieves the inventory of letters for a specific player.
+     *
      * @param playerId The ID of the player whose inventory is requested.
      * @return An ArrayList<Letter> representing the player's current inventory of letters.
      */

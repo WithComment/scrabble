@@ -7,13 +7,12 @@ import use_case.get_leaderboard.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetLeaderboardInteractorTest implements GetLeaderboardOutputBoundary{
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class GetLeaderboardInteractorTest implements GetLeaderboardOutputBoundary {
 
     private GetLeaderboardInputData inputData;
     private GetLeaderboardInteractor interactor;
@@ -47,7 +46,7 @@ public class GetLeaderboardInteractorTest implements GetLeaderboardOutputBoundar
         expectedLeaderboard.add(new LeaderboardEntry(1, 10));
         expectedLeaderboard.add(new LeaderboardEntry(3, 5));
 
-        Assert.assertEquals(expectedLeaderboard, leaderboard);
+        assertEquals(expectedLeaderboard, leaderboard);
     }
 
     @Test
@@ -63,7 +62,7 @@ public class GetLeaderboardInteractorTest implements GetLeaderboardOutputBoundar
         List<LeaderboardEntry> expectedLeaderboard = new ArrayList<>();
         expectedLeaderboard.add(new LeaderboardEntry(1, 10));
 
-        Assert.assertEquals(expectedLeaderboard, leaderboard);
+        assertEquals(expectedLeaderboard, leaderboard);
     }
 
     @Test
@@ -76,7 +75,7 @@ public class GetLeaderboardInteractorTest implements GetLeaderboardOutputBoundar
 
         List<LeaderboardEntry> expectedLeaderboard = new ArrayList<>();
 
-        Assert.assertEquals(expectedLeaderboard, leaderboard);
+        assertEquals(expectedLeaderboard, leaderboard);
     }
 
 }

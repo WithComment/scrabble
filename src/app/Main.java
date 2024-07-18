@@ -1,7 +1,5 @@
 package app;
 
-import java.io.IOException;
-
 import javax.swing.*;
 
 import entity.Board;
@@ -11,11 +9,13 @@ import view.PlayView;
 import view.View;
 import view.ViewManager;
 
+import java.awt.*;
+
 public class Main {
     public static void main(String[] args) {
         Board board = new Board();
         View view = new View();
-        
+
         // Build the main program window, the main panel containing the
         // various cards, and the layout, and stitch them together.
 
