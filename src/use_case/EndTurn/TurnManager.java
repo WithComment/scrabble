@@ -71,8 +71,8 @@ public class TurnManager implements EndTurn, DealingContest, StartTurn {
         PlayerNumber = (PlayerNumber + 1) % Players.size();
         // Notify the front-end or other players that the turn has ended and it's the next player's turn
         CurrentPlayer = Players.get(PlayerNumber);
-        System.out.println("It's now player " + PlayerNumber + "'s turn.");
-        System.out.println("It's now player " + getCurrentPlayer().getId() + "'s turn.");
+//        System.out.println("It's now player " + PlayerNumber + "'s turn.");
+//        System.out.println("It's now player " + getCurrentPlayer().getId() + "'s turn.");
         this.endTurn = false;
 
     }
@@ -91,7 +91,7 @@ public class TurnManager implements EndTurn, DealingContest, StartTurn {
             NumContestFailed.set((PlayerNumber), NumContestFailed.get((PlayerNumber)));
         }
         this.CurrentPlayer.NotContested();
-        System.out.println("Player " + this.CurrentPlayer.getId() + " contest result: " + (ContestSucceed ? "Valid" : "Invalid"));
+//        System.out.println("Player " + this.CurrentPlayer.getId() + " contest result: " + (ContestSucceed ? "Valid" : "Invalid"));
     }
 }
 
