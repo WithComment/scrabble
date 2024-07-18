@@ -39,10 +39,10 @@ public class Main {
         // be observed by the Views.
         PlaceLetterViewModel placeLetterViewModel = new PlaceLetterViewModel();
 
-        PlayView playView = new PlayView(placeLetterController, placeLetterViewModel);
-        views.add(playView, loggedInView.viewName);
-
-        viewManagerModel.setActiveView(signupView.viewName);
+//        PlayView playView = new PlayView(placeLetterController, placeLetterViewModel);
+//        views.add(playView, loggedInView.viewName);
+//
+//        viewManagerModel.setActiveView(signupView.viewName);
         viewManagerModel.firePropertyChanged();
 
         application.pack();

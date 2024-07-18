@@ -4,18 +4,12 @@ import entity.Game;
 
 public class ContestOutputData {
     private final Game game;
-    private final boolean success;
 
-    public ContestOutputData(Game game, boolean success) {
+    public ContestOutputData(Game game) {
         this.game = game;
-        this.success = success;
     }
 
     public Game getGame() {
         return this.game;
-    }
-
-    public boolean isSuccess() {
-        return this.success;
     }
 }

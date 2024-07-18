@@ -17,6 +17,10 @@ public class ContestInteractor implements ContestInputBoundary {
         this.wordValidator = wordValidator;
     }
 
+    private void failWithMessage(String message) {
+        contestOutputBoundary.prepareFailedView(message);
+    }
+
     private List<String> getWordsFromLastMove(ContestInputData contestInputData) {
         class Position {
             public final int x;
@@ -92,15 +96,15 @@ public class ContestInteractor implements ContestInputBoundary {
                     Play lastPlay = game.removeLastPlay();
                     Player contestedPlayer = lastPlay.getPlayer();
                     contestedPlayer.BeContested();
-                    contestOutputBoundary.prepareSuccessView(new ContestOutputData(game, true));
+                    contestOutputBoundary.prepareSuccessView(new ContestOutputData(game));
                     return;
                 }
             }
-            contestOutputBoundary.prepareFailedView("All words in last move are valid.");
+            failWithMessage("All words in last move are valid.");
         } catch (NoSuchElementException e) {
-            contestOutputBoundary.prepareFailedView("No player has made any move.");
+            failWithMessage("No player has made any move.");
         } catch (WordValidationException e) {
-            contestOutputBoundary.prepareFailedView(e.getMessage());
+            failWithMessage(e.getMessage());
         }
     }
 }
