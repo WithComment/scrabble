@@ -93,5 +93,9 @@ public class TurnManager {
             NumContestFailed.add(PlayerNumber);
         }
     }
+
+    public void updatePlayer(Player player) {
+        Players.add(player);
+    }
 }
 

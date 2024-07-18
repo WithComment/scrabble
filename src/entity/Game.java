@@ -13,6 +13,7 @@ public class Game implements Serializable {
     private Board board; // The game board
     private ArrayList<Player> players; // List of players in the game
     private ArrayList<Play> history; // History of plays made during the game
+    private TurnManager turnManager;
 
     /**
      * Constructs a new Game instance.
@@ -24,6 +25,7 @@ public class Game implements Serializable {
         this.players = new ArrayList<>();
         this.history = new ArrayList<>();
         this.letterBag = new LetterBag();
+        this.turnManager = new TurnManager();
     }
 
     /**
@@ -140,6 +142,17 @@ public class Game implements Serializable {
             scores.add(player.getScore());
         }
         return scores;
+    }
+
+    /**
+     * Update players to TurnManager
+     *
+     *
+     */
+    public void SetPlayerToTurnManager(TurnManager turnManager) {
+        for (Player player : players) {
+            this.turnManager.updatePlayer(player);
+        }
     }
 
     /**
