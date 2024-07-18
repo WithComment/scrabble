@@ -2,15 +2,19 @@ package entity;
 
 import java.util.LinkedList;
 
+/**
+ * Represents a Player's turn.
+ * @param player The player who made the moves.
+ * @param moves The moves made in the play.
+ * @param score The score of the play.
+ */
 public class Play {
   private final Player player;
   private final LinkedList<Move> moves;
-  private int score;
 
   public Play(Player player) {
     this.player = player;
     this.moves = new LinkedList<Move>();
-    this.score = 0;
   }
 
   public void addMove(Move move) {
@@ -36,13 +40,5 @@ public class Play {
 
   public LinkedList<Move> getMoves() {
     return moves;
-  }
-
-  public int getScore() {
-    return score;
-  }
-
-  public void addScore(int score) {
-    this.score += score;
   }
 }

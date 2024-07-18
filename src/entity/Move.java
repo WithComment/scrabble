@@ -1,8 +1,10 @@
 package entity;
 
 /**
- * This dataclass is used to record where a player has put a single letter in their turn.
- * It is used only within the play entity which
+ * Represents a move in a Player's turn.
+ * @param x The x-coordinate of the move.
+ * @param y The y-coordinate of the move.
+ * @param letter The letter placed on the board.
  */
 public class Move {
   private final int x;
