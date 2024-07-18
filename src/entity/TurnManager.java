@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Manages the turns of players in the game.
@@ -8,21 +9,21 @@ import java.util.ArrayList;
  * and handles the contesting process.
  */
 public class TurnManager {
+    private final List<Player> players;
     private Boolean endTurn;
-    private Player CurrentPlayer;
-    private int PlayerNumber;
-    private final ArrayList<Player> Players;
-    private ArrayList<Integer> NumContestFailed;
+    private Player currentPlayer;
+    private int playerNumber;
+    private List<Integer> numContestFailed;
 
     /**
      * Constructs a TurnManager with an initial state.
      * Initializes the endTurn flag, current player, players list, and contest failure counts.
      */
-    public TurnManager() {
+    public TurnManager(List<Player> players) {
         this.endTurn = false;
-        this.CurrentPlayer = null;
-        this.Players = new ArrayList<>();
-        this.NumContestFailed = new ArrayList<>();
+        this.currentPlayer = null;
+        this.players = players;
+        this.numContestFailed = new ArrayList<Integer>(players.size());
     }
 
     /**
@@ -47,15 +48,15 @@ public class TurnManager {
     public void CheckAndEndTurn() {
         Player currentPlayer = ReturnCurrentPlayer();
         currentPlayer.NotContested();
-        while (NumContestFailed.get((PlayerNumber + 1) % Players.size()) > 0) {
-            int NumContestFailedOfNextPlayer = NumContestFailed.get((PlayerNumber + 1) % Players.size());
-            NumContestFailed.set((PlayerNumber + 1) % Players.size(), NumContestFailedOfNextPlayer - 1);
-            PlayerNumber = (PlayerNumber + 1) % Players.size();
+        while (numContestFailed.get((playerNumber + 1) % players.size()) > 0) {
+            int NumContestFailedOfNextPlayer = numContestFailed.get((playerNumber + 1) % players.size());
+            numContestFailed.set((playerNumber + 1) % players.size(), NumContestFailedOfNextPlayer - 1);
+            playerNumber = (playerNumber + 1) % players.size();
         }
-        PlayerNumber = (PlayerNumber + 1) % Players.size();
+        playerNumber = (playerNumber + 1) % players.size();
         // Notify the front-end or other players that the turn has ended and it's the next player's turn
-        CurrentPlayer = Players.get(PlayerNumber);
-        System.out.println("It's now player " + PlayerNumber + "'s turn.");
+        this.currentPlayer = players.get(playerNumber);
+        System.out.println("It's now player " + playerNumber + "'s turn.");
     }
 
     /**
@@ -66,8 +67,8 @@ public class TurnManager {
      * @param PlayerNumber the number of the player whose contest failure count is being updated
      */
     public void ContestFailureUpdate(int PlayerNumber) {
-        int CurrentFailure = NumContestFailed.get(PlayerNumber);
-        NumContestFailed.set(PlayerNumber, CurrentFailure + 1);
+        int CurrentFailure = numContestFailed.get(PlayerNumber);
+        numContestFailed.set(PlayerNumber, CurrentFailure + 1);
         Player currentPlayer = ReturnCurrentPlayer();
         currentPlayer.BeContested();
     }
@@ -78,8 +79,8 @@ public class TurnManager {
      * @return the current player
      */
     public Player ReturnCurrentPlayer() {
-        CurrentPlayer = Players.get(PlayerNumber);
-        return CurrentPlayer;
+        currentPlayer = players.get(playerNumber);
+        return currentPlayer;
     }
 
     /**
@@ -90,12 +91,12 @@ public class TurnManager {
      */
     public void dealContest(boolean ContestSucceed) {
         if (ContestSucceed) {
-            NumContestFailed.add(PlayerNumber);
+            numContestFailed.add(playerNumber);
         }
     }
 
     public void updatePlayer(Player player) {
-        Players.add(player);
+        players.add(player);
     }
 }
 

@@ -17,7 +17,11 @@ public class ContestInteractor implements ContestInputBoundary {
         this.wordValidator = wordValidator;
     }
 
-    private void failWithMessage(String message) {
+    private void failWithMessage(ContestInputData contestInputData, String message) {
+        Game game = contestInputData.getGame();
+        Player player = contestInputData.getPlayer();
+        TurnManager turnManager = game.getTurnManager();
+        turnManager.ContestFailureUpdate(player.getId());
         contestOutputBoundary.prepareFailedView(message);
     }
 
@@ -100,11 +104,11 @@ public class ContestInteractor implements ContestInputBoundary {
                     return;
                 }
             }
-            failWithMessage("All words in last move are valid.");
+            failWithMessage(contestInputData, "All words in last move are valid.");
         } catch (NoSuchElementException e) {
-            failWithMessage("No player has made any move.");
+            failWithMessage(contestInputData, "No player has made any move.");
         } catch (WordValidationException e) {
-            failWithMessage(e.getMessage());
+            failWithMessage(contestInputData, e.getMessage());
         }
     }
 }
