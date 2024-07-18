@@ -2,14 +2,16 @@ package use_case.get_winner;
 
 import entity.LeaderboardEntry;
 
-public class GetWinnerOutputData {
-    private final LeaderboardEntry winner;
+import java.util.ArrayList;
 
-    public GetWinnerOutputData(LeaderboardEntry winner) {
+public class GetWinnerOutputData {
+    private final ArrayList<LeaderboardEntry> winner;
+
+    public GetWinnerOutputData(ArrayList<LeaderboardEntry> winner) {
         this.winner = winner;
     }
 
-    public LeaderboardEntry getWinner() {
+    public ArrayList<LeaderboardEntry> getWinner() {
         return winner;
     }
 }
