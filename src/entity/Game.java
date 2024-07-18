@@ -25,7 +25,7 @@ public class Game implements Serializable {
         this.players = new ArrayList<>();
         this.history = new ArrayList<>();
         this.letterBag = new LetterBag();
-        this.turnManager = new TurnManager();
+        this.turnManager = new TurnManager(players);
     }
 
     /**
@@ -146,8 +146,6 @@ public class Game implements Serializable {
 
     /**
      * Update players to TurnManager
-     *
-     *
      */
     public void SetPlayerToTurnManager(TurnManager turnManager) {
         for (Player player : players) {
@@ -185,5 +183,14 @@ public class Game implements Serializable {
         for (Player player : players) {
             player.addLetter(letterBag.drawLetters(7));
         }
+    }
+
+    /**
+     * Returns the TurnManager of the game.
+     *
+     * @return the TurnManager of the game
+     */
+    public TurnManager getTurnManager() {
+        return turnManager;
     }
 }

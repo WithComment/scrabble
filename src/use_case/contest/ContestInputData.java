@@ -2,6 +2,7 @@ package use_case.contest;
 
 import entity.Game;
 import entity.Player;
+import entity.TurnManager;
 
 public class ContestInputData {
     final private Game game;
