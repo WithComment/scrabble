@@ -1,7 +1,8 @@
 package entity;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Manages the turns of players in the game.
@@ -12,8 +13,8 @@ public class TurnManager {
     private final List<Player> players;
     private Boolean endTurn;
     private Player currentPlayer;
-    private int playerNumber;
-    private List<Integer> numContestFailed;
+    private int currentPlayerId;
+    private Map<Integer, Integer> numContestFailed;
 
     /**
      * Constructs a TurnManager with an initial state.
@@ -23,7 +24,21 @@ public class TurnManager {
         this.endTurn = false;
         this.currentPlayer = null;
         this.players = players;
-        this.numContestFailed = new ArrayList<Integer>(players.size());
+        numContestFailed = new HashMap<>();
+    }
+
+    private void incrementContestFail(int playerNumber) {
+        int currentFail = numContestFailed.getOrDefault(playerNumber, 0);
+        numContestFailed.put(playerNumber, currentFail + 1);
+    }
+
+    private void decreaseContestFail(int playerNumber) {
+        int currentFail = numContestFailed.getOrDefault(playerNumber, 0);
+        numContestFailed.put(playerNumber, currentFail - 1);
+    }
+
+    private int getNextPlayerId() {
+        return (currentPlayerId + 1) % players.size();
     }
 
     /**
@@ -45,18 +60,18 @@ public class TurnManager {
      * Updates the current player to the next player in the list,
      * skipping any players who have failed a contest.
      */
-    public void CheckAndEndTurn() {
-        Player currentPlayer = ReturnCurrentPlayer();
+    public void checkAndEndTurn() {
+        Player currentPlayer = getCurrentPlayer();
         currentPlayer.NotContested();
-        while (numContestFailed.get((playerNumber + 1) % players.size()) > 0) {
-            int NumContestFailedOfNextPlayer = numContestFailed.get((playerNumber + 1) % players.size());
-            numContestFailed.set((playerNumber + 1) % players.size(), NumContestFailedOfNextPlayer - 1);
-            playerNumber = (playerNumber + 1) % players.size();
+        int nextPlayerId = getNextPlayerId();
+        while (numContestFailed.getOrDefault(nextPlayerId, 0) > 0) {
+            decreaseContestFail(nextPlayerId);
+            currentPlayerId = nextPlayerId;
         }
-        playerNumber = (playerNumber + 1) % players.size();
+        currentPlayerId = nextPlayerId;
         // Notify the front-end or other players that the turn has ended and it's the next player's turn
-        this.currentPlayer = players.get(playerNumber);
-        System.out.println("It's now player " + playerNumber + "'s turn.");
+        this.currentPlayer = players.get(currentPlayerId);
+        System.out.println("It's now player " + currentPlayerId + "'s turn.");
     }
 
     /**
@@ -64,12 +79,11 @@ public class TurnManager {
      * Increments the number of contest failures for the specified player
      * and adjusts the current player's score based on contest results.
      *
-     * @param PlayerNumber the number of the player whose contest failure count is being updated
+     * @param playerId the number of the player whose contest failure count is being updated
      */
-    public void ContestFailureUpdate(int PlayerNumber) {
-        int CurrentFailure = numContestFailed.get(PlayerNumber);
-        numContestFailed.set(PlayerNumber, CurrentFailure + 1);
-        Player currentPlayer = ReturnCurrentPlayer();
+    public void ContestFailureUpdate(int playerId) {
+        incrementContestFail(playerId);
+        Player currentPlayer = getCurrentPlayer();
         currentPlayer.BeContested();
     }
 
@@ -78,8 +92,8 @@ public class TurnManager {
      *
      * @return the current player
      */
-    public Player ReturnCurrentPlayer() {
-        currentPlayer = players.get(playerNumber);
+    public Player getCurrentPlayer() {
+        currentPlayer = players.get(currentPlayerId);
         return currentPlayer;
     }
 
@@ -87,11 +101,11 @@ public class TurnManager {
      * Handles the result of a contest.
      * If the contest succeeds, the current player's contest failure count is incremented.
      *
-     * @param ContestSucceed a boolean indicating whether the contest succeeded
+     * @param contestSucceed a boolean indicating whether the contest succeeded
      */
-    public void dealContest(boolean ContestSucceed) {
-        if (ContestSucceed) {
-            numContestFailed.add(playerNumber);
+    public void dealContest(boolean contestSucceed) {
+        if (contestSucceed) {
+            incrementContestFail(currentPlayerId);
         }
     }
 
