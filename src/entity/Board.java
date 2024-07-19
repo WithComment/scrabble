@@ -1,6 +1,6 @@
 package entity;
 
-public class Board {
+public class    Board {
     private final Tile[][] board;
     private final int height;
     private final int width;

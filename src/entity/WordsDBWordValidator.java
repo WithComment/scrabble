@@ -1,7 +1,6 @@
 package entity;
 
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,7 +8,18 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * The {@code WordsDBWordValidator} class validates words using an external WordsDB web service.
+ */
 public class WordsDBWordValidator implements WordValidator {
+
+    /**
+     * Validates whether a given word is valid according to the WordsDB web service.
+     *
+     * @param word the word to be validated
+     * @return {@code true} if the word is valid, {@code false} otherwise
+     * @throws WordValidationException if there is an issue with the URL or network communication
+     */
     public boolean wordIsValid(String word) throws WordValidationException {
         try {
             URL url = new URL("https://scrabble.us.wordsdb.ws/validateDict/" + word);
