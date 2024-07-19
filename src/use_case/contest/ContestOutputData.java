@@ -2,14 +2,16 @@ package use_case.contest;
 
 import entity.Game;
 
-public class ContestOutputData {
-    private final Game game;
+import java.util.List;
 
-    public ContestOutputData(Game game) {
-        this.game = game;
+public class ContestOutputData {
+    private final List<String> invalidWords;
+
+    public ContestOutputData(List<String> invalidWords) {
+        this.invalidWords = invalidWords;
     }
 
-    public Game getGame() {
-        return this.game;
+    public List<String> getInvalidWords() {
+        return this.invalidWords;
     }
 }

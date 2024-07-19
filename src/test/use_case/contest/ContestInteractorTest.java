@@ -7,6 +7,8 @@ import use_case.contest.ContestInteractor;
 import use_case.contest.ContestOutputBoundary;
 import use_case.contest.ContestOutputData;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ContestInteractorTest {
@@ -16,7 +18,7 @@ class ContestInteractorTest {
     }
 
     @Test
-    void testInteractorSuccess() {
+    void testInteractorFail() {
         ContestOutputBoundary successPresenter = new ContestOutputBoundary() {
             @Override
             public void prepareSuccessView(ContestOutputData outputData) {
@@ -42,11 +44,50 @@ class ContestInteractorTest {
         play.addMove(new Move(7, 10, new Letter('Y', 1)));
         game.addPlay(play);
 
-        ContestInputData inputData = new ContestInputData(game, a);
+        ContestInputData inputData = new ContestInputData(game, b);
         WordValidator successWordValidator = new WordValidator() {
             @Override
             public boolean wordIsValid(String word) throws WordValidationException {
+                assertEquals("PLAY", word);
                 return true;
+            }
+        };
+        ContestInteractor interactor = new ContestInteractor(successPresenter, successWordValidator);
+        interactor.contest(inputData);
+    }
+
+    @Test
+    void testInteractorSuccess() {
+        ContestOutputBoundary successPresenter = new ContestOutputBoundary() {
+            @Override
+            public void prepareSuccessView(ContestOutputData outputData) {
+                List<String> invalidWords = outputData.getInvalidWords();
+                assertIterableEquals(List.of("PLA"), invalidWords);
+            }
+
+            @Override
+            public void prepareFailedView(String error) {
+                fail("Should not have failed");
+            }
+        };
+
+        Game game = new Game();
+        Player a = game.addPlayer(), b = game.addPlayer();
+        placeLetter(game, 7, 7, new Letter('P', 1));
+        placeLetter(game, 7, 8, new Letter('L', 1));
+        placeLetter(game, 7, 9, new Letter('A', 1));
+        Play play = new Play(a);
+        play.addMove(new Move(7, 7, new Letter('P', 1)));
+        play.addMove(new Move(7, 8, new Letter('L', 1)));
+        play.addMove(new Move(7, 9, new Letter('A', 1)));
+        game.addPlay(play);
+
+        ContestInputData inputData = new ContestInputData(game, b);
+        WordValidator successWordValidator = new WordValidator() {
+            @Override
+            public boolean wordIsValid(String word) throws WordValidationException {
+                assertEquals("PLA", word);
+                return false;
             }
         };
         ContestInteractor interactor = new ContestInteractor(successPresenter, successWordValidator);
