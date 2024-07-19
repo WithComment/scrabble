@@ -42,6 +42,7 @@ class ContestInteractorTest {
         play.addMove(new Move(7, 8, new Letter('L', 1)));
         play.addMove(new Move(7, 9, new Letter('A', 1)));
         play.addMove(new Move(7, 10, new Letter('Y', 1)));
+        play.setWords(List.of("PLAY"));
         game.addPlay(play);
 
         ContestInputData inputData = new ContestInputData(game, b);
@@ -80,6 +81,7 @@ class ContestInteractorTest {
         play.addMove(new Move(7, 7, new Letter('P', 1)));
         play.addMove(new Move(7, 8, new Letter('L', 1)));
         play.addMove(new Move(7, 9, new Letter('A', 1)));
+        play.setWords(List.of("PLA"));
         game.addPlay(play);
 
         ContestInputData inputData = new ContestInputData(game, b);
