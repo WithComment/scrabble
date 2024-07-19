@@ -14,9 +14,10 @@ public class BoardPanel extends JPanel {
     private Board board;
     JLabel[][] labels;
 
-    public BoardPanel(LayoutManager layout) {
-        super.setLayout(layout);
+    public BoardPanel() {
+        setLayout(new GridLayout(15, 15));
         Board emptyBoard = new Board();
+        setPreferredSize(new Dimension(800, 800));
         this.width = emptyBoard.getWidth();
         this.height = emptyBoard.getHeight();
         labels = new JLabel[this.width][this.height];

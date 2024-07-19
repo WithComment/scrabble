@@ -2,6 +2,7 @@ package view;
 
 import entity.Tile;
 import view.panels.BoardPanel;
+import view.panels.HandPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,11 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 
 public class View extends JPanel implements MouseListener, ActionListener {
     private JFrame window;
     private BoardPanel boardPanel;
+    private HandPanel handPanel;
 
     public View() {
         window = new JFrame("Scrabble");
@@ -21,9 +24,15 @@ public class View extends JPanel implements MouseListener, ActionListener {
         window.setSize(1000, 1000);
         window.setVisible(true);
         window.addMouseListener(this);
-        boardPanel = new BoardPanel(new GridLayout(15, 15));
-        window.add(boardPanel);
+        boardPanel = new BoardPanel();
+        handPanel = new HandPanel();
+        JPanel view = new JPanel();
+        view.setLayout(new FlowLayout());
+        view.add(boardPanel);
+        view.add(handPanel);
+        window.add(view);
         boardPanel.updateUI();
+        handPanel.updateUI();
     }
 
     public void actionPerformed(ActionEvent e) {

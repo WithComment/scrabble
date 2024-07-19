@@ -21,7 +21,9 @@ class RemoveLetterInteractorTest {
         board = new Board();
         play = new Play(player);
     }
-
+    /**
+     * Testing success
+     */
     @org.junit.jupiter.api.Test
     void testSuccess() {
         RemoveLetterOutputBoundary testerPresenter = new RemoveLetterOutputBoundary() {
@@ -47,6 +49,9 @@ class RemoveLetterInteractorTest {
         testerInteractor.execute(testInputData);
     }
 
+    /**
+     * Testing failure when the chosen cell is empty
+     */
     @org.junit.jupiter.api.Test
     void testEmptyCellFailure() {
         RemoveLetterOutputBoundary testerPresenter = new RemoveLetterOutputBoundary() {
@@ -67,6 +72,9 @@ class RemoveLetterInteractorTest {
 
     }
 
+    /**
+     * Testing failure when the chosen cell has a tile but not one played by the player
+     */
     @org.junit.jupiter.api.Test
     void testNotPlayedFailure() {
         RemoveLetterOutputBoundary testerPresenter = new RemoveLetterOutputBoundary() {
