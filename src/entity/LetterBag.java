@@ -108,7 +108,7 @@ public class LetterBag {
   /**
    * Returns the number of letters currently in the bag.
    *
-   * @return the number of letters in the bag
+   * @return the number of letters in the letter bag
    */
   public int getLength() {
     return bag.size();
