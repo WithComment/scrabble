@@ -21,7 +21,7 @@ public class TurnManager {
      */
     public TurnManager(List<Player> players) {
         this.endTurn = false;
-        this.CurrentPlayer = null;
+        this.CurrentPlayer = players.get(0);
         this.Players = players;
         this.NumContestFailed = new ArrayList<Integer>(players.size());
     }
