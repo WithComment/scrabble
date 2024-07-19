@@ -1,21 +1,21 @@
 package interface_adapter.end_turn;
 
-import use_case.EndTurn.TurnManager;
+import use_case.EndTurn.TurnManagerInteractor;
 
 /**
  * Controller for the EndTurn use case.
  * Manages the interaction between the front-end and the TurnManager.
  */
 public class EndTurnController {
-    private final TurnManager turnManager;
+    private final TurnManagerInteractor turnManagerInteractor;
 
     /**
      * Constructs an EndTurnController with a specified TurnManager.
      *
-     * @param turnManager the TurnManager managing the game turns
+     * @param turnManagerInteractor the TurnManager managing the game turns
      */
-    public EndTurnController(TurnManager turnManager) {
-        this.turnManager = turnManager;
+    public EndTurnController(TurnManagerInteractor turnManagerInteractor) {
+        this.turnManagerInteractor = turnManagerInteractor;
     }
 
     /**
@@ -23,8 +23,8 @@ public class EndTurnController {
      * Updates the TurnManager and starts the next player's turn.
      */
     public void endTurn() {
-        turnManager.endTurn();
-        turnManager.startTurn();
+        turnManagerInteractor.endTurn();
+        turnManagerInteractor.startTurn();
     }
 
     /**
@@ -34,6 +34,6 @@ public class EndTurnController {
      * @param contestSucceed a boolean indicating whether the contest succeeded
      */
     public void handleContest(boolean contestSucceed) {
-        turnManager.dealContest(contestSucceed);
+        turnManagerInteractor.dealContest(contestSucceed);
     }
 }
