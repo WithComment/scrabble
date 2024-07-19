@@ -101,8 +101,9 @@ public class TurnManagerInteractor implements EndTurn, DealingContest, StartTurn
             startTurn();
         }
 
-
-        dealContest(turnManagerInputData.isContestSucceed);
+        if(turnManagerInputData.isContest){
+            dealContest(turnManagerInputData.isContestSucceed);
+        }
     }
 }
 
