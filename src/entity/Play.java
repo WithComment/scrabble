@@ -1,16 +1,18 @@
 package entity;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Represents a Player's turn.
  * @param player The player who made the moves.
  * @param moves The moves made in the play.
- * @param score The score of the play.
+ * @param words The words formed in the play.
  */
 public class Play {
   private final Player player;
   private final LinkedList<Move> moves;
+  private List<String> words;
 
   public Play(Player player) {
     this.player = player;
@@ -40,5 +42,13 @@ public class Play {
 
   public LinkedList<Move> getMoves() {
     return moves;
+  }
+
+  public void setWords(List<String> words) {
+    this.words = words;
+  }
+
+  public List<String> getWords() {
+    return words;
   }
 }

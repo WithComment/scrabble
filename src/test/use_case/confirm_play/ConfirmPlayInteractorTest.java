@@ -17,8 +17,11 @@ import use_case.confirm_play.ConfirmPlayOutputData;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.LinkedList;
+
 public class ConfirmPlayInteractorTest {
     private static final Letter a = new Letter('a', 1);
+    private static final Letter b = new Letter('b', 1);
     private Board board;
     private Player player = new Player(0);
     private Play play;
@@ -115,10 +118,10 @@ public class ConfirmPlayInteractorTest {
             }
         }
         board.setAndConfirm(5, 2, a);
-        board.setAndConfirm(6, 2, a);
-        board.setAndConfirm(6, 3, a);
-        board.setAndConfirm(8, 3, a);
-        board.setAndConfirm(8, 4, a);
+        board.setAndConfirm(6, 2, b);
+        board.setAndConfirm(6, 3, b);
+        board.setAndConfirm(8, 3, b);
+        board.setAndConfirm(8, 4, b);
         board.setAndConfirm(9, 4, a);
         for (int i = 2; i < 8; i++) {
             play.addMove(new Move(7, i, a));
@@ -127,6 +130,14 @@ public class ConfirmPlayInteractorTest {
         ConfirmPlayOutputBoundary tester = getSuccessTester(12, 15);
         ConfirmPlayInteractor interactor = new ConfirmPlayInteractor(tester);
         interactor.execute(new ConfirmPlayInputData(play, board, false));
+        assertEquals(new LinkedList<String>() {
+            {
+                add("aaaaaa");
+                add("aba");
+                add("bab");
+                add("aba");
+            }
+        }, play.getWords());
     }
 
     @Test

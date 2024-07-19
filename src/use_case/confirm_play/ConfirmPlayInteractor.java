@@ -150,7 +150,7 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     return tiles;
   }
 
-  private List<List<Tile>> getWords(List<Move> moves, Board board) {
+  private List<List<Tile>> getWordsOnTiles(List<Move> moves, Board board) {
     List<List<Tile>> words = new LinkedList<>();
     Move fMove = moves.get(0);
     List<Tile> word;
@@ -172,6 +172,19 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
       }
     }
     return words;
+  }
+
+  private List<String> getWords(List<List<Tile>> words) {
+    List<String> wordStrings = new LinkedList<>();
+    StringBuilder word;
+    for (List<Tile> tiles : words) {
+      word = new StringBuilder();
+      for (Tile tile : tiles) {
+        word.append(tile.getLetter().getLetter());
+      }
+      wordStrings.add(word.toString());
+    }
+    return wordStrings;
   }
 
   private int calcScore(List<List<Tile>> words) {
@@ -232,7 +245,10 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     }
 
     confirmAll(moves, board);
-    player.addScore(calcScore(getWords(moves, board)));
+    List<List<Tile>> wordsOnTiles = getWordsOnTiles(moves, board);
+    play.setWords(getWords(wordsOnTiles));
+    
+    player.addScore(calcScore(wordsOnTiles));
     if (moves.size() >= 7) {
       player.addScore(50);
     }
