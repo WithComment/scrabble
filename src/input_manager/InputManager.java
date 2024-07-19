@@ -29,7 +29,7 @@ public class InputManager {
         } else if (input.getType().equals("HandInput")){
             if (input.getInput().equals("lclick")){
                 System.out.println("Letter selected");
-                Player currentPlayer = game.getTurnManager().ReturnCurrentPlayer();
+                Player currentPlayer = game.getTurnManager().GetCurrentPlayer();
                 selectedLetter = currentPlayer.getInventory().get(input.getPositionInHand());
             }
         }
