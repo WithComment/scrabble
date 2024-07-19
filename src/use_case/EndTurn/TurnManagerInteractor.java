@@ -89,6 +89,21 @@ public class TurnManagerInteractor implements EndTurn, DealingContest, StartTurn
     public int getCurrentPlayerNum(){
         return turnManager.getCurrentPlayerNum();
     }
+
+
+    public void execute(TurnManagerInputData turnManagerInputData){
+        for(Player player : turnManagerInputData.players){
+            this.turnManager.updatePlayer(player);
+        }
+
+        if (isEndTurn()) {
+            endTurn();
+            startTurn();
+        }
+
+
+        dealContest(turnManagerInputData.isContestSucceed);
+    }
 }
 
 
