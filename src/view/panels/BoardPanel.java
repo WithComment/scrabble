@@ -7,6 +7,7 @@ import input_manager.InputManager;
 import view.Input;
 import view.buttons.BoardButton;
 import view.buttons.HandButton;
+import view.listeners.GridButtonListener;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -35,15 +36,7 @@ public class BoardPanel extends JPanel {
                 BoardButton tileButton = new BoardButton(new int[]{x, y});
                 Tile tile = emptyBoard.getCell(x, y);
                 setButtonToMatchTile(tileButton, tile);
-                tileButton.addActionListener(
-                        new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {
-                                int[] coords = ((BoardButton) e.getSource()).getCoords();
-                                Input input = new Input(coords[0], coords[1], "lclick");
-                                inputManager.handleInput(input);
-                            }
-                        }
-                );
+                tileButton.addMouseListener(new GridButtonListener(x, y, inputManager));
                 this.add(tileButton);
                 int[] coords = new int[]{x, y};
                 buttons[y][x] = tileButton;

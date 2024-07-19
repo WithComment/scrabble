@@ -4,6 +4,8 @@ package view.panels;
 import input_manager.InputManager;
 import view.Input;
 import view.buttons.HandButton;
+import view.listeners.GridButtonListener;
+import view.listeners.HandButtonListener;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -27,15 +29,7 @@ public class HandPanel extends JPanel {
             button.setText(hand.get(i));
             button.setPreferredSize(new Dimension(100, 100));
             button.setBorder(new LineBorder(Color.black));
-            button.addActionListener(
-                    new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                            int positionInHand = ((HandButton) e.getSource()).getPositionInHand();
-                            Input input = new Input(positionInHand, "lclick");
-                            inputManager.handleInput(input);
-                        }
-                    }
-            );
+            button.addMouseListener(new HandButtonListener(i, inputManager));
             add(button);
             handButtons.add(button);
         }

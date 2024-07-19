@@ -193,4 +193,6 @@ public class Game implements Serializable {
     public TurnManager getTurnManager() {
         return turnManager;
     }
+
+    public Board getBoard(){ return board; }
 }
