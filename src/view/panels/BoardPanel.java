@@ -3,7 +3,10 @@ package view.panels;
 import entity.Board;
 import entity.Letter;
 import entity.Tile;
+import input_manager.InputManager;
+import view.Input;
 import view.buttons.BoardButton;
+import view.buttons.HandButton;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -16,13 +19,16 @@ public class BoardPanel extends JPanel {
     private int height;
     private Board board;
     BoardButton[][] buttons;
+    InputManager inputManager;
 
-    public BoardPanel() {
+    public BoardPanel(InputManager inputManager) {
         setLayout(new GridLayout(15, 15));
         Board emptyBoard = new Board();
         setPreferredSize(new Dimension(800, 800));
         this.width = emptyBoard.getWidth();
         this.height = emptyBoard.getHeight();
+        this.inputManager = inputManager;
+
         buttons = new BoardButton[this.width][this.height];
         for (int y=0; y < height; y++){
             for (int x=0; x < width; x++){
@@ -32,7 +38,9 @@ public class BoardPanel extends JPanel {
                 tileButton.addActionListener(
                         new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
-                                System.out.println(((BoardButton) e.getSource()).getCoords()[0]); //TODO: add onClick function that alerts InputManager when board elt pressed
+                                int[] coords = ((BoardButton) e.getSource()).getCoords();
+                                Input input = new Input(coords[0], coords[1], "lclick");
+                                inputManager.handleInput(input);
                             }
                         }
                 );

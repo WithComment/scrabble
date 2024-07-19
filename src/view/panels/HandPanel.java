@@ -1,6 +1,8 @@
 package view.panels;
 
 
+import input_manager.InputManager;
+import view.Input;
 import view.buttons.HandButton;
 
 import javax.swing.*;
@@ -13,9 +15,10 @@ import java.util.concurrent.Callable;
 
 public class HandPanel extends JPanel {
     private ArrayList<HandButton> handButtons = new ArrayList<>();
-
-    public HandPanel() {
+    InputManager inputManager;
+    public HandPanel(InputManager inputManager) {
         setLayout(new GridLayout(1, 7));
+        this.inputManager = inputManager;
     }
     public void setHand(ArrayList<String> hand) {
         removeAll();
@@ -27,7 +30,9 @@ public class HandPanel extends JPanel {
             button.addActionListener(
                     new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
-                            System.out.println(((HandButton) e.getSource()).getPositionInHand()); //TODO: add onClick function that alerts InputManager when hand elt pressed
+                            int positionInHand = ((HandButton) e.getSource()).getPositionInHand();
+                            Input input = new Input(positionInHand, "lclick");
+                            inputManager.handleInput(input);
                         }
                     }
             );

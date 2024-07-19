@@ -1,6 +1,7 @@
 package view;
 
 import entity.Tile;
+import input_manager.InputManager;
 import view.panels.BoardPanel;
 import view.panels.HandPanel;
 
@@ -18,14 +19,14 @@ public class View extends JPanel implements MouseListener, ActionListener {
     private BoardPanel boardPanel;
     private HandPanel handPanel;
 
-    public View() {
+    public View(InputManager inputManager) {
         window = new JFrame("Scrabble");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(1000, 1000);
         window.setVisible(true);
         window.addMouseListener(this);
-        boardPanel = new BoardPanel();
-        handPanel = new HandPanel();
+        boardPanel = new BoardPanel(inputManager);
+        handPanel = new HandPanel(inputManager);
         ArrayList<String> tempHand = new ArrayList<>();
         tempHand.add("A");
         tempHand.add("B");
