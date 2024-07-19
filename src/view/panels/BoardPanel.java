@@ -3,16 +3,19 @@ package view.panels;
 import entity.Board;
 import entity.Letter;
 import entity.Tile;
+import view.buttons.BoardButton;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class BoardPanel extends JPanel {
     private int width;
     private int height;
     private Board board;
-    JLabel[][] labels;
+    BoardButton[][] buttons;
 
     public BoardPanel() {
         setLayout(new GridLayout(15, 15));
@@ -20,15 +23,22 @@ public class BoardPanel extends JPanel {
         setPreferredSize(new Dimension(800, 800));
         this.width = emptyBoard.getWidth();
         this.height = emptyBoard.getHeight();
-        labels = new JLabel[this.width][this.height];
+        buttons = new BoardButton[this.width][this.height];
         for (int y=0; y < height; y++){
             for (int x=0; x < width; x++){
-                JLabel tileLabel = new JLabel("", SwingConstants.CENTER);
+                BoardButton tileButton = new BoardButton(new int[]{x, y});
                 Tile tile = emptyBoard.getCell(x, y);
-                setLabelToMatchTile(tileLabel, tile);
-                this.add(tileLabel);
+                setButtonToMatchTile(tileButton, tile);
+                tileButton.addActionListener(
+                        new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {
+                                System.out.println(((BoardButton) e.getSource()).getCoords()[0]); //TODO: add onClick function that alerts InputManager when board elt pressed
+                            }
+                        }
+                );
+                this.add(tileButton);
                 int[] coords = new int[]{x, y};
-                labels[y][x] = tileLabel;
+                buttons[y][x] = tileButton;
             }
         }
     }
@@ -39,38 +49,38 @@ public class BoardPanel extends JPanel {
                 Tile tile = board.getCell(x, y);
                 int[] coords = new int[]{x, y};
                 Letter letter = tile.getLetter();
-                JLabel tileLabel =  labels[coords[0]][coords[1]];
-                setLabelToMatchTile(tileLabel, tile);
+                BoardButton tileButton =  buttons[coords[0]][coords[1]];
+                setButtonToMatchTile(tileButton, tile);
             }
         }
     }
 
-    private void setLabelToMatchTile(JLabel tileLabel, Tile tile){
+    private void setButtonToMatchTile(JButton tileButton, Tile tile){
         Letter letter = tile.getLetter();
         int wordMult = tile.getWordMult();
         int letterMult = tile.getLetterMult();
         if (letter != null){
-            tileLabel.setText(String.valueOf(letter.getLetter()));
+            tileButton.setText(String.valueOf(letter.getLetter()));
         } else{
-            tileLabel.setText("_");
+            tileButton.setText("_");
         }
-        tileLabel.setBorder(new LineBorder(Color.black));
+        tileButton.setBorder(new LineBorder(Color.black));
         if (wordMult == 2){
-            tileLabel.setBackground(Color.ORANGE);
+            tileButton.setBackground(Color.ORANGE);
         } else if (wordMult == 3){
-            tileLabel.setBackground(Color.RED);
+            tileButton.setBackground(Color.RED);
         }
         if (letterMult == 2){
-            tileLabel.setBackground(Color.CYAN);
+            tileButton.setBackground(Color.CYAN);
         } else if (letterMult == 3){
-            tileLabel.setBackground(Color.BLUE);
+            tileButton.setBackground(Color.BLUE);
         }
-        tileLabel.setOpaque(true);
+        tileButton.setOpaque(true);
     }
 
     public void setGridSpotToTile(int[] coords, Tile tile){
-        JLabel tileLabel = labels[coords[0]][coords[1]];
+        JButton tileButton = buttons[coords[0]][coords[1]];
         System.out.println("Adding tile");
-        setLabelToMatchTile(tileLabel, tile);
+        setButtonToMatchTile(tileButton, tile);
     }
 }

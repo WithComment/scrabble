@@ -1,4 +1,4 @@
-package InputManager;
+package input_manager;
 
 import entity.Letter;
 

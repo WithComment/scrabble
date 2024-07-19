@@ -26,6 +26,10 @@ public class View extends JPanel implements MouseListener, ActionListener {
         window.addMouseListener(this);
         boardPanel = new BoardPanel();
         handPanel = new HandPanel();
+        ArrayList<String> tempHand = new ArrayList<>();
+        tempHand.add("A");
+        tempHand.add("B");
+        handPanel.setHand(tempHand);
         JPanel view = new JPanel();
         view.setLayout(new FlowLayout());
         view.add(boardPanel);
