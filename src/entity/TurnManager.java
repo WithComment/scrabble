@@ -1,5 +1,7 @@
 package entity;
 
+import entity.Play;
+import entity.Game;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ public class TurnManager {
     private Player CurrentPlayer;
     private int PlayerNumber;
     private List<Integer> NumContestFailed;
+    private Play CurrentPlay;
 
     /**
      * Constructs a TurnManager with an initial state.
@@ -24,6 +27,7 @@ public class TurnManager {
         this.CurrentPlayer = players.get(0);
         this.Players = players;
         this.NumContestFailed = new ArrayList<Integer>(players.size());
+        this.CurrentPlay = null;
     }
 
     /**
@@ -40,6 +44,8 @@ public class TurnManager {
      */
 
     public void startTurn(){
+        CurrentPlay = new Play(CurrentPlayer);
+
 
         while (NumContestFailed.get((PlayerNumber + 1) % Players.size()) > 0) {
             int NumContestFailedOfNextPlayer = NumContestFailed.get((PlayerNumber + 1) % Players.size());
@@ -65,18 +71,22 @@ public class TurnManager {
     public void ContestFailureUpdate(int PlayerNumber) {
         int CurrentFailure = NumContestFailed.get(PlayerNumber);
         NumContestFailed.set(PlayerNumber, CurrentFailure + 1);
-        Player currentPlayer = ReturnCurrentPlayer();
+        Player currentPlayer = GetCurrentPlayer();
         currentPlayer.BeContested();
     }
 
     /**
-     * Returns the current player.
+     * Returns thedealContest(turnManagerInputData.isContestSucceed); current player.
      *
      * @return the current player
      */
-    public Player ReturnCurrentPlayer() {
+    public Player GetCurrentPlayer() {
         CurrentPlayer = Players.get(PlayerNumber);
         return CurrentPlayer;
+    }
+
+    public List<Player> GetPlayers() {
+        return this.Players;
     }
 
      /**
@@ -109,6 +119,10 @@ public class TurnManager {
 
     public int getCurrentPlayerNum() {
         return PlayerNumber;
+    }
+
+    public Play getCurrentPlay() {
+        return CurrentPlay;
     }
 }
 

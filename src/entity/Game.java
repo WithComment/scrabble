@@ -153,17 +153,17 @@ public class Game implements Serializable {
         }
     }
 
-    /**
-     * Updates the score of a specific player based on a play.
-     *
-     * @param playerID The ID of the player whose score is to be updated.
-     * @param play     The play containing the score to add to the player's total score.
-     */
-    public void updatePlayerScore(int playerID, Play play) {
-        ArrayList<Integer> scores = new ArrayList<>();
-        scores.add(play.getScore());
-        players.get(playerID).updateScore(scores);
-    }
+//    /**
+//     * Updates the score of a specific player based on a play.
+//     *
+//     * @param playerID The ID of the player whose score is to be updated.
+//     * @param play     The play containing the score to add to the player's total score.
+//     */
+//    public void updatePlayerScore(int playerID, Play play) {
+//        ArrayList<Integer> scores = new ArrayList<>();
+//        scores.add(play.getScore());
+//        players.get(playerID).updateScore(scores);
+//    }
 
     /**
      * Retrieves the inventory of letters for a specific player.
