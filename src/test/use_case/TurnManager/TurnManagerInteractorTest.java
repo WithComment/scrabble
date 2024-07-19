@@ -36,7 +36,7 @@ public class TurnManagerInteractorTest {
 
     @Test
     public void testInitialCurrentPlayer() {
-        assertNull(turnManagerInteractor.getCurrentPlayer(), "Initial current player should be null.");
+        assertEquals(turnManagerInteractor.getCurrentPlayer(), turnManagerInteractor.getPlayers().get(0));
     }
 
     @Test

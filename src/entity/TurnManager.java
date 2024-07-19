@@ -65,7 +65,7 @@ public class TurnManager {
     public void ContestFailureUpdate(int PlayerNumber) {
         int CurrentFailure = NumContestFailed.get(PlayerNumber);
         NumContestFailed.set(PlayerNumber, CurrentFailure + 1);
-        Player currentPlayer = ReturnCurrentPlayer();
+        Player currentPlayer = GetCurrentPlayer();
         currentPlayer.BeContested();
     }
 
@@ -74,9 +74,13 @@ public class TurnManager {
      *
      * @return the current player
      */
-    public Player ReturnCurrentPlayer() {
+    public Player GetCurrentPlayer() {
         CurrentPlayer = Players.get(PlayerNumber);
         return CurrentPlayer;
+    }
+
+    public List<Player> GetPlayers() {
+        return this.Players;
     }
 
      /**
