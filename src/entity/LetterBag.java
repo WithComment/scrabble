@@ -8,20 +8,6 @@ import java.util.Collections;
 public class LetterBag {
   private ArrayList<Letter> bag;
 
-  // main method for testing purposes
-  public static void main(String[] args) {
-    LetterBag letterBag = new LetterBag();
-    System.out.println(letterBag);
-
-    // Draw tiles and print them
-    for (int i = 0; i < 3; i++) {
-      ArrayList<Letter> letters = letterBag.drawLetters(2);
-      for(Letter letter: letters){
-        System.out.println("Drew tile: " + letter.getLetter() + " (" + letter.getPoints() + " points)");
-      }
-    }
-  }
-
   public LetterBag() {
     bag = new ArrayList<>();
     initializeBag("static/letters.txt");
@@ -64,7 +50,6 @@ public class LetterBag {
       bag.add(letter);
     }
   }
-
 
   //Overloaded method to draw a single letter
   public ArrayList<Letter> drawLetters() {

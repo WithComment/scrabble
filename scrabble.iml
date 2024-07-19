@@ -9,7 +9,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" scope="TEST">
+    <orderEntry type="module-library" exported="" scope="TEST">
       <library name="JUnit5.8.1">
         <CLASSES>
           <root url="jar://$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter/5.8.1/junit-jupiter-5.8.1.jar!/" />
@@ -25,7 +25,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="jar://$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter/5.8.1/junit-jupiter-5.8.1.jar!/" />
@@ -41,14 +41,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" name="json" level="project" >
-        <library name="json">
-            <CLASSES>
-            <root url="jar://$MAVEN_REPOSITORY$/org/json/json/20240303/json-20240303.jar!/" />
-            </CLASSES>
-            <JAVADOC />
-            <SOURCES />
-        </library>
-    </orderEntry>
+    <orderEntry type="library" name="json" level="project" />
   </component>
 </module>
