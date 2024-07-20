@@ -1,24 +1,35 @@
 package app;
 
-import javax.swing.*;
+import java.util.LinkedList;
 
 import entity.Board;
 import entity.Game;
+import entity.LetterBag;
+import entity.Player;
+import entity.TurnManager;
 import input_manager.InputManager;
 import interface_adapter.GameViewModel;
-import interface_adapter.ViewManagerModel;
-import interface_adapter.ViewModel;
 import view.View;
-import view.ViewManager;
-
-import java.awt.*;
-import java.beans.PropertyChangeListener;
 
 public class Main {
     public static void main(String[] args) {
-        Game game = new Game();
+        Player player1 = new Player();
+        Player player2 = new Player();
+        LetterBag letterBag = new LetterBag();
+        Game game = new Game(new LinkedList<Player>() {
+            {
+                add(player1);
+                add(player2);
+            }
+        });
+
+        TurnManager turnManager = game.getTurnManager();
+        turnManager.startTurn();
+        player1.addLetter(letterBag.drawLetters(7));
+        player2.addLetter(letterBag.drawLetters(7));
+
         Board board = game.getBoard();
-        ViewModel viewModel = new GameViewModel("game", game);
+        GameViewModel viewModel = new GameViewModel(game);
         View view = new View(new InputManager(game, viewModel));
     }
 }

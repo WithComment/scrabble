@@ -3,6 +3,7 @@ package entity;
 import entity.Play;
 import entity.Game;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class TurnManager {
         this.endTurn = false;
         this.CurrentPlayer = players.get(0);
         this.Players = players;
-        this.NumContestFailed = new ArrayList<Integer>(players.size());
+        this.NumContestFailed = new ArrayList<Integer>(Collections.nCopies(players.size(), 0));
         this.CurrentPlay = null;
     }
 

@@ -1,6 +1,8 @@
 package input_manager;
 
+import controller_factory.PlaceLetterControllerFactory;
 import entity.*;
+import interface_adapter.GameViewModel;
 import interface_adapter.ViewModel;
 import interface_adapter.remove_piece.RemoveLetterController;
 import use_case.remove_letter.*;
@@ -11,9 +13,9 @@ import view.View;
 public class InputManager {
     private Letter selectedLetter;
     private Game game;
-    private ViewModel viewModel;
+    private GameViewModel viewModel;
 
-    public InputManager(Game game, ViewModel viewModel){
+    public InputManager(Game game, GameViewModel viewModel){
         this.game = game;
         this.viewModel = viewModel;
     }
@@ -25,7 +27,7 @@ public class InputManager {
             } else if (input.getInput().equals("lclick")){
                 if (selectedLetter != null) {
                     System.out.println("Place letter");
-                    //PLACE LETTER GOES HERE
+                    placeLetter(input.getX(), input.getY(), selectedLetter);
                 } else{
                     System.out.println("No selected letter");
                     return;
@@ -48,6 +50,16 @@ public class InputManager {
         RemoveLetterInteractor interactor = new RemoveLetterInteractor(presenter);
         RemoveLetterController controller = new RemoveLetterController(interactor);
         controller.execute(x, y, play, selectedTile, board);
+    }
+
+    private void placeLetter(int x, int y, Letter letter){
+        Play play = game.getTurnManager().getCurrentPlay();
+        Board board = game.getBoard();
+        PlaceLetterControllerFactory.get(viewModel).execute(x, y, letter, board, play);
+    }
+
+    public Game getGame(){
+        return game;
     }
     /** methods: useCaseName(relevant data eg: x, y position){
      *              UseCaseNamePresenter useCaseNamePresenter = new useCaseNamePresenter();

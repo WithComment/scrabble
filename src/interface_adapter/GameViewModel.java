@@ -10,8 +10,8 @@ public class GameViewModel extends ViewModel {
   private final PropertyChangeSupport support = new PropertyChangeSupport(this);
   private Game game;
 
-  public GameViewModel(String viewName, Game game) {
-    super(viewName);
+  public GameViewModel(Game game) {
+    super("Game");
     this.game = game;
   }
   
@@ -31,6 +31,5 @@ public class GameViewModel extends ViewModel {
   
   public void setGame(Game game) {
     this.game = game;
-    firePropertyChanged();
   }
 }
