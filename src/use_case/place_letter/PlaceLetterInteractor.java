@@ -29,6 +29,8 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     if (!board.getCell(x, y).isEmpty()) {
       presenter.prepareFailView("This grid is occupied!");
     } else if (!player.getInventory().contains(letter)) {
+      System.out.println(player.getId());
+      System.out.println(player.getInventory().toString());
       presenter.prepareFailView("You don't have the letter in your inventory!");
     } else {
       play.addMove(new Move(x, y, letter));

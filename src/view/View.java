@@ -14,16 +14,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 
-public class View extends JPanel implements MouseListener, ActionListener {
+public class View extends JPanel implements MouseListener, ActionListener, PropertyChangeListener {
     private JFrame window;
     private BoardPanel boardPanel;
     private HandPanel handPanel;
-    private GameViewModel viewModel;
+    private GameViewModel gameViewModel;
 
-    public View(InputManager inputManager, GameViewModel viewModel) {
+    public View(InputManager inputManager, GameViewModel gameViewModel) {
+        this.gameViewModel = gameViewModel;
+        gameViewModel.addPropertyChangeListener(this);
         window = new JFrame("Scrabble");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(1000, 1000);
@@ -32,6 +36,7 @@ public class View extends JPanel implements MouseListener, ActionListener {
         boardPanel = new BoardPanel(inputManager);
         handPanel = new HandPanel(inputManager);
         ArrayList<String> tempHand = new ArrayList<>();
+        System.out.println(inputManager.getGame().getTurnManager().GetCurrentPlayer().getId());
         for (Letter l : inputManager.getGame().getTurnManager().GetCurrentPlayer().getInventory()) {
             tempHand.add(String.valueOf(l.getLetter()));
         }
@@ -70,5 +75,20 @@ public class View extends JPanel implements MouseListener, ActionListener {
 
     public void setTile(int[] coords, Tile tile) {
         boardPanel.setGridSpotToTile(coords, tile);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        Game game = (Game) evt.getNewValue();
+        if (evt.getPropertyName().equals("Game")) {
+            ArrayList<String> tempHand = new ArrayList<>();
+            for (Letter l : gameViewModel.getGame().getTurnManager().GetCurrentPlayer().getInventory()) {
+                tempHand.add(String.valueOf(l.getLetter()));
+            }
+            handPanel.setHand(tempHand);
+            boardPanel.setBoardToState((game.getBoard()));
+            handPanel.updateUI();
+            boardPanel.updateUI();
+        }
     }
 }
