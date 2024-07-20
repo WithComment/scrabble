@@ -1,8 +1,10 @@
 package entity;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -18,17 +20,17 @@ public class LetterBag {
    */
   public LetterBag() {
     bag = new ArrayList<>();
-    initializeBag("static/letters.txt");
+    initializeBag(Paths.get("static", "letters.txt"));
   }
 
   /**
    * Initializes the bag with letters from a specified file.
    * Each line in the file should contain a letter, its points, and its count separated by spaces.
    *
-   * @param filename the name of the file containing the letters information
+   * @param filePath the name of the file containing the letters information
    */
-  private void initializeBag(String filename) {
-    try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+  private void initializeBag(Path filePath) {
+    try (BufferedReader br = Files.newBufferedReader(filePath)) {
       String line;
       while ((line = br.readLine()) != null) {
         String[] parts = line.split(" ");
