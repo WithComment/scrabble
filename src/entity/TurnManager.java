@@ -35,6 +35,17 @@ public class TurnManager {
      * Ends the current turn by setting the endTurn flag to true.
      */
     public void endTurn() {
+        while (NumContestFailed.get((PlayerNumber + 1) % Players.size()) > 0) {
+            int NumContestFailedOfNextPlayer = NumContestFailed.get((PlayerNumber + 1) % Players.size());
+            NumContestFailed.set((PlayerNumber + 1) % Players.size(), NumContestFailedOfNextPlayer - 1);
+            PlayerNumber = (PlayerNumber + 1) % Players.size();
+        }
+        PlayerNumber = (PlayerNumber + 1) % Players.size();
+        // Notify the front-end or other players that the turn has ended and it's the next player's turn
+        CurrentPlayer = Players.get(PlayerNumber);
+//        System.out.println("It's now player " + PlayerNumber + "'s turn.");
+//        System.out.println("It's now player " + getCurrentPlayer().getId() + "'s turn.");
+
         endTurn = true;
     }
 
@@ -48,16 +59,6 @@ public class TurnManager {
         CurrentPlay = new Play(CurrentPlayer);
 
 
-        while (NumContestFailed.get((PlayerNumber + 1) % Players.size()) > 0) {
-            int NumContestFailedOfNextPlayer = NumContestFailed.get((PlayerNumber + 1) % Players.size());
-            NumContestFailed.set((PlayerNumber + 1) % Players.size(), NumContestFailedOfNextPlayer - 1);
-            PlayerNumber = (PlayerNumber + 1) % Players.size();
-        }
-        PlayerNumber = (PlayerNumber + 1) % Players.size();
-        // Notify the front-end or other players that the turn has ended and it's the next player's turn
-        CurrentPlayer = Players.get(PlayerNumber);
-//        System.out.println("It's now player " + PlayerNumber + "'s turn.");
-//        System.out.println("It's now player " + getCurrentPlayer().getId() + "'s turn.");
         this.endTurn = false;
 
     }
