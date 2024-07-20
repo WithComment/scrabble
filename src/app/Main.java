@@ -29,7 +29,7 @@ public class Main {
         player2.addLetter(letterBag.drawLetters(7));
 
         Board board = game.getBoard();
-        GameViewModel viewModel = new GameViewModel(game);
-        View view = new View(new InputManager(game, viewModel));
+        GameViewModel gameViewModel = new GameViewModel(game);
+        View view = new View(new InputManager(game, gameViewModel), gameViewModel);
     }
 }
