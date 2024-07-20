@@ -18,7 +18,7 @@ public class Player {
      *
      * @param id the ID of the player
      */
-    public Player() {
+    public Player(int id) {
         this.id = idCounter++;
         this.inventory = new ArrayList<>();
         this.score = 0;

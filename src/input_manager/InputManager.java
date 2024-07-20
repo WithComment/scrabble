@@ -23,7 +23,7 @@ public class InputManager {
         if (input.getType().equals("GridInput")){
             if (input.getInput().equals("rclick")){
                 System.out.println("Remove letter");
-                removeLetter(input.getX(), input.getY());
+                //removeLetter(input.getX(), input.getY());
             } else if (input.getInput().equals("lclick")){
                 if (selectedLetter != null) {
                     System.out.println("Place letter");
@@ -42,15 +42,15 @@ public class InputManager {
         }
     }
 
-    private void removeLetter(int x, int y){
-        Play play = game.getLastPlay();
-        Board board = game.getBoard();
-        Tile selectedTile = board.getCell(x, y);
-        RemoveLetterOutputData presenter = new RemoveLetterPresenter();
-        RemoveLetterInteractor interactor = new RemoveLetterInteractor(presenter);
-        RemoveLetterController controller = new RemoveLetterController(interactor);
-        controller.execute(x, y, play, selectedTile, board);
-    }
+//    private void removeLetter(int x, int y){
+//        Play play = game.getLastPlay();
+//        Board board = game.getBoard();
+//        Tile selectedTile = board.getCell(x, y);
+//        RemoveLetterOutputData presenter = new RemoveLetterPresenter();
+//        RemoveLetterInteractor interactor = new RemoveLetterInteractor(presenter);
+//        RemoveLetterController controller = new RemoveLetterController(interactor);
+//        controller.execute(x, y, play, selectedTile, board);
+//    }
 
     private void placeLetter(int x, int y, Letter letter){
         Play play = game.getTurnManager().getCurrentPlay();

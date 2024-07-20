@@ -68,7 +68,7 @@ public class Game implements Serializable {
      * @return The player that was added to the game.
      */
     public Player addPlayer() {
-        Player player = new Player();
+        Player player = new Player(0);
         players.add(player);
         return player;
     }

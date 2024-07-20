@@ -7,7 +7,7 @@ import interface_adapter.place_letter.ConfirmPlayController;
 import use_case.confirm_play.ConfirmPlayOutputBoundary;
 
 public class ConfirmPlayControllerFactory {
-  
+
   private ConfirmPlayControllerFactory() {
     // This class should not be instantiated
   }

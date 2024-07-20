@@ -16,7 +16,7 @@ public class Main {
         int NumOfPlayers = 2;
         ArrayList<Player> players = new ArrayList<Player>();
         for (int i = 0; i < NumOfPlayers; i++) {
-            players.add(new Player());
+            players.add(new Player(i));
         }
         LetterBag letterBag = new LetterBag();
         Game game = new Game(players);

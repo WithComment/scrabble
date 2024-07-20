@@ -24,9 +24,9 @@ public class TurnManagerTest {
 
     @BeforeEach
     public void setUp() {
-        player1 = new Player(1);
-        player2 = new Player(2);
-        player3 = new Player(3);
+        player1 = new Player(0);
+        player2 = new Player(1);
+        player3 = new Player(2);
         players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
