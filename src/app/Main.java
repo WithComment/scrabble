@@ -1,6 +1,6 @@
 package app;
 
-import java.util.LinkedList;
+import java.util.*;
 
 import entity.Board;
 import entity.Game;
@@ -12,24 +12,22 @@ import interface_adapter.GameViewModel;
 import view.View;
 
 public class Main {
-    public static void main(String[] args) {
-        Player player1 = new Player();
-        Player player2 = new Player();
+    public static void main(String[] args, int NumOfPlayers) {
+        ArrayList<Player> players = new ArrayList<Player>();
+        for (int i = 0; i < NumOfPlayers; i++) {
+            players.add(new Player());
+        }
         LetterBag letterBag = new LetterBag();
-        Game game = new Game(new LinkedList<Player>() {
-            {
-                add(player1);
-                add(player2);
-            }
-        });
+        Game game = new Game(players);
 
         TurnManager turnManager = game.getTurnManager();
         turnManager.startTurn();
-        player1.addLetter(letterBag.drawLetters(7));
-        player2.addLetter(letterBag.drawLetters(7));
+        for (Player player : players) {
+            player.addLetter(letterBag.drawLetters(7));
+        }
 
         Board board = game.getBoard();
         GameViewModel viewModel = new GameViewModel(game);
-        View view = new View(new InputManager(game, viewModel));
+        View view = new View(new InputManager(game, viewModel), viewModel);
     }
 }

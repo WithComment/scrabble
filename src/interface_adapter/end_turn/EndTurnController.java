@@ -18,14 +18,10 @@ public class EndTurnController {
         this.turnManagerInteractor = turnManagerInteractor;
     }
 
-    /**
+    /*
      * Ends the current player's turn.
      * Updates the TurnManager and starts the next player's turn.
      */
-    public void endTurn() {
-        turnManagerInteractor.endTurn();
-        turnManagerInteractor.startTurn();
-    }
 
     /**
      * Handles the result of a contest.
@@ -33,7 +29,13 @@ public class EndTurnController {
      *
      * @param contestSucceed a boolean indicating whether the contest succeeded
      */
-    public void handleContest(boolean contestSucceed) {
+
+    public void execute(boolean contestSucceed) {
         turnManagerInteractor.dealContest(contestSucceed);
+        turnManagerInteractor.endTurn();
+        turnManagerInteractor.startTurn();
     }
 }
+
+
+

@@ -24,9 +24,7 @@ public class Game implements Serializable {
         this.id = nextId++;
         this.board = new Board();
         this.players = new ArrayList<Player>();
-        for (Player player : players) {
-            this.players.add(player);
-        }
+        this.players.addAll(players);
         this.history = new ArrayList<>();
         this.letterBag = new LetterBag();
         this.turnManager = new TurnManager(this.players);
@@ -70,7 +68,7 @@ public class Game implements Serializable {
      * @return The player that was added to the game.
      */
     public Player addPlayer() {
-        Player player = new Player(nextPlayerId++);
+        Player player = new Player();
         players.add(player);
         return player;
     }
