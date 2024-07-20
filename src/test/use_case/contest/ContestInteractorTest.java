@@ -7,6 +7,9 @@ import use_case.contest.ContestInteractor;
 import use_case.contest.ContestOutputBoundary;
 import use_case.contest.ContestOutputData;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +34,7 @@ class ContestInteractorTest {
             }
         };
 
-        Game game = new Game();
+        Game game = new Game(new LinkedList<>());
         Player a = game.addPlayer(), b = game.addPlayer();
         placeLetter(game, 7, 7, new Letter('P', 1));
         placeLetter(game, 7, 8, new Letter('L', 1));
@@ -42,7 +45,9 @@ class ContestInteractorTest {
         play.addMove(new Move(7, 8, new Letter('L', 1)));
         play.addMove(new Move(7, 9, new Letter('A', 1)));
         play.addMove(new Move(7, 10, new Letter('Y', 1)));
-        play.setWords(List.of("PLAY"));
+        ArrayList<String> words = new ArrayList<>();
+        words.add("PLAY");
+        play.setWords(words);
         game.addPlay(play);
 
         ContestInputData inputData = new ContestInputData(game, b);
@@ -63,7 +68,7 @@ class ContestInteractorTest {
             @Override
             public void prepareSuccessView(ContestOutputData outputData) {
                 List<String> invalidWords = outputData.getInvalidWords();
-                assertIterableEquals(List.of("PLA"), invalidWords);
+                assertIterableEquals(Arrays.asList("PLA"), invalidWords);
             }
 
             @Override
@@ -72,7 +77,7 @@ class ContestInteractorTest {
             }
         };
 
-        Game game = new Game();
+        Game game = new Game(new LinkedList<>());
         Player a = game.addPlayer(), b = game.addPlayer();
         placeLetter(game, 7, 7, new Letter('P', 1));
         placeLetter(game, 7, 8, new Letter('L', 1));
@@ -81,7 +86,7 @@ class ContestInteractorTest {
         play.addMove(new Move(7, 7, new Letter('P', 1)));
         play.addMove(new Move(7, 8, new Letter('L', 1)));
         play.addMove(new Move(7, 9, new Letter('A', 1)));
-        play.setWords(List.of("PLA"));
+        play.setWords(Arrays.asList("PLA"));
         game.addPlay(play);
 
         ContestInputData inputData = new ContestInputData(game, b);

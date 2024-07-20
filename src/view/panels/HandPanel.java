@@ -9,10 +9,14 @@ import view.listeners.HandButtonListener;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+
+import entity.Letter;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 public class HandPanel extends JPanel {
@@ -22,11 +26,11 @@ public class HandPanel extends JPanel {
         setLayout(new GridLayout(1, 7));
         this.inputManager = inputManager;
     }
-    public void setHand(ArrayList<String> hand) {
+    public void setHand(List<Letter> newHand) {
         removeAll();
-        for(int i = 0; i < hand.size(); i++) {
+        for(int i = 0; i < newHand.size(); i++) {
             HandButton button = new HandButton(i);
-            button.setText(hand.get(i));
+            button.setText(newHand.get(i).toString());
             button.setPreferredSize(new Dimension(100, 100));
             button.setBorder(new LineBorder(Color.black));
             button.addMouseListener(new HandButtonListener(i, inputManager));

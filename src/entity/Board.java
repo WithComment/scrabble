@@ -44,6 +44,10 @@ public class    Board {
         return board;
     }
 
+    public Tile[][] getBoard() {
+        return board;
+    }
+
     /**
      * Adds a tile to the board and its 7 other symmetric positions.
      *
@@ -90,7 +94,7 @@ public class    Board {
      * @param tile the tile to set
      */
     public void setCell(int x, int y, Tile tile) {
-        this.board[x][y] = tile;
+        this.board[y][x] = tile;
     }
 
     /**
@@ -102,7 +106,7 @@ public class    Board {
      * @return
      */
     public Tile setCell(int x, int y, Letter letter) {
-        return this.board[x][y].setLetter(letter);
+        return this.board[y][x].setLetter(letter);
     }
 
     /**
@@ -113,7 +117,7 @@ public class    Board {
      * @return the tile at the specified position
      */
     public Tile getCell(int x, int y) {
-        return this.board[x][y];
+        return this.board[y][x];
     }
 
     /**
@@ -124,10 +128,10 @@ public class    Board {
      * @return
      */
     public boolean confirm(int x, int y) {
-        if (this.board[x][y].isEmpty()) {
+        if (this.board[y][x].isEmpty()) {
             return false;
         }
-        this.board[x][y].confirm();
+        this.board[y][x].confirm();
         return true;
     }
 
@@ -138,7 +142,7 @@ public class    Board {
      * @param y
      */
     public void setAndConfirm(int x, int y, Letter letter) {
-        this.board[x][y].setAndConfirm(letter);
+        this.board[y][x].setAndConfirm(letter);
     }
 
     /**
@@ -148,6 +152,6 @@ public class    Board {
      * @param y
      */
     public boolean isConfirmed(int x, int y) {
-        return this.board[x][y].isConfirmed();
+        return this.board[y][x].isConfirmed();
     }
 }

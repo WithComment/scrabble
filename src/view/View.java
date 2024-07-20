@@ -1,5 +1,6 @@
 package view;
 
+import entity.Board;
 import entity.Game;
 import entity.Letter;
 import entity.Tile;
@@ -17,6 +18,7 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class View extends JPanel implements MouseListener, ActionListener, PropertyChangeListener {
@@ -40,7 +42,7 @@ public class View extends JPanel implements MouseListener, ActionListener, Prope
         for (Letter l : inputManager.getGame().getTurnManager().GetCurrentPlayer().getInventory()) {
             tempHand.add(String.valueOf(l.getLetter()));
         }
-        handPanel.setHand(tempHand);
+        handPanel.setHand(inputManager.getGame().getTurnManager().GetCurrentPlayer().getInventory());
         JPanel view = new JPanel();
         view.setLayout(new FlowLayout());
         view.add(boardPanel);
@@ -77,18 +79,22 @@ public class View extends JPanel implements MouseListener, ActionListener, Prope
         boardPanel.setGridSpotToTile(coords, tile);
     }
 
+    private void updateBoard(Board newBoard) {
+        boardPanel.setBoardToState(newBoard);
+        boardPanel.updateUI();
+    }
+
+    private void updateHand(List<Letter> newHand) {
+        handPanel.setHand(newHand);
+        handPanel.updateUI();
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         Game game = (Game) evt.getNewValue();
         if (evt.getPropertyName().equals("Game")) {
-            ArrayList<String> tempHand = new ArrayList<>();
-            for (Letter l : gameViewModel.getGame().getTurnManager().GetCurrentPlayer().getInventory()) {
-                tempHand.add(String.valueOf(l.getLetter()));
-            }
-            handPanel.setHand(tempHand);
-            boardPanel.setBoardToState((game.getBoard()));
-            handPanel.updateUI();
-            boardPanel.updateUI();
+            updateHand(game.getTurnManager().GetCurrentPlayer().getInventory());
+            updateBoard(game.getBoard());
         }
     }
 }
