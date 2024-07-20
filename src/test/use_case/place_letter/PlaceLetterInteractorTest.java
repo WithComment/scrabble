@@ -75,18 +75,18 @@ public class PlaceLetterInteractorTest {
             }
         };
 
-        PlaceLetterInputBoundary dummyInteractor = new PlaceLetterInteractor(dummyPresenter, board, play);
-        dummyInteractor.execute(new PlaceLetterInputData(ax, ay, a));
-        dummyInteractor.execute(new PlaceLetterInputData(bx, by, b));
-        dummyInteractor.execute(new PlaceLetterInputData(cx, cy, c));
+        PlaceLetterInputBoundary dummyInteractor = new PlaceLetterInteractor(dummyPresenter);
+        dummyInteractor.execute(new PlaceLetterInputData(ax, ay, a, board, play));
+        dummyInteractor.execute(new PlaceLetterInputData(bx, by, b, board, play));
+        dummyInteractor.execute(new PlaceLetterInputData(cx, cy, c, board, play));
 
-        PlaceLetterInputBoundary interactor = new PlaceLetterInteractor(tester, board, play);
-        interactor.execute(new PlaceLetterInputData(dx, dy, d));
+        PlaceLetterInputBoundary interactor = new PlaceLetterInteractor(tester);
+        interactor.execute(new PlaceLetterInputData(dx, dy, d, board, play));
     }
 
     @Test
     void testOccupiedFailure() {
-        PlaceLetterInputBoundary dummyInteractor = new PlaceLetterInteractor(dummyPresenter, board, play);
+        PlaceLetterInputBoundary dummyInteractor = new PlaceLetterInteractor(dummyPresenter);
         PlaceLetterOutputBoundary tester = new PlaceLetterOutputBoundary() {
             @Override
             public void prepareSuccessView(PlaceLetterOutputData data) {
@@ -99,15 +99,15 @@ public class PlaceLetterInteractorTest {
             }
         };
         player.addLetter(a.clone());
-        PlaceLetterInputData data = new PlaceLetterInputData(7, 7, a);
+        PlaceLetterInputData data = new PlaceLetterInputData(7, 7, a, board, play);
         dummyInteractor.execute(data);
-        PlaceLetterInputBoundary interactor = new PlaceLetterInteractor(tester, board, play);
+        PlaceLetterInputBoundary interactor = new PlaceLetterInteractor(tester);
         interactor.execute(data);
     }
 
     @Test
     void testNotInInventoryFailure() {
-        PlaceLetterInputBoundary dummyInteractor = new PlaceLetterInteractor(dummyPresenter, board, play);
+        PlaceLetterInputBoundary dummyInteractor = new PlaceLetterInteractor(dummyPresenter);
         PlaceLetterOutputBoundary tester = new PlaceLetterOutputBoundary() {
 
             @Override
@@ -120,8 +120,8 @@ public class PlaceLetterInteractorTest {
                 assertEquals("You don't have the letter in your inventory!", error);
             }
         };
-        dummyInteractor.execute(new PlaceLetterInputData(7, 7, a));
-        PlaceLetterInputBoundary interactor = new PlaceLetterInteractor(tester, board, play);
-        interactor.execute(new PlaceLetterInputData(0, 0, a));
+        dummyInteractor.execute(new PlaceLetterInputData(7, 7, a, board, play));
+        PlaceLetterInputBoundary interactor = new PlaceLetterInteractor(tester);
+        interactor.execute(new PlaceLetterInputData(0, 0, a, board, play));
     }
 }

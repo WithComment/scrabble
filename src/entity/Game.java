@@ -2,6 +2,7 @@ package entity;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Game implements Serializable {
     // Serializable vars
@@ -11,21 +12,24 @@ public class Game implements Serializable {
     protected LetterBag letterBag; // Bag of letters available to draw from
     private int nextPlayerId = 0; // Counter to assign unique IDs to players within this game
     private Board board; // The game board
-    private ArrayList<Player> players; // List of players in the game
-    private ArrayList<Play> history; // History of plays made during the game
+    private List<Player> players; // List of players in the game
+    private List<Play> history; // History of plays made during the game
     private TurnManager turnManager;
 
     /**
      * Constructs a new Game instance.
      * Initializes the game with a unique ID, a new board, empty player list, empty play history, and a new letter bag.
      */
-    public Game() {
+    public Game(List<Player> players) {
         this.id = nextId++;
         this.board = new Board();
-        this.players = new ArrayList<>();
+        this.players = new ArrayList<Player>();
+        for (Player player : players) {
+            this.players.add(player);
+        }
         this.history = new ArrayList<>();
         this.letterBag = new LetterBag();
-        this.turnManager = new TurnManager(players);
+        this.turnManager = new TurnManager(this.players);
     }
 
     /**
