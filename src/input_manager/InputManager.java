@@ -35,6 +35,9 @@ public class InputManager {
                 Player currentPlayer = game.getTurnManager().GetCurrentPlayer();
                 selectedLetter = currentPlayer.getInventory().get(input.getPositionInHand());
             }
+        } else if (input.getType().equals("ConfirmPlay")){
+            System.out.println("Confirm play");
+            //CONFIRM PLAY USE CASE GOES HERE
         }
     }
 

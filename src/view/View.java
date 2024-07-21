@@ -6,8 +6,10 @@ import entity.Letter;
 import entity.Tile;
 import input_manager.InputManager;
 import interface_adapter.GameViewModel;
+import view.listeners.ConfirmPlayListener;
 import view.panels.BoardPanel;
 import view.panels.HandPanel;
+import view.panels.LeaderboardPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +28,7 @@ public class View extends JPanel implements MouseListener, ActionListener, Prope
     private BoardPanel boardPanel;
     private HandPanel handPanel;
     private GameViewModel gameViewModel;
+    private LeaderboardPanel leaderBoardPanel;
 
     public View(InputManager inputManager, GameViewModel gameViewModel) {
         this.gameViewModel = gameViewModel;
@@ -37,16 +40,28 @@ public class View extends JPanel implements MouseListener, ActionListener, Prope
         window.addMouseListener(this);
         boardPanel = new BoardPanel(inputManager);
         handPanel = new HandPanel(inputManager);
+        leaderBoardPanel = new LeaderboardPanel();
+        leaderBoardPanel.addPlayer("Player Name 1"); // Replace with players actual name or ID as a string NOT as a Player object
+        leaderBoardPanel.addPlayer("Player Name 2");
+        leaderBoardPanel.addPlayer("Player Name 3");
+        leaderBoardPanel.addPlayer("Player Name 4");
+//        leaderBoardPanel.updateLeaderboard(whatever their score is, as an int);
+
+        JButton confirmPlayButton = new JButton("Confirm Play");
+        confirmPlayButton.addMouseListener(new ConfirmPlayListener(inputManager));
         ArrayList<String> tempHand = new ArrayList<>();
         System.out.println(inputManager.getGame().getTurnManager().GetCurrentPlayer().getId());
         for (Letter l : inputManager.getGame().getTurnManager().GetCurrentPlayer().getInventory()) {
             tempHand.add(String.valueOf(l.getLetter()));
         }
         handPanel.setHand(inputManager.getGame().getTurnManager().GetCurrentPlayer().getInventory());
+
         JPanel view = new JPanel();
         view.setLayout(new FlowLayout());
         view.add(boardPanel);
         view.add(handPanel);
+        view.add(confirmPlayButton);
+        view.add(leaderBoardPanel);
         window.add(view);
         boardPanel.updateUI();
         handPanel.updateUI();
