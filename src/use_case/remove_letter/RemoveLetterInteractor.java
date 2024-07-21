@@ -34,12 +34,12 @@ public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
             }
         }
         if (!isValidClick){
-            presenter.prepareFailureView(new RemoveLetterOutputData(false));
+            presenter.prepareFailureView(new RemoveLetterOutputData(false, board, player.getInventory()));
         } else{
             play.removeMove(x, y);
             player.addLetter(selectedTile.getLetter());
             selectedTile.removeLetter();
-            presenter.prepareSuccessView(new RemoveLetterOutputData(true));
+            presenter.prepareSuccessView(new RemoveLetterOutputData(true, board, player.getInventory()));
         }
     }
 }
