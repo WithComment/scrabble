@@ -50,7 +50,7 @@ public class BoardPanel extends JPanel {
                 Tile tile = board.getCell(x, y);
                 int[] coords = new int[]{x, y};
                 Letter letter = tile.getLetter();
-                BoardButton tileButton =  buttons[coords[0]][coords[1]];
+                BoardButton tileButton =  buttons[coords[1]][coords[0]];
                 setButtonToMatchTile(tileButton, tile);
             }
         }
