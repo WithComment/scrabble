@@ -1,12 +1,14 @@
 package input_manager;
 
 import controller_factory.PlaceLetterControllerFactory;
+import controller_factory.RemoveLetterControllerFactory;
 import entity.*;
 import interface_adapter.GameViewModel;
 import interface_adapter.confirm_play.ConfirmPlayController;
 import interface_adapter.place_letter.PlaceLetterController;
 import use_case.get_leaderboard.GetLeaderboardInputBoundary;
 import use_case.get_leaderboard.GetLeaderboardInputData;
+import interface_adapter.remove_piece.RemoveLetterController;
 import view.Input;
 
 
@@ -32,7 +34,7 @@ public class InputManager {
         if (input.getType().equals("GridInput")){
             if (input.getInput().equals("rclick")){
                 System.out.println("Remove letter");
-                //removeLetter(input.getX(), input.getY());
+                removeLetter(input.getX(), input.getY());
             } else if (input.getInput().equals("lclick")){
                 if (selectedLetter != null) {
                     System.out.println("Place letter");
@@ -54,15 +56,18 @@ public class InputManager {
         }
     }
 
-//    private void removeLetter(int x, int y){
-//        Play play = game.getLastPlay();
-//        Board board = game.getBoard();
-//        Tile selectedTile = board.getCell(x, y);
-//        RemoveLetterOutputData presenter = new RemoveLetterPresenter();
-//        RemoveLetterInteractor interactor = new RemoveLetterInteractor(presenter);
-//        RemoveLetterController controller = new RemoveLetterController(interactor);
-//        controller.execute(x, y, play, selectedTile, board);
-//    }
+    private void removeLetter(int x, int y){
+        try{
+            Play play = game.getLastPlay();
+            Board board = game.getBoard();
+            Tile selectedTile = board.getCell(x, y);
+            RemoveLetterController controller = RemoveLetterControllerFactory.createRemoveLetterController(viewModel);
+            controller.execute(x, y, play, selectedTile, board);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+    }
 
     private void placeLetter(int x, int y, Letter letter){
         Play play = game.getTurnManager().getCurrentPlay();

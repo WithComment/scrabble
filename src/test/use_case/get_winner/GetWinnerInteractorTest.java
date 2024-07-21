@@ -8,10 +8,10 @@ import use_case.get_winner.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GetWinnerInteractorTest implements GetWinnerOutputBoundary {
 
@@ -40,7 +40,7 @@ public class GetWinnerInteractorTest implements GetWinnerOutputBoundary {
         interactor.execute(inputData);
 
         List<LeaderboardEntry> expectedWinner = new ArrayList<>();
-        expectedWinner.add(new LeaderboardEntry(1, 20));
+        expectedWinner.add(new LeaderboardEntry(players.get(0), 20));
         assertEquals(expectedWinner, winners);
     }
 
@@ -56,8 +56,8 @@ public class GetWinnerInteractorTest implements GetWinnerOutputBoundary {
         interactor.execute(inputData);
 
         List<LeaderboardEntry> expectedWinners = new ArrayList<>();
-        expectedWinners.add(new LeaderboardEntry(1, 20));
-        expectedWinners.add(new LeaderboardEntry(2, 20));
+        expectedWinners.add(new LeaderboardEntry(players.get(0), 20));
+        expectedWinners.add(new LeaderboardEntry(players.get(1), 20));
         assertEquals(expectedWinners, winners);
     }
 

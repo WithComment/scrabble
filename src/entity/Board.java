@@ -1,6 +1,6 @@
 package entity;
 
-public class    Board {
+public class Board {
     private final Tile[][] board;
     private final int height;
     private final int width;
@@ -44,10 +44,6 @@ public class    Board {
         return board;
     }
 
-    public Tile[][] getBoard() {
-        return board;
-    }
-
     /**
      * Adds a tile to the board and its 7 other symmetric positions.
      *
@@ -66,6 +62,10 @@ public class    Board {
         board[y][14 - x] = new Tile(wordMult, letterMult, null);
         board[14 - y][x] = new Tile(wordMult, letterMult, null);
         board[14 - y][14 - x] = new Tile(wordMult, letterMult, null);
+    }
+
+    public Tile[][] getBoard() {
+        return board;
     }
 
     /**
@@ -153,5 +153,16 @@ public class    Board {
      */
     public boolean isConfirmed(int x, int y) {
         return this.board[y][x].isConfirmed();
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                sb.append(board[i][j].toString());
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }
