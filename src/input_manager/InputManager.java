@@ -3,19 +3,32 @@ package input_manager;
 import controller_factory.PlaceLetterControllerFactory;
 import entity.*;
 import interface_adapter.GameViewModel;
+import interface_adapter.confirm_play.ConfirmPlayController;
+import interface_adapter.place_letter.PlaceLetterController;
+import use_case.get_leaderboard.GetLeaderboardInputBoundary;
+import use_case.get_leaderboard.GetLeaderboardInputData;
 import view.Input;
 
 
 public class InputManager {
     private Letter selectedLetter;
     private Game game;
-    private GameViewModel viewModel;
+    private PlaceLetterController placeLetterController;
+    private ConfirmPlayController confirmPlayController;
+    private GetLeaderboardInputBoundary getLeaderboardInputBoundary;
 
-    public InputManager(Game game, GameViewModel viewModel){
+    public InputManager(
+        Game game, 
+        PlaceLetterController placeLetterController,
+        ConfirmPlayController confirmPlayController
+    ){
         this.game = game;
-        this.viewModel = viewModel;
+        this.placeLetterController = placeLetterController;
+        this.confirmPlayController = confirmPlayController;
     }
+
     public void handleInput(Input input){
+
         if (input.getType().equals("GridInput")){
             if (input.getInput().equals("rclick")){
                 System.out.println("Remove letter");
@@ -37,7 +50,7 @@ public class InputManager {
             }
         } else if (input.getType().equals("ConfirmPlay")){
             System.out.println("Confirm play");
-            //CONFIRM PLAY USE CASE GOES HERE
+            confirmPlay();
         }
     }
 
@@ -54,7 +67,15 @@ public class InputManager {
     private void placeLetter(int x, int y, Letter letter){
         Play play = game.getTurnManager().getCurrentPlay();
         Board board = game.getBoard();
-        PlaceLetterControllerFactory.get(viewModel).execute(x, y, letter, board, play);
+        placeLetterController.execute(x, y, letter, board, play);
+    }
+    
+    private void confirmPlay() {
+        Play play = game.getTurnManager().getCurrentPlay();
+        Board board = game.getBoard();
+        confirmPlayController.execute(play, board);
+        getLeaderboardInputBoundary.execute(new GetLeaderboardInputData(game.getPlayers()));
+        
     }
 
     public Game getGame(){
