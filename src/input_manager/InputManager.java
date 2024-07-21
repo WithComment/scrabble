@@ -45,7 +45,7 @@ public class InputManager {
 
     private void removeLetter(int x, int y){
         try{
-            Play play = game.getLastPlay();
+            Play play = game.getTurnManager().getCurrentPlay();
             Board board = game.getBoard();
             Tile selectedTile = board.getCell(x, y);
             RemoveLetterController controller = RemoveLetterControllerFactory.createRemoveLetterController(viewModel);
