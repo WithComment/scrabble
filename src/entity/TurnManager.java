@@ -1,6 +1,10 @@
 package entity;
 
+import entity.Play;
+import entity.Game;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Manages the turns of players in the game.
@@ -8,45 +12,29 @@ import java.util.ArrayList;
  * and handles the contesting process.
  */
 public class TurnManager {
+    private final List<Player> Players;
     private Boolean endTurn;
     private Player CurrentPlayer;
     private int PlayerNumber;
-    private final ArrayList<Player> Players;
-    private ArrayList<Integer> NumContestFailed;
+    private List<Integer> NumContestFailed;
+    private Play CurrentPlay;
 
     /**
      * Constructs a TurnManager with an initial state.
      * Initializes the endTurn flag, current player, players list, and contest failure counts.
      */
-    public TurnManager() {
+    public TurnManager(List<Player> players) {
         this.endTurn = false;
-        this.CurrentPlayer = null;
-        this.Players = new ArrayList<>();
-        this.NumContestFailed = new ArrayList<>();
+        this.CurrentPlayer = players.get(0);
+        this.Players = players;
+        this.NumContestFailed = new ArrayList<Integer>(Collections.nCopies(players.size(), 0));
+        this.CurrentPlay = null;
     }
 
     /**
      * Ends the current turn by setting the endTurn flag to true.
      */
-    public void EndTurn() {
-        endTurn = true;
-    }
-
-    /**
-     * Starts a new turn by setting the endTurn flag to false.
-     */
-    public void startTurn() {
-        endTurn = false;
-    }
-
-    /**
-     * Checks the conditions and ends the current turn.
-     * Updates the current player to the next player in the list,
-     * skipping any players who have failed a contest.
-     */
-    public void CheckAndEndTurn() {
-        Player currentPlayer = ReturnCurrentPlayer();
-        currentPlayer.NotContested();
+    public void endTurn() {
         while (NumContestFailed.get((PlayerNumber + 1) % Players.size()) > 0) {
             int NumContestFailedOfNextPlayer = NumContestFailed.get((PlayerNumber + 1) % Players.size());
             NumContestFailed.set((PlayerNumber + 1) % Players.size(), NumContestFailedOfNextPlayer - 1);
@@ -55,7 +43,24 @@ public class TurnManager {
         PlayerNumber = (PlayerNumber + 1) % Players.size();
         // Notify the front-end or other players that the turn has ended and it's the next player's turn
         CurrentPlayer = Players.get(PlayerNumber);
-        System.out.println("It's now player " + PlayerNumber + "'s turn.");
+//        System.out.println("It's now player " + PlayerNumber + "'s turn.");
+//        System.out.println("It's now player " + getCurrentPlayer().getId() + "'s turn.");
+
+        endTurn = true;
+    }
+
+    /**
+     * Starts a new turn by setting the endTurn flag to false and
+     * updating the current player to the next player in the list,
+     * skipping any players who have failed a contest.
+     */
+
+    public void startTurn(){
+        CurrentPlay = new Play(CurrentPlayer);
+
+
+        this.endTurn = false;
+
     }
 
     /**
@@ -68,30 +73,58 @@ public class TurnManager {
     public void ContestFailureUpdate(int PlayerNumber) {
         int CurrentFailure = NumContestFailed.get(PlayerNumber);
         NumContestFailed.set(PlayerNumber, CurrentFailure + 1);
-        Player currentPlayer = ReturnCurrentPlayer();
+        Player currentPlayer = GetCurrentPlayer();
         currentPlayer.BeContested();
     }
 
     /**
-     * Returns the current player.
+     * Returns thedealContest(turnManagerInputData.isContestSucceed); current player.
      *
      * @return the current player
      */
-    public Player ReturnCurrentPlayer() {
+    public Player GetCurrentPlayer() {
         CurrentPlayer = Players.get(PlayerNumber);
         return CurrentPlayer;
     }
 
-    /**
+    public List<Player> GetPlayers() {
+        return this.Players;
+    }
+
+     /**
      * Handles the result of a contest.
-     * If the contest succeeds, the current player's contest failure count is incremented.
+     * If the contest succeeds, updates the current player's score and contest failure count.
      *
      * @param ContestSucceed a boolean indicating whether the contest succeeded
      */
+
     public void dealContest(boolean ContestSucceed) {
-        if (ContestSucceed) {
-            NumContestFailed.add(PlayerNumber);
+        if (ContestSucceed){
+            this.CurrentPlayer.BeContested();
+            NumContestFailed.set((PlayerNumber), NumContestFailed.get((PlayerNumber)));
         }
+        this.CurrentPlayer.NotContested();
+//        System.out.println("Player " + this.CurrentPlayer.getId() + " contest result: " + (ContestSucceed ? "Valid" : "Invalid"));
+    }
+
+    public void updatePlayer(Player player) {
+        Players.add(player);
+    }
+
+    public boolean isEndTurn() {
+        return endTurn;
+    }
+
+    public int getPlayersNumContestFailed(int PlayerNumber) {
+        return NumContestFailed.get(PlayerNumber);
+    }
+
+    public int getCurrentPlayerNum() {
+        return PlayerNumber;
+    }
+
+    public Play getCurrentPlay() {
+        return CurrentPlay;
     }
 }
 

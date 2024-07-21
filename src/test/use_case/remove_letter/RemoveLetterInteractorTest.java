@@ -1,14 +1,14 @@
 package test.use_case.remove_letter;
 
 import entity.*;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import use_case.remove_letter.RemoveLetterInputData;
 import use_case.remove_letter.RemoveLetterInteractor;
 import use_case.remove_letter.RemoveLetterOutputBoundary;
 import use_case.remove_letter.RemoveLetterOutputData;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class RemoveLetterInteractorTest {
     public Player player;
@@ -21,15 +21,17 @@ class RemoveLetterInteractorTest {
         board = new Board();
         play = new Play(player);
     }
-
+    /**
+     * Testing success
+     */
     @org.junit.jupiter.api.Test
     void testSuccess() {
         RemoveLetterOutputBoundary testerPresenter = new RemoveLetterOutputBoundary() {
             @Override
             public void prepareSuccessView(RemoveLetterOutputData removeLetterOutputData) {
-                Assert.assertEquals(play.getMoves().size(), 0);
-                Assert.assertEquals(board.getCell(0, 0).getLetter(), null);
-                Assert.assertEquals(player.getInventory().get(0).getLetter(), 'A');
+                assertEquals(play.getMoves().size(), 0);
+                assertEquals(board.getCell(0, 0).getLetter(), null);
+                assertEquals(player.getInventory().get(0).getLetter(), 'A');
             }
 
             @Override
@@ -47,6 +49,9 @@ class RemoveLetterInteractorTest {
         testerInteractor.execute(testInputData);
     }
 
+    /**
+     * Testing failure when the chosen cell is empty
+     */
     @org.junit.jupiter.api.Test
     void testEmptyCellFailure() {
         RemoveLetterOutputBoundary testerPresenter = new RemoveLetterOutputBoundary() {
@@ -67,6 +72,9 @@ class RemoveLetterInteractorTest {
 
     }
 
+    /**
+     * Testing failure when the chosen cell has a tile but not one played by the player
+     */
     @org.junit.jupiter.api.Test
     void testNotPlayedFailure() {
         RemoveLetterOutputBoundary testerPresenter = new RemoveLetterOutputBoundary() {

@@ -1,51 +1,34 @@
 package app;
 
-import java.io.IOException;
-
-import javax.swing.*;
+import java.util.*;
 
 import entity.Board;
-import interface_adapter.ViewManagerModel;
-import interface_adapter.place_letter.PlaceLetterViewModel;
-import view.PlayView;
+import entity.Game;
+import entity.LetterBag;
+import entity.Player;
+import entity.TurnManager;
+import input_manager.InputManager;
+import interface_adapter.GameViewModel;
 import view.View;
-import view.ViewManager;
 
 public class Main {
     public static void main(String[] args) {
-        Board board = new Board();
-        View view = new View();
-        
-        // Build the main program window, the main panel containing the
-        // various cards, and the layout, and stitch them together.
+        int NumOfPlayers = 2;
+        ArrayList<Player> players = new ArrayList<Player>();
+        for (int i = 0; i < NumOfPlayers; i++) {
+            players.add(new Player(i));
+        }
+        LetterBag letterBag = new LetterBag();
+        Game game = new Game(players);
 
-        // The main application window.
-        JFrame application = new JFrame("Login Example");
-        application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        TurnManager turnManager = game.getTurnManager();
+        turnManager.startTurn();
+        for (Player player : players) {
+            player.addLetter(letterBag.drawLetters(7));
+        }
 
-        CardLayout cardLayout = new CardLayout();
-
-        // The various View objects. Only one view is visible at a time.
-        JPanel views = new JPanel(cardLayout);
-        application.add(views);
-
-        // This keeps track of and manages which view is currently showing.
-        ViewManagerModel viewManagerModel = new ViewManagerModel();
-        new ViewManager(views, cardLayout, viewManagerModel);
-
-        // The data for the views, such as username and password, are in the ViewModels.
-        // This information will be changed by a presenter object that is reporting the
-        // results from the use case. The ViewModels are observable, and will
-        // be observed by the Views.
-        PlaceLetterViewModel placeLetterViewModel = new PlaceLetterViewModel();
-
-        PlayView playView = new PlayView(placeLetterController, placeLetterViewModel);
-        views.add(playView, loggedInView.viewName);
-
-        viewManagerModel.setActiveView(signupView.viewName);
-        viewManagerModel.firePropertyChanged();
-
-        application.pack();
-        application.setVisible(true);
+        Board board = game.getBoard();
+        GameViewModel gameViewModel = new GameViewModel(board, null, game.getTurnManager().GetCurrentPlayer().getInventory());
+        View view = new View(new InputManager(game, gameViewModel), gameViewModel);
     }
 }

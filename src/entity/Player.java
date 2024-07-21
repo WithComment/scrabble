@@ -7,6 +7,7 @@ import java.util.ArrayList;
  * A player has an ID, an inventory of letters, a score, and an unstable score.
  */
 public class Player {
+    private static int idCounter = 0;
     private final int id;
     private ArrayList<Letter> inventory;
     private int score;
@@ -18,7 +19,7 @@ public class Player {
      * @param id the ID of the player
      */
     public Player(int id) {
-        this.id = id;
+        this.id = idCounter++;
         this.inventory = new ArrayList<>();
         this.score = 0;
         this.unstableScore = 0;

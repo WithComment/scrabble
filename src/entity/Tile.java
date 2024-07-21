@@ -1,5 +1,12 @@
 package entity;
 
+/**
+ * Represents a cell on the board.
+ * @param wordMult The word multiplier.
+ * @param letterMult The letter multiplier.
+ * @param letter The letter on the tile, null if empty.
+ * @param isConfirmed Whether the letter on the tile has been confirmed.
+ */
 public class Tile {
   private final int wordMult;
   private final int letterMult;
@@ -30,15 +37,22 @@ public class Tile {
     return this;
   }
 
+  /**
+   * Set the letter on the tile to null. Un-confirm the tile.
+   */
   public void removeLetter() {
     letter = null;
     isConfirmed = false;
   }
 
+  /**
+   * Set the tile to confirmed.
+   */
   public void confirm() {
     isConfirmed = true;
   }
 
+  
   public void setAndConfirm(Letter letter) {
     this.letter = letter;
     isConfirmed = true;

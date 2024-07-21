@@ -10,19 +10,11 @@ import entity.Player;
 public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
 
   private final PlaceLetterOutputBoundary presenter;
-  private final Board board;
-  private final Play play;
-  private Player player;
 
   public PlaceLetterInteractor(
-    PlaceLetterOutputBoundary presenter, 
-    Board board, 
-    Play play
+    PlaceLetterOutputBoundary presenter
   ) {
     this.presenter = presenter;
-    this.board = board;
-    this.play = play;
-    this.player = play.getPlayer();
   }
 
   @Override
@@ -30,6 +22,9 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     int x = input.getX();
     int y = input.getY();
     Letter letter = input.getLetter();
+    Play play = input.getPlay();
+    Board board = input.getBoard();
+    Player player = play.getPlayer();
     
     if (!board.getCell(x, y).isEmpty()) {
       presenter.prepareFailView("This grid is occupied!");
@@ -39,7 +34,7 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
       play.addMove(new Move(x, y, letter));
       board.setCell(x, y, letter);
       player.removeLetter(letter);
-      presenter.prepareSuccessView(new PlaceLetterOutputData(board));
+      presenter.prepareSuccessView(new PlaceLetterOutputData(board, player.getInventory()));
     }
   }
 }
