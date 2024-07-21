@@ -20,6 +20,9 @@ public class Input {
         this.input = input;
         this.type = "HandInput";
     }
+    public Input(String type) {
+        this.type = type;
+    }
 
     public int getX() {return x;}
     public int getY() {return y;}
