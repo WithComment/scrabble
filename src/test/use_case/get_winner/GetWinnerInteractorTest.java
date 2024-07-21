@@ -41,7 +41,7 @@ public class GetWinnerInteractorTest implements GetWinnerOutputBoundary {
         interactor.execute(inputData);
 
         List<LeaderboardEntry> expectedWinner = new ArrayList<>();
-        expectedWinner.add(new LeaderboardEntry(1, 20));
+        expectedWinner.add(new LeaderboardEntry(players.get(0), 20));
         Assert.assertEquals(expectedWinner, winners);
     }
 
@@ -57,8 +57,8 @@ public class GetWinnerInteractorTest implements GetWinnerOutputBoundary {
         interactor.execute(inputData);
 
         List<LeaderboardEntry> expectedWinners = new ArrayList<>();
-        expectedWinners.add(new LeaderboardEntry(1, 20));
-        expectedWinners.add(new LeaderboardEntry(2, 20));
+        expectedWinners.add(new LeaderboardEntry(players.get(0), 20));
+        expectedWinners.add(new LeaderboardEntry(players.get(1), 20));
         Assert.assertEquals(expectedWinners, winners);
     }
 

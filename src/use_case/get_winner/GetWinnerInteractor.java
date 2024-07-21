@@ -32,7 +32,7 @@ public class GetWinnerInteractor implements GetWinnerInputBoundary {
     public void execute(GetWinnerInputData input) {
         ArrayList<LeaderboardEntry> leaderboard = new ArrayList<>();
         for (Player player : input.getPlayers()) {
-            leaderboard.add(new LeaderboardEntry(player.getId(), player.getScore()));
+            leaderboard.add(new LeaderboardEntry(player, player.getScore()));
         }
         ArrayList<LeaderboardEntry> winner = new ArrayList<>();
         Collections.sort(leaderboard, Collections.reverseOrder());

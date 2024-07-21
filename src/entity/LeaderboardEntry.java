@@ -1,28 +1,28 @@
 package entity;
 
 /**
- * Represents an entry in the leaderboard, holding a player's ID and score.
+ * Represents an entry in the leaderboard, holding a player and it's score.
  */
 public class LeaderboardEntry implements Comparable<LeaderboardEntry>{
-    private final int playerId;
+    private final Player player;
     private final int score;
 
     /**
-     * Constructs a new LeaderboardEntry with the specified player ID and score.
-     * @param playerId The unique ID of the player.
+     * Constructs a new LeaderboardEntry with the specified player and score.
+     * @param player The player.
      * @param score The score of the player.
      */
-    public LeaderboardEntry(int playerId, int score) {
-        this.playerId = playerId;
+    public LeaderboardEntry(Player player, int score) {
+        this.player = player;
         this.score = score;
     }
 
     /**
-     * Retrieves the player ID associated with this leaderboard entry.
-     * @return The player's ID.
+     * Retrieves the player associated with this leaderboard entry.
+     * @return The player.
      */
-    public int getPlayerId() {
-        return playerId;
+    public Player getPlayer() {
+        return player;
     }
 
     /**

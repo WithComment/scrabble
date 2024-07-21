@@ -43,9 +43,9 @@ public class GetLeaderboardInteractorTest implements GetLeaderboardOutputBoundar
         interactor.execute(inputData);
 
         List<LeaderboardEntry> expectedLeaderboard = new ArrayList<>();
-        expectedLeaderboard.add(new LeaderboardEntry(2, 15));
-        expectedLeaderboard.add(new LeaderboardEntry(1, 10));
-        expectedLeaderboard.add(new LeaderboardEntry(3, 5));
+        expectedLeaderboard.add(new LeaderboardEntry(players.get(1), 15));
+        expectedLeaderboard.add(new LeaderboardEntry(players.get(0), 10));
+        expectedLeaderboard.add(new LeaderboardEntry(players.get(2), 5));
 
         Assert.assertEquals(expectedLeaderboard, leaderboard);
     }
@@ -61,7 +61,7 @@ public class GetLeaderboardInteractorTest implements GetLeaderboardOutputBoundar
         interactor.execute(inputData);
 
         List<LeaderboardEntry> expectedLeaderboard = new ArrayList<>();
-        expectedLeaderboard.add(new LeaderboardEntry(1, 10));
+        expectedLeaderboard.add(new LeaderboardEntry(players.get(0), 10));
 
         Assert.assertEquals(expectedLeaderboard, leaderboard);
     }
