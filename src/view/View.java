@@ -91,10 +91,10 @@ public class View extends JPanel implements MouseListener, ActionListener, Prope
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        Game game = (Game) evt.getNewValue();
-        if (evt.getPropertyName().equals("Game")) {
-            updateHand(game.getTurnManager().GetCurrentPlayer().getInventory());
-            updateBoard(game.getBoard());
+        if (evt.getPropertyName().equals("board")) {
+            updateBoard((Board) evt.getNewValue());
+        } else if (evt.getPropertyName().equals("hand")) {
+            updateHand((List<Letter>) evt.getNewValue());
         }
     }
 }

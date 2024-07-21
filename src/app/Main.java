@@ -28,7 +28,7 @@ public class Main {
         }
 
         Board board = game.getBoard();
-        GameViewModel gameViewModel = new GameViewModel(game);
+        GameViewModel gameViewModel = new GameViewModel(board, null, game.getTurnManager().GetCurrentPlayer().getInventory());
         View view = new View(new InputManager(game, gameViewModel), gameViewModel);
     }
 }

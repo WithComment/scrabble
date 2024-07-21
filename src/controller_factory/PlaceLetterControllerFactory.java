@@ -14,9 +14,9 @@ public class PlaceLetterControllerFactory {
     // Prevents instantiation
   }
 
-  public static PlaceLetterController get(GameViewModel viewModel) {
+  public static PlaceLetterController get(GameViewModel gameViewModel) {
     if (instance == null) {
-      PlaceLetterOutputBoundary presenter = new PlaceLetterPresenter(viewModel);
+      PlaceLetterOutputBoundary presenter = new PlaceLetterPresenter(gameViewModel);
       PlaceLetterInteractor interactor = new PlaceLetterInteractor(presenter);
       instance = new PlaceLetterController(interactor);
     }

@@ -3,11 +3,7 @@ package input_manager;
 import controller_factory.PlaceLetterControllerFactory;
 import entity.*;
 import interface_adapter.GameViewModel;
-import interface_adapter.ViewModel;
-import interface_adapter.remove_piece.RemoveLetterController;
-import use_case.remove_letter.*;
 import view.Input;
-import view.View;
 
 
 public class InputManager {

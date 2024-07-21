@@ -17,14 +17,14 @@ public class PlaceLetterPresenter implements PlaceLetterOutputBoundary {
 
   @Override
   public void prepareSuccessView(PlaceLetterOutputData data) {
+    viewModel.setBoard(data.getBoard());
+    viewModel.setHand(data.getHand());
     viewModel.firePropertyChanged();
-    System.out.println(data.getBoard().getBoard().toString());
-    System.out.println("Letter placed successfully");
   }
 
   @Override
   public void prepareFailView(String error) {
+    viewModel.setErrorMessage(error);
     viewModel.firePropertyChanged();
-    System.out.println(error);
   }
 }
