@@ -1,6 +1,12 @@
 package interface_adapter.end_turn;
 
+import entity.Game;
+import entity.Play;
+import entity.Player;
+import use_case.EndTurn.TurnManagerInputData;
 import use_case.EndTurn.TurnManagerInteractor;
+
+import java.util.ArrayList;
 
 /**
  * Controller for the EndTurn use case.
@@ -30,10 +36,10 @@ public class EndTurnController {
      * @param contestSucceed a boolean indicating whether the contest succeeded
      */
 
-    public void execute(boolean contestSucceed) {
-        turnManagerInteractor.dealContest(contestSucceed);
-        turnManagerInteractor.endTurn();
-        turnManagerInteractor.startTurn();
+    public void execute(boolean contestSucceed, Game game) {
+        ArrayList<Player> players = new ArrayList<>();
+        TurnManagerInputData turnManagerInputData = new TurnManagerInputData(players, false, false);
+        turnManagerInteractor.execute(turnManagerInputData);
     }
 }
 
