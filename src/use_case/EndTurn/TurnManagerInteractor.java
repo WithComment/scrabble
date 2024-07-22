@@ -1,5 +1,6 @@
 package use_case.EndTurn;
 
+import entity.LetterBag;
 import entity.Player;
 import entity.TurnManager;
 
@@ -101,6 +102,14 @@ public class TurnManagerInteractor implements EndTurn, DealingContest, StartTurn
         }
 
         if (isEndTurn()) {
+            Player CurrentPlayer = turnManager.getCurrentPlayer();
+            if(turnManagerInputData.isContestSucceed){
+                CurrentPlayer.eraseTempScore();
+            }else {
+                CurrentPlayer.confirmTempScore();
+            }
+            int ToDraw = 7 - CurrentPlayer.getInventory().size();
+            CurrentPlayer.addLetter(turnManagerInputData.getLetterBag().drawLetters(ToDraw));
             endTurn();
             startTurn();
         }

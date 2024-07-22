@@ -35,6 +35,7 @@ public class TurnManager {
      * Ends the current turn by setting the endTurn flag to true.
      */
     public void endTurn() {
+
         while (NumContestFailed.get((PlayerNumber + 1) % Players.size()) > 0) {
             int NumContestFailedOfNextPlayer = NumContestFailed.get((PlayerNumber + 1) % Players.size());
             NumContestFailed.set((PlayerNumber + 1) % Players.size(), NumContestFailedOfNextPlayer - 1);
