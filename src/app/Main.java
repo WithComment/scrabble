@@ -44,7 +44,7 @@ public class Main {
         ConfirmPlayController confirmPlayController = ConfirmPlayControllerFactory.create(gameViewModel);
         GetLeaderboardController getLeaderboardController = GetLeaderboardControllerFactory.create(gameViewModel);
         StartTurnController startTurnController = StartTurnControllerFactory.create(gameViewModel);
-        EndTurnController endTurnController = EndTurnControllerFactory.create(gameViewModel);
+        EndTurnController endTurnController = EndTurnControllerFactory.create(gameViewModel, turnManager);
         startTurnController.execute(turnManager);
         View view = new View(new InputManager(game, gameViewModel, placeLetterController, confirmPlayController, getLeaderboardController, endTurnController), gameViewModel);
     }
