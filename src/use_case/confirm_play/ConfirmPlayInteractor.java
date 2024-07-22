@@ -227,11 +227,6 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     return true;
   }
 
-  private List<Player> getLeaderboard() {
-    // TODO: Implement this method
-    return new LinkedList<Player>();
-  }
-
   @Override
   public void execute(ConfirmPlayInputData data) {
 
@@ -241,7 +236,7 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     Player player = play.getPlayer();
  
     if (moves.isEmpty()) {
-      presenter.prepareSuccessView(new ConfirmPlayOutputData(board, getLeaderboard()));
+      presenter.prepareSuccessView(new ConfirmPlayOutputData(board));
       return;
     }
     
@@ -271,10 +266,10 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     List<List<Tile>> wordsOnTiles = getWordsOnTiles(moves, board);
     play.setWords(getWords(wordsOnTiles));
     
-    player.addScore(calcScore(wordsOnTiles));
+    player.addTempScore(calcScore(wordsOnTiles));
     if (moves.size() >= 7) {
       player.addScore(50);
     }
-    presenter.prepareSuccessView(new ConfirmPlayOutputData(board, getLeaderboard()));
+    presenter.prepareSuccessView(new ConfirmPlayOutputData(board));
   }
 }

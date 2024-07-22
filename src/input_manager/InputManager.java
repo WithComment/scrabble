@@ -22,13 +22,11 @@ public class InputManager {
     private GameViewModel gameViewModel;
 
     public InputManager(
-        Game game, 
         GameViewModel gameViewModel,
         PlaceLetterController placeLetterController,
         ConfirmPlayController confirmPlayController,
         GetLeaderboardController getLeaderboardController
     ){
-        this.game = game;
         this.gameViewModel = gameViewModel;
         this.placeLetterController = placeLetterController;
         this.confirmPlayController = confirmPlayController;
@@ -38,27 +36,36 @@ public class InputManager {
     public void handleInput(Input input){
 
         if (input.getType().equals("GridInput")){
-            if (input.getInput().equals("rclick")){
-                System.out.println("Remove letter");
-                removeLetter(input.getX(), input.getY());
-            } else if (input.getInput().equals("lclick")){
-                if (selectedLetter != null) {
-                    System.out.println("Place letter");
-                    placeLetter(input.getX(), input.getY(), selectedLetter);
-                } else{
-                    System.out.println("No selected letter");
-                    return;
-                }
-            }
+            handleGridInput(input);
         } else if (input.getType().equals("HandInput")){
-            if (input.getInput().equals("lclick")){
-                System.out.println("Letter selected");
-                Player currentPlayer = game.getTurnManager().GetCurrentPlayer();
-                selectedLetter = currentPlayer.getInventory().get(input.getPositionInHand());
-            }
+            handleHandInput(input);
         } else if (input.getType().equals("ConfirmPlay")){
             System.out.println("Confirm play");
             confirmPlay();
+        }
+    }
+
+    private void handleGridInput(Input input) {
+        if (input.getInput().equals("rclick")) {
+            System.out.println("Remove letter");
+            removeLetter(input.getX(), input.getY());
+        } else if (input.getInput().equals("lclick")) {
+            Letter selectedLetter = gameViewModel.getSelectedLetter();
+            if (selectedLetter != null) {
+                System.out.println("Place letter");
+                placeLetter(input.getX(), input.getY(), selectedLetter);
+            } else {
+                System.out.println("No selected letter");
+                return;
+            }
+        }
+    }
+
+    private void handleHandInput(Input input){
+        if (input.getInput().equals("lclick")){
+            System.out.println("Letter selected");
+            Player currentPlayer = gameViewModel.getPlayer();
+            gameViewModel.setSelectedLetter(currentPlayer.getInventory().get(input.getPositionInHand()));
         }
     }
 
@@ -76,25 +83,15 @@ public class InputManager {
     }
 
     private void placeLetter(int x, int y, Letter letter){
-        Play play = game.getTurnManager().getCurrentPlay();
-        Board board = game.getBoard();
+        Play play = gameViewModel.getPlay();
+        Board board = gameViewModel.getBoard();
         placeLetterController.execute(x, y, letter, board, play);
     }
     
     private void confirmPlay() {
-        Play play = game.getTurnManager().getCurrentPlay();
-        Board board = game.getBoard();
+        Play play = gameViewModel.getPlay();
+        Board board = gameViewModel.getBoard();
         confirmPlayController.execute(play, board);
         getLeaderboardController.execute(gameViewModel.getLeaderboard());
     }
-
-    public Game getGame(){
-        return game;
-    }
-    /** methods: useCaseName(relevant data eg: x, y position){
-     *              UseCaseNamePresenter useCaseNamePresenter = new useCaseNamePresenter();
-     *              useCaseNameInteractor useCaseNameInteractor = new UseCaseNameInteractor(useCaseNamePresenter)
-     *              UseCaseNameController useCaseNameController = new useCaseNameController(useCaseNameInteractor);
-     *              useCaseNameController.execute(relevant data);
-     } */
 }

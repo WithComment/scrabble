@@ -34,6 +34,7 @@ public class GetLeaderboardInteractor implements GetLeaderboardInputBoundary {
         for (Player player : input.getPlayers()) {
             leaderboard.add(new LeaderboardEntry(player, player.getScore()));
         }
+        System.out.println(input.getPlayers().size());
         Collections.sort(leaderboard, Collections.reverseOrder());
         presenter.prepareView(new GetLeaderboardOutputData(leaderboard));
     }

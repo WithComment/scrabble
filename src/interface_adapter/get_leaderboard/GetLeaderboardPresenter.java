@@ -1,9 +1,11 @@
 package interface_adapter.get_leaderboard;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import entity.LeaderboardEntry;
 import interface_adapter.GameViewModel;
+import entity.Player;
 import use_case.get_leaderboard.*;
 
 public class GetLeaderboardPresenter implements GetLeaderboardOutputBoundary {
@@ -16,11 +18,11 @@ public class GetLeaderboardPresenter implements GetLeaderboardOutputBoundary {
 
     @Override
     public void prepareView(GetLeaderboardOutputData outputData) {
-        viewModel.setLeaderboard(new LinkedList<>() {{
-            for (LeaderboardEntry entry : outputData.getLeaderboard()) {
-                add(entry.getPlayer());
-            }
-        }});
+        List<Player> players = new LinkedList<>();
+        for (LeaderboardEntry entry : outputData.getLeaderboard()) {
+            players.add(entry.getPlayer());
+        }
+        viewModel.setLeaderboard(players);
         viewModel.firePropertyChanged();
     }
 }

@@ -5,6 +5,7 @@ import java.util.*;
 import controller_factory.ConfirmPlayControllerFactory;
 import controller_factory.GetLeaderboardControllerFactory;
 import controller_factory.PlaceLetterControllerFactory;
+import controller_factory.StartTurnControllerFactory;
 import entity.Board;
 import entity.Game;
 import entity.LetterBag;
@@ -15,6 +16,8 @@ import interface_adapter.GameViewModel;
 import interface_adapter.confirm_play.ConfirmPlayController;
 import interface_adapter.get_leaderboard.GetLeaderboardController;
 import interface_adapter.place_letter.PlaceLetterController;
+import interface_adapter.start_turn.StartTurnController;
+import use_case.EndTurn.StartTurn;
 import view.View;
 
 public class Main {
@@ -34,10 +37,12 @@ public class Main {
         }
 
         Board board = game.getBoard();
-        GameViewModel gameViewModel = new GameViewModel(board, players, game.getTurnManager().GetCurrentPlayer().getInventory());
+        GameViewModel gameViewModel = new GameViewModel(board, players);
         PlaceLetterController placeLetterController = PlaceLetterControllerFactory.create(gameViewModel);
         ConfirmPlayController confirmPlayController = ConfirmPlayControllerFactory.create(gameViewModel);
         GetLeaderboardController getLeaderboardController = GetLeaderboardControllerFactory.create(gameViewModel);
-        View view = new View(new InputManager(game, gameViewModel, placeLetterController, confirmPlayController, getLeaderboardController), gameViewModel);
+        StartTurnController startTurnController = StartTurnControllerFactory.create(gameViewModel);
+        startTurnController.execute(turnManager);
+        View view = new View(new InputManager(gameViewModel, placeLetterController, confirmPlayController, getLeaderboardController), gameViewModel);
     }
 }

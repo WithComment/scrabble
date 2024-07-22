@@ -18,7 +18,6 @@ public class ConfirmPlayPresenter implements ConfirmPlayOutputBoundary {
     @Override
     public void prepareSuccessView(ConfirmPlayOutputData data) {
         gameViewModel.setBoard(data.getBoard());
-        gameViewModel.setLeaderboard(data.getLeaderboard());
         gameViewModel.firePropertyChanged();
     }
 

@@ -41,18 +41,17 @@ public class View extends JPanel implements MouseListener, ActionListener, Prope
         window.addMouseListener(this);
         boardPanel = new BoardPanel(inputManager);
         handPanel = new HandPanel(inputManager);
-        leaderBoardPanel = new LeaderboardPanel(inputManager.getGame().getPlayers());
+        leaderBoardPanel = new LeaderboardPanel(gameViewModel.getLeaderboard());
 //        leaderBoardPanel.updateLeaderboard(whatever their score is, as an int);
 
         JButton confirmPlayButton = new JButton("Confirm Play");
         
         confirmPlayButton.addMouseListener(new ConfirmPlayListener(inputManager));
         ArrayList<String> tempHand = new ArrayList<>();
-        System.out.println(inputManager.getGame().getTurnManager().GetCurrentPlayer().getId());
-        for (Letter l : inputManager.getGame().getTurnManager().GetCurrentPlayer().getInventory()) {
+        for (Letter l : gameViewModel.getHand()) {
             tempHand.add(String.valueOf(l.getLetter()));
         }
-        handPanel.setHand(inputManager.getGame().getTurnManager().GetCurrentPlayer().getInventory());
+        handPanel.setHand(gameViewModel.getHand());
 
         JPanel view = new JPanel();
         view.setLayout(new FlowLayout());
@@ -103,7 +102,7 @@ public class View extends JPanel implements MouseListener, ActionListener, Prope
     }
 
     private void updateLeaderboard(List<Player> newLeaderboard) {
-        leaderBoardPanel.updateLeaderboard(newLeaderboard);
+        leaderBoardPanel.update(newLeaderboard);
         leaderBoardPanel.updateUI();
     }
 

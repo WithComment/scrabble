@@ -66,7 +66,7 @@ public class TurnManagerInteractor implements EndTurn, DealingContest, StartTurn
      * @return The current player
      */
     public Player getCurrentPlayer() {
-        return turnManager.GetCurrentPlayer();
+        return turnManager.getCurrentPlayer();
     }
 
     /**

@@ -7,6 +7,7 @@ import java.util.List;
 
 import entity.Board;
 import entity.Letter;
+import entity.Play;
 import entity.Player;
 
 public class GameViewModel extends ViewModel {
@@ -15,17 +16,21 @@ public class GameViewModel extends ViewModel {
   private Board board;
   private List<Player> leaderboard;
   private List<Letter> hand;
+  private Letter selectedLetter;
   private Player currentPlayer;
+  private Play currentPlay;
   private String errorMessage;
   private final HashMap<String, Object> propertiesChanged;
 
-  public GameViewModel(Board board, List<Player> leaderboard, List<Letter> hand) {
+  public GameViewModel(Board board, List<Player> leaderboard) {
     super("game");
     this.support = new PropertyChangeSupport(this);
     this.board = board;
     this.leaderboard = leaderboard;
-    this.hand = hand;
+    this.hand = null;
+    this.selectedLetter = null;
     this.currentPlayer = null;
+    this.currentPlay = null;
     this.errorMessage = "";
     this.propertiesChanged = new HashMap<>();
   }
@@ -33,7 +38,6 @@ public class GameViewModel extends ViewModel {
   @Override
   public void firePropertyChanged() {
     for (String key : propertiesChanged.keySet()) {
-      System.out.println(key + " set");
       support.firePropertyChange(key, null, propertiesChanged.get(key));
     }
     propertiesChanged.clear();
@@ -50,6 +54,7 @@ public class GameViewModel extends ViewModel {
   }
 
   public void setLeaderboard(List<Player> leaderboard) {
+    System.out.println("leaderboard size: " + Integer.toString(leaderboard.size()));
     this.leaderboard = leaderboard;
     propertiesChanged.put("leaderboard", leaderboard);
   }
@@ -59,9 +64,24 @@ public class GameViewModel extends ViewModel {
     propertiesChanged.put("hand", hand);
   }
 
+  public void setSelectedLetter(Letter letter) {
+    this.selectedLetter = letter;
+    propertiesChanged.put("selectedLetter", letter);
+  }
+
   public void setPlayer(Player player) {
     this.currentPlayer = player;
     propertiesChanged.put("player", player);
+    this.hand = player.getInventory();
+    propertiesChanged.put("hand", hand);
+  }
+
+  public void setPlay(Play play) {
+    this.currentPlay = play;
+  }
+
+  public Play getPlay() {
+    return currentPlay;
   }
 
   public void setErrorMessage(String errorMessage) {
@@ -79,6 +99,10 @@ public class GameViewModel extends ViewModel {
 
   public List<Letter> getHand() {
     return hand;
+  }
+
+  public Letter getSelectedLetter() {
+    return selectedLetter;
   }
 
   public Player getPlayer() {

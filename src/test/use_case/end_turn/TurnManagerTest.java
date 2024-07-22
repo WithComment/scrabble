@@ -36,7 +36,7 @@ public class TurnManagerTest {
 
     @Test
     public void testInitialCurrentPlayer() {
-        assertNull(turnManager.GetCurrentPlayer(), "Initial current player should be null.");
+        assertNull(turnManager.getCurrentPlayer(), "Initial current player should be null.");
     }
 
     @Test
@@ -49,7 +49,7 @@ public class TurnManagerTest {
     public void testStartTurn() {
         turnManager.startTurn();
         assertFalse(turnManager.isEndTurn(), "End turn flag should be false after calling startTurn.");
-        assertNotNull(turnManager.GetCurrentPlayer(), "Current player should not be null after starting the turn.");
+        assertNotNull(turnManager.getCurrentPlayer(), "Current player should not be null after starting the turn.");
     }
 
     @Test
@@ -57,7 +57,7 @@ public class TurnManagerTest {
         turnManager.startTurn();
         turnManager.dealContest(true);
         assertEquals(1, turnManager.getPlayersNumContestFailed(turnManager.getCurrentPlayerNum()), "Contest failure count should be incremented.");
-        assertEquals(player1.getScore(), player1.getScore() - player1.unstableScore, "Player score should be updated correctly after contest success.");
+        assertEquals(player1.getScore(), player1.getScore() - player1.tempScore, "Player score should be updated correctly after contest success.");
     }
 
     @Test
@@ -70,19 +70,19 @@ public class TurnManagerTest {
     @Test
     public void testPlayerRotationOnStartTurn() {
         turnManager.startTurn();
-        assertEquals(player1, turnManager.GetCurrentPlayer(), "Player 1 should be the current player at the start.");
+        assertEquals(player1, turnManager.getCurrentPlayer(), "Player 1 should be the current player at the start.");
 
         turnManager.endTurn();
         turnManager.startTurn();
-        assertEquals(player2, turnManager.GetCurrentPlayer(), "Player 2 should be the current player after ending Player 1's turn.");
+        assertEquals(player2, turnManager.getCurrentPlayer(), "Player 2 should be the current player after ending Player 1's turn.");
 
         turnManager.endTurn();
         turnManager.startTurn();
-        assertEquals(player3, turnManager.GetCurrentPlayer(), "Player 3 should be the current player after ending Player 2's turn.");
+        assertEquals(player3, turnManager.getCurrentPlayer(), "Player 3 should be the current player after ending Player 2's turn.");
 
         turnManager.endTurn();
         turnManager.startTurn();
-        assertEquals(player1, turnManager.GetCurrentPlayer(), "Player 1 should be the current player again after ending Player 3's turn.");
+        assertEquals(player1, turnManager.getCurrentPlayer(), "Player 1 should be the current player again after ending Player 3's turn.");
     }
 
     @Test
@@ -92,18 +92,18 @@ public class TurnManagerTest {
         turnManager.endTurn();
         turnManager.startTurn();
 
-        assertEquals(player2, turnManager.GetCurrentPlayer(), "Player 2 should be the current player after Player 1's turn.");
+        assertEquals(player2, turnManager.getCurrentPlayer(), "Player 2 should be the current player after Player 1's turn.");
 
         turnManager.dealContest(true);
         turnManager.endTurn();
         turnManager.startTurn();
 
-        assertEquals(player3, turnManager.GetCurrentPlayer(), "Player 3 should be the current player after Player 2's turn.");
+        assertEquals(player3, turnManager.getCurrentPlayer(), "Player 3 should be the current player after Player 2's turn.");
 
         turnManager.dealContest(true);
         turnManager.endTurn();
         turnManager.startTurn();
 
-        assertEquals(player1, turnManager.GetCurrentPlayer(), "Player 1 should be the current player again after all players contested.");
+        assertEquals(player1, turnManager.getCurrentPlayer(), "Player 1 should be the current player again after all players contested.");
     }
 }

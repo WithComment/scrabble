@@ -11,7 +11,7 @@ public class Player {
     private final int id;
     private ArrayList<Letter> inventory;
     private int score;
-    public int unstableScore;
+    public int tempScore;
 
     /**
      * Constructs a Player with a specified ID.
@@ -22,7 +22,7 @@ public class Player {
         this.id = idCounter++;
         this.inventory = new ArrayList<>();
         this.score = 0;
-        this.unstableScore = 0;
+        this.tempScore = 0;
     }
 
     /**
@@ -63,20 +63,29 @@ public class Player {
         // Add scores to player
         for (Integer score : ScoresOfWords) {
             this.score += score;
-            unstableScore += score;
+            tempScore += score;
         }
     }
 
     public void addScore(int score) {
         this.score += score;
-        unstableScore += score;
+        tempScore += score;
+    }
+
+    public void addTempScore(int score) {
+        this.tempScore += score;
+    }
+
+    public void confirmTempScore() {
+        this.score += this.tempScore;
+        this.tempScore = 0;
     }
 
     /**
      * Resets the player's unstable score to 0, indicating the scores were not contested.
      */
     public void NotContested() {
-        this.unstableScore = 0;
+        this.tempScore = 0;
     }
 
     /**
@@ -84,8 +93,8 @@ public class Player {
      * This indicates the scores were contested and invalidated.
      */
     public void BeContested() {
-        this.score = this.score - this.unstableScore;
-        this.unstableScore = 0;
+        this.score = this.score - this.tempScore;
+        this.tempScore = 0;
     }
 
     /**

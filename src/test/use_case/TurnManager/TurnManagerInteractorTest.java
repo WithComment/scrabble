@@ -57,7 +57,7 @@ public class TurnManagerInteractorTest {
         turnManagerInteractor.startTurn();
         int NumContestFailed = turnManagerInteractor.getPlayersNumContestFailed(turnManagerInteractor.getCurrentPlayerNum());
         turnManagerInteractor.dealContest(true);
-        assertEquals(player1.getScore(), player1.getScore() - player1.unstableScore, "Player score should be updated correctly after contest success.");
+        assertEquals(player1.getScore(), player1.getScore() - player1.tempScore, "Player score should be updated correctly after contest success.");
     }
 
     @Test
