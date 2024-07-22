@@ -72,12 +72,12 @@ public class Player {
         tempScore += score;
     }
 
-    public void addTempScore(int score) {
-        this.tempScore += score;
-    }
-
     public void confirmTempScore() {
         this.score += this.tempScore;
+        this.tempScore = 0;
+    }
+
+    public void eraseTempScore() {
         this.tempScore = 0;
     }
 

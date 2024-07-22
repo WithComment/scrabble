@@ -266,7 +266,7 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     List<List<Tile>> wordsOnTiles = getWordsOnTiles(moves, board);
     play.setWords(getWords(wordsOnTiles));
     
-    player.addTempScore(calcScore(wordsOnTiles));
+    player.addScore(calcScore(wordsOnTiles));
     if (moves.size() >= 7) {
       player.addScore(50);
     }

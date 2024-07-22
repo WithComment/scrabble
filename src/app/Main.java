@@ -3,6 +3,7 @@ package app;
 import java.util.*;
 
 import controller_factory.ConfirmPlayControllerFactory;
+import controller_factory.EndTurnControllerFactory;
 import controller_factory.GetLeaderboardControllerFactory;
 import controller_factory.PlaceLetterControllerFactory;
 import controller_factory.StartTurnControllerFactory;
@@ -14,6 +15,7 @@ import entity.TurnManager;
 import input_manager.InputManager;
 import interface_adapter.GameViewModel;
 import interface_adapter.confirm_play.ConfirmPlayController;
+import interface_adapter.end_turn.EndTurnController;
 import interface_adapter.get_leaderboard.GetLeaderboardController;
 import interface_adapter.place_letter.PlaceLetterController;
 import interface_adapter.start_turn.StartTurnController;
@@ -42,7 +44,8 @@ public class Main {
         ConfirmPlayController confirmPlayController = ConfirmPlayControllerFactory.create(gameViewModel);
         GetLeaderboardController getLeaderboardController = GetLeaderboardControllerFactory.create(gameViewModel);
         StartTurnController startTurnController = StartTurnControllerFactory.create(gameViewModel);
+        EndTurnController endTurnController = EndTurnControllerFactory.create(gameViewModel);
         startTurnController.execute(turnManager);
-        View view = new View(new InputManager(gameViewModel, placeLetterController, confirmPlayController, getLeaderboardController), gameViewModel);
+        View view = new View(new InputManager(game, gameViewModel, placeLetterController, confirmPlayController, getLeaderboardController, endTurnController), gameViewModel);
     }
 }

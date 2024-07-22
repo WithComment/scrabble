@@ -5,32 +5,35 @@ import controller_factory.RemoveLetterControllerFactory;
 import entity.*;
 import interface_adapter.GameViewModel;
 import interface_adapter.confirm_play.ConfirmPlayController;
+import interface_adapter.end_turn.EndTurnController;
 import interface_adapter.get_leaderboard.GetLeaderboardController;
 import interface_adapter.place_letter.PlaceLetterController;
-import use_case.get_leaderboard.GetLeaderboardInputBoundary;
-import use_case.get_leaderboard.GetLeaderboardInputData;
 import interface_adapter.remove_piece.RemoveLetterController;
 import view.Input;
 
 
 public class InputManager {
-    private Letter selectedLetter;
     private Game game;
     private PlaceLetterController placeLetterController;
     private ConfirmPlayController confirmPlayController;
     private GetLeaderboardController getLeaderboardController;
+    private EndTurnController endTurnController;
     private GameViewModel gameViewModel;
 
     public InputManager(
+        Game game,
         GameViewModel gameViewModel,
         PlaceLetterController placeLetterController,
         ConfirmPlayController confirmPlayController,
-        GetLeaderboardController getLeaderboardController
+        GetLeaderboardController getLeaderboardController,
+        EndTurnController endTurnController
     ){
+        this.game = game;
         this.gameViewModel = gameViewModel;
         this.placeLetterController = placeLetterController;
         this.confirmPlayController = confirmPlayController;
         this.getLeaderboardController = getLeaderboardController;
+        this.endTurnController = endTurnController;
     }
 
     public void handleInput(Input input){
@@ -76,10 +79,9 @@ public class InputManager {
             Tile selectedTile = board.getCell(x, y);
             RemoveLetterController controller = RemoveLetterControllerFactory.createRemoveLetterController(gameViewModel);
             controller.execute(x, y, play, selectedTile, board);
-        }catch (Exception e){
+        } catch (Exception e){
             System.out.println(e.getMessage());
         }
-
     }
 
     private void placeLetter(int x, int y, Letter letter){
@@ -93,5 +95,6 @@ public class InputManager {
         Board board = gameViewModel.getBoard();
         confirmPlayController.execute(play, board);
         getLeaderboardController.execute(gameViewModel.getLeaderboard());
+        endTurnController.execute(false, game);
     }
 }
