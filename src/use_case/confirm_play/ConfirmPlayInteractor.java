@@ -99,6 +99,17 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     return false;
   }
 
+  private boolean isFirstPlay(Board board) {
+    for (int i = 0; i < board.getWidth(); i++) {
+      for (int j = 0; j < board.getHeight(); j++) {
+        if (board.isConfirmed(i, j)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   private boolean isNotCenter(List<Move> moves) {
     for (Move move : moves) {
       if (move.getX() == 7 && move.getY() == 7) {
@@ -155,7 +166,10 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     Move fMove = moves.get(0);
     List<Tile> word;
     if (isVertical(moves)) {
-      words.add(getVTiles(fMove, board));
+      word = getVTiles(fMove, board);
+      if (word != null) {
+        words.add(word);
+      }
       for (Move move : moves) {
         word = getHTiles(move, board);
         if (word != null) {
@@ -163,14 +177,18 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
         }
       }
     } else {
-      words.add(getHTiles(fMove, board));
+      word = getHTiles(fMove, board);
+      if (word != null) {
+        words.add(word);
+      }
       for (Move move : moves) {
-        word = getHTiles(move, board);
+        word = getVTiles(move, board);
         if (word != null) {
           words.add(word);
         }
       }
     }
+    System.out.println(words);
     return words;
   }
 
@@ -209,6 +227,11 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     return true;
   }
 
+  private List<Player> getLeaderboard() {
+    // TODO: Implement this method
+    return new LinkedList<Player>();
+  }
+
   @Override
   public void execute(ConfirmPlayInputData data) {
 
@@ -218,7 +241,7 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     Player player = play.getPlayer();
  
     if (moves.isEmpty()) {
-      presenter.prepareSuccessView(new ConfirmPlayOutputData(board, player));
+      presenter.prepareSuccessView(new ConfirmPlayOutputData(board, getLeaderboard()));
       return;
     }
     
@@ -234,14 +257,14 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
       }
     }
 
-    if (data.isFirstPlay() && isNotCenter(moves)) {
-      presenter.prepareFailView(CENTER_MSG);
-      return;
-    }
-
-    if (!data.isFirstPlay() && isIsolated(moves, board)) {
+    if (isFirstPlay(board)) {
+      if (isNotCenter(moves)) {
+        presenter.prepareFailView(CENTER_MSG);
+        return;
+      }
+    } else if (isIsolated(moves, board)) {
       presenter.prepareFailView(CONNECTED_MSG);
-      return; 
+      return;
     }
 
     confirmAll(moves, board);
@@ -252,6 +275,6 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     if (moves.size() >= 7) {
       player.addScore(50);
     }
-    presenter.prepareSuccessView(new ConfirmPlayOutputData(board, player));
+    presenter.prepareSuccessView(new ConfirmPlayOutputData(board, getLeaderboard()));
   }
 }

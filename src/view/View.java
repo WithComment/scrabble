@@ -3,6 +3,7 @@ package view;
 import entity.Board;
 import entity.Game;
 import entity.Letter;
+import entity.Player;
 import entity.Tile;
 import input_manager.InputManager;
 import interface_adapter.GameViewModel;
@@ -40,14 +41,11 @@ public class View extends JPanel implements MouseListener, ActionListener, Prope
         window.addMouseListener(this);
         boardPanel = new BoardPanel(inputManager);
         handPanel = new HandPanel(inputManager);
-        leaderBoardPanel = new LeaderboardPanel();
-        leaderBoardPanel.addPlayer("Player Name 1"); // Replace with players actual name or ID as a string NOT as a Player object
-        leaderBoardPanel.addPlayer("Player Name 2");
-        leaderBoardPanel.addPlayer("Player Name 3");
-        leaderBoardPanel.addPlayer("Player Name 4");
+        leaderBoardPanel = new LeaderboardPanel(inputManager.getGame().getPlayers());
 //        leaderBoardPanel.updateLeaderboard(whatever their score is, as an int);
 
         JButton confirmPlayButton = new JButton("Confirm Play");
+        
         confirmPlayButton.addMouseListener(new ConfirmPlayListener(inputManager));
         ArrayList<String> tempHand = new ArrayList<>();
         System.out.println(inputManager.getGame().getTurnManager().GetCurrentPlayer().getId());
@@ -104,12 +102,23 @@ public class View extends JPanel implements MouseListener, ActionListener, Prope
         handPanel.updateUI();
     }
 
+    private void updateLeaderboard(List<Player> newLeaderboard) {
+        leaderBoardPanel.updateLeaderboard(newLeaderboard);
+        leaderBoardPanel.updateUI();
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("board")) {
-            updateBoard((Board) evt.getNewValue());
-        } else if (evt.getPropertyName().equals("hand")) {
+        Object newValue = evt.getNewValue();
+        if (evt.getPropertyName().equals("board") && newValue instanceof Board) {
+            updateBoard((Board) newValue);
+        } else if (evt.getPropertyName().equals("hand") && newValue instanceof List) {
             updateHand((List<Letter>) evt.getNewValue());
+        } else if (evt.getPropertyName().equals("player") && newValue instanceof Player) {
+            // TODO: update current player
+        } else if (evt.getPropertyName().equals("leaderboard") && newValue instanceof List) {
+            // TODO: update leaderboard
+            updateLeaderboard((List<Player>) newValue);
         }
     }
 }

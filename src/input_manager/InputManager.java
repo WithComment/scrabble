@@ -4,6 +4,11 @@ import controller_factory.PlaceLetterControllerFactory;
 import controller_factory.RemoveLetterControllerFactory;
 import entity.*;
 import interface_adapter.GameViewModel;
+import interface_adapter.confirm_play.ConfirmPlayController;
+import interface_adapter.get_leaderboard.GetLeaderboardController;
+import interface_adapter.place_letter.PlaceLetterController;
+import use_case.get_leaderboard.GetLeaderboardInputBoundary;
+import use_case.get_leaderboard.GetLeaderboardInputData;
 import interface_adapter.remove_piece.RemoveLetterController;
 import view.Input;
 
@@ -11,13 +16,27 @@ import view.Input;
 public class InputManager {
     private Letter selectedLetter;
     private Game game;
-    private GameViewModel viewModel;
+    private PlaceLetterController placeLetterController;
+    private ConfirmPlayController confirmPlayController;
+    private GetLeaderboardController getLeaderboardController;
+    private GameViewModel gameViewModel;
 
-    public InputManager(Game game, GameViewModel viewModel){
+    public InputManager(
+        Game game, 
+        GameViewModel gameViewModel,
+        PlaceLetterController placeLetterController,
+        ConfirmPlayController confirmPlayController,
+        GetLeaderboardController getLeaderboardController
+    ){
         this.game = game;
-        this.viewModel = viewModel;
+        this.gameViewModel = gameViewModel;
+        this.placeLetterController = placeLetterController;
+        this.confirmPlayController = confirmPlayController;
+        this.getLeaderboardController = getLeaderboardController;
     }
+
     public void handleInput(Input input){
+
         if (input.getType().equals("GridInput")){
             if (input.getInput().equals("rclick")){
                 System.out.println("Remove letter");
@@ -39,7 +58,7 @@ public class InputManager {
             }
         } else if (input.getType().equals("ConfirmPlay")){
             System.out.println("Confirm play");
-            //CONFIRM PLAY USE CASE GOES HERE
+            confirmPlay();
         }
     }
 
@@ -48,7 +67,7 @@ public class InputManager {
             Play play = game.getTurnManager().getCurrentPlay();
             Board board = game.getBoard();
             Tile selectedTile = board.getCell(x, y);
-            RemoveLetterController controller = RemoveLetterControllerFactory.createRemoveLetterController(viewModel);
+            RemoveLetterController controller = RemoveLetterControllerFactory.createRemoveLetterController(gameViewModel);
             controller.execute(x, y, play, selectedTile, board);
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -59,7 +78,14 @@ public class InputManager {
     private void placeLetter(int x, int y, Letter letter){
         Play play = game.getTurnManager().getCurrentPlay();
         Board board = game.getBoard();
-        PlaceLetterControllerFactory.get(viewModel).execute(x, y, letter, board, play);
+        placeLetterController.execute(x, y, letter, board, play);
+    }
+    
+    private void confirmPlay() {
+        Play play = game.getTurnManager().getCurrentPlay();
+        Board board = game.getBoard();
+        confirmPlayController.execute(play, board);
+        getLeaderboardController.execute(gameViewModel.getLeaderboard());
     }
 
     public Game getGame(){

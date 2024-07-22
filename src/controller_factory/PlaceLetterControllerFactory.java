@@ -7,19 +7,14 @@ import use_case.place_letter.PlaceLetterInteractor;
 import use_case.place_letter.PlaceLetterOutputBoundary;
 
 public class PlaceLetterControllerFactory {
-
-  private static PlaceLetterController instance;
   
   private PlaceLetterControllerFactory() {
     // Prevents instantiation
   }
 
-  public static PlaceLetterController get(GameViewModel gameViewModel) {
-    if (instance == null) {
-      PlaceLetterOutputBoundary presenter = new PlaceLetterPresenter(gameViewModel);
-      PlaceLetterInteractor interactor = new PlaceLetterInteractor(presenter);
-      instance = new PlaceLetterController(interactor);
-    }
-    return instance;
+  public static PlaceLetterController create(GameViewModel gameViewModel) {
+    PlaceLetterOutputBoundary presenter = new PlaceLetterPresenter(gameViewModel);
+    PlaceLetterInteractor interactor = new PlaceLetterInteractor(presenter);
+    return new PlaceLetterController(interactor);
   }
 }

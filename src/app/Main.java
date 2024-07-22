@@ -2,6 +2,9 @@ package app;
 
 import java.util.*;
 
+import controller_factory.ConfirmPlayControllerFactory;
+import controller_factory.GetLeaderboardControllerFactory;
+import controller_factory.PlaceLetterControllerFactory;
 import entity.Board;
 import entity.Game;
 import entity.LetterBag;
@@ -9,6 +12,9 @@ import entity.Player;
 import entity.TurnManager;
 import input_manager.InputManager;
 import interface_adapter.GameViewModel;
+import interface_adapter.confirm_play.ConfirmPlayController;
+import interface_adapter.get_leaderboard.GetLeaderboardController;
+import interface_adapter.place_letter.PlaceLetterController;
 import view.View;
 
 public class Main {
@@ -28,7 +34,10 @@ public class Main {
         }
 
         Board board = game.getBoard();
-        GameViewModel gameViewModel = new GameViewModel(board, null, game.getTurnManager().GetCurrentPlayer().getInventory());
-        View view = new View(new InputManager(game, gameViewModel), gameViewModel);
+        GameViewModel gameViewModel = new GameViewModel(board, players, game.getTurnManager().GetCurrentPlayer().getInventory());
+        PlaceLetterController placeLetterController = PlaceLetterControllerFactory.create(gameViewModel);
+        ConfirmPlayController confirmPlayController = ConfirmPlayControllerFactory.create(gameViewModel);
+        GetLeaderboardController getLeaderboardController = GetLeaderboardControllerFactory.create(gameViewModel);
+        View view = new View(new InputManager(game, gameViewModel, placeLetterController, confirmPlayController, getLeaderboardController), gameViewModel);
     }
 }

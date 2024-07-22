@@ -6,24 +6,26 @@ import java.util.HashMap;
 import java.util.List;
 
 import entity.Board;
-import entity.LeaderboardEntry;
 import entity.Letter;
+import entity.Player;
 
 public class GameViewModel extends ViewModel {
       
   private final PropertyChangeSupport support;
   private Board board;
-  private List<LeaderboardEntry> leaderboard;
+  private List<Player> leaderboard;
   private List<Letter> hand;
+  private Player currentPlayer;
   private String errorMessage;
   private final HashMap<String, Object> propertiesChanged;
 
-  public GameViewModel(Board board, List<LeaderboardEntry> leaderboard, List<Letter> hand) {
+  public GameViewModel(Board board, List<Player> leaderboard, List<Letter> hand) {
     super("game");
     this.support = new PropertyChangeSupport(this);
     this.board = board;
     this.leaderboard = leaderboard;
     this.hand = hand;
+    this.currentPlayer = null;
     this.errorMessage = "";
     this.propertiesChanged = new HashMap<>();
   }
@@ -31,6 +33,7 @@ public class GameViewModel extends ViewModel {
   @Override
   public void firePropertyChanged() {
     for (String key : propertiesChanged.keySet()) {
+      System.out.println(key + " set");
       support.firePropertyChange(key, null, propertiesChanged.get(key));
     }
     propertiesChanged.clear();
@@ -46,7 +49,7 @@ public class GameViewModel extends ViewModel {
     propertiesChanged.put("board", board);
   }
 
-  public void setLeaderboard(List<LeaderboardEntry> leaderboard) {
+  public void setLeaderboard(List<Player> leaderboard) {
     this.leaderboard = leaderboard;
     propertiesChanged.put("leaderboard", leaderboard);
   }
@@ -54,6 +57,11 @@ public class GameViewModel extends ViewModel {
   public void setHand(List<Letter> hand) {
     this.hand = hand;
     propertiesChanged.put("hand", hand);
+  }
+
+  public void setPlayer(Player player) {
+    this.currentPlayer = player;
+    propertiesChanged.put("player", player);
   }
 
   public void setErrorMessage(String errorMessage) {
@@ -65,12 +73,16 @@ public class GameViewModel extends ViewModel {
     return board;
   }
 
-  public List<LeaderboardEntry> getLeaderboard() {
+  public List<Player> getLeaderboard() {
     return leaderboard;
   }
 
   public List<Letter> getHand() {
     return hand;
+  }
+
+  public Player getPlayer() {
+    return currentPlayer;
   }
 
   public String getErrorMessage() {

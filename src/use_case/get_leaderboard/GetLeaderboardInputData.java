@@ -1,16 +1,16 @@
 package use_case.get_leaderboard;
 
 import entity.Player;
-import java.util.ArrayList;
+import java.util.List;
 
 public class GetLeaderboardInputData {
-    final ArrayList<Player> players;
+    final List<Player> players;
 
-    public GetLeaderboardInputData(ArrayList<Player> players) {
+    public GetLeaderboardInputData(List<Player> players) {
         this.players = players;
     }
 
-    public ArrayList<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 }
