@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Represents a player in the game.
  * A player has an ID, an inventory of letters, a score, and an unstable score.
  */
-public class Player {
+public class    Player {
     private static int idCounter = 0;
     private final int id;
     private ArrayList<Letter> inventory;
