@@ -77,7 +77,7 @@ public class ConfirmPlayInteractorTest {
         addMoves();
         ConfirmPlayOutputBoundary tester = getFailureTester(0, 0, ConfirmPlayInteractor.INLINE_MSG);
         ConfirmPlayInteractor interactor = new ConfirmPlayInteractor(tester);
-        interactor.execute(new ConfirmPlayInputData(play, board, false));
+        interactor.execute(new ConfirmPlayInputData(play, board));
     }
 
     @Test
@@ -87,7 +87,7 @@ public class ConfirmPlayInteractorTest {
         addMoves();
         ConfirmPlayOutputBoundary tester = getFailureTester(0, 0, ConfirmPlayInteractor.CONTINUOUS_MSG);
         ConfirmPlayInteractor interactor = new ConfirmPlayInteractor(tester);
-        interactor.execute(new ConfirmPlayInputData(play, board, false));
+        interactor.execute(new ConfirmPlayInputData(play, board));
     }
 
     @Test
@@ -96,7 +96,7 @@ public class ConfirmPlayInteractorTest {
         addMoves();
         ConfirmPlayOutputBoundary tester = getFailureTester(0, 0, ConfirmPlayInteractor.CENTER_MSG);
         ConfirmPlayInteractor interactor = new ConfirmPlayInteractor(tester);
-        interactor.execute(new ConfirmPlayInputData(play, board, true));
+        interactor.execute(new ConfirmPlayInputData(play, board));
     }
 
     @Test
@@ -107,7 +107,7 @@ public class ConfirmPlayInteractorTest {
         addMoves();
         ConfirmPlayOutputBoundary tester = getFailureTester(1, 0, ConfirmPlayInteractor.CONNECTED_MSG);
         ConfirmPlayInteractor interactor = new ConfirmPlayInteractor(tester);
-        interactor.execute(new ConfirmPlayInputData(play, board, false));
+        interactor.execute(new ConfirmPlayInputData(play, board));
     }
 
     @Test
@@ -129,7 +129,7 @@ public class ConfirmPlayInteractorTest {
         addMoves();
         ConfirmPlayOutputBoundary tester = getSuccessTester(12, 15);
         ConfirmPlayInteractor interactor = new ConfirmPlayInteractor(tester);
-        interactor.execute(new ConfirmPlayInputData(play, board, false));
+        interactor.execute(new ConfirmPlayInputData(play, board));
         assertEquals(new LinkedList<String>() {
             {
                 add("aaaaaa");
@@ -150,7 +150,7 @@ public class ConfirmPlayInteractorTest {
         board.setAndConfirm(1, 0, new Letter('a', 0));
         ConfirmPlayOutputBoundary tester = getSuccessTester(8, 77);
         ConfirmPlayInteractor interactor = new ConfirmPlayInteractor(tester);
-        interactor.execute(new ConfirmPlayInputData(play, board, false));
+        interactor.execute(new ConfirmPlayInputData(play, board));
     }
 
     abstract class Tester implements ConfirmPlayOutputBoundary {

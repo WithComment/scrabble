@@ -6,12 +6,10 @@ import entity.Play;
 public class ConfirmPlayInputData {
   private final Play play;
   private final Board board;
-  private final boolean isFirstPlay;
 
-  public ConfirmPlayInputData(Play play, Board board, boolean isFirstPlay) {
+  public ConfirmPlayInputData(Play play, Board board) {
     this.play = play;
     this.board = board;
-    this.isFirstPlay = isFirstPlay;
   }
 
   public Play getPlay() {
@@ -20,9 +18,5 @@ public class ConfirmPlayInputData {
 
   public Board getBoard() {
     return board;
-  }
-
-  public boolean isFirstPlay() {
-    return isFirstPlay;
   }
 }

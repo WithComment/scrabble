@@ -5,6 +5,7 @@ import controller_factory.RemoveLetterControllerFactory;
 import entity.*;
 import interface_adapter.GameViewModel;
 import interface_adapter.confirm_play.ConfirmPlayController;
+import interface_adapter.get_leaderboard.GetLeaderboardController;
 import interface_adapter.place_letter.PlaceLetterController;
 import use_case.get_leaderboard.GetLeaderboardInputBoundary;
 import use_case.get_leaderboard.GetLeaderboardInputData;
@@ -17,16 +18,21 @@ public class InputManager {
     private Game game;
     private PlaceLetterController placeLetterController;
     private ConfirmPlayController confirmPlayController;
-    private GetLeaderboardInputBoundary getLeaderboardInputBoundary;
+    private GetLeaderboardController getLeaderboardController;
+    private GameViewModel gameViewModel;
 
     public InputManager(
         Game game, 
+        GameViewModel gameViewModel,
         PlaceLetterController placeLetterController,
-        ConfirmPlayController confirmPlayController
+        ConfirmPlayController confirmPlayController,
+        GetLeaderboardController getLeaderboardController
     ){
         this.game = game;
+        this.gameViewModel = gameViewModel;
         this.placeLetterController = placeLetterController;
         this.confirmPlayController = confirmPlayController;
+        this.getLeaderboardController = getLeaderboardController;
     }
 
     public void handleInput(Input input){
@@ -61,7 +67,7 @@ public class InputManager {
             Play play = game.getLastPlay();
             Board board = game.getBoard();
             Tile selectedTile = board.getCell(x, y);
-            RemoveLetterController controller = RemoveLetterControllerFactory.createRemoveLetterController(viewModel);
+            RemoveLetterController controller = RemoveLetterControllerFactory.createRemoveLetterController(gameViewModel);
             controller.execute(x, y, play, selectedTile, board);
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -79,8 +85,7 @@ public class InputManager {
         Play play = game.getTurnManager().getCurrentPlay();
         Board board = game.getBoard();
         confirmPlayController.execute(play, board);
-        getLeaderboardInputBoundary.execute(new GetLeaderboardInputData(game.getPlayers()));
-        
+        getLeaderboardController.execute(gameViewModel.getLeaderboard());
     }
 
     public Game getGame(){

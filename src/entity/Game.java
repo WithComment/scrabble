@@ -133,6 +133,8 @@ public class Game implements Serializable {
         return players.get(playerId).getScore();
     }
 
+
+
     /**
      * Gets a list of scores for all players in the game.
      *
@@ -197,4 +199,8 @@ public class Game implements Serializable {
     }
 
     public Board getBoard(){ return board; }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
 }

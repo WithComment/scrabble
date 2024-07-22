@@ -1,5 +1,8 @@
 package interface_adapter.get_leaderboard;
 
+import java.util.LinkedList;
+
+import entity.LeaderboardEntry;
 import interface_adapter.GameViewModel;
 import use_case.get_leaderboard.*;
 
@@ -13,7 +16,11 @@ public class GetLeaderboardPresenter implements GetLeaderboardOutputBoundary {
 
     @Override
     public void prepareView(GetLeaderboardOutputData outputData) {
-        viewModel.setLeaderboard(outputData.getLeaderboard());
+        viewModel.setLeaderboard(new LinkedList<>() {{
+            for (LeaderboardEntry entry : outputData.getLeaderboard()) {
+                add(entry.getPlayer());
+            }
+        }});
         viewModel.firePropertyChanged();
     }
 }

@@ -3,7 +3,7 @@ package interface_adapter.get_leaderboard;
 import entity.Player;
 import use_case.get_leaderboard.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class GetLeaderboardController {
 
@@ -13,7 +13,7 @@ public class GetLeaderboardController {
         this.getLeaderboardUseCaseInteractor = getLeaderboardUseCaseInteractor;
     }
 
-    public void execute(ArrayList<Player> players) {
+    public void execute(List<Player> players) {
         GetLeaderboardInputData getLeaderboardInputData = new GetLeaderboardInputData(players);
         getLeaderboardUseCaseInteractor.execute(getLeaderboardInputData);
     }

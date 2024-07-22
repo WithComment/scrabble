@@ -114,6 +114,16 @@ public class Player {
     public int getScore() {
         return score;
     }
+
+    public String getUsername() {
+        // TODO: Add username to player.
+        return "Player " + id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }
 
 
