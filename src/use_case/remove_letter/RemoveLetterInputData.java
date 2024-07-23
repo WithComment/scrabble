@@ -2,14 +2,12 @@ package use_case.remove_letter;
 
 import entity.Board;
 import entity.Play;
-import entity.Player;
-import entity.Tile;
 
 public class RemoveLetterInputData {
-    private int x;
-    private int y;
-    private Play play;
-    private Board board;
+    private final int x;
+    private final int y;
+    private final Play play;
+    private final Board board;
     public RemoveLetterInputData(
             Play play,
             Board board,

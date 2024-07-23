@@ -2,8 +2,6 @@ package view.panels;
 
 import javax.swing.*;
 
-import entity.Player;
-
 import java.awt.GridLayout;
 import java.util.List;
 public class LeaderboardPanel extends JPanel {

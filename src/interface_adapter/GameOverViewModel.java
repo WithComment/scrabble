@@ -1,8 +1,6 @@
 package interface_adapter;
 
 import entity.Board;
-import entity.LeaderboardEntry;
-import entity.Letter;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

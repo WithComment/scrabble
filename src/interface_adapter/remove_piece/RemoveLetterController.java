@@ -2,7 +2,6 @@ package interface_adapter.remove_piece;
 
 import entity.Board;
 import entity.Play;
-import entity.Tile;
 import use_case.remove_letter.RemoveLetterInputBoundary;
 import use_case.remove_letter.RemoveLetterInputData;
 

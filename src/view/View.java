@@ -2,7 +2,6 @@ package view;
 
 import entity.Board;
 import entity.Player;
-import entity.Tile;
 import input_manager.InputManager;
 import interface_adapter.GameViewModel;
 import view.listeners.ConfirmPlayListener;

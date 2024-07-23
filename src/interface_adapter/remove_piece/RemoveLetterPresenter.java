@@ -1,7 +1,6 @@
 package interface_adapter.remove_piece;
 
 import interface_adapter.GameViewModel;
-import interface_adapter.ViewModel;
 import use_case.remove_letter.RemoveLetterOutputBoundary;
 import use_case.remove_letter.RemoveLetterOutputData;
 

@@ -1,7 +1,6 @@
 package use_case.place_letter;
 
 import entity.Board;
-import entity.Letter;
 import entity.Play;
 
 public class PlaceLetterInputData {
