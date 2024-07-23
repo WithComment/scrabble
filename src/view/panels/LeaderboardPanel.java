@@ -13,7 +13,7 @@ public class LeaderboardPanel extends JPanel {
         this.removeAll();
         this.setLayout(new GridLayout(4, 2, 10, 10));
         for (int i = 0; i < players.size(); i++){
-            this.add(new JLabel("Player " + Integer.toString(players.get(i))));
+            this.add(new JLabel("Player " + players.get(i)));
             this.add(new JLabel(Integer.toString(scores.get(i))));
         }
     }

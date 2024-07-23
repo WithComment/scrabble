@@ -37,13 +37,17 @@ public class InputManager {
 
     public void handleInput(Input input){
 
-        if (input.getType().equals("GridInput")){
-            handleGridInput(input);
-        } else if (input.getType().equals("HandInput")){
-            handleHandInput(input);
-        } else if (input.getType().equals("ConfirmPlay")){
-            System.out.println("Confirm play");
-            confirmPlay();
+        switch (input.getType()) {
+            case "GridInput":
+                handleGridInput(input);
+                break;
+            case "HandInput":
+                handleHandInput(input);
+                break;
+            case "ConfirmPlay":
+                System.out.println("Confirm play");
+                confirmPlay();
+                break;
         }
     }
 
@@ -58,7 +62,6 @@ public class InputManager {
                 placeLetter(input.getX(), input.getY(), selectedLetter);
             } else {
                 System.out.println("No selected letter");
-                return;
             }
         }
     }

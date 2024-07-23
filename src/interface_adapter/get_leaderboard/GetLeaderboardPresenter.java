@@ -5,7 +5,6 @@ import java.util.List;
 
 import entity.LeaderboardEntry;
 import interface_adapter.GameViewModel;
-import entity.Player;
 import use_case.get_leaderboard.*;
 
 public class GetLeaderboardPresenter implements GetLeaderboardOutputBoundary {

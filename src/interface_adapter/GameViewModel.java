@@ -7,9 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import entity.Board;
-import entity.Letter;
 import entity.Play;
-import entity.Player;
 
 public class GameViewModel extends ViewModel {
       
