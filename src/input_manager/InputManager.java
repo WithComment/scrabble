@@ -1,6 +1,5 @@
 package input_manager;
 
-import controller_factory.PlaceLetterControllerFactory;
 import controller_factory.RemoveLetterControllerFactory;
 import entity.*;
 import interface_adapter.GameViewModel;
@@ -53,7 +52,7 @@ public class InputManager {
             System.out.println("Remove letter");
             removeLetter(input.getX(), input.getY());
         } else if (input.getInput().equals("lclick")) {
-            Letter selectedLetter = gameViewModel.getSelectedLetter();
+            Character selectedLetter = gameViewModel.getSelectedLetter();
             if (selectedLetter != null) {
                 System.out.println("Place letter");
                 placeLetter(input.getX(), input.getY(), selectedLetter);
@@ -67,8 +66,8 @@ public class InputManager {
     private void handleHandInput(Input input){
         if (input.getInput().equals("lclick")){
             System.out.println("Letter selected");
-            Player currentPlayer = gameViewModel.getPlayer();
-            gameViewModel.setSelectedLetter(currentPlayer.getInventory().get(input.getPositionInHand()));
+            int currentPlayer = gameViewModel.getPlayer();
+            gameViewModel.setSelectedLetter(game.getPlayerInventory(currentPlayer).get(input.getPositionInHand()).getLetter());
         }
     }
 
@@ -76,15 +75,14 @@ public class InputManager {
         try{
             Play play = game.getLastPlay();
             Board board = game.getBoard();
-            Tile selectedTile = board.getCell(x, y);
             RemoveLetterController controller = RemoveLetterControllerFactory.createRemoveLetterController(gameViewModel);
-            controller.execute(x, y, play, selectedTile, board);
+            controller.execute(x, y, play, board);
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
 
-    private void placeLetter(int x, int y, Letter letter){
+    private void placeLetter(int x, int y, Character letter){
         Play play = gameViewModel.getPlay();
         Board board = gameViewModel.getBoard();
         placeLetterController.execute(x, y, letter, board, play);

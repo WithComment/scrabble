@@ -2,6 +2,10 @@ package use_case.start_turn;
 
 import entity.Play;
 import entity.Player;
+import entity.Letter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class StartTurnOutputData {
   private final Player player;
@@ -14,6 +18,18 @@ public class StartTurnOutputData {
 
   public Player getPlayer() {
     return player;
+  }
+
+  public int getPlayerID() {
+    return player.getId();
+  }
+
+  public List<Character> getHandCharacters() {
+    ArrayList<Character> handChars = new ArrayList<>();
+    for (Letter letter : player.getInventory()) {
+      handChars.add(letter.getLetter());
+    }
+    return handChars;
   }
 
   public Play getPlay() {

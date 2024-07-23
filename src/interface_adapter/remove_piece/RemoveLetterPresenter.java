@@ -15,7 +15,7 @@ public class RemoveLetterPresenter implements RemoveLetterOutputBoundary {
     }
     public void prepareSuccessView(RemoveLetterOutputData removeLetterOutputData) {
         viewModel.setBoard(removeLetterOutputData.getBoard());
-        viewModel.setHand(removeLetterOutputData.getHand());
+        viewModel.setHand(removeLetterOutputData.getHandCharacters());
         viewModel.firePropertyChanged();
     }
 }

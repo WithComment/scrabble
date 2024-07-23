@@ -10,17 +10,14 @@ public class RemoveLetterInputData {
     private int y;
     private Play play;
     private Board board;
-    private Tile selectedTile;
     public RemoveLetterInputData(
             Play play,
             Board board,
-            Tile selectedTile,
             int x,
             int y
     ) {
         this.play = play;
         this.board = board;
-        this.selectedTile = selectedTile;
         this.x = x;
         this.y = y;
     }
@@ -30,9 +27,6 @@ public class RemoveLetterInputData {
     }
     public Board getBoard() {
         return board;
-    }
-    public Tile getSelectedTile(){
-        return this.selectedTile;
     }
     public int getX() {
         return x;

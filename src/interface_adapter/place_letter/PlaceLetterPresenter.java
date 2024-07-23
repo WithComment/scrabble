@@ -18,7 +18,7 @@ public class PlaceLetterPresenter implements PlaceLetterOutputBoundary {
   @Override
   public void prepareSuccessView(PlaceLetterOutputData data) {
     viewModel.setBoard(data.getBoard());
-    viewModel.setHand(data.getHand());
+    viewModel.setHand(data.getHandCharacters());
     viewModel.firePropertyChanged();
   }
 
