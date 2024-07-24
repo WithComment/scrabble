@@ -9,7 +9,7 @@ public class Game implements Serializable {
     private static final long serialVersionUID = 1L; // Unique version identifier for serialization
     private static int nextId = 0; // Static counter to assign unique IDs to each game instance
     private final int id; // Unique ID for the game instance
-    protected LetterBag letterBag; // Bag of letters available to draw from
+    private LetterBag letterBag; // Bag of letters available to draw from
     private int nextPlayerId = 0; // Counter to assign unique IDs to players within this game
     private Board board; // The game board
     private List<Player> players; // List of players in the game
@@ -59,6 +59,10 @@ public class Game implements Serializable {
      */
     public Tile getBoardCell(int x, int y) {
         return board.getCell(x, y);
+    }
+
+    public LetterBag getLetterBag() {
+        return letterBag;
     }
 
     /**

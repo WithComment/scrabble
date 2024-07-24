@@ -1,7 +1,6 @@
 package interface_adapter.end_turn;
 
 import entity.Game;
-import entity.Play;
 import entity.Player;
 import use_case.EndTurn.TurnManagerInputData;
 import use_case.EndTurn.TurnManagerInteractor;

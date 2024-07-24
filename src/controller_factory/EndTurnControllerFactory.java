@@ -17,10 +17,9 @@ public class EndTurnControllerFactory {
         // This class should not be instantiated
     }
 
-    public static EndTurnController create(GameViewModel viewModel) {
+    public static EndTurnController create(GameViewModel viewModel, TurnManager turnManager) {
         GetEndTurnOutputBoundary presenter = new EndTurnPresenter(viewModel);
-        ArrayList<Player> players = new ArrayList<>();
-        TurnManagerInteractor interactor = new TurnManagerInteractor(new TurnManager(players));
+        TurnManagerInteractor interactor = new TurnManagerInteractor(turnManager);
         return new EndTurnController(interactor);
     }
 }
