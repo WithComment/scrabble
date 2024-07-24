@@ -7,6 +7,7 @@ import data_access.EndGameDataAccessObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EndGameInteractor implements EndGameInputBoundary{
@@ -17,9 +18,9 @@ public class EndGameInteractor implements EndGameInputBoundary{
     }
 
     @Override
-    public void execute(EndGameInputData endGameInputData) throws Exception {
+    public void execute(EndGameInputData endGameInputData){
         Game game = endGameInputData.getGame();
-        ArrayList<Player> players = endGameInputData.getPlayers();
+        List<Player> players = game.getPlayers();
 
         Map<Player, Integer> unplayedScores = new HashMap<>();
         for (Player player : players) {
@@ -31,32 +32,49 @@ public class EndGameInteractor implements EndGameInputBoundary{
             unplayedScores.put(player, unplayedScore);
         }
 
+        boolean onePlayerEmptied = false;
         int bonus = 0;
         for (Integer value : unplayedScores.values()) {
             bonus += value;
+            if(value == 0){
+                onePlayerEmptied = true;
+            }
+        }
+
+
+        if(!onePlayerEmptied){
+            presenter.prepareFailView("The game should not be over yet");
+            return;
         }
 
         int highestScore = 0;
-        Player winner = null;
+        ArrayList<Player> winners = new ArrayList<>();
         for (Player player : players) {
             int playerPoints = player.getScore();
             int playerFinalScore;
-            if(unplayedScores.get(player) == 0){
+            if (unplayedScores.get(player) == 0) {
                 playerFinalScore = playerPoints + bonus;
-            }else{
+            } else {
                 playerFinalScore = playerPoints - unplayedScores.get(player);
             }
-
+            if (playerFinalScore == highestScore) {
+                winners.add(player);
+            }
             if (playerFinalScore > highestScore) {
                 highestScore = playerFinalScore;
-                winner = player;
+                winners.clear();
+                winners.add(player);
             }
-
-            presenter.prepareView(new EndGameOutputData(winner));
-            EndGameData endGameData = new EndGameData(game);
-            EndGameDataAccessObject endGameDataAccessObject = new EndGameDataAccessObject();
-            endGameDataAccessObject.write(endGameData);
-
         }
+
+        presenter.prepareSuccessView(new EndGameOutputData(winners));
+        EndGameData endGameData = new EndGameData(game);
+        EndGameDataAccessObject endGameDataAccessObject = new EndGameDataAccessObject();
+        try {
+            endGameDataAccessObject.write(endGameData);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

@@ -30,7 +30,7 @@ public class RedrawInteractorTest {
             }
 
             @Override
-            public void prepareFailedView(String error) {
+            public void prepareFailView(String error) {
                 assertEquals("There are less than 7 letters in the bag", error);
             }
         };
@@ -60,7 +60,7 @@ public class RedrawInteractorTest {
             }
 
             @Override
-            public void prepareFailedView(String error) {
+            public void prepareFailView(String error) {
                 fail("Should not have failed");
             }
         };

@@ -32,7 +32,7 @@ public class RedrawInteractor implements RedrawInputBoundary{
         if (drawSuccessful) {
             playerPresenter.prepareSuccessView(new RedrawOutputData(true));
         } else{
-            playerPresenter.prepareFailedView("There are less than 7 letters in the bag");
+            playerPresenter.prepareFailView("There are less than 7 letters in the bag");
         }
     }
 }

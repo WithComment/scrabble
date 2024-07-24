@@ -2,10 +2,16 @@ package use_case.end_game;
 
 import entity.Player;
 
-public class EndGameOutputData {
-    private Player winner;
+import java.util.ArrayList;
 
-    public EndGameOutputData(Player winner) {
-        this.winner = winner;
+public class EndGameOutputData {
+    private ArrayList<Player> winners;
+
+    public EndGameOutputData(ArrayList<Player> winners) {
+        this.winners = winners;
+    }
+
+    public ArrayList<Player> getWinners() {
+        return winners;
     }
 }
