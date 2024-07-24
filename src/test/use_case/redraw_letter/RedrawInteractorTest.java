@@ -13,23 +13,13 @@ import use_case.redraw_letters.RedrawOutputData;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RedrawInteractorTest {
     private LetterBag letterBag;
     private Player player;
     private RedrawInteractor redrawInteractor;
-
-    @BeforeEach
-    public void setUp() {
-        LetterBag letterBag = new LetterBag();
-        Player player = new Player(0);
-
-        player.addLetter(letterBag.drawLetters(7));
-    }
 
     @Test
     public void testInteractorFail() {
@@ -44,13 +34,51 @@ public class RedrawInteractorTest {
                 assertEquals("There are less than 7 letters in the bag", error);
             }
         };
+
+        LetterBag letterBag = new LetterBag();
+        Player player = new Player(0);
+
+        player.addLetter(letterBag.drawLetters(7));
+
         RedrawInteractor redrawInteractor = new RedrawInteractor(failurePresenter);
+
         assertEquals(91, letterBag.getLength());
 
-        ArrayList<Letter> removedLetters = letterBag.drawLetters(90);
-        assertEquals(91, letterBag.getLength());
+        letterBag.drawLetters(90);
+        assertEquals(1, letterBag.getLength());
 
         RedrawInputData redrawInputData = new RedrawInputData(new ArrayList<>(), player, letterBag);
         redrawInteractor.execute(redrawInputData);
+    }
+
+    @Test
+    public void testInteractorSuccess() {
+        RedrawOutputBoundary successPresenter = new RedrawOutputBoundary() {
+            @Override
+            public void prepareSuccessView(RedrawOutputData redrawOutputData) {
+                assertEquals(true, redrawOutputData.isDrawSuccessful());
+            }
+
+            @Override
+            public void prepareFailedView(String error) {
+                fail("Should not have failed");
+            }
+        };
+
+        LetterBag letterBag = new LetterBag();
+        Player player = new Player(0);
+
+        player.addLetter(letterBag.drawLetters(7));
+
+        RedrawInteractor redrawInteractor = new RedrawInteractor(successPresenter);
+
+        assertEquals(91, letterBag.getLength());
+
+        ArrayList<Letter> inventoryBefore = (ArrayList<Letter>) player.getInventory().clone();
+
+        RedrawInputData redrawInputData = new RedrawInputData(player.getInventory(), player, letterBag);
+        redrawInteractor.execute(redrawInputData);
+
+        assertNotEquals(inventoryBefore, player.getInventory());
     }
 }

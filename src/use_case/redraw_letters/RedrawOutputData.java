@@ -6,4 +6,8 @@ public class RedrawOutputData {
     public RedrawOutputData(boolean drawSuccessful) {
         this.drawSuccessful = drawSuccessful;
     }
+
+    public boolean isDrawSuccessful() {
+        return drawSuccessful;
+    }
 }

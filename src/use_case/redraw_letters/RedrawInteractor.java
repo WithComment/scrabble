@@ -20,10 +20,11 @@ public class RedrawInteractor implements RedrawInputBoundary{
             Player player = redrawInputData.getPlayer();
             ArrayList<Letter> letters = redrawInputData.getLetters();
             LetterBag letterBag = redrawInputData.getLetterBag();
+            int numToRedraw = letters.size();
 
-            player.removeLetter(letters);
             letterBag.addLetters(letters);
-            ArrayList<Letter> newLetters = letterBag.drawLetters(letters.size());
+            player.removeLetter((ArrayList<Letter>) letters.clone());
+            ArrayList<Letter> newLetters = letterBag.drawLetters(numToRedraw);
             player.addLetter(newLetters);
             drawSuccessful = true;
         }

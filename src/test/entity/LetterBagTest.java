@@ -11,6 +11,12 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LetterBagTest {
+    @Test
+    void testGetLength(){
+        LetterBag letterBag = new LetterBag();
+
+        assertEquals(98, letterBag.getLength());
+    }
 
     @Test
     void testInit(){
@@ -131,9 +137,11 @@ public class LetterBagTest {
         lettersToAdd.add(letterToAdd);
 
         letterBag.addLetters(lettersToAdd);
-        assertEquals(0, letterBag.getLength());
+        assertEquals(1, letterBag.getLength());
 
         Letter drawnLetter = letterBag.drawLetters().remove(0);
         assertEquals(drawnLetter, letterToAdd);
     }
+
+
 }
