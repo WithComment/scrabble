@@ -38,7 +38,7 @@ public class EndTurnController {
 
     public void execute(boolean contestSucceed, Game game) {
         ArrayList<Player> players = new ArrayList<>();
-        TurnManagerInputData turnManagerInputData = new TurnManagerInputData(players, false, false);
+        TurnManagerInputData turnManagerInputData = new TurnManagerInputData(players, false, false, game.getLetterBag());
         turnManagerInteractor.execute(turnManagerInputData);
     }
 }
