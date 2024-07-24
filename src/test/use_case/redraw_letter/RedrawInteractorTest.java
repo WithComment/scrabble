@@ -6,7 +6,10 @@ import org.junit.jupiter.api.Test;
 import entity.Letter;
 import entity.LetterBag;
 import entity.Player;
+import use_case.redraw_letters.RedrawInputData;
 import use_case.redraw_letters.RedrawInteractor;
+import use_case.redraw_letters.RedrawOutputBoundary;
+import use_case.redraw_letters.RedrawOutputData;
 
 
 import java.util.ArrayList;
@@ -22,38 +25,32 @@ public class RedrawInteractorTest {
 
     @BeforeEach
     public void setUp() {
-        letterBag = new LetterBag();
-        player = new Player(0);
-        redrawInteractor = new RedrawInteractor();
+        LetterBag letterBag = new LetterBag();
+        Player player = new Player(0);
 
-        // Initialize player's hand with some letters
-        ArrayList<Letter> initialLetters = new ArrayList<>();
-        initialLetters.add(new Letter('A', 1));
-        initialLetters.add(new Letter('B', 3));
-        initialLetters.add(new Letter('C', 3));
-        player.addLetters(initialLetters);
+        player.addLetter(letterBag.drawLetters(7));
     }
 
     @Test
-    public void testRedrawLetters() {
-        List<Character> lettersToRedraw = new ArrayList<>();
-        lettersToRedraw.add('A');
-        lettersToRedraw.add('B');
+    public void testInteractorFail() {
+        RedrawOutputBoundary failurePresenter = new RedrawOutputBoundary() {
+            @Override
+            public void prepareSuccessView(RedrawOutputData redrawOutputData) {
+                fail("Should not have successed");
+            }
 
-        int initialBagSize = letterBag.getLength();
-        int initialPlayerHandSize = player.getHandSize();
+            @Override
+            public void prepareFailedView(String error) {
+                assertEquals("There are less than 7 letters in the bag", error);
+            }
+        };
+        RedrawInteractor redrawInteractor = new RedrawInteractor(failurePresenter);
+        assertEquals(91, letterBag.getLength());
 
-        redrawInteractor.redrawLetters(lettersToRedraw);
+        ArrayList<Letter> removedLetters = letterBag.drawLetters(90);
+        assertEquals(91, letterBag.getLength());
 
-        // Check that the player's hand still has the same number of letters
-        assertEquals(initialPlayerHandSize, player.getHandSize());
-
-        // Check that the letters A and B have been replaced
-        boolean containsA = player.getHand().stream().anyMatch(letter -> letter.getLetter() == 'A');
-        boolean containsB = player.getHand().stream().anyMatch(letter -> letter.getLetter() == 'B');
-        assertTrue(!containsA && !containsB);
-
-        // Check that the bag size is updated correctly
-        assertEquals(initialBagSize, letterBag.getLength() + 2);
+        RedrawInputData redrawInputData = new RedrawInputData(new ArrayList<>(), player, letterBag);
+        redrawInteractor.execute(redrawInputData);
     }
 }
