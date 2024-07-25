@@ -1,17 +1,17 @@
 package use_case.get_leaderboard;
 
-import entity.LeaderboardEntry;
+import entity.Player;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class GetLeaderboardOutputData {
-    private final ArrayList<LeaderboardEntry> leaderboard;
+    private final List<Player> leaderboard;
 
-    public GetLeaderboardOutputData(ArrayList<LeaderboardEntry> leaderboard) {
+    public GetLeaderboardOutputData(List<Player> leaderboard) {
         this.leaderboard = leaderboard;
     }
 
-    public ArrayList<LeaderboardEntry> getLeaderboard() {
+    public List<Player> getLeaderboard() {
         return leaderboard;
     }
 }

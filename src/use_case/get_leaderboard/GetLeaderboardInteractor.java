@@ -1,10 +1,9 @@
 package use_case.get_leaderboard;
 
-import entity.LeaderboardEntry;
 import entity.Player;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Implements the use case interactor for retrieving and presenting the game leaderboard.
@@ -30,11 +29,7 @@ public class GetLeaderboardInteractor implements GetLeaderboardInputBoundary {
      */
     @Override
     public void execute(GetLeaderboardInputData input) {
-        ArrayList<LeaderboardEntry> leaderboard = new ArrayList<>();
-        for (Player player : input.getPlayers()) {
-            leaderboard.add(new LeaderboardEntry(player, player.getScore()));
-        }
-        System.out.println(input.getPlayers().size());
+        List<Player> leaderboard = input.getPlayers();
         Collections.sort(leaderboard, Collections.reverseOrder());
         presenter.prepareView(new GetLeaderboardOutputData(leaderboard));
     }
