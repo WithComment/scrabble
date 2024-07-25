@@ -148,7 +148,8 @@ public class ConfirmPlayInteractorTest {
         ;
         addMoves();
         board.setAndConfirm(1, 0, new Letter('a', 0));
-        ConfirmPlayOutputBoundary tester = getSuccessTester(8, 77);
+        ConfirmPlayOutp
+          utBoundary tester = getSuccessTester(8, 77);
         ConfirmPlayInteractor interactor = new ConfirmPlayInteractor(tester);
         interactor.execute(new ConfirmPlayInputData(play, board));
     }

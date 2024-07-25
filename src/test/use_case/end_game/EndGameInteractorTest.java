@@ -10,6 +10,7 @@ import use_case.end_game.EndGameOutputBoundary;
 import use_case.end_game.EndGameOutputData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,7 +32,7 @@ public class EndGameInteractorTest {
         };
         EndGameInteractor endGameInteractor = new EndGameInteractor(failurePresenter);
 
-        ArrayList<Player> players = new ArrayList<>();
+        List<Player> players = new ArrayList<>();
         players.add(new Player(0));
         players.add(new Player(1));
         players.add(new Player(2));
@@ -46,7 +47,7 @@ public class EndGameInteractorTest {
     }
 
     @Test void testInteractorSuccess(){
-        ArrayList<Player> expectedWinners = new ArrayList<>();
+        List<Player> expectedWinners = new ArrayList<>();
         EndGameOutputBoundary successPresenter = new EndGameOutputBoundary() {
             @Override
             public void prepareSuccessView(EndGameOutputData endGameOutputData) {
@@ -60,7 +61,7 @@ public class EndGameInteractorTest {
         };
         EndGameInteractor endGameInteractor = new EndGameInteractor(successPresenter);
 
-        ArrayList<Player> players = new ArrayList<>();
+        List<Player> players = new ArrayList<>();
         Player player0 = new Player(0);
         Player player1 = new Player(1);
         Player player2 = new Player(2);

@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a player in the game.
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 public class    Player {
     private static int idCounter = 0;
     private final int id;
-    private ArrayList<Letter> inventory;
+    private List<Letter> inventory;
     private int score;
     public int tempScore;
 
@@ -49,7 +50,7 @@ public class    Player {
         this.inventory.add(letter);
     }
 
-    public void addLetter(ArrayList<Letter> tiles) {
+    public void addLetter(List<Letter> tiles) {
         this.inventory.addAll(tiles);
     }
 
@@ -57,9 +58,9 @@ public class    Player {
      * Updates the player's score by adding the scores of words played.
      * The scores are added to both the main score and the unstable score.
      *
-     * @param ScoresOfWords an ArrayList of scores to be added to the player's score
+     * @param ScoresOfWords an List of scores to be added to the player's score
      */
-    public void updateScore(ArrayList<Integer> ScoresOfWords) {
+    public void updateScore(List<Integer> ScoresOfWords) {
         // Add scores to player
         for (Integer score : ScoresOfWords) {
             this.score += score;
@@ -111,7 +112,7 @@ public class    Player {
      *
      * @return the player's inventory of letters
      */
-    public ArrayList<Letter> getInventory() {
+    public List<Letter> getInventory() {
         return inventory;
     }
 

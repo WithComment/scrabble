@@ -24,7 +24,7 @@ public class EndGameInteractor implements EndGameInputBoundary{
 
         Map<Player, Integer> unplayedScores = new HashMap<>();
         for (Player player : players) {
-            ArrayList<Letter> playerInventory = player.getInventory();
+            List<Letter> playerInventory = player.getInventory();
             int unplayedScore = 0;
             for (Letter letter : playerInventory) {
                 unplayedScore += letter.getPoints();
@@ -48,7 +48,7 @@ public class EndGameInteractor implements EndGameInputBoundary{
         }
 
         int highestScore = 0;
-        ArrayList<Integer> winners = new ArrayList<>();
+        List<Integer> winners = new ArrayList<>();
         for (Player player : players) {
             int playerPoints = player.getScore();
             int playerFinalScore;

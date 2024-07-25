@@ -5,6 +5,7 @@ import entity.LetterBag;
 import entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RedrawInteractor implements RedrawInputBoundary{
     final RedrawOutputBoundary playerPresenter;
@@ -18,13 +19,13 @@ public class RedrawInteractor implements RedrawInputBoundary{
         boolean drawSuccessful = false;
         if(redrawInputData.getLetterBag().getLength() > 6) {
             Player player = redrawInputData.getPlayer();
-            ArrayList<Letter> letters = redrawInputData.getLetters();
+            List<Letter> letters = redrawInputData.getLetters();
             LetterBag letterBag = redrawInputData.getLetterBag();
             int numToRedraw = letters.size();
 
             letterBag.addLetters(letters);
-            player.removeLetter((ArrayList<Letter>) letters.clone());
-            ArrayList<Letter> newLetters = letterBag.drawLetters(numToRedraw);
+            player.removeLetter((ArrayList<Letter>) ((ArrayList<Letter>)letters).clone());
+            List<Letter> newLetters = letterBag.drawLetters(numToRedraw);
             player.addLetter(newLetters);
             drawSuccessful = true;
         }
