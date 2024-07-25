@@ -1,9 +1,13 @@
 package use_case.EndTurn;
 
-import entity.LetterBag;
+import entity.LeaderboardEntry;
 import entity.Player;
 import entity.TurnManager;
+import use_case.get_leaderboard.GetLeaderboardInputData;
+import use_case.get_leaderboard.GetLeaderboardOutputData;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -79,6 +83,10 @@ public class TurnManagerInteractor implements EndTurn, DealingContest, StartTurn
         turnManager.ContestFailureUpdate(playerNumber);
     }
 
+    public TurnManager getTurnManager() {
+        return turnManager;
+    }
+
     public boolean isEndTurn(){
         return turnManager.isEndTurn();
     }
@@ -94,7 +102,6 @@ public class TurnManagerInteractor implements EndTurn, DealingContest, StartTurn
     public List<Player> getPlayers(){
         return turnManager.GetPlayers();
     }
-
 
     public void execute(TurnManagerInputData turnManagerInputData){
         for(Player player : turnManagerInputData.players){
@@ -119,3 +126,4 @@ public class TurnManagerInteractor implements EndTurn, DealingContest, StartTurn
         }
     }
 }
+
