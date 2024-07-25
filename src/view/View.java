@@ -1,10 +1,7 @@
 package view;
 
 import entity.Board;
-import entity.Game;
-import entity.Letter;
 import entity.Player;
-import entity.Tile;
 import input_manager.InputManager;
 import interface_adapter.GameViewModel;
 import view.listeners.ConfirmPlayListener;
@@ -41,15 +38,15 @@ public class View extends JPanel implements MouseListener, ActionListener, Prope
         window.addMouseListener(this);
         boardPanel = new BoardPanel(inputManager);
         handPanel = new HandPanel(inputManager);
-        leaderBoardPanel = new LeaderboardPanel(gameViewModel.getLeaderboard());
+        leaderBoardPanel = new LeaderboardPanel(gameViewModel.getLeaderboard(), gameViewModel.getScores());
 //        leaderBoardPanel.updateLeaderboard(whatever their score is, as an int);
 
         JButton confirmPlayButton = new JButton("Confirm Play");
         
         confirmPlayButton.addMouseListener(new ConfirmPlayListener(inputManager));
         ArrayList<String> tempHand = new ArrayList<>();
-        for (Letter l : gameViewModel.getHand()) {
-            tempHand.add(String.valueOf(l.getLetter()));
+        for (Character l : gameViewModel.getHand()) {
+            tempHand.add(String.valueOf(l));
         }
         handPanel.setHand(gameViewModel.getHand());
 
@@ -87,22 +84,22 @@ public class View extends JPanel implements MouseListener, ActionListener, Prope
 
     }
 
-    public void setTile(int[] coords, Tile tile) {
-        boardPanel.setGridSpotToTile(coords, tile);
-    }
+//    public void setTile(int[] coords, Tile tile) {
+//        boardPanel.setGridSpotToTile(coords, tile);
+//    }
 
     private void updateBoard(Board newBoard) {
         boardPanel.setBoardToState(newBoard);
         boardPanel.updateUI();
     }
 
-    private void updateHand(List<Letter> newHand) {
+    private void updateHand(List<Character> newHand) {
         handPanel.setHand(newHand);
         handPanel.updateUI();
     }
 
-    private void updateLeaderboard(List<Player> newLeaderboard) {
-        leaderBoardPanel.update(newLeaderboard);
+    private void updateLeaderboard(List<Integer> newLeaderboard, List<Integer> scores) {
+        leaderBoardPanel.update(newLeaderboard, scores);
         leaderBoardPanel.updateUI();
     }
 
@@ -112,12 +109,15 @@ public class View extends JPanel implements MouseListener, ActionListener, Prope
         if (evt.getPropertyName().equals("board") && newValue instanceof Board) {
             updateBoard((Board) newValue);
         } else if (evt.getPropertyName().equals("hand") && newValue instanceof List) {
-            updateHand((List<Letter>) evt.getNewValue());
+            updateHand((List<Character>) evt.getNewValue());
         } else if (evt.getPropertyName().equals("player") && newValue instanceof Player) {
             // TODO: update current player
         } else if (evt.getPropertyName().equals("leaderboard") && newValue instanceof List) {
             // TODO: update leaderboard
-            updateLeaderboard((List<Player>) newValue);
+            List<Object> args = (List<Object>) newValue;
+            if (args.get(0) instanceof List && args.get(1) instanceof List) {
+                updateLeaderboard((List<Integer>) args.get(0), (List<Integer>) args.get(1));
+            }
         }
     }
 }

@@ -5,7 +5,6 @@ import java.util.List;
 
 import entity.LeaderboardEntry;
 import interface_adapter.GameViewModel;
-import entity.Player;
 import use_case.get_leaderboard.*;
 
 public class GetLeaderboardPresenter implements GetLeaderboardOutputBoundary {
@@ -18,11 +17,13 @@ public class GetLeaderboardPresenter implements GetLeaderboardOutputBoundary {
 
     @Override
     public void prepareView(GetLeaderboardOutputData outputData) {
-        List<Player> players = new LinkedList<>();
+        List<Integer> players = new LinkedList<>();
+        List<Integer> scores = new LinkedList<>();
         for (LeaderboardEntry entry : outputData.getLeaderboard()) {
-            players.add(entry.getPlayer());
+            players.add(entry.getPlayer().getId());
+            scores.add(entry.getScore());
         }
-        viewModel.setLeaderboard(players);
+        viewModel.setLeaderboard(players, scores);
         viewModel.firePropertyChanged();
     }
 }

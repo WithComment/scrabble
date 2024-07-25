@@ -1,5 +1,6 @@
 package use_case.place_letter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import entity.Board;
@@ -20,5 +21,13 @@ public class PlaceLetterOutputData {
 
   public List<Letter> getHand() {
     return hand;
+  }
+
+  public List<Character> getHandCharacters() {
+    List<Character> handChars = new ArrayList<>();
+    for (Letter letter : hand) {
+      handChars.add(letter.getLetter());
+    }
+    return handChars;
   }
 }

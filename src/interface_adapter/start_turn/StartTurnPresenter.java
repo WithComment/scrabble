@@ -13,7 +13,8 @@ public class StartTurnPresenter implements StartTurnOutputBoundary {
 
   @Override
   public void prepareView(StartTurnOutputData data) {
-    gameViewModel.setPlayer(data.getPlayer());
+    gameViewModel.setPlayer(data.getPlayerID());
+    gameViewModel.setHand(data.getHandCharacters());
     gameViewModel.setPlay(data.getPlay());
     gameViewModel.firePropertyChanged();
   }

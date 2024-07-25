@@ -43,8 +43,7 @@ class RemoveLetterInteractorTest {
         Letter letter = new Letter('A', 4);
         play.addMove(new Move(0, 0, letter));
         board.setCell(0, 0, letter);
-        Tile selectedtile = board.getCell(0, 0);
-        RemoveLetterInputData testInputData = new RemoveLetterInputData(play, board, selectedtile, 0, 0);
+        RemoveLetterInputData testInputData = new RemoveLetterInputData(play, board,0, 0);
         RemoveLetterInteractor testerInteractor = new RemoveLetterInteractor(testerPresenter);
         testerInteractor.execute(testInputData);
     }
@@ -65,8 +64,7 @@ class RemoveLetterInteractorTest {
                 assertEquals(removeLetterOutputData.isRemoveSuccessful(), false);
             }
         };
-        Tile selectedtile = board.getCell(0, 0);
-        RemoveLetterInputData testInputData = new RemoveLetterInputData(play, board, selectedtile, 0, 0);
+        RemoveLetterInputData testInputData = new RemoveLetterInputData(play, board, 0, 0);
         RemoveLetterInteractor testerInteractor = new RemoveLetterInteractor(testerPresenter);
         testerInteractor.execute(testInputData);
 
@@ -89,8 +87,7 @@ class RemoveLetterInteractorTest {
             }
         };
         board.setCell(0, 0, new Letter('A', 4));
-        Tile selectedtile = board.getCell(0, 0);
-        RemoveLetterInputData testInputData = new RemoveLetterInputData(play, board, selectedtile, 0, 0);
+        RemoveLetterInputData testInputData = new RemoveLetterInputData(play, board, 0, 0);
         RemoveLetterInteractor testerInteractor = new RemoveLetterInteractor(testerPresenter);
         testerInteractor.execute(testInputData);
 

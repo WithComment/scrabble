@@ -76,12 +76,12 @@ public class PlaceLetterInteractorTest {
         };
 
         PlaceLetterInputBoundary dummyInteractor = new PlaceLetterInteractor(dummyPresenter);
-        dummyInteractor.execute(new PlaceLetterInputData(ax, ay, a, board, play));
-        dummyInteractor.execute(new PlaceLetterInputData(bx, by, b, board, play));
-        dummyInteractor.execute(new PlaceLetterInputData(cx, cy, c, board, play));
+        dummyInteractor.execute(new PlaceLetterInputData(ax, ay, 'a', board, play));
+        dummyInteractor.execute(new PlaceLetterInputData(bx, by, 'b', board, play));
+        dummyInteractor.execute(new PlaceLetterInputData(cx, cy, 'c', board, play));
 
         PlaceLetterInputBoundary interactor = new PlaceLetterInteractor(tester);
-        interactor.execute(new PlaceLetterInputData(dx, dy, d, board, play));
+        interactor.execute(new PlaceLetterInputData(dx, dy, 'd', board, play));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class PlaceLetterInteractorTest {
             }
         };
         player.addLetter(a.clone());
-        PlaceLetterInputData data = new PlaceLetterInputData(7, 7, a, board, play);
+        PlaceLetterInputData data = new PlaceLetterInputData(7, 7, 'a', board, play);
         dummyInteractor.execute(data);
         PlaceLetterInputBoundary interactor = new PlaceLetterInteractor(tester);
         interactor.execute(data);
@@ -120,8 +120,8 @@ public class PlaceLetterInteractorTest {
                 assertEquals("You don't have the letter in your inventory!", error);
             }
         };
-        dummyInteractor.execute(new PlaceLetterInputData(7, 7, a, board, play));
+        dummyInteractor.execute(new PlaceLetterInputData(7, 7, 'a', board, play));
         PlaceLetterInputBoundary interactor = new PlaceLetterInteractor(tester);
-        interactor.execute(new PlaceLetterInputData(0, 0, a, board, play));
+        interactor.execute(new PlaceLetterInputData(0, 0, 'a', board, play));
     }
 }

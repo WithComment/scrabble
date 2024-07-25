@@ -1,6 +1,8 @@
 package use_case.remove_letter;
 import entity.Board;
 import entity.Letter;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class RemoveLetterOutputData {
@@ -23,5 +25,13 @@ public class RemoveLetterOutputData {
 
     public List<Letter> getHand(){
         return hand;
+    }
+
+    public List<Character> getHandCharacters() {
+        List<Character> handChars = new ArrayList<>();
+        for (Letter letter : hand) {
+            handChars.add(letter.getLetter());
+        }
+        return handChars;
     }
 }

@@ -2,34 +2,34 @@ package interface_adapter;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import entity.Board;
-import entity.Letter;
 import entity.Play;
-import entity.Player;
 
 public class GameViewModel extends ViewModel {
       
   private final PropertyChangeSupport support;
-  private Board board;
-  private List<Player> leaderboard;
-  private List<Letter> hand;
-  private Letter selectedLetter;
-  private Player currentPlayer;
-  private Play currentPlay;
+  private Board board; //TODO
+  private List<Integer> leaderboard;
+  private List<Integer> leaderboardScores;
+  private List<Character> hand;
+  private char selectedLetter;
+  private int currentPlayer;
+  private Play currentPlay; //TODO
   private String errorMessage;
   private final HashMap<String, Object> propertiesChanged;
 
-  public GameViewModel(Board board, List<Player> leaderboard) {
+  public GameViewModel(Board board, List<Integer> leaderboard) {
     super("game");
     this.support = new PropertyChangeSupport(this);
     this.board = board;
     this.leaderboard = leaderboard;
     this.hand = null;
-    this.selectedLetter = null;
-    this.currentPlayer = null;
+    this.selectedLetter = '\0';
+    this.currentPlayer = -1;
     this.currentPlay = null;
     this.errorMessage = "";
     this.propertiesChanged = new HashMap<>();
@@ -53,27 +53,29 @@ public class GameViewModel extends ViewModel {
     propertiesChanged.put("board", board);
   }
 
-  public void setLeaderboard(List<Player> leaderboard) {
+  public void setLeaderboard(List<Integer> leaderboard, List<Integer> scores) {
     System.out.println("leaderboard size: " + Integer.toString(leaderboard.size()));
     this.leaderboard = leaderboard;
-    propertiesChanged.put("leaderboard", leaderboard);
+    this.leaderboardScores = scores;
+    ArrayList<Object> args = new ArrayList<>();
+    args.add(leaderboard);
+    args.add(scores);
+    propertiesChanged.put("leaderboard", args);
   }
 
-  public void setHand(List<Letter> hand) {
+  public void setHand(List<Character> hand) {
     this.hand = hand;
     propertiesChanged.put("hand", hand);
   }
 
-  public void setSelectedLetter(Letter letter) {
+  public void setSelectedLetter(char letter) {
     this.selectedLetter = letter;
     propertiesChanged.put("selectedLetter", letter);
   }
 
-  public void setPlayer(Player player) {
+  public void setPlayer(int player) {
     this.currentPlayer = player;
     propertiesChanged.put("player", player);
-    this.hand = player.getInventory();
-    propertiesChanged.put("hand", hand);
   }
 
   public void setPlay(Play play) {
@@ -93,19 +95,23 @@ public class GameViewModel extends ViewModel {
     return board;
   }
 
-  public List<Player> getLeaderboard() {
+  public List<Integer> getLeaderboard() {
     return leaderboard;
   }
 
-  public List<Letter> getHand() {
+  public List<Integer> getScores() {
+    return leaderboardScores;
+  }
+
+  public List<Character> getHand() {
     return hand;
   }
 
-  public Letter getSelectedLetter() {
+  public char getSelectedLetter() {
     return selectedLetter;
   }
 
-  public Player getPlayer() {
+  public int getPlayer() {
     return currentPlayer;
   }
 
