@@ -1,7 +1,11 @@
 package interface_adapter.get_winner;
 
+import entity.LeaderboardEntry;
 import interface_adapter.GameOverViewModel;
 import use_case.get_winner.*;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class GetWinnerPresenter implements GetWinnerOutputBoundary {
 
@@ -13,7 +17,11 @@ public class GetWinnerPresenter implements GetWinnerOutputBoundary {
 
     @Override
     public void prepareView(GetWinnerOutputData outputData) {
-        viewModel.setWinners(outputData.getWinner());
+        List<Integer> winners = new LinkedList<>();
+        for (LeaderboardEntry entry : outputData.getWinner()) {
+            winners.add(entry.getPlayer().getId());
+        }
+        viewModel.setWinners(winners);
         viewModel.firePropertyChanged();
     }
 }

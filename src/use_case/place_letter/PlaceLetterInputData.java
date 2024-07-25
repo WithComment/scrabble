@@ -1,20 +1,19 @@
 package use_case.place_letter;
 
 import entity.Board;
-import entity.Letter;
 import entity.Play;
 
 public class PlaceLetterInputData {
   private final int x;
   private final int y;
-  private final Letter letter;
+  private final Character letter;
   private final Board board;
   private final Play play;
 
   public PlaceLetterInputData(
     int x,
     int y,
-    Letter letter,
+    Character letter,
     Board board,
     Play play
   ) {
@@ -33,7 +32,7 @@ public class PlaceLetterInputData {
     return y;
   }
 
-  public Letter getLetter() {
+  public Character getLetter() {
     return letter;
   }
 
