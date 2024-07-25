@@ -5,13 +5,13 @@ import entity.Player;
 import java.util.ArrayList;
 
 public class EndGameOutputData {
-    private ArrayList<Player> winners;
+    private final ArrayList<Integer> winners;
 
-    public EndGameOutputData(ArrayList<Player> winners) {
+    public EndGameOutputData(ArrayList<Integer> winners) {
         this.winners = winners;
     }
 
-    public ArrayList<Player> getWinners() {
+    public ArrayList<Integer> getWinners() {
         return winners;
     }
 }

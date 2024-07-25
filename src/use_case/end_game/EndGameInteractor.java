@@ -48,7 +48,7 @@ public class EndGameInteractor implements EndGameInputBoundary{
         }
 
         int highestScore = 0;
-        ArrayList<Player> winners = new ArrayList<>();
+        ArrayList<Integer> winners = new ArrayList<>();
         for (Player player : players) {
             int playerPoints = player.getScore();
             int playerFinalScore;
@@ -58,12 +58,12 @@ public class EndGameInteractor implements EndGameInputBoundary{
                 playerFinalScore = playerPoints - unplayedScores.get(player);
             }
             if (playerFinalScore == highestScore) {
-                winners.add(player);
+                winners.add(player.getId());
             }
             if (playerFinalScore > highestScore) {
                 highestScore = playerFinalScore;
                 winners.clear();
-                winners.add(player);
+                winners.add(player.getId());
             }
         }
 
