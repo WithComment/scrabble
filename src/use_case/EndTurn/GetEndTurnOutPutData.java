@@ -1,21 +1,24 @@
 package use_case.EndTurn;
+import entity.Game;
 import entity.LetterBag;
 import entity.Player;
 
 import java.util.ArrayList;
 
 
-public class TurnManagerInputData {
-        final ArrayList<Player> players;
-        boolean isContestSucceed;
-        boolean isContest;
-        LetterBag letterBag;
+public class GetEndTurnOutPutData {
+    final ArrayList<Player> players;
+    boolean isContestSucceed;
+    boolean isContest;
+    LetterBag letterBag;
+    Game game;
 
-    public TurnManagerInputData(ArrayList<Player> players, boolean isContestSucceed, boolean isContest, LetterBag letterBag) {
+    public GetEndTurnOutPutData(ArrayList<Player> players, boolean isContestSucceed, boolean isContest, LetterBag letterBag, Game game) {
         this.players = players;
         this.isContestSucceed = isContestSucceed;
         this.isContest = isContest;
         this.letterBag = letterBag;
+        this.game = game;
 
     }
 
