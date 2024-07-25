@@ -133,6 +133,17 @@ public class    Player {
     public int hashCode() {
         return id;
     }
+
+    /**
+     * Compares this Player with another based on their scores.
+     * @param o The other Player to compare to.
+     * @return A negative integer, zero, or a positive integer as this object
+     *         is less than, equal to, or greater than the specified object.
+     */
+    public int compareTo(Player o)
+    {
+        return this.score - o.getScore();
+    }
 }
 
 
