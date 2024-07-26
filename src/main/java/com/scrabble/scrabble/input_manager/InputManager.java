@@ -10,7 +10,10 @@ import interface_adapter.place_letter.PlaceLetterController;
 import interface_adapter.remove_piece.RemoveLetterController;
 import view.Input;
 
-
+/**
+ * Manages the input handling for the game.
+ * Processes different types of inputs and delegates actions to the appropriate controllers.
+ */
 public class InputManager {
     private Game game;
     private PlaceLetterController placeLetterController;
@@ -19,6 +22,15 @@ public class InputManager {
     private EndTurnController endTurnController;
     private GameViewModel gameViewModel;
 
+    /**
+     * Constructs an InputManager with the specified game, view model, and controllers.
+     * @param game The game instance.
+     * @param gameViewModel The view model for the game.
+     * @param placeLetterController The controller for placing letters.
+     * @param confirmPlayController The controller for confirming plays.
+     * @param getLeaderboardController The controller for getting the leaderboard.
+     * @param endTurnController The controller for ending turns.
+     */
     public InputManager(
         Game game,
         GameViewModel gameViewModel,
@@ -35,6 +47,10 @@ public class InputManager {
         this.endTurnController = endTurnController;
     }
 
+    /**
+     * Handles the input based on its type.
+     * @param input The input to handle.
+     */
     public void handleInput(Input input){
 
         switch (input.getType()) {
@@ -51,6 +67,10 @@ public class InputManager {
         }
     }
 
+    /**
+     * Handles grid input actions such as placing or removing letters.
+     * @param input The grid input to handle.
+     */
     private void handleGridInput(Input input) {
         if (input.getInput().equals("rclick")) {
             System.out.println("Remove letter");
@@ -66,6 +86,10 @@ public class InputManager {
         }
     }
 
+    /**
+     * Handles hand input actions such as selecting a letter.
+     * @param input The hand input to handle.
+     */
     private void handleHandInput(Input input){
         if (input.getInput().equals("lclick")){
             System.out.println("Letter selected");
@@ -74,6 +98,11 @@ public class InputManager {
         }
     }
 
+    /**
+     * Removes a letter from the board at the specified coordinates.
+     * @param x The x-coordinate of the letter to remove.
+     * @param y The y-coordinate of the letter to remove.
+     */
     private void removeLetter(int x, int y){
         try{
             Play play = game.getLastPlay();
@@ -85,12 +114,21 @@ public class InputManager {
         }
     }
 
+    /**
+     * Places a letter on the board at the specified coordinates.
+     * @param x The x-coordinate to place the letter.
+     * @param y The y-coordinate to place the letter.
+     * @param letter The letter to place.
+     */
     private void placeLetter(int x, int y, Character letter){
         Play play = gameViewModel.getPlay();
         Board board = gameViewModel.getBoard();
         placeLetterController.execute(x, y, letter, board, play);
     }
-    
+
+    /**
+     * Confirms the current play and updates the leaderboard and turn.
+     */
     private void confirmPlay() {
         Play play = gameViewModel.getPlay();
         Board board = gameViewModel.getBoard();

@@ -22,12 +22,13 @@ public class TurnManager implements Serializable {
     private int PlayerNumber;
     private List<Integer> NumContestFailed;
     private Play CurrentPlay;
+    private Game CurrentGame;
 
     /**
      * Constructs a TurnManager with an initial state.
      * Initializes the endTurn flag, current player, players list, and contest failure counts.
      */
-    public TurnManager(List<Player> players) {
+    public TurnManager(List<Player> players, Game game) {
         this.endTurn = false;
         this.CurrentPlayer = players.get(0);
         this.Players = players;
@@ -68,7 +69,7 @@ public class TurnManager implements Serializable {
      * skipping any players who have failed a contest.
      */
 
-    public void startTurn(){ 
+    public void startTurn(){
         CurrentPlay = new Play(CurrentPlayer);
         this.endTurn = false;
     }
@@ -97,6 +98,10 @@ public class TurnManager implements Serializable {
         return CurrentPlayer;
     }
 
+    /**
+     * Returns the cause of this exception.
+     * @return The cause of this exception.
+     */
     public List<Player> GetPlayers() {
         return this.Players;
     }
@@ -107,7 +112,6 @@ public class TurnManager implements Serializable {
      *
      * @param ContestSucceed a boolean indicating whether the contest succeeded
      */
-
     public void dealContest(boolean ContestSucceed) {
         if (ContestSucceed){
             NumContestFailed.set((PlayerNumber), NumContestFailed.get((PlayerNumber)));
@@ -116,22 +120,48 @@ public class TurnManager implements Serializable {
 //        System.out.println("Player " + this.CurrentPlayer.getId() + " contest result: " + (ContestSucceed ? "Valid" : "Invalid"));
     }
 
+    /**
+     * Updates the list of players by adding a new player.
+     *
+     * @param player the player to be added
+     */
     public void updatePlayer(Player player) {
         Players.add(player);
     }
 
+    /**
+     * Checks if the turn has ended.
+     *
+     * @return true if the turn has ended, false otherwise
+     */
     public boolean isEndTurn() {
         return endTurn;
     }
 
+    /**
+     * Returns the number of contest failures for a specified player.
+     *
+     * @param PlayerNumber the number of the player
+     * @return the number of contest failures for the player
+     */
     public int getPlayersNumContestFailed(int PlayerNumber) {
         return NumContestFailed.get(PlayerNumber);
     }
 
+    /**
+     * Returns the number of the current player.
+     *
+     * @return the number of the current player
+     */
     public int getCurrentPlayerNum() {
         return PlayerNumber;
     }
 
+    /**
+     * Returns the current play.
+     *
+     * @return the current play
+     */
     public Play getCurrentPlay() {
         return CurrentPlay;
     }
