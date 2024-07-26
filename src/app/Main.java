@@ -7,6 +7,8 @@ import controller_factory.EndTurnControllerFactory;
 import controller_factory.GetLeaderboardControllerFactory;
 import controller_factory.PlaceLetterControllerFactory;
 import controller_factory.StartTurnControllerFactory;
+import data_access.GameDao;
+import data_access.GameDataAccess;
 import entity.Board;
 import entity.Game;
 import entity.LetterBag;
@@ -22,6 +24,7 @@ import interface_adapter.start_turn.StartTurnController;
 import view.View;
 
 public class Main {
+
     public static void main(String[] args) {
         int NumOfPlayers = 2;
         ArrayList<Player> players = new ArrayList<Player>();
@@ -30,6 +33,8 @@ public class Main {
         }
         LetterBag letterBag = new LetterBag();
         Game game = new Game(players);
+        GameDataAccess gameDao = new GameDao();
+        gameDao.create(game);
 
         TurnManager turnManager = game.getTurnManager();
         turnManager.startTurn();
