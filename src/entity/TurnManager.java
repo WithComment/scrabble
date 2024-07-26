@@ -22,12 +22,13 @@ public class TurnManager implements Serializable {
     private int PlayerNumber;
     private List<Integer> NumContestFailed;
     private Play CurrentPlay;
+    private Game CurrentGame;
 
     /**
      * Constructs a TurnManager with an initial state.
      * Initializes the endTurn flag, current player, players list, and contest failure counts.
      */
-    public TurnManager(List<Player> players) {
+    public TurnManager(List<Player> players, Game game) {
         this.endTurn = false;
         this.CurrentPlayer = players.get(0);
         this.Players = players;
