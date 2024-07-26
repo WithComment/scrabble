@@ -119,8 +119,8 @@ public class Game implements Serializable {
      *
      * @return A list of player IDs.
      */
-    public ArrayList<Integer> getPlayerIds() {
-        ArrayList<Integer> playerIds = new ArrayList<>();
+    public List<Integer> getPlayerIds() {
+        List<Integer> playerIds = new ArrayList<>();
         for (Player player : players) {
             playerIds.add(player.getId());
         }
@@ -138,14 +138,13 @@ public class Game implements Serializable {
     }
 
 
-
     /**
      * Gets a list of scores for all players in the game.
      *
      * @return An ArrayList<Integer> containing the scores of all players.
      */
-    public ArrayList<Integer> getPlayerScore() {
-        ArrayList<Integer> scores = new ArrayList<>();
+    public List<Integer> getPlayerScore() {
+        List<Integer> scores = new ArrayList<>();
         for (Player player : players) {
             scores.add(player.getScore());
         }
@@ -179,7 +178,7 @@ public class Game implements Serializable {
      * @param playerId The ID of the player whose inventory is requested.
      * @return An ArrayList<Letter> representing the player's current inventory of letters.
      */
-    public ArrayList<Letter> getPlayerInventory(int playerId) {
+    public List<Letter> getPlayerInventory(int playerId) {
         return players.get(playerId).getInventory();
     }
 
@@ -202,7 +201,9 @@ public class Game implements Serializable {
         return turnManager;
     }
 
-    public Board getBoard(){ return board; }
+    public Board getBoard() {
+        return board;
+    }
 
     public List<Player> getPlayers() {
         return players;
