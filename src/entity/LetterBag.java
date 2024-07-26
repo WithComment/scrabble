@@ -1,7 +1,6 @@
 package entity;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,6 +14,7 @@ import java.util.Collections;
  */
 public class LetterBag {
   private List<Letter> bag;
+  private static final long serialVersionUID = 5L;
 
   /**
    * Constructs a {@code LetterBag} and initializes it with letters from a specified file.
@@ -115,5 +115,21 @@ public class LetterBag {
    */
   public int getLength() {
     return bag.size();
+  }
+
+  // Custom serialization method
+  private void writeObject(ObjectOutputStream out) throws IOException {
+    out.defaultWriteObject();
+  }
+
+  // Custom deserialization method
+  private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+    in.defaultReadObject();
+  }
+
+  // Custom method for when no data is found during deserialization
+  private void readObjectNoData() throws ObjectStreamException {
+    bag = new ArrayList<>();
+    initializeBag(Paths.get("static", "letters.txt"));
   }
 }

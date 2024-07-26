@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,7 +25,7 @@ public class LetterBagTest {
 
         assertEquals(98, letterBag.getLength());
 
-        ArrayList<Letter> allLetters = letterBag.drawLetters(98);
+        List<Letter> allLetters = letterBag.drawLetters(98);
 
         assertEquals(0, letterBag.getLength());
 
@@ -105,7 +106,7 @@ public class LetterBagTest {
         expectedPoints.put('Y', 4);
         expectedPoints.put('Z', 10);
 
-        ArrayList<Letter> draws = letterBag.drawLetters();
+        List<Letter> draws = letterBag.drawLetters();
 
         assertEquals(97, letterBag.getLength());
 
@@ -128,7 +129,7 @@ public class LetterBagTest {
 
         assertEquals(98, letterBag.getLength());
 
-        ArrayList<Letter> allLetters = letterBag.drawLetters(98);
+        List<Letter> allLetters = letterBag.drawLetters(98);
 
         assertEquals(0, letterBag.getLength());
 
