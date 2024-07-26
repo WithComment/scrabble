@@ -12,7 +12,7 @@ import java.util.Collections;
  * The {@code LetterBag} class represents a bag of letters used in a game.
  * It allows initializing the bag from a file, drawing letters, and adding letters back to the bag.
  */
-public class LetterBag {
+public class LetterBag implements Serializable{
   private List<Letter> bag;
   private static final long serialVersionUID = 5L;
 
@@ -132,4 +132,5 @@ public class LetterBag {
     bag = new ArrayList<>();
     initializeBag(Paths.get("static", "letters.txt"));
   }
+
 }
