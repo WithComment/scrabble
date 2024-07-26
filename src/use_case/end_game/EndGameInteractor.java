@@ -3,7 +3,7 @@ package use_case.end_game;
 import entity.Game;
 import entity.Letter;
 import entity.Player;
-import data_access.EndGameDataAccessObject;
+import data_access.GameDao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,9 +69,9 @@ public class EndGameInteractor implements EndGameInputBoundary{
 
         presenter.prepareSuccessView(new EndGameOutputData(winners));
         EndGameData endGameData = new EndGameData(game);
-        EndGameDataAccessObject endGameDataAccessObject = new EndGameDataAccessObject();
+        GameDao endGameDataAccessObject = new GameDao();
         try {
-            endGameDataAccessObject.write(endGameData);
+            endGameDataAccessObject.create(endGameData);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
