@@ -2,8 +2,8 @@ package interface_adapter.end_turn;
 
 import entity.Game;
 import entity.Player;
-import use_case.EndTurn.TurnManagerInputData;
-import use_case.EndTurn.TurnManagerInteractor;
+import use_case.EndTurn.EndTurnInteractor;
+import use_case.EndTurn.GetEndTurnOutPutData;
 
 import java.util.ArrayList;
 
@@ -12,14 +12,14 @@ import java.util.ArrayList;
  * Manages the interaction between the front-end and the TurnManager.
  */
 public class EndTurnController {
-    private final TurnManagerInteractor turnManagerInteractor;
+    private final EndTurnInteractor turnManagerInteractor;
 
     /**
      * Constructs an EndTurnController with a specified TurnManager.
      *
      * @param turnManagerInteractor the TurnManager managing the game turns
      */
-    public EndTurnController(TurnManagerInteractor turnManagerInteractor) {
+    public EndTurnController(EndTurnInteractor turnManagerInteractor) {
         this.turnManagerInteractor = turnManagerInteractor;
     }
 
@@ -37,7 +37,7 @@ public class EndTurnController {
 
     public void execute(boolean contestSucceed, Game game) {
         ArrayList<Player> players = new ArrayList<>();
-        TurnManagerInputData turnManagerInputData = new TurnManagerInputData(players, false, false, game.getLetterBag());
-        turnManagerInteractor.execute(turnManagerInputData);
+        GetEndTurnOutPutData getEndTurnInputData = new GetEndTurnOutPutData(players, false, false, game.getLetterBag(), game);
+        turnManagerInteractor.execute(getEndTurnInputData);
     }
 }

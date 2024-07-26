@@ -2,7 +2,6 @@ package use_case.EndTurn;
 
 import entity.Player;
 import entity.TurnManager;
-import use_case.get_leaderboard.GetLeaderboardInputData;
 
 /**
  * Implements the use case interactor for retrieving and presenting the game leaderboard.
@@ -21,27 +20,27 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
     }
 
     @Override
-    public void execute(TurnManagerInputData turnManagerInputData) {
-        TurnManagerInteractor turnManagerInteractor = new TurnManagerInteractor(new TurnManager(turnManagerInputData.getPlayers()));
-        for(Player player : turnManagerInputData.players){
+    public void execute(GetEndTurnOutPutData getEndTurnInputData) {
+        TurnManagerInteractor turnManagerInteractor = new TurnManagerInteractor(new TurnManager(getEndTurnInputData.getPlayers()));
+        for(Player player : getEndTurnInputData.players){
             turnManagerInteractor.getTurnManager().updatePlayer(player);
         }
 
         if (turnManagerInteractor.isEndTurn()) {
             Player CurrentPlayer = turnManagerInteractor.getTurnManager().getCurrentPlayer();
-            if(turnManagerInputData.isContestSucceed){
+            if(getEndTurnInputData.isContestSucceed){
                 CurrentPlayer.eraseTempScore();
             }else {
                 CurrentPlayer.confirmTempScore();
             }
             int ToDraw = 7 - CurrentPlayer.getInventory().size();
-            CurrentPlayer.addLetter(turnManagerInputData.getLetterBag().drawLetters(ToDraw));
+            CurrentPlayer.addLetter(getEndTurnInputData.getLetterBag().drawLetters(ToDraw));
             turnManagerInteractor.endTurn();
             turnManagerInteractor.startTurn();
         }
 
-        if(turnManagerInputData.isContest){
-            turnManagerInteractor.dealContest(turnManagerInputData.isContestSucceed);
+        if(getEndTurnInputData.isContest){
+            turnManagerInteractor.dealContest(getEndTurnInputData.isContestSucceed);
         }
     }
 
