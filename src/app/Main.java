@@ -1,5 +1,6 @@
 package app;
 
+import java.io.IOException;
 import java.util.*;
 
 import controller_factory.ConfirmPlayControllerFactory;
@@ -25,7 +26,7 @@ import view.View;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         int NumOfPlayers = 2;
         ArrayList<Player> players = new ArrayList<Player>();
         for (int i = 0; i < NumOfPlayers; i++) {
@@ -38,12 +39,14 @@ public class Main {
 
         TurnManager turnManager = game.getTurnManager();
         turnManager.startTurn();
+        List<Integer> playerIds = new ArrayList<>();
         for (Player player : players) {
             player.addLetter(letterBag.drawLetters(7));
+            playerIds.add(player.getId());
         }
 
         Board board = game.getBoard();
-        GameViewModel gameViewModel = new GameViewModel(board, players);
+        GameViewModel gameViewModel = new GameViewModel(board, playerIds);
         PlaceLetterController placeLetterController = PlaceLetterControllerFactory.create(gameViewModel);
         ConfirmPlayController confirmPlayController = ConfirmPlayControllerFactory.create(gameViewModel);
         GetLeaderboardController getLeaderboardController = GetLeaderboardControllerFactory.create(gameViewModel, game);
