@@ -31,11 +31,11 @@ public class GetLeaderboardInteractorTest implements GetLeaderboardOutputBoundar
     public void leaderboardWithMultiplePlayers_SortedDescendingByScore() {
         ArrayList<Player> players = new ArrayList<>();
         players.add(new Player(1));
-        players.get(0).addScore(10);
+        players.get(0).addTempScore(10);
         players.add(new Player(2));
-        players.get(1).addScore(15);
+        players.get(1).addTempScore(15);
         players.add(new Player(3));
-        players.get(2).addScore(15);
+        players.get(2).addTempScore(15);
 
         inputData = new GetLeaderboardInputData(players);
 
@@ -53,7 +53,7 @@ public class GetLeaderboardInteractorTest implements GetLeaderboardOutputBoundar
     public void leaderboardWithSinglePlayer_ShouldReturnSingleEntry() {
         ArrayList<Player> players = new ArrayList<>();
         players.add(new Player(1));
-        players.get(0).addScore(10);
+        players.get(0).addTempScore(10);
 
         inputData = new GetLeaderboardInputData(players);
 

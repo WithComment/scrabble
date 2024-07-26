@@ -3,9 +3,10 @@ package interface_adapter.end_turn;
 import entity.Game;
 import entity.Player;
 import use_case.EndTurn.EndTurnInteractor;
-import use_case.EndTurn.GetEndTurnOutPutData;
+import use_case.EndTurn.GetEndTurnInputData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Controller for the EndTurn use case.
@@ -35,9 +36,10 @@ public class EndTurnController {
      * @param contestSucceed a boolean indicating whether the contest succeeded
      */
 
-    public void execute(boolean contestSucceed, Game game) {
+    public void execute(boolean contestSucceed, Game game, List<List> wordsToBeConfirmed) {
         ArrayList<Player> players = new ArrayList<>();
-        GetEndTurnOutPutData getEndTurnInputData = new GetEndTurnOutPutData(players, false, false, game.getLetterBag(), game);
+        GetEndTurnInputData getEndTurnInputData = new GetEndTurnInputData(players, false, false,
+                game.getLetterBag(), game,wordsToBeConfirmed);
         turnManagerInteractor.execute(getEndTurnInputData);
     }
 }

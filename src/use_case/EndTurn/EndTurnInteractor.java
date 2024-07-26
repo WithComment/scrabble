@@ -1,7 +1,10 @@
 package use_case.EndTurn;
 
+import entity.Board;
 import entity.Player;
 import entity.TurnManager;
+
+import java.util.List;
 
 /**
  * Implements the use case interactor for retrieving and presenting the game leaderboard.
@@ -20,14 +23,25 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
     }
 
     @Override
-    public void execute(GetEndTurnOutPutData getEndTurnInputData) {
-        TurnManagerInteractor turnManagerInteractor = new TurnManagerInteractor(new TurnManager(getEndTurnInputData.getPlayers()));
+    public void execute(GetEndTurnInputData getEndTurnInputData) {
+        Board currentBoard;
+
+
+        TurnManager turnManager = new TurnManager(getEndTurnInputData.getPlayers(), getEndTurnInputData.game);
         for(Player player : getEndTurnInputData.players){
-            turnManagerInteractor.getTurnManager().updatePlayer(player);
+            turnManager.updatePlayer(player);
         }
 
-        if (turnManagerInteractor.isEndTurn()) {
-            Player CurrentPlayer = turnManagerInteractor.getTurnManager().getCurrentPlayer();
+        if (turnManager.isEndTurn()) {
+            currentBoard = getEndTurnInputData.game.getBoard();
+            for(List<Integer> wordToBeConfirmed : getEndTurnInputData.wordsToBeConfirmed){
+                int x = wordToBeConfirmed.get(0);
+                int y = wordToBeConfirmed.get(1);
+                currentBoard.confirm(x,y);
+
+            }
+
+            Player CurrentPlayer = turnManager.getCurrentPlayer();
             if(getEndTurnInputData.isContestSucceed){
                 CurrentPlayer.eraseTempScore();
             }else {
@@ -35,14 +49,15 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
             }
             int ToDraw = 7 - CurrentPlayer.getInventory().size();
             CurrentPlayer.addLetter(getEndTurnInputData.getLetterBag().drawLetters(ToDraw));
-            turnManagerInteractor.endTurn();
-            turnManagerInteractor.startTurn();
+            turnManager.endTurn();
+            turnManager.startTurn();
         }
 
         if(getEndTurnInputData.isContest){
-            turnManagerInteractor.dealContest(getEndTurnInputData.isContestSucceed);
+            turnManager.dealContest(getEndTurnInputData.isContestSucceed);
         }
     }
+
 
     /**
      * Executes the use case of getting the leaderboard. It retrieves player data,

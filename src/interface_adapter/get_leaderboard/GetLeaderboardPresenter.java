@@ -1,9 +1,10 @@
 package interface_adapter.get_leaderboard;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import entity.LeaderboardEntry;
+import entity.Player;
 import interface_adapter.GameViewModel;
 import use_case.get_leaderboard.*;
 
@@ -17,10 +18,11 @@ public class GetLeaderboardPresenter implements GetLeaderboardOutputBoundary {
 
     @Override
     public void prepareView(GetLeaderboardOutputData outputData) {
-        List<Integer> players = new LinkedList<>();
+        List<Player> leaderboard = outputData.getLeaderboard();
+        List<Integer> players = new ArrayList<>();
         List<Integer> scores = new LinkedList<>();
-        for (LeaderboardEntry entry : outputData.getLeaderboard()) {
-            players.add(entry.getPlayer().getId());
+        for (Player entry : leaderboard) {
+            players.add(entry.getId());
             scores.add(entry.getScore());
         }
         viewModel.setLeaderboard(players, scores);

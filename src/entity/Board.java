@@ -12,6 +12,7 @@ public class Board implements Serializable {
     private int height;
     private int width;
 
+
     /**
      * Constructs a new Board with an initial state.
      */
@@ -174,6 +175,11 @@ public class Board implements Serializable {
         return this.board[y][x].isConfirmed();
     }
 
+    /**
+     * Returns a string representation of the board.
+     *
+     * @return a string representation of the board
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 15; i++) {

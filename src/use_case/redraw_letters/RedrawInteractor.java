@@ -17,10 +17,10 @@ public class RedrawInteractor implements RedrawInputBoundary{
     @Override
     public void execute(RedrawInputData redrawInputData){
         boolean drawSuccessful = false;
+        Player player = redrawInputData.getPlayer();
+        List<Letter> letters = redrawInputData.getLetters();
+        LetterBag letterBag = redrawInputData.getLetterBag();
         if(redrawInputData.getLetterBag().getLength() > 6) {
-            Player player = redrawInputData.getPlayer();
-            List<Letter> letters = redrawInputData.getLetters();
-            LetterBag letterBag = redrawInputData.getLetterBag();
             int numToRedraw = letters.size();
 
             letterBag.addLetters(letters);
@@ -29,9 +29,9 @@ public class RedrawInteractor implements RedrawInputBoundary{
             player.addLetter(newLetters);
             drawSuccessful = true;
         }
-
         if (drawSuccessful) {
-            playerPresenter.prepareSuccessView(new RedrawOutputData(true));
+            List<Letter> hand = player.getInventory();
+            playerPresenter.prepareSuccessView(new RedrawOutputData(true, hand));
         } else{
             playerPresenter.prepareFailView("There are less than 7 letters in the bag");
         }
