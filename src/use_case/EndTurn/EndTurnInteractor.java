@@ -1,7 +1,10 @@
 package use_case.EndTurn;
 
+import entity.Board;
 import entity.Player;
 import entity.TurnManager;
+
+import java.util.List;
 
 /**
  * Implements the use case interactor for retrieving and presenting the game leaderboard.
@@ -21,12 +24,23 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
 
     @Override
     public void execute(GetEndTurnInputData getEndTurnInputData) {
-        TurnManager turnManager = new TurnManager(getEndTurnInputData.getPlayers());
+        Board currentBoard;
+
+
+        TurnManager turnManager = new TurnManager(getEndTurnInputData.getPlayers(), getEndTurnInputData.game);
         for(Player player : getEndTurnInputData.players){
             turnManager.updatePlayer(player);
         }
 
         if (turnManager.isEndTurn()) {
+            currentBoard = getEndTurnInputData.game.getBoard();
+            for(List<Integer> wordToBeConfirmed : getEndTurnInputData.wordsToBeConfirmed){
+                int x = wordToBeConfirmed.get(0);
+                int y = wordToBeConfirmed.get(1);
+                currentBoard.confirm(x,y);
+
+            }
+
             Player CurrentPlayer = turnManager.getCurrentPlayer();
             if(getEndTurnInputData.isContestSucceed){
                 CurrentPlayer.eraseTempScore();
