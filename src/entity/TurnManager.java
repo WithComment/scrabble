@@ -15,6 +15,7 @@ import java.util.List;
  * and handles the contesting process.
  */
 public class TurnManager implements Serializable {
+    private static final long serialVersionUID = 10L;
     private final List<Player> Players;
     private Boolean endTurn;
     private Player CurrentPlayer;
