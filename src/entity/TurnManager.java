@@ -3,6 +3,7 @@ package entity;
 import entity.Play;
 import entity.Game;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +32,14 @@ public class TurnManager implements Serializable {
         this.Players = players;
         this.NumContestFailed = new ArrayList<Integer>(Collections.nCopies(players.size(), 0));
         this.CurrentPlay = null;
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
     }
 
     /**
