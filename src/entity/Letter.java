@@ -1,67 +1,72 @@
 package entity;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 /**
  * Represents a playable letter.
+ *
+ * @param letter The letter.
+ * @param points The points the letter is worth.
  */
-public class Letter {
-  private final char letter;
-  private final int points;
+public class Letter implements Serializable {
+    private char letter;
+    private int points;
 
-  /**
-   * Constructs a new Letter with the specified character and points.
-   * @param letter The character representing the letter.
-   * @param points The points the letter is worth.
-   */
-  public Letter(
-    char letter,
-    int points
-  ) {
-    this.letter = letter;
-    this.points = points;
-  }
+    public Letter(
+            char letter,
+            int points
+    ) {
+        this.letter = letter;
+        this.points = points;
+    }
 
-  /**
-   * Gets the character of the letter.
-   * @return The character of the letter.
-   */
-  public char getLetter() {
-    return letter;
-  }
+    public Letter(JSONObject json) {
+        this.parseJSON(json);
+    }
 
-  /**
-   * Gets the points the letter is worth.
-   * @return The points the letter is worth.
-   */
-  public int getPoints() {
-    return points;
-  }
+    private void parseJSON(JSONObject json) {
+        this.letter = json.getString("letter").charAt(0);
+        this.points = json.getInt("points");
+    }
 
-  /**
-   * Checks if this letter is equal to another object.
-   * Two Letter objects are considered equal if they have the same character.
-   * @param o The object to compare with.
-   * @return True if the objects are equal, false otherwise.
-   */
-  @Override
-  public boolean equals(Object o) {
-    return (o instanceof Letter && ((Letter) o).getLetter() == getLetter());
-  }
+    public char getLetter() {
+        return letter;
+    }
 
-  /**
-   * Returns a string representation of the letter.
-   * @return A string representation of the letter.
-   */
-  @Override
-  public String toString() {
-    return Character.toString(getLetter());
-  }
+    public int getPoints() {
+        return points;
+    }
 
-  /**
-   * Creates and returns a copy of this letter.
-   * @return A clone of this letter.
-   */
-  @Override
-  public Letter clone() {
-    return new Letter(this.getLetter(), this.getPoints());
-  }
+    /**
+     * Two Letter are equal if they have the same letter.
+     */
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof Letter && ((Letter) o).getLetter() == getLetter());
+    }
+
+    @Override
+    public String toString() {
+        return Character.toString(getLetter());
+    }
+
+    @Override
+    public Letter clone() {
+        return new Letter(this.getLetter(), this.getPoints());
+    }
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.writeChars(new JSONObject(this).toString());
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        String json = in.readUTF();
+        System.out.println(json);
+        this.parseJSON(new JSONObject(json));
+    }
 }

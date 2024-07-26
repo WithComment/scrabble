@@ -158,7 +158,6 @@ public class Game implements Serializable {
     }
 
 
-
     /**
      * Gets a list of scores for all players in the game.
      *
@@ -221,6 +220,7 @@ public class Game implements Serializable {
     public TurnManager getTurnManager() {
         return turnManager;
     }
+
 
     /**
      * Returns the board of the game.

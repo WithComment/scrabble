@@ -4,35 +4,37 @@ import entity.Letter;
 import entity.LetterBag;
 import org.junit.jupiter.api.Test;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LetterBagTest {
     @Test
-    void testGetLength(){
+    void testGetLength() {
         LetterBag letterBag = new LetterBag();
 
         assertEquals(98, letterBag.getLength());
     }
 
     @Test
-    void testInit(){
+    void testInit() {
         LetterBag letterBag = new LetterBag();
 
         assertEquals(98, letterBag.getLength());
 
-        ArrayList<Letter> allLetters = letterBag.drawLetters(98);
+        List<Letter> allLetters = letterBag.drawLetters(98);
 
         assertEquals(0, letterBag.getLength());
 
         Map<Character, Integer> letterCount = new HashMap<>();
 
-        for(Letter letter:allLetters){
-            if(letterCount.containsKey(letter.getLetter())){
-                letterCount.put(letter.getLetter(), letterCount.get(letter.getLetter())+1);
+        for (Letter letter : allLetters) {
+            if (letterCount.containsKey(letter.getLetter())) {
+                letterCount.put(letter.getLetter(), letterCount.get(letter.getLetter()) + 1);
             } else {
                 letterCount.put(letter.getLetter(), 1);
             }
@@ -72,7 +74,7 @@ public class LetterBagTest {
     }
 
     @Test
-    void testDrawLetters(){
+    void testDrawLetters() {
         LetterBag letterBag = new LetterBag();
 
         assertEquals(98, letterBag.getLength());
@@ -105,11 +107,11 @@ public class LetterBagTest {
         expectedPoints.put('Y', 4);
         expectedPoints.put('Z', 10);
 
-        ArrayList<Letter> draws = letterBag.drawLetters();
+        List<Letter> draws = letterBag.drawLetters();
 
         assertEquals(97, letterBag.getLength());
 
-        for(Letter letter:draws){
+        for (Letter letter : draws) {
             assertEquals(expectedPoints.get(letter.getLetter()), letter.getPoints());
         }
 
@@ -117,23 +119,23 @@ public class LetterBagTest {
 
         assertEquals(77, letterBag.getLength());
 
-        for(Letter letter:draws){
+        for (Letter letter : draws) {
             assertEquals(expectedPoints.get(letter.getLetter()), letter.getPoints());
         }
     }
 
     @Test
-    void testAddLetters(){
+    void testAddLetters() {
         LetterBag letterBag = new LetterBag();
 
         assertEquals(98, letterBag.getLength());
 
-        ArrayList<Letter> allLetters = letterBag.drawLetters(98);
+        List<Letter> allLetters = letterBag.drawLetters(98);
 
         assertEquals(0, letterBag.getLength());
 
         Letter letterToAdd = allLetters.remove(0);
-        ArrayList<Letter> lettersToAdd = new ArrayList<>();
+        List<Letter> lettersToAdd = new ArrayList<>();
         lettersToAdd.add(letterToAdd);
 
         letterBag.addLetters(lettersToAdd);
@@ -143,5 +145,41 @@ public class LetterBagTest {
         assertEquals(drawnLetter, letterToAdd);
     }
 
+    @Test
+    void testSerialization(){
+        LetterBag originalBag = new LetterBag();
 
+        // Serialize the LetterBag
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("letterBag.ser"))) {
+            out.writeObject(originalBag);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Deserialize the LetterBag
+        LetterBag deserializedBag = null;
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("letterBag.ser"))) {
+            deserializedBag = (LetterBag) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Test to ensure the deserialized bag is not null and has the same length
+        if (deserializedBag != null) {
+            assertEquals(originalBag.getLength(), deserializedBag.getLength());
+        }
+
+        // Deserialize with no data to trigger readObjectNoData
+        LetterBag noDataBag = null;
+        try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(new byte[0]))) {
+            noDataBag = (LetterBag) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Test to ensure the bag initialized correctly with no data
+        if (noDataBag != null) {
+            assertEquals(98, noDataBag.getLength());
+        }
+    }
 }

@@ -6,6 +6,14 @@
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/libraries" />
+      <excludeFolder url="file://$MODULE_DIR$/src/app" />
+      <excludeFolder url="file://$MODULE_DIR$/src/controller_factory" />
+      <excludeFolder url="file://$MODULE_DIR$/src/data_access" />
+      <excludeFolder url="file://$MODULE_DIR$/src/input_manager" />
+      <excludeFolder url="file://$MODULE_DIR$/src/interface_adapter" />
+      <excludeFolder url="file://$MODULE_DIR$/src/test/use_case" />
+      <excludeFolder url="file://$MODULE_DIR$/src/use_case" />
+      <excludeFolder url="file://$MODULE_DIR$/src/view" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
