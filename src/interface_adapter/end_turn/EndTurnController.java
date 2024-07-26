@@ -38,7 +38,7 @@ public class EndTurnController {
 
     public void execute(boolean contestSucceed, Game game) {
         ArrayList<Player> players = new ArrayList<>();
-        GetEndTurnInputData getEndTurnInputData = new GetEndTurnInutData(players, false, false, game.getLetterBag(), game);
+        GetEndTurnInputData getEndTurnInputData = new GetEndTurnInputData(players, false, false, game.getLetterBag(), game);
         turnManagerInteractor.execute(getEndTurnInputData);
     }
 }
