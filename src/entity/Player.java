@@ -7,7 +7,7 @@ import java.util.List;
  * Represents a player in the game.
  * A player has an ID, an inventory of letters, a score, and an unstable score.
  */
-public class    Player {
+public class Player {
     private static int idCounter = 0;
     private final int id;
     private List<Letter> inventory;
@@ -54,23 +54,8 @@ public class    Player {
         this.inventory.addAll(tiles);
     }
 
-    /**
-     * Updates the player's score by adding the scores of words played.
-     * The scores are added to both the main score and the unstable score.
-     *
-     * @param ScoresOfWords an List of scores to be added to the player's score
-     */
-    public void updateScore(List<Integer> ScoresOfWords) {
-        // Add scores to player
-        for (Integer score : ScoresOfWords) {
-            this.score += score;
-            tempScore += score;
-        }
-    }
-
-    public void addScore(int score) {
+    public void addTempScore(int score) {
         this.score += score;
-        tempScore += score;
     }
 
     public void confirmTempScore() {
@@ -78,14 +63,7 @@ public class    Player {
         this.tempScore = 0;
     }
 
-    public void eraseTempScore() {
-        this.tempScore = 0;
-    }
-
-    /**
-     * Resets the player's unstable score to 0, indicating the scores were not contested.
-     */
-    public void NotContested() {
+    public void resetTempScore() {
         this.tempScore = 0;
     }
 

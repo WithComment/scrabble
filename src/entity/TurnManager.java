@@ -68,12 +68,9 @@ public class TurnManager implements Serializable {
      * skipping any players who have failed a contest.
      */
 
-    public void startTurn(){
+    public void startTurn(){ 
         CurrentPlay = new Play(CurrentPlayer);
-
-
         this.endTurn = false;
-
     }
 
     /**
@@ -113,10 +110,9 @@ public class TurnManager implements Serializable {
 
     public void dealContest(boolean ContestSucceed) {
         if (ContestSucceed){
-            this.CurrentPlayer.BeContested();
             NumContestFailed.set((PlayerNumber), NumContestFailed.get((PlayerNumber)));
         }
-        this.CurrentPlayer.NotContested();
+        this.CurrentPlayer.confirmTempScore();
 //        System.out.println("Player " + this.CurrentPlayer.getId() + " contest result: " + (ContestSucceed ? "Valid" : "Invalid"));
     }
 

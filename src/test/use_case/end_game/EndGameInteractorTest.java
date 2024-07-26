@@ -76,10 +76,10 @@ public class EndGameInteractorTest {
         player1.addLetter(game.getLetterBag().drawLetters(7));
         player2.addLetter(game.getLetterBag().drawLetters(7));
 
-        player0.addScore(0);
-        player0.addScore(0);
-        player0.addScore(0);
-        player3.addScore(100);
+        player0.addTempScore(0);
+        player0.addTempScore(0);
+        player0.addTempScore(0);
+        player3.addTempScore(100);
 
 
         expectedWinners.add(player3);

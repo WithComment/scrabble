@@ -32,9 +32,9 @@ public class GetWinnerInteractorTest implements GetWinnerOutputBoundary {
     public void singleWinnerIdentifiedCorrectly() {
         ArrayList<Player> players = new ArrayList<>();
         players.add(new Player(1));
-        players.get(0).addScore(20);
+        players.get(0).addTempScore(20);
         players.add(new Player(2));
-        players.get(1).addScore(15);
+        players.get(1).addTempScore(15);
         inputData = new GetWinnerInputData(players);
 
         interactor.execute(inputData);
@@ -48,9 +48,9 @@ public class GetWinnerInteractorTest implements GetWinnerOutputBoundary {
     public void multipleWinnersIdentifiedInCaseOfTie() {
         ArrayList<Player> players = new ArrayList<>();
         players.add(new Player(1));
-        players.get(0).addScore(20);
+        players.get(0).addTempScore(20);
         players.add(new Player(2));
-        players.get(1).addScore(25);
+        players.get(1).addTempScore(25);
         inputData = new GetWinnerInputData(players);
 
         interactor.execute(inputData);
