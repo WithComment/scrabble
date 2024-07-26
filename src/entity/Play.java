@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Play {
   private final Player player;
-  private final LinkedList<Move> moves;
+  private final List<Move> moves;
   private List<String> words;
 
   public Play(Player player) {
@@ -24,7 +24,7 @@ public class Play {
   }
 
   public Move undoMove() {
-    return moves.pop();
+    return moves.removeLast();
   }
 
   public Move removeMove(int x, int y) {
@@ -40,7 +40,7 @@ public class Play {
     return player;
   }
 
-  public LinkedList<Move> getMoves() {
+  public List<Move> getMoves() {
     return moves;
   }
 
