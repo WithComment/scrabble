@@ -6,14 +6,14 @@ import entity.Player;
 import java.util.ArrayList;
 
 
-public class GetEndTurnOutPutData {
+public class GetEndTurnOutputData {
     final ArrayList<Player> players;
     boolean isContestSucceed;
     boolean isContest;
     LetterBag letterBag;
     Game game;
 
-    public GetEndTurnOutPutData(ArrayList<Player> players, boolean isContestSucceed, boolean isContest, LetterBag letterBag, Game game) {
+    public GetEndTurnOutputData(ArrayList<Player> players, boolean isContestSucceed, boolean isContest, LetterBag letterBag, Game game) {
         this.players = players;
         this.isContestSucceed = isContestSucceed;
         this.isContest = isContest;
@@ -21,6 +21,7 @@ public class GetEndTurnOutPutData {
         this.game = game;
 
     }
+
 
     public ArrayList<Player> getPlayers() {
         return players;
