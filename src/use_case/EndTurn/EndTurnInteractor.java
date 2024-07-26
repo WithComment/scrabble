@@ -20,14 +20,14 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
     }
 
     @Override
-    public void execute(GetEndTurnOutPutData getEndTurnInputData) {
-        TurnManagerInteractor turnManagerInteractor = new TurnManagerInteractor(new TurnManager(getEndTurnInputData.getPlayers()));
+    public void execute(GetEndTurnInputData getEndTurnInputData) {
+        TurnManager turnManager = new TurnManager(getEndTurnInputData.getPlayers());
         for(Player player : getEndTurnInputData.players){
-            turnManagerInteractor.getTurnManager().updatePlayer(player);
+            turnManager.updatePlayer(player);
         }
 
-        if (turnManagerInteractor.isEndTurn()) {
-            Player CurrentPlayer = turnManagerInteractor.getTurnManager().getCurrentPlayer();
+        if (turnManager.isEndTurn()) {
+            Player CurrentPlayer = turnManager.getCurrentPlayer();
             if(getEndTurnInputData.isContestSucceed){
                 CurrentPlayer.eraseTempScore();
             }else {
@@ -35,14 +35,15 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
             }
             int ToDraw = 7 - CurrentPlayer.getInventory().size();
             CurrentPlayer.addLetter(getEndTurnInputData.getLetterBag().drawLetters(ToDraw));
-            turnManagerInteractor.endTurn();
-            turnManagerInteractor.startTurn();
+            turnManager.endTurn();
+            turnManager.startTurn();
         }
 
         if(getEndTurnInputData.isContest){
-            turnManagerInteractor.dealContest(getEndTurnInputData.isContestSucceed);
+            turnManager.dealContest(getEndTurnInputData.isContestSucceed);
         }
     }
+
 
     /**
      * Executes the use case of getting the leaderboard. It retrieves player data,
