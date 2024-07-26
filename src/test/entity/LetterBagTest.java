@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LetterBagTest {
     @Test
-    void testGetLength(){
+    void testGetLength() {
         LetterBag letterBag = new LetterBag();
 
         assertEquals(98, letterBag.getLength());
     }
 
     @Test
-    void testInit(){
+    void testInit() {
         LetterBag letterBag = new LetterBag();
 
         assertEquals(98, letterBag.getLength());
@@ -32,9 +32,9 @@ public class LetterBagTest {
 
         Map<Character, Integer> letterCount = new HashMap<>();
 
-        for(Letter letter:allLetters){
-            if(letterCount.containsKey(letter.getLetter())){
-                letterCount.put(letter.getLetter(), letterCount.get(letter.getLetter())+1);
+        for (Letter letter : allLetters) {
+            if (letterCount.containsKey(letter.getLetter())) {
+                letterCount.put(letter.getLetter(), letterCount.get(letter.getLetter()) + 1);
             } else {
                 letterCount.put(letter.getLetter(), 1);
             }
@@ -74,7 +74,7 @@ public class LetterBagTest {
     }
 
     @Test
-    void testDrawLetters(){
+    void testDrawLetters() {
         LetterBag letterBag = new LetterBag();
 
         assertEquals(98, letterBag.getLength());
@@ -111,7 +111,7 @@ public class LetterBagTest {
 
         assertEquals(97, letterBag.getLength());
 
-        for(Letter letter:draws){
+        for (Letter letter : draws) {
             assertEquals(expectedPoints.get(letter.getLetter()), letter.getPoints());
         }
 
@@ -119,13 +119,13 @@ public class LetterBagTest {
 
         assertEquals(77, letterBag.getLength());
 
-        for(Letter letter:draws){
+        for (Letter letter : draws) {
             assertEquals(expectedPoints.get(letter.getLetter()), letter.getPoints());
         }
     }
 
     @Test
-    void testAddLetters(){
+    void testAddLetters() {
         LetterBag letterBag = new LetterBag();
 
         assertEquals(98, letterBag.getLength());
@@ -135,7 +135,7 @@ public class LetterBagTest {
         assertEquals(0, letterBag.getLength());
 
         Letter letterToAdd = allLetters.remove(0);
-        ArrayList<Letter> lettersToAdd = new ArrayList<>();
+        List<Letter> lettersToAdd = new ArrayList<>();
         lettersToAdd.add(letterToAdd);
 
         letterBag.addLetters(lettersToAdd);
