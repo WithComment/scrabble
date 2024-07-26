@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Play {
   private final Player player;
-  private final LinkedList<Move> moves;
+  private final List<Move> moves;
   private List<String> words;
 
   /**
@@ -33,7 +33,7 @@ public class Play {
    * @return The move that was undone.
    */
   public Move undoMove() {
-    return moves.pop();
+    return moves.removeLast();
   }
 
   /**
@@ -59,11 +59,11 @@ public class Play {
     return player;
   }
 
-  /**
-   * Gets the list of moves made in the play.
-   * @return A LinkedList of moves made in the play.
-   */
-  public LinkedList<Move> getMoves() {
+    /**
+     * Gets the list of moves made in the play.
+     * @return A LinkedList of moves made in the play.
+     */
+  public List<Move> getMoves() {
     return moves;
   }
 

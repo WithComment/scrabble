@@ -21,7 +21,7 @@ import java.util.LinkedList;
 
 public class ConfirmPlayInteractorTest {
     private static final Letter a = new Letter('a', 1);
-    private static final Letter b = new Letter('b', 1);
+    private static final Letter b = new Letter('b', 2);
     private Board board;
     private Player player = new Player(0);
     private Play play;
@@ -48,8 +48,8 @@ public class ConfirmPlayInteractorTest {
             @Override
             public void prepareFailView(String error) {
                 assertEquals(msg, error);
-                assert (checkConfirmed());
-                assert (checkScore());
+                checkConfirmed();
+                checkScore();
             }
         };
     }
@@ -58,8 +58,8 @@ public class ConfirmPlayInteractorTest {
         return new Tester(board, expectedConfirmed, expectedScore) {
             @Override
             public void prepareSuccessView(ConfirmPlayOutputData data) {
-                assert (checkConfirmed());
-                assert (checkScore());
+                checkConfirmed();
+                checkScore();
             }
 
             @Override
@@ -112,11 +112,6 @@ public class ConfirmPlayInteractorTest {
 
     @Test
     void testGetWords() {
-        for (int i = 0; i < board.getHeight(); i++) {
-            for (int j = 0; j < board.getWidth(); j++) {
-                board.setCell(i, j, new Tile(1, 1, null));
-            }
-        }
         board.setAndConfirm(5, 2, a);
         board.setAndConfirm(6, 2, b);
         board.setAndConfirm(6, 3, b);
@@ -127,7 +122,7 @@ public class ConfirmPlayInteractorTest {
             play.addMove(new Move(7, i, a));
         }
         addMoves();
-        ConfirmPlayOutputBoundary tester = getSuccessTester(12, 15);
+        ConfirmPlayOutputBoundary tester = getSuccessTester(12, 30);
         ConfirmPlayInteractor interactor = new ConfirmPlayInteractor(tester);
         interactor.execute(new ConfirmPlayInputData(play, board));
         assertEquals(new LinkedList<String>() {
@@ -164,7 +159,7 @@ public class ConfirmPlayInteractorTest {
             this.expectedScore = expectedScore;
         }
 
-        protected boolean checkConfirmed() {
+        protected void checkConfirmed() {
             int confirmed = 0;
             for (int i = 0; i < board.getHeight(); i++) {
                 for (int j = 0; j < board.getWidth(); j++) {
@@ -173,11 +168,11 @@ public class ConfirmPlayInteractorTest {
                     }
                 }
             }
-            return confirmed == expectedConfirmed;
+            assertEquals(expectedConfirmed, confirmed);
         }
 
-        protected boolean checkScore() {
-            return player.getScore() == expectedScore;
+        protected void checkScore() {
+            assertEquals(player.getScore(), expectedScore);
         }
     }
 }

@@ -3,6 +3,7 @@ package interface_adapter.end_turn;
 import entity.Game;
 import entity.Player;
 import use_case.EndTurn.EndTurnInteractor;
+import use_case.EndTurn.GetEndTurnInputData;
 import use_case.EndTurn.GetEndTurnOutPutData;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class EndTurnController {
 
     public void execute(boolean contestSucceed, Game game) {
         ArrayList<Player> players = new ArrayList<>();
-        GetEndTurnOutPutData getEndTurnInputData = new GetEndTurnOutPutData(players, false, false, game.getLetterBag(), game);
+        GetEndTurnInputData getEndTurnInputData = new GetEndTurnInputData(players, false, false, game.getLetterBag(), game);
         turnManagerInteractor.execute(getEndTurnInputData);
     }
 }
