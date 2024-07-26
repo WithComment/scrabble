@@ -2,6 +2,7 @@ package entity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,7 +14,7 @@ import java.util.Collections;
  * The {@code LetterBag} class represents a bag of letters used in a game.
  * It allows initializing the bag from a file, drawing letters, and adding letters back to the bag.
  */
-public class LetterBag {
+public class LetterBag implements Serializable {
   private List<Letter> bag;
 
   /**
