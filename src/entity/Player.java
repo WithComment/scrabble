@@ -46,10 +46,19 @@ public class    Player {
         this.inventory.remove(letter);
     }
 
+    /**
+     * Gets the list of words formed in the play.
+     * @return A list of words formed in the play.
+     */
     public void addLetter(Letter letter) {
         this.inventory.add(letter);
     }
 
+    /**
+     * Adds a list of letters to the player's inventory.
+     *
+     * @param tiles the list of letters to be added
+     */
     public void addLetter(List<Letter> tiles) {
         this.inventory.addAll(tiles);
     }
@@ -68,16 +77,27 @@ public class    Player {
         }
     }
 
+    /**
+     * Adds a specified score to the player's score.
+     *
+     * @param score the score to be added
+     */
     public void addScore(int score) {
         this.score += score;
         tempScore += score;
     }
 
+    /**
+     * Confirms the player's unstable score by adding it to the main score and resetting the unstable score to 0.
+     */
     public void confirmTempScore() {
         this.score += this.tempScore;
         this.tempScore = 0;
     }
 
+    /**
+     * Resets the player's unstable score to 0.
+     */
     public void eraseTempScore() {
         this.tempScore = 0;
     }
@@ -125,11 +145,21 @@ public class    Player {
         return score;
     }
 
+    /**
+     * Returns the player's username.
+     *
+     * @return the player's username
+     */
     public String getUsername() {
         // TODO: Add username to player.
         return "Player " + id;
     }
 
+    /**
+     * Returns the hash code for this player.
+     *
+     * @return the hash code for this player
+     */
     @Override
     public int hashCode() {
         return id;

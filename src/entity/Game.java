@@ -4,6 +4,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a game of Scrabble.
+ * A game consists of a board, a letter bag, a list of players, and a history of plays made during the game.
+ * The game is responsible for managing the state of the game, including the board, players, and letter bag.
+ */
 public class Game implements Serializable {
     // Serializable vars
     private static final long serialVersionUID = 1L; // Unique version identifier for serialization

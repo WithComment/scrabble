@@ -69,7 +69,11 @@ public class GameDao implements GameDataAccess {
         this.game = game;
         return game;
     }
-    
+
+    /**
+     * Get the current Game object.
+     * @return the Game object.
+     */
     public Game getGame() {
         return this.game;
     }

@@ -1,5 +1,8 @@
 package entity;
 
+/**
+ * Represents the board of the game.
+ */
 public class Board {
     private final Tile[][] board;
     private final int height;
@@ -155,6 +158,11 @@ public class Board {
         return this.board[y][x].isConfirmed();
     }
 
+    /**
+     * Returns a string representation of the board.
+     *
+     * @return a string representation of the board
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 15; i++) {
