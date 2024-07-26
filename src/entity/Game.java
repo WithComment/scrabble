@@ -61,8 +61,23 @@ public class Game implements Serializable {
         return board.getCell(x, y);
     }
 
+    /**
+     * Gets the letter bag.
+     *
+     * @return The LetterBag.
+     */
     public LetterBag getLetterBag() {
         return letterBag;
+    }
+
+    /**
+     * Gets the specific player by their ID.
+     *
+     * @param playerId The ID of the player.
+     * @return The specified player.
+     */
+    public Player getPlayer(int playerId) {
+        return players.get(playerId);
     }
 
     /**
@@ -202,8 +217,18 @@ public class Game implements Serializable {
         return turnManager;
     }
 
+    /**
+     * Returns the board of the game.
+     *
+     * @return the board of the game
+     */
     public Board getBoard(){ return board; }
 
+    /**
+     * Returns the list of players in the game.
+     *
+     * @return the list of players in the game
+     */
     public List<Player> getPlayers() {
         return players;
     }

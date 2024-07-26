@@ -1,10 +1,11 @@
 package use_case.get_leaderboard;
 
-import entity.LeaderboardEntry;
+import entity.Game;
 import entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Implements the use case interactor for retrieving and presenting the game leaderboard.
@@ -13,13 +14,16 @@ import java.util.Collections;
  */
 public class GetLeaderboardInteractor implements GetLeaderboardInputBoundary {
     private final GetLeaderboardOutputBoundary presenter;
+    private final Game game;
 
     /**
      * Constructs a GetLeaderboardInteractor with a specified presenter.
      * @param presenter The presenter to which the sorted leaderboard will be passed.
+     * @param game The game.
      */
-    public GetLeaderboardInteractor(GetLeaderboardOutputBoundary presenter) {
+    public GetLeaderboardInteractor(GetLeaderboardOutputBoundary presenter, Game game) {
         this.presenter = presenter;
+        this.game = game;
     }
 
     /**
@@ -30,11 +34,12 @@ public class GetLeaderboardInteractor implements GetLeaderboardInputBoundary {
      */
     @Override
     public void execute(GetLeaderboardInputData input) {
-        ArrayList<LeaderboardEntry> leaderboard = new ArrayList<>();
-        for (Player player : input.getPlayers()) {
-            leaderboard.add(new LeaderboardEntry(player, player.getScore()));
+        List<Integer> players = input.getPlayers();
+        List<Player> leaderboard = new ArrayList<>();
+        for (int playerId : players) {
+            Player player = game.getPlayer(playerId);
+            leaderboard.add(player);
         }
-        System.out.println(input.getPlayers().size());
         Collections.sort(leaderboard, Collections.reverseOrder());
         presenter.prepareView(new GetLeaderboardOutputData(leaderboard));
     }
