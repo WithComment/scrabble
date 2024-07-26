@@ -2,6 +2,8 @@ package entity;
 
 import entity.Play;
 import entity.Game;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.List;
  * Keeps track of the current player, manages the end of turns,
  * and handles the contesting process.
  */
-public class TurnManager {
+public class TurnManager implements Serializable {
     private final List<Player> Players;
     private Boolean endTurn;
     private Player CurrentPlayer;
