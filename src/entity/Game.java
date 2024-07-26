@@ -61,8 +61,23 @@ public class Game implements Serializable {
         return board.getCell(x, y);
     }
 
+    /**
+     * Gets the letter bag.
+     *
+     * @return The LetterBag.
+     */
     public LetterBag getLetterBag() {
         return letterBag;
+    }
+
+    /**
+     * Gets the specific player by their ID.
+     *
+     * @param playerId The ID of the player.
+     * @return The specified player.
+     */
+    public Player getPlayer(int playerId) {
+        return players.get(playerId);
     }
 
     /**
@@ -119,8 +134,8 @@ public class Game implements Serializable {
      *
      * @return A list of player IDs.
      */
-    public ArrayList<Integer> getPlayerIds() {
-        ArrayList<Integer> playerIds = new ArrayList<>();
+    public List<Integer> getPlayerIds() {
+        List<Integer> playerIds = new ArrayList<>();
         for (Player player : players) {
             playerIds.add(player.getId());
         }
@@ -142,10 +157,10 @@ public class Game implements Serializable {
     /**
      * Gets a list of scores for all players in the game.
      *
-     * @return An ArrayList<Integer> containing the scores of all players.
+     * @return An List<Integer> containing the scores of all players.
      */
-    public ArrayList<Integer> getPlayerScore() {
-        ArrayList<Integer> scores = new ArrayList<>();
+    public List<Integer> getPlayerScore() {
+        List<Integer> scores = new ArrayList<>();
         for (Player player : players) {
             scores.add(player.getScore());
         }
@@ -177,9 +192,9 @@ public class Game implements Serializable {
      * Retrieves the inventory of letters for a specific player.
      *
      * @param playerId The ID of the player whose inventory is requested.
-     * @return An ArrayList<Letter> representing the player's current inventory of letters.
+     * @return A List<Letter> representing the player's current inventory of letters.
      */
-    public ArrayList<Letter> getPlayerInventory(int playerId) {
+    public List<Letter> getPlayerInventory(int playerId) {
         return players.get(playerId).getInventory();
     }
 
@@ -202,8 +217,18 @@ public class Game implements Serializable {
         return turnManager;
     }
 
+    /**
+     * Returns the board of the game.
+     *
+     * @return the board of the game
+     */
     public Board getBoard(){ return board; }
 
+    /**
+     * Returns the list of players in the game.
+     *
+     * @return the list of players in the game
+     */
     public List<Player> getPlayers() {
         return players;
     }

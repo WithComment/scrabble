@@ -13,6 +13,7 @@ import use_case.redraw_letters.RedrawOutputData;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -74,7 +75,7 @@ public class RedrawInteractorTest {
 
         assertEquals(91, letterBag.getLength());
 
-        ArrayList<Letter> inventoryBefore = (ArrayList<Letter>) player.getInventory().clone();
+        List<Letter> inventoryBefore = (ArrayList<Letter>) ((ArrayList<Letter>)player.getInventory()).clone();
 
         RedrawInputData redrawInputData = new RedrawInputData(player.getInventory(), player, letterBag);
         redrawInteractor.execute(redrawInputData);

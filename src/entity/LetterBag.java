@@ -2,18 +2,20 @@ package entity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Collections;
 
 /**
  * The {@code LetterBag} class represents a bag of letters used in a game.
  * It allows initializing the bag from a file, drawing letters, and adding letters back to the bag.
  */
-public class LetterBag {
-  private ArrayList<Letter> bag;
+public class LetterBag implements Serializable {
+  private List<Letter> bag;
 
   /**
    * Constructs a {@code LetterBag} and initializes it with letters from a specified file.
@@ -76,31 +78,31 @@ public class LetterBag {
    *
    * @param letters the list of {@code Letter} objects to be added
    */
-  public void addLetters(ArrayList<Letter> letters) {
+  public void addLetters(List<Letter> letters) {
     for (Letter letter : letters) {
       bag.add(letter);
     }
   }
 
   /**
-   * Draws a single letter from the bag and returns it in an {@code ArrayList}.
+   * Draws a single letter from the bag and returns it in an {@code List}.
    *
-   * @return an {@code ArrayList} containing the drawn {@code Letter}
+   * @return an {@code List} containing the drawn {@code Letter}
    */
-  public ArrayList<Letter> drawLetters() {
-    ArrayList<Letter> draws = new ArrayList<>();
+  public List<Letter> drawLetters() {
+    List<Letter> draws = new ArrayList<>();
     draws.add(drawLetter());
     return draws;
   }
 
   /**
-   * Draws the specified number of letters from the bag and returns them in an {@code ArrayList}.
+   * Draws the specified number of letters from the bag and returns them in an {@code List}.
    *
    * @param num the number of letters to be drawn
-   * @return an {@code ArrayList} containing the drawn letters
+   * @return an {@code List} containing the drawn letters
    */
-  public ArrayList<Letter> drawLetters(int num) {
-    ArrayList<Letter> draws = new ArrayList<>();
+  public List<Letter> drawLetters(int num) {
+    List<Letter> draws = new ArrayList<>();
     for (int i = 0; i < num; i++) {
       draws.add(drawLetter());
     }

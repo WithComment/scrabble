@@ -5,6 +5,7 @@ import entity.LetterBag;
 import entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RedrawInteractor implements RedrawInputBoundary{
     final RedrawOutputBoundary playerPresenter;
@@ -16,21 +17,21 @@ public class RedrawInteractor implements RedrawInputBoundary{
     @Override
     public void execute(RedrawInputData redrawInputData){
         boolean drawSuccessful = false;
+        Player player = redrawInputData.getPlayer();
+        List<Letter> letters = redrawInputData.getLetters();
+        LetterBag letterBag = redrawInputData.getLetterBag();
         if(redrawInputData.getLetterBag().getLength() > 6) {
-            Player player = redrawInputData.getPlayer();
-            ArrayList<Letter> letters = redrawInputData.getLetters();
-            LetterBag letterBag = redrawInputData.getLetterBag();
             int numToRedraw = letters.size();
 
             letterBag.addLetters(letters);
-            player.removeLetter((ArrayList<Letter>) letters.clone());
-            ArrayList<Letter> newLetters = letterBag.drawLetters(numToRedraw);
+            player.removeLetter((ArrayList<Letter>) ((ArrayList<Letter>)letters).clone());
+            List<Letter> newLetters = letterBag.drawLetters(numToRedraw);
             player.addLetter(newLetters);
             drawSuccessful = true;
         }
-
         if (drawSuccessful) {
-            playerPresenter.prepareSuccessView(new RedrawOutputData(true));
+            List<Letter> hand = player.getInventory();
+            playerPresenter.prepareSuccessView(new RedrawOutputData(true, hand));
         } else{
             playerPresenter.prepareFailView("There are less than 7 letters in the bag");
         }

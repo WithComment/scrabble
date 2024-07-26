@@ -1,5 +1,6 @@
 package app;
 
+import java.io.IOException;
 import java.util.*;
 
 import controller_factory.ConfirmPlayControllerFactory;
@@ -7,6 +8,8 @@ import controller_factory.EndTurnControllerFactory;
 import controller_factory.GetLeaderboardControllerFactory;
 import controller_factory.PlaceLetterControllerFactory;
 import controller_factory.StartTurnControllerFactory;
+import data_access.GameDao;
+import data_access.GameDataAccess;
 import entity.Board;
 import entity.Game;
 import entity.LetterBag;
@@ -19,11 +22,11 @@ import interface_adapter.end_turn.EndTurnController;
 import interface_adapter.get_leaderboard.GetLeaderboardController;
 import interface_adapter.place_letter.PlaceLetterController;
 import interface_adapter.start_turn.StartTurnController;
-import use_case.EndTurn.StartTurn;
 import view.View;
 
 public class Main {
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws IOException {
         int NumOfPlayers = 2;
         ArrayList<Player> players = new ArrayList<Player>();
         for (int i = 0; i < NumOfPlayers; i++) {
@@ -31,18 +34,22 @@ public class Main {
         }
         LetterBag letterBag = new LetterBag();
         Game game = new Game(players);
+        GameDataAccess gameDao = new GameDao();
+        gameDao.create(game);
 
         TurnManager turnManager = game.getTurnManager();
         turnManager.startTurn();
+        List<Integer> playerIds = new ArrayList<>();
         for (Player player : players) {
             player.addLetter(letterBag.drawLetters(7));
+            playerIds.add(player.getId());
         }
 
         Board board = game.getBoard();
-        GameViewModel gameViewModel = new GameViewModel(board, players);
+        GameViewModel gameViewModel = new GameViewModel(board, playerIds);
         PlaceLetterController placeLetterController = PlaceLetterControllerFactory.create(gameViewModel);
         ConfirmPlayController confirmPlayController = ConfirmPlayControllerFactory.create(gameViewModel);
-        GetLeaderboardController getLeaderboardController = GetLeaderboardControllerFactory.create(gameViewModel);
+        GetLeaderboardController getLeaderboardController = GetLeaderboardControllerFactory.create(gameViewModel, game);
         StartTurnController startTurnController = StartTurnControllerFactory.create(gameViewModel);
         EndTurnController endTurnController = EndTurnControllerFactory.create(gameViewModel, turnManager);
         startTurnController.execute(turnManager);

@@ -17,11 +17,13 @@ public class RedrawPresenter implements RedrawOutputBoundary {
 
     @Override
     public void prepareSuccessView(RedrawOutputData redrawOutputData) {
-        // TODO
+        viewModel.setHand(redrawOutputData.getHandCharacters());
+        viewModel.firePropertyChanged();
     }
 
     @Override
     public void prepareFailView(String error) {
-        // TODO
+        viewModel.setErrorMessage(error);
+        viewModel.firePropertyChanged();
     }
 }

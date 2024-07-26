@@ -3,7 +3,7 @@ package use_case.end_game;
 import entity.Game;
 import entity.Letter;
 import entity.Player;
-import data_access.EndGameDataAccessObject;
+import data_access.GameDao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +24,7 @@ public class EndGameInteractor implements EndGameInputBoundary{
 
         Map<Player, Integer> unplayedScores = new HashMap<>();
         for (Player player : players) {
-            ArrayList<Letter> playerInventory = player.getInventory();
+            List<Letter> playerInventory = player.getInventory();
             int unplayedScore = 0;
             for (Letter letter : playerInventory) {
                 unplayedScore += letter.getPoints();
@@ -48,7 +48,7 @@ public class EndGameInteractor implements EndGameInputBoundary{
         }
 
         int highestScore = 0;
-        ArrayList<Integer> winners = new ArrayList<>();
+        List<Integer> winners = new ArrayList<>();
         for (Player player : players) {
             int playerPoints = player.getScore();
             int playerFinalScore;
@@ -69,9 +69,9 @@ public class EndGameInteractor implements EndGameInputBoundary{
 
         presenter.prepareSuccessView(new EndGameOutputData(winners));
         EndGameData endGameData = new EndGameData(game);
-        EndGameDataAccessObject endGameDataAccessObject = new EndGameDataAccessObject();
+        GameDao endGameDataAccessObject = new GameDao();
         try {
-            endGameDataAccessObject.write(endGameData);
+            endGameDataAccessObject.create(endGameData.getGame());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

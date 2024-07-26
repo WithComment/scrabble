@@ -2,6 +2,9 @@ package entity;
 
 import entity.Play;
 import entity.Game;
+
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +14,8 @@ import java.util.List;
  * Keeps track of the current player, manages the end of turns,
  * and handles the contesting process.
  */
-public class TurnManager {
+public class TurnManager implements Serializable {
+    private static final long serialVersionUID = 10L;
     private final List<Player> Players;
     private Boolean endTurn;
     private Player CurrentPlayer;
@@ -29,6 +33,14 @@ public class TurnManager {
         this.Players = players;
         this.NumContestFailed = new ArrayList<Integer>(Collections.nCopies(players.size(), 0));
         this.CurrentPlay = null;
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
     }
 
     /**

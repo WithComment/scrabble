@@ -6,7 +6,6 @@ import entity.Player;
 import entity.TurnManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import use_case.EndTurn.TurnManagerInteractor;
 
 import java.util.ArrayList;
 import java.util.List;
