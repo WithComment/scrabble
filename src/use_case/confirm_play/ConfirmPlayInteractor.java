@@ -220,13 +220,6 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     return total;
   }
 
-  private boolean confirmAll(List<Move> moves, Board board) {
-    for (Move move : moves) {
-      if (!board.confirm(move.getX(), move.getY())) return false;
-    }
-    return true;
-  }
-
   @Override
   public void execute(ConfirmPlayInputData data) {
 
@@ -262,13 +255,12 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
       return;
     }
 
-    confirmAll(moves, board);
     List<List<Tile>> wordsOnTiles = getWordsOnTiles(moves, board);
     play.setWords(getWords(wordsOnTiles));
     
-    player.addScore(calcScore(wordsOnTiles));
+    player.addTempScore(calcScore(wordsOnTiles));
     if (moves.size() >= 7) {
-      player.addScore(50);
+      player.addTempScore(50);
     }
     presenter.prepareSuccessView(new ConfirmPlayOutputData(board));
   }

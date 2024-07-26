@@ -104,7 +104,7 @@ public class TurnManagerInteractor implements EndTurn, DealingContest, StartTurn
         if (isEndTurn()) {
             Player CurrentPlayer = turnManager.getCurrentPlayer();
             if(turnManagerInputData.isContestSucceed){
-                CurrentPlayer.eraseTempScore();
+                CurrentPlayer.resetTempScore();
             }else {
                 CurrentPlayer.confirmTempScore();
             }
