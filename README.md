@@ -1,5 +1,8 @@
 # Notes on changes
 
+## On Errors
+You'll notice we have 600+ errors. Not to worry, most of them are caused by moving the files around and renaming the packages. What you need to do is change the package declaration and re-import the internal modules e.g. entities. You don't have to deliberately go into every file and change it. Just change whatever file you need.
+
 ## InputData
 
 An `InputData` class should not contain any entity classes. Instead, pass in `gameId` so the interactor can use the `GameDataAccess` object to get `Game` from data storage. Also, add an empty constructor so that the input data can be automatically parsed from request body.
