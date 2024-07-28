@@ -10,6 +10,7 @@ import java.util.List;
 public class Player {
     private static int idCounter = 0;
     private final int id;
+    private final String name;
     private List<Letter> inventory;
     private int score;
     public int tempScore;
@@ -19,7 +20,16 @@ public class Player {
      *
      * @param id the ID of the player
      */
-    public Player(int id) {
+    public Player() {
+        this.id = idCounter++;
+        this.name = "Player " + id;
+        this.inventory = new ArrayList<>();
+        this.score = 0;
+        this.tempScore = 0;
+    }
+
+    public Player(String name) {
+        this.name = name;
         this.id = idCounter++;
         this.inventory = new ArrayList<>();
         this.score = 0;
@@ -123,9 +133,8 @@ public class Player {
      *
      * @return the player's username
      */
-    public String getUsername() {
-        // TODO: Add username to player.
-        return "Player " + id;
+    public String getName() {
+        return name;
     }
 
     /**
