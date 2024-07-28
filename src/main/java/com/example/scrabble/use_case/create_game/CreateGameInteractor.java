@@ -24,16 +24,11 @@ public class CreateGameInteractor implements CreateGameInputBoundary {
 
   @Override
   public Game execute(CreateGameInputData data) throws FileNotFoundException, IOException {
-    // Game game = new Game();
-    // for (String playerName : data.getPlayerNames()) {
-    //   game.addPlayer(new Player(playerName));
-    // }
-    // return gameDao.create(game);
-
-    List<Player> players = new LinkedList<>();
-    players.add(new Player(0));
-    players.add(new Player(1));
+    List<Player> players = new LinkedList<Player>();
+    for (String name : data.getPlayerNames()) {
+      players.add(new Player(name));
+    }
     Game game = new Game(players);
-    return game;
+    return gameDao.create(game);
   }
 }

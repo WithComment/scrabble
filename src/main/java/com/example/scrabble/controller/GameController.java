@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Player;
+import com.example.scrabble.use_case.confirm_play.ConfirmPlayInputBoundary;
+import com.example.scrabble.use_case.confirm_play.ConfirmPlayInputData;
 import com.example.scrabble.use_case.create_game.CreateGameInputBoundary;
 import com.example.scrabble.use_case.create_game.CreateGameInputData;
+import com.example.scrabble.use_case.place_letter.PlaceLetterInputBoundary;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputData;
 
 @RestController
@@ -28,47 +31,44 @@ public class GameController {
 
   private final GameDataAccess gameDao;
   private final CreateGameInputBoundary createGameInteractor;
+  private final PlaceLetterInputBoundary placeLetterInteractor;
+  private final ConfirmPlayInputBoundary confirmPlayInteractor;
   private static final Logger log = LoggerFactory.getLogger(GameController.class);
 
   @Autowired
-  public GameController(GameDataAccess gameDao, CreateGameInputBoundary createGameInteractor) {
+  public GameController(
+    GameDataAccess gameDao, 
+    CreateGameInputBoundary createGameInteractor, 
+    PlaceLetterInputBoundary placeLetterInteractor,
+    ConfirmPlayInputBoundary confirmPlayInteractor
+  ) {
     this.gameDao = gameDao;
     this.createGameInteractor = createGameInteractor;
+    this.placeLetterInteractor = placeLetterInteractor;
+    this.confirmPlayInteractor = confirmPlayInteractor;
   }
   
-  @PostMapping("create/")
+  @PostMapping("/create/")
   public Game createGame(@RequestBody CreateGameInputData data) throws IOException, ClassNotFoundException {
-    // return createGameInteractor.execute(data);
-    log.info("Creating game with players:");
-    return createGameInteractor.execute(new CreateGameInputData(new LinkedList<String>(){
-      {
-        add("Player 1");
-        add("Player 2");
-      }
-    }));
+    log.info("Creating game with players:" + data.getPlayerNames());
+    return createGameInteractor.execute(data);
   }
 
   @GetMapping("/{gameId}/")
   public Game getGame(@PathVariable("gameId") int gameId) throws IOException, ClassNotFoundException {
-    // log.info("Getting game with ID:" + gameId);
-    // return gameDao.get(gameId);
-    return createGameInteractor.execute(new CreateGameInputData(new LinkedList<String>() {
-      {
-        add("Player 1");
-        add("Player 2");
-      }
-    }));
+    log.info("Getting game with ID:" + gameId);
+    return gameDao.get(gameId);
   }
 
-  @PostMapping("/{gameId}/place_letter/")
-  public Game placeLetter(@PathVariable("gameId") int gameId, @RequestParam("data") PlaceLetterInputData data) throws IOException, ClassNotFoundException {
-    // TODO: insert place letter logic
-    throw new UnsupportedOperationException();
+  @PostMapping("/place_letter/")
+  public Game placeLetter(@RequestBody PlaceLetterInputData data) throws IOException, ClassNotFoundException {
+    log.info("Game ID: " + data.getGameId() + " Placing letter: " + data.getLetter() + " at position: " + data.getX() + "," + data.getY());
+    return placeLetterInteractor.execute(data);
   }
 
-  @PostMapping("/{gameId}/confirm_play/")
-  public Game confirmPlay(@PathVariable("gameId") int gameId) throws IOException, ClassNotFoundException {
-    // TODO: insert confirm play logic
-    throw new UnsupportedOperationException();
+  @PostMapping("/confirm_play/")
+  public Game confirmPlay(@RequestBody ConfirmPlayInputData data) throws IOException, ClassNotFoundException {
+    log.info("Game ID: " + data.getGameId() + " Confirming play");
+    return confirmPlayInteractor.execute(data);
   }
 }

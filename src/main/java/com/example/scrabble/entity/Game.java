@@ -4,10 +4,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-
 /**
  * Represents a game of Scrabble.
  * A game consists of a board, a letter bag, a list of players, and a history of plays made during the game.
@@ -37,6 +33,9 @@ public class Game implements Serializable {
         this.history = new ArrayList<>();
         this.letterBag = new LetterBag();
         this.turnManager = new TurnManager(this.players);
+        for (Player player : players) {
+            player.addLetter(letterBag.drawLetters(7));
+        }
     }
 
     /**
@@ -104,7 +103,12 @@ public class Game implements Serializable {
      * @return The player that was added to the game.
      */
     public Player addPlayer() {
-        Player player = new Player(0);
+        Player player = new Player();
+        players.add(player);
+        return player;
+    }
+
+    public Player addPlayer(Player player) {
         players.add(player);
         return player;
     }
