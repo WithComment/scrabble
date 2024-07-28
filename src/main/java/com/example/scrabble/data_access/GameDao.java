@@ -77,10 +77,14 @@ public class GameDao implements GameDataAccess {
         if (!gameExists(gameId)) {
             throw new IllegalArgumentException("Game with the specified ID does not exist.");
         }
-        FileInputStream fileInputStream = new FileInputStream(makeFilePath(gameId));
-        Game game = objectMapper.readValue(fileInputStream, Game.class);
-        fileInputStream.close();
-        return game;
+        try (FileInputStream fileInputStream = new FileInputStream(makeFilePath(gameId));) {
+            Game game = objectMapper.readValue(fileInputStream, Game.class);
+            return game;
+        } catch (Exception e) {
+            log.error("Failed to read game from file: ", e);
+            return null;
+        }
+        
     }
 
     /**

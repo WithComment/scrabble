@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-class EmployeeNotFoundAdvice {
+class InvalidPlayAdvice {
 
   @ExceptionHandler(InvalidPlayException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  String employeeNotFoundHandler(InvalidPlayException ex) {
+  String invalidPlayHandler(InvalidPlayException ex) {
     return ex.getMessage();
   }
 }

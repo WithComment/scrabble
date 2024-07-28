@@ -269,6 +269,8 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     if (moves.size() >= 7) {
       player.addTempScore(50);
     }
+
+    gameDao.update(game);
     
     return game;
   }
