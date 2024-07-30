@@ -1,16 +1,14 @@
-package use_case.end_game;
-
-import entity.Game;
+package com.example.scrabble.use_case.end_game;
 
 public class EndGameInputData {
-    private final Game game;
+    private final int gameId;
 
-    public EndGameInputData(Game game) {
-        this.game = game;
+    public EndGameInputData(int gameId) {
+        this.gameId = gameId;
     }
 
-    Game getGame() {
-        return game;
+    public int getGameId() {
+        return gameId;
     }
 
 }

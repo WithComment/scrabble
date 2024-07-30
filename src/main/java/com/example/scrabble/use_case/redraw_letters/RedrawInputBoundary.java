@@ -1,5 +1,9 @@
-package use_case.redraw_letters;
+package com.example.scrabble.use_case.redraw_letters;
+
+import com.example.scrabble.entity.Game;
+
+import java.io.IOException;
 
 public interface RedrawInputBoundary {
-    void execute(RedrawInputData redrawInputData);
+    Game execute(RedrawInputData redrawInputData) throws IOException, ClassNotFoundException;
 }

@@ -1,25 +1,30 @@
-package use_case.end_game;
+package com.example.scrabble.use_case.end_game;
 
-import entity.Game;
-import entity.Letter;
-import entity.Player;
-import data_access.GameDao;
+import com.example.scrabble.data_access.GameDataAccess;
+import com.example.scrabble.entity.Game;
+import com.example.scrabble.entity.Letter;
+import com.example.scrabble.entity.Player;
+import com.example.scrabble.data_access.GameDao;
+import com.example.scrabble.use_case.InvalidPlayException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class EndGameInteractor implements EndGameInputBoundary{
-    final EndGameOutputBoundary presenter;
+    private final GameDataAccess gameDao;
 
-    public EndGameInteractor(EndGameOutputBoundary endGameOutputBoundary) {
-        this.presenter = endGameOutputBoundary;
-    }
+    @Autowired
+    public EndGameInteractor(GameDataAccess gameDao) {this.gameDao = gameDao;}
 
     @Override
-    public void execute(EndGameInputData endGameInputData){
-        Game game = endGameInputData.getGame();
+    public Game execute(EndGameInputData endGameInputData) throws IOException, ClassNotFoundException, RuntimeException{
+        Game game = gameDao.get(endGameInputData.getGameId());
         List<Player> players = game.getPlayers();
 
         Map<Player, Integer> unplayedScores = new HashMap<>();
@@ -41,10 +46,8 @@ public class EndGameInteractor implements EndGameInputBoundary{
             }
         }
 
-
         if(!onePlayerEmptied){
-            presenter.prepareFailView("The game should not be over yet");
-            return;
+            throw new InvalidPlayException("The game should have ended yet");
         }
 
         int highestScore = 0;
@@ -67,14 +70,14 @@ public class EndGameInteractor implements EndGameInputBoundary{
             }
         }
 
-        presenter.prepareSuccessView(new EndGameOutputData(winners));
-        EndGameData endGameData = new EndGameData(game);
+        // presenter.prepareSuccessView(new EndGameOutputData(winners));
+        // EndGameData endGameData = new EndGameData(game);
         GameDao endGameDataAccessObject = new GameDao();
         try {
-            endGameDataAccessObject.create(endGameData.getGame());
+            endGameDataAccessObject.create(game);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
+        return game;
     }
 }

@@ -1,27 +1,28 @@
-package use_case.redraw_letters;
+package com.example.scrabble.use_case.redraw_letters;
 
-import entity.Letter;
-import entity.LetterBag;
-import entity.Player;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RedrawInputData {
-    private final List<Letter> letters;
-    private final Player player;
-    private final LetterBag letterBag;
+    private final int gameId;
+    private final List<Character> characters;
 
-    public RedrawInputData(List<Letter> letters, Player player, LetterBag letterBag) {
-        this.letters = letters;
-        this.player = player;
-        this.letterBag = letterBag;
+    public RedrawInputData(){
+        this.gameId = 0;
+        this.characters = new ArrayList<>();
     }
-    List<Letter> getLetters() {
-        return letters;
+
+    public RedrawInputData(int gameId, List<Character> letters) {
+        this.gameId = gameId;
+        this.characters = letters;
     }
-    Player getPlayer() {
-        return player;
+
+    public int getGameId() {
+        return gameId;
     }
-    LetterBag getLetterBag(){
-        return letterBag;
+
+    public List<Character> getCharacters() {
+        return characters;
     }
+
 }
