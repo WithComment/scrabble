@@ -1,6 +1,7 @@
 package com.example.scrabble.entity;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,12 +13,13 @@ import java.util.List;
  * and handles the contesting process.
  */
 public class TurnManager implements Serializable {
+    @Serial
     private static final long serialVersionUID = 10L;
     private final List<Player> Players;
     private Boolean endTurn;
     private Player CurrentPlayer;
     private int PlayerNumber;
-    private List<Integer> NumContestFailed;
+    private final List<Integer> NumContestFailed;
     private Play CurrentPlay;
 
     /**
@@ -26,16 +28,18 @@ public class TurnManager implements Serializable {
      */
     public TurnManager(List<Player> players) {
         this.endTurn = false;
-        this.CurrentPlayer = players.get(0);
+        this.CurrentPlayer = players.getFirst();
         this.Players = players;
         this.NumContestFailed = new ArrayList<Integer>(Collections.nCopies(players.size(), 0));
         this.CurrentPlay = null;
     }
 
+    @Serial
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
     }
 
+    @Serial
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
     }

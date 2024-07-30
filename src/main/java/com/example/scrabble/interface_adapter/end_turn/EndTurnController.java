@@ -1,10 +1,10 @@
-package main.java.com.example.scrabble.interface_adapter.end_turn;
+package com.example.scrabble.interface_adapter.end_turn;
 
-import entity.Game;
-import entity.Player;
-import use_case.EndTurn.EndTurnInteractor;
-import use_case.EndTurn.GetEndTurnInputData;
+import com.example.scrabble.entity.Player;
+import com.example.scrabble.use_case.end_turn.EndTurnInteractor;
+import com.example.scrabble.use_case.end_turn.GetEndTurnInputData;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,10 +36,9 @@ public class EndTurnController {
      * @param contestSucceed a boolean indicating whether the contest succeeded
      */
 
-    public void execute(boolean contestSucceed, Game game, List<List> wordsToBeConfirmed) {
+    public void execute(boolean contestSucceed, int gameId, List<List<Integer>> wordsToBeConfirmed) throws IOException, ClassNotFoundException {
         ArrayList<Player> players = new ArrayList<>();
-        GetEndTurnInputData getEndTurnInputData = new GetEndTurnInputData(players, false, false,
-                game.getLetterBag(), game,wordsToBeConfirmed);
+        GetEndTurnInputData getEndTurnInputData = new GetEndTurnInputData(gameId, false, false ,wordsToBeConfirmed);
         turnManagerInteractor.execute(getEndTurnInputData);
     }
 }

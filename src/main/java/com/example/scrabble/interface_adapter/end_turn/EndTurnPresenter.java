@@ -1,23 +1,21 @@
-package main.java.com.example.scrabble.interface_adapter.end_turn;
+package com.example.scrabble.interface_adapter.end_turn;
 
-import interface_adapter.GameViewModel;
-import use_case.EndTurn.GetEndTurnOutputBoundary;
-import use_case.confirm_play.ConfirmPlayOutputData;
-import use_case.get_leaderboard.GetLeaderboardOutputData;
+import com.example.scrabble.use_case.end_turn.GetEndTurnOutputData;
+//import interface_adapter.GameViewModel;
+import com.example.scrabble.use_case.end_turn.GetEndTurnOutputBoundary;
 
 public class EndTurnPresenter implements GetEndTurnOutputBoundary {
-    private GameViewModel gameViewModel;
-
-    public EndTurnPresenter(GameViewModel gameViewModel) {
-        this.gameViewModel = gameViewModel;
+//    private GameViewModel gameViewModel;
+//
+    public EndTurnPresenter() {
     }
-
-    public GameViewModel getGameViewModel() {
-        return gameViewModel;
-    }
+//
+//    public GameViewModel getGameViewModel() {
+//        return gameViewModel;
+//    }
 
     @Override
-    public void prepareSuccessView(ConfirmPlayOutputData data) {
+    public void prepareSuccessView(GetEndTurnOutputData data) {
     }
 
     @Override
@@ -25,7 +23,7 @@ public class EndTurnPresenter implements GetEndTurnOutputBoundary {
     }
 
     @Override
-    public void prepareView(GetLeaderboardOutputData outputData) {
+    public void prepareView(GetEndTurnOutputData outputData) {
 
     }
 }

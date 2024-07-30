@@ -157,6 +157,9 @@ public class Player {
     {
         return this.score - o.getScore();
     }
+
+    public void eraseTempScore() {
+    }
 }
 
 
