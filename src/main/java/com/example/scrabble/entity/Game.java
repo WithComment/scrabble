@@ -288,4 +288,10 @@ public class Game implements Serializable {
     public void setLeaderboard(List<Player> leaderboard) {
         this.leaderboard = leaderboard;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        // @RickChen-0918 TODO: implement equals
+        return false;
+    }
 }

@@ -19,6 +19,8 @@ public class Tile implements Serializable {
     private int letterMult;
     private Letter letter;
     private boolean isConfirmed;
+    
+    public Tile() {}
 
     /**
      * Constructs a Tile with specified multipliers and letter.
@@ -26,9 +28,6 @@ public class Tile implements Serializable {
      * @param letterMult The letter multiplier for the tile.
      * @param letter The letter placed on the tile.
      */
-
-    public Tile(){
-    }
 
     public Tile(int wordMult, int letterMult, Letter letter) {
         this.wordMult = wordMult;
@@ -137,5 +136,12 @@ public class Tile implements Serializable {
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         JSONObject json = new JSONObject(in.readUTF());
         this.parseJSON(json);
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tile tile = (Tile) o;
+        return wordMult == tile.wordMult && letterMult == tile.letterMult && isConfirmed == tile.isConfirmed && letter.equals(tile.letter);
     }
 }
