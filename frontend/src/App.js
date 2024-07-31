@@ -1,8 +1,11 @@
-import logo from './logo.svg';
 import './App.css';
 import Board from './components/Board';
 import React, { useState } from 'react';
 import ViewModel from './ViewModel';
+import Hand from './components/Hand'
+import Redraw from './components/buttons/Redraw';
+import Contest from './components/buttons/Contest';
+import Leaderboard from './components/Leaderboard';
 
 function App() {
   let tempBoard = []
@@ -13,15 +16,34 @@ function App() {
     }
     tempBoard.push(row)
   }
+
+  let tempHand = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
   const [board, setBoard] = useState(tempBoard);
-  const [hand, setHand] = useState([]);
-  const [leaderboard, setLeaderboard] = useState([]);
-  let viewModel = new ViewModel(board, hand, leaderboard, setBoard, setHand, setLeaderboard);
+  const [hand, setHand] = useState(tempHand);
+  const [leaderboard, setLeaderboard] = useState(
+    [
+      {
+        name: 'Oscar',
+        score: 32
+      },
+      {
+        name: 'Alex',
+        score: 12
+      },
+    ]);
+  const viewModel = new ViewModel(1, board, hand, leaderboard, setBoard, setHand, setLeaderboard)
   return (
     <div className="App">
-      <Board board={board}/>
+      <Leaderboard players={leaderboard}/>
+      <Board board={board} boardViewModel={viewModel}/>
+      <div class='inputs-container'>
+        <div class='buttons-container'>
+          <Redraw ButtonViewModel={viewModel}/>
+          <Contest ButtonViewModel={viewModel}/>
+        </div>
+        <Hand handLetters={hand} viewModel={viewModel}/>
+      </div>
     </div>
   );
 }
-
 export default App;

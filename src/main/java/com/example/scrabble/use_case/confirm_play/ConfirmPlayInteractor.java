@@ -232,7 +232,7 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
   }
 
   @Override
-  public Game execute(ConfirmPlayInputData data) throws FileNotFoundException, IOException, ClassNotFoundException {
+  public Game execute(ConfirmPlayInputData data) {
 
     Game game = gameDao.get(data.getGameId());
     Board board = game.getBoard();
