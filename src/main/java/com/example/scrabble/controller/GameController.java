@@ -1,7 +1,5 @@
 package com.example.scrabble.controller;
 
-import java.io.IOException;
-
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputBoundary;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputData;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInteractor;
@@ -88,8 +86,9 @@ public class GameController {
   }
 
   @GetMapping("/leaderboard/")
-  public Game getLeaderboard(@RequestParam("gameId") int gameId, @RequestParam("players") List<Integer> players) {
+  public Game getLeaderboard(@RequestBody GetLeaderboardInputData data) {
+    int gameId = data.getGameId();
     log.info("Getting leaderboard for game ID: " + gameId);
-    return getLeaderboardInteractor.execute(new GetLeaderboardInputData(gameId, players));
+    return getLeaderboardInteractor.execute(new GetLeaderboardInputData(gameId, data.getPlayers()));
   }
 }

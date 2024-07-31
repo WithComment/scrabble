@@ -1,6 +1,5 @@
 package com.example.scrabble.use_case.redraw_letters;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RedrawInputData {

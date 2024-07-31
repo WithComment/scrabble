@@ -1,6 +1,5 @@
 package com.example.scrabble.use_case.place_letter;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;

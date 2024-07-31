@@ -1,9 +1,7 @@
 package com.example.scrabble.data_access;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.example.scrabble.entity.Game;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 
 /**
  * Represents a data access object for the Game entity.

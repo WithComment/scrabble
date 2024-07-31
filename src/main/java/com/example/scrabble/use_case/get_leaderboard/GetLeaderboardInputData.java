@@ -3,8 +3,10 @@ package com.example.scrabble.use_case.get_leaderboard;
 import java.util.List;
 
 public class GetLeaderboardInputData {
-    final List<Integer> players;
-    private final int gameId;
+    private List<Integer> players;
+    private int gameId;
+
+    public GetLeaderboardInputData() {}
 
     public GetLeaderboardInputData(int gameId, List<Integer> players) {
         this.gameId = gameId;

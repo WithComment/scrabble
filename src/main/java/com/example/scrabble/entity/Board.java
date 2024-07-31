@@ -29,7 +29,7 @@ public class Board implements Serializable {
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 JSONObject tile = jsonObject.getJSONObject("board").getJSONObject(i + "," + j);
-                this.board[i][j] = new Tile(jsonObject.getJSONObject("board").getJSONObject(i + "," + j));
+                this.board[i][j] = new Tile(tile);
             }
         }
     }
