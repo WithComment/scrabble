@@ -28,10 +28,10 @@ public class Game implements Serializable {
     public Game() {
         this.id = nextId++;
         this.board = new Board();
-        this.players = new ArrayList<Player>();
+        this.players = new ArrayList<>();
         this.history = new ArrayList<>();
         this.letterBag = new LetterBag();
-        this.turnManager = new TurnManager(this.players);
+        this.turnManager = new TurnManager(new ArrayList<>());
         for (Player player : players) {
             player.addLetter(letterBag.drawLetters(7));
         }
@@ -39,6 +39,9 @@ public class Game implements Serializable {
 
     public void setPlayers(List<Player> players) {
         this.players.addAll(players);
+        for(Player player : players){
+            this.turnManager.updatePlayer(player);
+        }
     }
 
     /**
