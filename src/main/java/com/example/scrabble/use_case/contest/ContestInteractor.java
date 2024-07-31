@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -55,7 +56,7 @@ public class ContestInteractor implements ContestInputBoundary {
         }
     }
 
-    private void fail() {
+    private void fail() throws IOException, FileNotFoundException {
         TurnManager turnManager = game.getTurnManager();
         turnManager.ContestFailureUpdate(player.getId());
     }
@@ -87,6 +88,9 @@ public class ContestInteractor implements ContestInputBoundary {
         } catch (WordValidationException e) {
             fail();
             throw new ContestException("Word validation failed.", e);
+        }
+        finally {
+            gameDAO.update(game);
         }
         return game;
     }

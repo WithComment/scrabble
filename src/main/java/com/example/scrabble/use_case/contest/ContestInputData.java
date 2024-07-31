@@ -5,19 +5,19 @@ import com.example.scrabble.entity.Player;
 import com.example.scrabble.entity.TurnManager;
 
 public class ContestInputData {
-    final private Game game;
-    final private Player player;
+    final private int gameId;
+    final private int playerId;
 
-    public ContestInputData(Game game, Player player) {
-        this.game = game;
-        this.player = player;
+    public ContestInputData(int gameId, int playerId) {
+        this.gameId = gameId;
+        this.playerId = playerId;
     }
 
-    public Game getGame() {
-        return game;
+    public int getGameId() {
+        return gameId;
     }
 
-    public Player getPlayer() {
-        return player;
+    public int getPlayerId() {
+        return playerId;
     }
 }
