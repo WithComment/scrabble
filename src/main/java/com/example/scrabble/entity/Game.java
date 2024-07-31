@@ -22,6 +22,7 @@ public class Game implements Serializable {
     private List<Player> players; // List of players in the game
     private List<Play> history; // History of plays made during the game
     private TurnManager turnManager;
+    private List<Player> leaderboard;
 
     /**
      * Constructs a new Game instance.
@@ -268,5 +269,23 @@ public class Game implements Serializable {
      */
     public List<Player> getPlayers() {
         return players;
+    }
+
+    /**
+     * Returns the leaderboard.
+     *
+     * @return the leaderboard
+     */
+    public List<Player> getLeaderboard() {
+        return leaderboard;
+    }
+
+    /**
+     * Sets the leaderboard.
+     *
+     * @param leaderboard the leaderboard to set
+     */
+    public void setLeaderboard(List<Player> leaderboard) {
+        this.leaderboard = leaderboard;
     }
 }

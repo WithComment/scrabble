@@ -1,29 +1,35 @@
-package use_case.remove_letter;
+package com.example.scrabble.use_case.remove_letter;
 
-import entity.Board;
-import entity.Play;
-import entity.Player;
-import entity.Tile;
-import entity.Move;
-import entity.Letter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.example.scrabble.data_access.GameDataAccess;
+import com.example.scrabble.entity.Board;
+import com.example.scrabble.entity.Game;
+import com.example.scrabble.entity.Play;
+import com.example.scrabble.entity.Player;
+import com.example.scrabble.entity.Tile;
+import com.example.scrabble.use_case.InvalidPlayException;
+import com.example.scrabble.entity.Move;
+
+@Service
 public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
-    private Play play;
-    private Player player;
-    private Board board;
-    private Tile selectedTile;
-    private RemoveLetterOutputBoundary presenter;
-    public RemoveLetterInteractor(RemoveLetterOutputBoundary presenter) {
-        this.presenter = presenter;
+    
+    private final GameDataAccess gameDao;
+
+    @Autowired
+    public RemoveLetterInteractor(GameDataAccess gameDao) {
+        this.gameDao = gameDao;
     }
 
-    public void execute(RemoveLetterInputData removeLetterInputData){
-        Play play = removeLetterInputData.getPlay();
+    public Game execute(RemoveLetterInputData data) {
+        Game game = gameDao.get(data.getGameId());
+        Play play = game.getCurrentPlay();
         Player player = play.getPlayer();
-        Board board = removeLetterInputData.getBoard();
-        Tile selectedTile = removeLetterInputData.getSelectedTile();
-        int x = removeLetterInputData.getX();
-        int y = removeLetterInputData.getY();
+        Board board = game.getBoard();
+        Tile selectedTile = board.getCell(data.getX(), data.getY());
+        int x = data.getX();
+        int y = data.getY();
         boolean isValidClick = false;
         for (Move move : play.getMoves()){
             if (move.getLetter() == selectedTile.getLetter()
@@ -33,13 +39,14 @@ public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
                 break;
             }
         }
-        if (!isValidClick){
-            presenter.prepareFailureView(new RemoveLetterOutputData(false, board, player.getInventory()));
-        } else{
+        if (!isValidClick) {
+            throw new InvalidPlayException("Remove failed.");
+        } else {
             play.removeMove(x, y);
             player.addLetter(selectedTile.getLetter());
             selectedTile.removeLetter();
-            presenter.prepareSuccessView(new RemoveLetterOutputData(true, board, player.getInventory()));
+            gameDao.update(game);
+            return game;
         }
     }
 }

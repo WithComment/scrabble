@@ -1,5 +1,7 @@
-package use_case.end_game;
+package com.example.scrabble.use_case.end_game;
+
+import com.example.scrabble.entity.Game;
 
 public interface EndGameInputBoundary {
-    void execute(EndGameInputData endGameInputData) throws Exception;
+    Game execute(EndGameInputData endGameInputData) throws RuntimeException;
 }

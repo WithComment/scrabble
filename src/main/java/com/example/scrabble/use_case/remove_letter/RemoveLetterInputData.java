@@ -1,31 +1,26 @@
-package use_case.remove_letter;
-
-import entity.Board;
-import entity.Play;
+package com.example.scrabble.use_case.remove_letter;
 
 public class RemoveLetterInputData {
-    private final int x;
-    private final int y;
-    private final Play play;
-    private final Board board;
+    private int gameId;
+    private int x;
+    private int y;
+
+    public RemoveLetterInputData() {}
+
     public RemoveLetterInputData(
-            Play play,
-            Board board,
-            int x,
-            int y
+        int gameId,
+        int x,
+        int y
     ) {
-        this.play = play;
-        this.board = board;
+        this.gameId = gameId;
         this.x = x;
         this.y = y;
     }
 
-    public Play getPlay(){
-        return this.play;
+    public int getGameId() {
+      return gameId;
     }
-    public Board getBoard() {
-        return board;
-    }
+
     public int getX() {
         return x;
     }

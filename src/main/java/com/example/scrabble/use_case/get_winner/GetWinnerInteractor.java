@@ -1,7 +1,7 @@
-package use_case.get_winner;
+package com.example.scrabble.use_case.get_winner;
 
-import entity.LeaderboardEntry;
-import entity.Player;
+import com.example.scrabble.entity.LeaderboardEntry;
+import com.example.scrabble.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,8 +1,10 @@
 package com.example.scrabble.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,12 +39,32 @@ public class TurnManager implements Serializable {
         }
     }
 
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
+
+    public TurnManager(JSONObject json){
+        this.parseJSON(json);
     }
 
+    private void parseJSON(JSONObject json){
+        this.Players = (List<Player>) json.getJSONObject("Players");
+        this.NumContestFailed = new ArrayList<Integer>(Collections.nCopies(this.Players.size(), 0));
+        this.endTurn = false;
+        this.CurrentPlayer = Players.getFirst();
+        this.PlayerNumber = 0;
+        this.CurrentPlay = null;
+
+
+    }
+
+    @Serial
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        JSONObject jsonObject = new JSONObject(this);
+        out.writeChars(jsonObject.toString());
+    }
+
+    @Serial
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
+        JSONObject json = new JSONObject(in.readUTF());
+        this.parseJSON(json);
     }
 
     /**

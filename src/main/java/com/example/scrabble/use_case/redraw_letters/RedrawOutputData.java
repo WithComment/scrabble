@@ -1,6 +1,6 @@
-package use_case.redraw_letters;
+package com.example.scrabble.use_case.redraw_letters;
 
-import entity.Letter;
+import com.example.scrabble.entity.Letter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
-package use_case.remove_letter;
-import entity.Board;
-import entity.Letter;
+package com.example.scrabble.use_case.remove_letter;
+import com.example.scrabble.entity.Board;
+import com.example.scrabble.entity.Letter;
 
 import java.util.ArrayList;
 import java.util.List;

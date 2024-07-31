@@ -1,5 +1,10 @@
 package com.example.scrabble.entity;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,18 +12,16 @@ import java.util.List;
  * Represents a player in the game.
  * A player has an ID, an inventory of letters, a score, and an unstable score.
  */
-public class Player {
+public class Player implements Serializable {
     private static int idCounter = 0;
-    private final int id;
-    private final String name;
+    private int id;
+    private String name;
     private List<Letter> inventory;
     private int score;
     public int tempScore;
 
     /**
      * Constructs a Player with a specified ID.
-     *
-     * @param id the ID of the player
      */
     public Player() {
         this.id = idCounter++;
@@ -34,6 +37,34 @@ public class Player {
         this.inventory = new ArrayList<>();
         this.score = 0;
         this.tempScore = 0;
+    }
+
+    public Player(JSONObject json){
+        this.parseJSON(json);
+    }
+
+
+    private void parseJSON(JSONObject json) {
+        this.name = json.getString("name");
+        this.id = json.getInt("id");
+        this.inventory = new ArrayList<>();
+        this.score = 0;
+        this.tempScore = 0;
+
+
+    }
+
+
+    @Serial
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        JSONObject jsonObject = new JSONObject(this);
+        out.writeChars(jsonObject.toString());
+    }
+
+    @Serial
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        JSONObject json = new JSONObject(in.readUTF());
+        this.parseJSON(json);
     }
 
     /**
@@ -156,6 +187,9 @@ public class Player {
     public int compareTo(Player o)
     {
         return this.score - o.getScore();
+    }
+
+    public void eraseTempScore() {
     }
 }
 

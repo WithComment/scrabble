@@ -1,5 +1,7 @@
-package use_case.contest;
+package com.example.scrabble.use_case.contest;
+
+import com.example.scrabble.entity.Game;
 
 public interface ContestInputBoundary {
-    void contest(ContestInputData contestInputData);
+    Game execute(ContestInputData contestInputData) throws ContestException;
 }

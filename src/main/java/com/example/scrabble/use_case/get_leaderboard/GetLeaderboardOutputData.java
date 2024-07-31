@@ -1,6 +1,6 @@
-package use_case.get_leaderboard;
+package com.example.scrabble.use_case.get_leaderboard;
 
-import entity.Player;
+import com.example.scrabble.entity.Player;
 
 import java.util.List;
 
