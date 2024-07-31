@@ -48,12 +48,14 @@ public class TurnManager implements Serializable {
 
     @Serial
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
+        JSONObject jsonObject = new JSONObject(this);
+        out.writeChars(jsonObject.toString());
     }
 
     @Serial
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
+        JSONObject json = new JSONObject(in.readUTF());
+        this.parseJSON(json);
     }
 
     /**
