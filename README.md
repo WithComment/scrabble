@@ -20,10 +20,10 @@ After:
 
 ```java
 public class PlaceLetterInputData {
-  private final int gameId;
-  private final int x;
-  private final int y;
-  private final char letter;
+  private int gameId;
+  private int x;
+  private int y;
+  private char letter;
 
   public PlaceLetterInputData() {}
 }
