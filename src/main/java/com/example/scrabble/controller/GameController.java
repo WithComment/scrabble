@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputBoundary;
+import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputData;
+import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInteractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,7 @@ public class GameController {
   private final CreateGameInputBoundary createGameInteractor;
   private final PlaceLetterInputBoundary placeLetterInteractor;
   private final ConfirmPlayInputBoundary confirmPlayInteractor;
+  private final GetLeaderboardInputBoundary getLeaderboardInteractor;
   private static final Logger log = LoggerFactory.getLogger(GameController.class);
 
   @Autowired
@@ -40,12 +44,14 @@ public class GameController {
     GameDataAccess gameDao, 
     CreateGameInputBoundary createGameInteractor, 
     PlaceLetterInputBoundary placeLetterInteractor,
-    ConfirmPlayInputBoundary confirmPlayInteractor
+    ConfirmPlayInputBoundary confirmPlayInteractor,
+    GetLeaderboardInteractor getLeaderboardInteractor
   ) {
     this.gameDao = gameDao;
     this.createGameInteractor = createGameInteractor;
     this.placeLetterInteractor = placeLetterInteractor;
     this.confirmPlayInteractor = confirmPlayInteractor;
+    this.getLeaderboardInteractor = getLeaderboardInteractor;
   }
   
   @PostMapping("/create/")
@@ -70,5 +76,11 @@ public class GameController {
   public Game confirmPlay(@RequestBody ConfirmPlayInputData data) throws IOException, ClassNotFoundException {
     log.info("Game ID: " + data.getGameId() + " Confirming play");
     return confirmPlayInteractor.execute(data);
+  }
+
+  @GetMapping("/leaderboard/")
+  public Game getLeaderboard(@RequestParam("gameId") int gameId, @RequestParam("players") List<Integer> players) {
+    log.info("Getting leaderboard for game ID: " + gameId);
+    return getLeaderboardInteractor.execute(new GetLeaderboardInputData(gameId, players));
   }
 }

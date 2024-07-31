@@ -1,6 +1,7 @@
-package main.java.com.example.scrabble.interface_adapter.get_leaderboard;
+package com.example.scrabble.interface_adapter.get_leaderboard;
 
-import use_case.get_leaderboard.*;
+import com.example.scrabble.use_case.get_leaderboard.*;
+import com.example.scrabble.entity.Player;
 
 import java.util.List;
 

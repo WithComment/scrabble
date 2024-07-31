@@ -1,12 +1,12 @@
-package main.java.com.example.scrabble.interface_adapter.get_leaderboard;
+package com.example.scrabble.interface_adapter.get_leaderboard;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import entity.Player;
-import interface_adapter.GameViewModel;
-import use_case.get_leaderboard.*;
+import com.example.scrabble.entity.Player;
+import com.example.scrabble.interface_adapter.GameViewModel;
+import com.example.scrabble.use_case.get_leaderboard.*;
 
 public class GetLeaderboardPresenter implements GetLeaderboardOutputBoundary {
 

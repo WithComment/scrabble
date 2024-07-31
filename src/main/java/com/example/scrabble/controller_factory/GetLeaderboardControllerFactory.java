@@ -1,11 +1,11 @@
-package main.java.com.example.scrabble.controller_factory;
+package com.example.scrabble.controller_factory;
 
-import entity.Game;
-import interface_adapter.get_leaderboard.GetLeaderboardController;
-import interface_adapter.get_leaderboard.GetLeaderboardPresenter;
-import interface_adapter.GameViewModel;
-import use_case.get_leaderboard.GetLeaderboardInteractor;
-import use_case.get_leaderboard.GetLeaderboardOutputBoundary;
+import com.example.scrabble.entity.Game;
+import com.example.scrabble.interface_adapter.get_leaderboard.GetLeaderboardController;
+import com.example.scrabble.interface_adapter.get_leaderboard.GetLeaderboardPresenter;
+import com.example.scrabble.interface_adapter.GameViewModel;
+import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInteractor;
+import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardOutputBoundary;
 
 /**
  * Factory class for creating instances of GetLeaderboardController.

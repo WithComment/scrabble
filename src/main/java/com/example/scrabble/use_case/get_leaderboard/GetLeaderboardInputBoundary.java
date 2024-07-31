@@ -1,5 +1,7 @@
-package use_case.get_leaderboard;
+package com.example.scrabble.use_case.get_leaderboard;
+
+import com.example.scrabble.entity.Game;
 
 public interface GetLeaderboardInputBoundary {
-    void execute(GetLeaderboardInputData data);
+    Game execute(GetLeaderboardInputData data);
 }
