@@ -1,5 +1,7 @@
 package com.example.scrabble.entity;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
@@ -15,11 +17,11 @@ import java.util.List;
 public class TurnManager implements Serializable {
     @Serial
     private static final long serialVersionUID = 10L;
-    private final List<Player> Players;
+    private List<Player> Players;
     private Boolean endTurn;
     private Player CurrentPlayer;
     private int PlayerNumber;
-    private final List<Integer> NumContestFailed;
+    private List<Integer> NumContestFailed;
     private Play CurrentPlay;
 
     /**
@@ -32,6 +34,16 @@ public class TurnManager implements Serializable {
         this.Players = players;
         this.NumContestFailed = new ArrayList<Integer>(Collections.nCopies(players.size(), 0));
         this.CurrentPlay = null;
+    }
+
+
+    public TurnManager(JSONObject json){
+        this.parseJSON(json);
+    }
+
+    private void parseJSON(JSONObject json){
+        this.Players = (List<Player>) json.getJSONObject("Players");
+        this.NumContestFailed = new ArrayList<Integer>(Collections.nCopies(this.Players.size(), 0));
     }
 
     @Serial
