@@ -22,6 +22,7 @@ import java.util.NoSuchElementException;
 public class ContestInteractor implements ContestInputBoundary {
     private final GameDataAccess gameDAO;
     private Game game;
+    private Player player;
 
     @Autowired
     public ContestInteractor(GameDataAccess gameDAO) {
@@ -54,15 +55,15 @@ public class ContestInteractor implements ContestInputBoundary {
         }
     }
 
-    private void failWithMessage(ContestInputData contestInputData, String message) {
-        Player player = game.getPlayer(contestInputData.getPlayerId());
+    private void fail() {
         TurnManager turnManager = game.getTurnManager();
         turnManager.ContestFailureUpdate(player.getId());
     }
 
     @Override
-    public Game execute(ContestInputData contestInputData) throws IOException, ClassNotFoundException {
+    public Game execute(ContestInputData contestInputData) throws IOException, ClassNotFoundException, ContestException {
         game = gameDAO.get(contestInputData.getGameId());
+        player = game.getPlayer(contestInputData.getPlayerId());
 
         try {
             List<String> words = game.getLastPlay().getWords();
@@ -77,12 +78,15 @@ public class ContestInteractor implements ContestInputBoundary {
                 Player contestedPlayer = lastPlay.getPlayer();
                 contestedPlayer.BeContested();
             } else {
-                failWithMessage(contestInputData, "All words in last move are valid.");
+                fail();
+                throw new ContestException("All words in last move are valid.");
             }
         } catch (NoSuchElementException e) {
-            failWithMessage(contestInputData, "No player has made any move.");
+            fail();
+            throw new ContestException("No player has made any move.");
         } catch (WordValidationException e) {
-            failWithMessage(contestInputData, e.getMessage());
+            fail();
+            throw new ContestException("Word validation failed.", e);
         }
         return game;
     }
