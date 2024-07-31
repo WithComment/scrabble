@@ -1,13 +1,16 @@
 package com.example.scrabble.data_access;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import com.example.scrabble.entity.Game;
 
 public interface GameDataAccess {
-    public Game create(Game game) throws FileNotFoundException, IOException;
-    public Game get(int gameId) throws FileNotFoundException, IOException, ClassNotFoundException;
-    public void update(Game game) throws FileNotFoundException, IOException;
-    public void delete(int gameId) throws FileNotFoundException, IOException;
+    public class GameDaoException extends RuntimeException {
+        public GameDaoException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
+    public Game create(Game game);
+    public Game get(int gameId);
+    public void update(Game game);
+    public void delete(int gameId);
 }

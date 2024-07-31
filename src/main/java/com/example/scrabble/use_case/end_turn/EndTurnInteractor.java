@@ -49,7 +49,7 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
     }
 
     @Override
-    public Game execute(GetEndTurnInputData getEndTurnInputData) throws IOException, ClassNotFoundException {
+    public Game execute(GetEndTurnInputData getEndTurnInputData) {
         Game game = gameDataAccess.get(getEndTurnInputData.getGameId());
         TurnManager turnManager = game.getTurnManager();
 

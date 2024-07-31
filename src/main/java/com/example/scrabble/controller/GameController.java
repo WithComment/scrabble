@@ -51,31 +51,31 @@ public class GameController {
   }
   
   @PostMapping("/create/")
-  public Game createGame(@RequestBody CreateGameInputData data) throws IOException, ClassNotFoundException {
+  public Game createGame(@RequestBody CreateGameInputData data) {
     log.info("Creating game with players:" + data.getPlayerNames());
     return createGameInteractor.execute(data);
   }
 
   @GetMapping("/{gameId}/")
-  public Game getGame(@PathVariable("gameId") int gameId) throws IOException, ClassNotFoundException {
+  public Game getGame(@PathVariable("gameId") int gameId) {
     log.info("Getting game with ID:" + gameId);
     return gameDao.get(gameId);
   }
 
   @PostMapping("/place_letter/")
-  public Game placeLetter(@RequestBody PlaceLetterInputData data) throws IOException, ClassNotFoundException {
+  public Game placeLetter(@RequestBody PlaceLetterInputData data) {
     log.info("Game ID: " + data.getGameId() + " Placing letter: " + data.getLetter() + " at position: " + data.getX() + "," + data.getY());
     return placeLetterInteractor.execute(data);
   }
 
   @PostMapping("/confirm_play/")
-  public Game confirmPlay(@RequestBody ConfirmPlayInputData data) throws IOException, ClassNotFoundException {
+  public Game confirmPlay(@RequestBody ConfirmPlayInputData data) {
     log.info("Game ID: " + data.getGameId() + " Confirming play");
     return confirmPlayInteractor.execute(data);
   }
 
   @PostMapping("/<end_turn>/")
-  public Game EndTurn(@RequestBody GetEndTurnInputData data) throws IOException, ClassNotFoundException {
+  public Game EndTurn(@RequestBody GetEndTurnInputData data) {
     // Add a logging message that contains enough information to identify the game, the use case, and the input data,
     log.info("Game ID: " + data.getGameId() + " Ending turn");
     return getEndTurnInteractor.execute(data);
