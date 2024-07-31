@@ -1,7 +1,5 @@
 package com.example.scrabble.use_case.confirm_play;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 

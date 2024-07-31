@@ -20,7 +20,6 @@ import java.util.List;
  */
 @Service
 public class EndTurnInteractor implements GetEndTurnInputBoundary {
-    private final GetEndTurnOutputBoundary presenter;
     private final GameDataAccess gameDataAccess;
 
     /**
@@ -29,22 +28,6 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
      */
     @Autowired
     public EndTurnInteractor( GameDataAccess gameDataAccess) {
-        this.presenter = new GetEndTurnOutputBoundary() {
-            @Override
-            public void prepareSuccessView(GetEndTurnOutputData data) {
-
-            }
-
-            @Override
-            public void prepareFailView(String error) {
-
-            }
-
-            @Override
-            public void prepareView(GetEndTurnOutputData outputData) {
-
-            }
-        };
         this.gameDataAccess = gameDataAccess;
     }
 

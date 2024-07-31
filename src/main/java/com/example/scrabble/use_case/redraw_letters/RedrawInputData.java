@@ -4,13 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RedrawInputData {
-    private final int gameId;
-    private final List<Character> characters;
+    private int gameId;
+    private List<Character> characters;
 
-    public RedrawInputData(){
-        this.gameId = 0;
-        this.characters = new ArrayList<>();
-    }
+    public RedrawInputData() {}
 
     public RedrawInputData(int gameId, List<Character> letters) {
         this.gameId = gameId;

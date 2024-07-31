@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -56,13 +55,13 @@ public class ContestInteractor implements ContestInputBoundary {
         }
     }
 
-    private void fail() throws IOException, FileNotFoundException {
+    private void fail() {
         TurnManager turnManager = game.getTurnManager();
         turnManager.ContestFailureUpdate(player.getId());
     }
 
     @Override
-    public Game execute(ContestInputData contestInputData) throws IOException, ClassNotFoundException, ContestException {
+    public Game execute(ContestInputData contestInputData) throws ContestException {
         game = gameDAO.get(contestInputData.getGameId());
         player = game.getPlayer(contestInputData.getPlayerId());
 

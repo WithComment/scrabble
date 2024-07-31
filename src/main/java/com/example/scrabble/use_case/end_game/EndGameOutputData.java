@@ -1,4 +1,4 @@
-package use_case.end_game;
+package com.example.scrabble.use_case.end_game;
 
 
 import java.util.List;

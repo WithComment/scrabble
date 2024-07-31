@@ -8,7 +8,6 @@ import com.example.scrabble.entity.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class RedrawInteractor implements RedrawInputBoundary{
     }
 
     @Override
-    public Game execute(RedrawInputData redrawInputData) throws IOException, ClassNotFoundException {
+    public Game execute(RedrawInputData redrawInputData) {
         Game game = gameDao.get(redrawInputData.getGameId());
         Player player = game.getCurrentPlayer();
         List<Letter> letters = getLetters(player.getInventory(), redrawInputData.getCharacters());

@@ -9,7 +9,6 @@ import com.example.scrabble.use_case.InvalidPlayException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +22,7 @@ public class EndGameInteractor implements EndGameInputBoundary{
     public EndGameInteractor(GameDataAccess gameDao) {this.gameDao = gameDao;}
 
     @Override
-    public Game execute(EndGameInputData endGameInputData) throws IOException, ClassNotFoundException, RuntimeException{
+    public Game execute(EndGameInputData endGameInputData) throws InvalidPlayException {
         Game game = gameDao.get(endGameInputData.getGameId());
         List<Player> players = game.getPlayers();
 
@@ -47,7 +46,7 @@ public class EndGameInteractor implements EndGameInputBoundary{
         }
 
         if(!onePlayerEmptied){
-            throw new InvalidPlayException("The game should have ended yet");
+            throw new InvalidPlayException("The game shouldn't have ended yet");
         }
 
         int highestScore = 0;

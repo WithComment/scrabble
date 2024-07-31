@@ -1,6 +1,6 @@
 package com.example.scrabble.use_case.contest;
 
-public class ContestException extends Exception{
+public class ContestException extends RuntimeException {
     private Exception cause;
 
     public ContestException(String message) {

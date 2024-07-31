@@ -3,7 +3,7 @@ package com.example.scrabble.use_case.contest;
 /**
  * Exception thrown when a word validation fails.
  */
-public class WordValidationException extends Exception {
+public class WordValidationException extends RuntimeException {
     private final Throwable cause;
 
     /**

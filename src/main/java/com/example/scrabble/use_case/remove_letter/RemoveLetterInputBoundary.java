@@ -1,5 +1,7 @@
 package com.example.scrabble.use_case.remove_letter;
 
+import com.example.scrabble.entity.Game;
+
 public interface RemoveLetterInputBoundary {
-    void execute(RemoveLetterInputData removeLetterInputData);
+    Game execute(RemoveLetterInputData removeLetterInputData);
 }
