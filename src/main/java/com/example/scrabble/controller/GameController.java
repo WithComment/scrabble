@@ -2,6 +2,9 @@ package com.example.scrabble.controller;
 
 import java.io.IOException;
 
+import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputBoundary;
+import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputData;
+import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInteractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,7 @@ public class GameController {
   private final PlaceLetterInputBoundary placeLetterInteractor;
   private final ConfirmPlayInputBoundary confirmPlayInteractor;
   private final GetEndTurnInputBoundary getEndTurnInteractor;
+  private final GetLeaderboardInputBoundary getLeaderboardInteractor;
   private static final Logger log = LoggerFactory.getLogger(GameController.class);
 
   @Autowired
@@ -41,13 +45,15 @@ public class GameController {
     CreateGameInputBoundary createGameInteractor, 
     PlaceLetterInputBoundary placeLetterInteractor,
     ConfirmPlayInputBoundary confirmPlayInteractor,
-    GetEndTurnInputBoundary getEndTurnInteractor
+    GetEndTurnInputBoundary getEndTurnInteractor,
+    GetLeaderboardInteractor getLeaderboardInteractor
   ) {
     this.gameDao = gameDao;
     this.createGameInteractor = createGameInteractor;
     this.placeLetterInteractor = placeLetterInteractor;
     this.confirmPlayInteractor = confirmPlayInteractor;
     this.getEndTurnInteractor = getEndTurnInteractor;
+    this.getLeaderboardInteractor = getLeaderboardInteractor;
   }
   
   @PostMapping("/create/")
@@ -79,5 +85,11 @@ public class GameController {
     // Add a logging message that contains enough information to identify the game, the use case, and the input data,
     log.info("Game ID: " + data.getGameId() + " Ending turn");
     return getEndTurnInteractor.execute(data);
+  }
+
+  @GetMapping("/leaderboard/")
+  public Game getLeaderboard(@RequestParam("gameId") int gameId, @RequestParam("players") List<Integer> players) {
+    log.info("Getting leaderboard for game ID: " + gameId);
+    return getLeaderboardInteractor.execute(new GetLeaderboardInputData(gameId, players));
   }
 }
