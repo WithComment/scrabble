@@ -22,8 +22,6 @@ public class Player implements Serializable {
 
     /**
      * Constructs a Player with a specified ID.
-     *
-     * @param id the ID of the player
      */
     public Player() {
         this.id = idCounter++;

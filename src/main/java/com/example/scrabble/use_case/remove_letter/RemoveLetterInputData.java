@@ -2,6 +2,7 @@ package com.example.scrabble.use_case.remove_letter;
 
 import com.example.scrabble.entity.Board;
 import com.example.scrabble.entity.Play;
+import com.example.scrabble.entity.Tile;
 
 public class RemoveLetterInputData {
     private final int x;
@@ -31,5 +32,9 @@ public class RemoveLetterInputData {
     }
     public int getY() {
         return y;
+    }
+
+    public Tile getSelectedTile() {
+        return this.board.getCell(this.x, this.y);
     }
 }

@@ -1,4 +1,4 @@
-package use_case.get_leaderboard;
+package com.example.scrabble.use_case.get_leaderboard;
 
 import java.util.List;
 
