@@ -1,6 +1,6 @@
 package use_case.get_winner;
 
-import entity.LeaderboardEntry;
+import com.example.scrabble.entity.LeaderboardEntry;
 
 import java.util.ArrayList;
 

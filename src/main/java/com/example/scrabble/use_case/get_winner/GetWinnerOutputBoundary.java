@@ -1,4 +1,4 @@
-package use_case.get_winner;
+package com.example.scrabble.use_case.get_winner;
 
 import use_case.get_leaderboard.GetLeaderboardOutputData;
 

@@ -1,10 +1,10 @@
-package use_case.place_letter;
+package com.example.scrabble.use_case.place_letter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import entity.Board;
-import entity.Letter;
+import com.example.scrabble.entity.Board;
+import com.example.scrabble.entity.Letter;
 
 public class PlaceLetterOutputData {
   private final Board board;

@@ -1,11 +1,11 @@
-package use_case.remove_letter;
+package com.example.scrabble.use_case.remove_letter;
 
-import entity.Board;
-import entity.Play;
-import entity.Player;
-import entity.Tile;
-import entity.Move;
-import entity.Letter;
+import com.example.scrabble.entity.Board;
+import com.example.scrabble.entity.Play;
+import com.example.scrabble.entity.Player;
+import com.example.scrabble.entity.Tile;
+import com.example.scrabble.entity.Move;
+import com.example.scrabble.entity.Letter;
 
 public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
     private Play play;

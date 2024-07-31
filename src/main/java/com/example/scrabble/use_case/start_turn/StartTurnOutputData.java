@@ -1,8 +1,8 @@
-package use_case.start_turn;
+package com.example.scrabble.use_case.start_turn;
 
-import entity.Play;
-import entity.Player;
-import entity.Letter;
+import com.example.scrabble.entity.Play;
+import com.example.scrabble.entity.Player;
+import com.example.scrabble.entity.Letter;
 
 import java.util.ArrayList;
 import java.util.List;

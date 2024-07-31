@@ -1,7 +1,7 @@
-package use_case.get_leaderboard;
+package com.example.scrabble.use_case.get_leaderboard;
 
-import entity.Game;
-import entity.Player;
+import com.example.scrabble.entity.Game;
+import com.example.scrabble.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;

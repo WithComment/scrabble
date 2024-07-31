@@ -1,7 +1,7 @@
-package use_case.remove_letter;
+package com.example.scrabble.use_case.remove_letter;
 
-import entity.Board;
-import entity.Play;
+import com.example.scrabble.entity.Board;
+import com.example.scrabble.entity.Play;
 
 public class RemoveLetterInputData {
     private final int x;

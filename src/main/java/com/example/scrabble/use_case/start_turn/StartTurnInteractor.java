@@ -1,6 +1,6 @@
-package use_case.start_turn;
+package com.example.scrabble.use_case.start_turn;
 
-import entity.TurnManager;
+import com.example.scrabble.entity.TurnManager;
 
 public class StartTurnInteractor implements StartTurnInputBoundary {
     private final StartTurnOutputBoundary outputBoundary;
