@@ -44,6 +44,12 @@ public class TurnManager implements Serializable {
     private void parseJSON(JSONObject json){
         this.Players = (List<Player>) json.getJSONObject("Players");
         this.NumContestFailed = new ArrayList<Integer>(Collections.nCopies(this.Players.size(), 0));
+        this.endTurn = false;
+        this.CurrentPlayer = Players.getFirst();
+        this.PlayerNumber = 0;
+        this.CurrentPlay = null;
+
+
     }
 
     @Serial
