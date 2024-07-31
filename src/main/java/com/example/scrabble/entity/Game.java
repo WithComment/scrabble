@@ -25,17 +25,20 @@ public class Game implements Serializable {
      * Constructs a new Game instance.
      * Initializes the game with a unique ID, a new board, empty player list, empty play history, and a new letter bag.
      */
-    public Game(List<Player> players) {
+    public Game() {
         this.id = nextId++;
         this.board = new Board();
         this.players = new ArrayList<Player>();
-        this.players.addAll(players);
         this.history = new ArrayList<>();
         this.letterBag = new LetterBag();
         this.turnManager = new TurnManager(this.players);
         for (Player player : players) {
             player.addLetter(letterBag.drawLetters(7));
         }
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players.addAll(players);
     }
 
     /**

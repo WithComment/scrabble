@@ -84,7 +84,6 @@ public class GameDao implements GameDataAccess {
             log.error("Failed to read game from file: ", e);
             return null;
         }
-        
     }
 
     /**
