@@ -1,5 +1,9 @@
-package use_case.contest;
+package com.example.scrabble.use_case.contest;
+
+import com.example.scrabble.entity.Game;
+
+import java.io.IOException;
 
 public interface ContestInputBoundary {
-    void contest(ContestInputData contestInputData);
+    Game execute(ContestInputData contestInputData) throws IOException, ClassNotFoundException;
 }

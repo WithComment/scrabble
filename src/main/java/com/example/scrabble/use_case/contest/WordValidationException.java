@@ -1,10 +1,10 @@
-package entity;
+package com.example.scrabble.use_case.contest;
 
 /**
  * Exception thrown when a word validation fails.
  */
 public class WordValidationException extends Exception {
-    private Throwable cause;
+    private final Throwable cause;
 
     /**
      * Constructs a new WordValidationException with the specified detail message and cause.

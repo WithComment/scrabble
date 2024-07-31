@@ -1,23 +1,21 @@
-package use_case.contest;
-
-import entity.Game;
-import entity.Player;
-import entity.TurnManager;
+package com.example.scrabble.use_case.contest;
 
 public class ContestInputData {
-    final private Game game;
-    final private Player player;
+    private int gameId;
+    private int playerId;
 
-    public ContestInputData(Game game, Player player) {
-        this.game = game;
-        this.player = player;
+    public ContestInputData() {}
+
+    public ContestInputData(int gameId, int playerId) {
+        this.gameId = gameId;
+        this.playerId = playerId;
     }
 
-    public Game getGame() {
-        return game;
+    public int getGameId() {
+        return gameId;
     }
 
-    public Player getPlayer() {
-        return player;
+    public int getPlayerId() {
+        return playerId;
     }
 }
