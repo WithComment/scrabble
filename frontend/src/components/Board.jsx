@@ -1,18 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styles from './Board.module.css';
 import './Board.css';
+import Tile from './Tile'
 
-function Board({ board }){
+function Board({ board, boardViewModel }){
+    let viewModel = boardViewModel;
+    async function handleClick(e, xCoord, yCoord){
+        if (e.type === "click"){
+            let input = {
+                type : 'lclick',
+                x : xCoord,
+                y : yCoord,
+            }
+            viewModel. sendInput(input)
+        } else if (e.type === "contextmenu"){
+            let input = {
+                type : 'rclick',
+                x : xCoord,
+                y : yCoord,
+            }
+            viewModel. sendInput(input)
+        }
+    }
+
     return (
         <div className={styles.board}>
-            {board.map((row, x) =>{
+            {board.map((row, y) =>{
                 return (
                 <div className={styles.row}>
-                    {row.map((tile, y) =>{
+                    {row.map((tile, x) =>{
                     return (
-                        <div className={styles.tile} id={`t${x}-${y}`} key={`${x}, ${y}`}>
-                            {tile}
-                        </div>
+                        <Tile id={`t${x}-${y}`} intitialContent={tile} x={x} y={y} handleClick={handleClick}/>
                         )
                     })}
                 </div>
