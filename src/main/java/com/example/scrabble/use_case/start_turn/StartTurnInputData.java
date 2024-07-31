@@ -3,13 +3,15 @@ package com.example.scrabble.use_case.start_turn;
 import com.example.scrabble.entity.TurnManager;
 
 public class StartTurnInputData {
-  private final TurnManager turnManager;
+  private int gameId;
 
-  public StartTurnInputData(TurnManager turnManager) {
-    this.turnManager = turnManager;
+  public StartTurnInputData() {}
+
+  public StartTurnInputData(int gameId) {
+    this.gameId = gameId;
   }
 
-  public TurnManager getTurnManager() {
-    return turnManager;
+  public int getGameId() {
+    return gameId;
   }
 }
