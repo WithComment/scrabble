@@ -1,5 +1,7 @@
 package com.example.scrabble.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +11,9 @@ import java.util.List;
  * A game consists of a board, a letter bag, a list of players, and a history of plays made during the game.
  * The game is responsible for managing the state of the game, including the board, players, and letter bag.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Game implements Serializable {
     // Serializable vars
-    private static final long serialVersionUID = 1L; // Unique version identifier for serialization
     private static int nextId = 0;
     private final int id; // Unique ID for the game instance
     private LetterBag letterBag; // Bag of letters available to draw from
@@ -40,7 +42,7 @@ public class Game implements Serializable {
             this.turnManager.updatePlayer(player);
         }
         for (Player player : players) {
-            player.addLetter(this.letterBag.drawLetters(7));
+            player.addLetter(letterBag.drawLetters(7));
         }
     }
 

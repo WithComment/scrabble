@@ -1,11 +1,9 @@
 package com.example.scrabble.data_access;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
@@ -58,6 +56,7 @@ public class GameDao implements GameDataAccess {
      */
     public Game create(Game game) throws FileNotFoundException, IOException, IllegalArgumentException {
         if (gameExists(game.getId())) {
+            update(game);
             return game;
         }
         writeGame(game);
@@ -77,8 +76,8 @@ public class GameDao implements GameDataAccess {
         if (!gameExists(gameId)) {
             throw new IllegalArgumentException("Game with the specified ID does not exist.");
         }
-        try (FileInputStream fileInputStream = new FileInputStream(makeFilePath(gameId));) {
-            Game game = objectMapper.readValue(fileInputStream, Game.class);
+        try (BufferedReader reader = new BufferedReader(new FileReader(makeFilePath(gameId)));) {
+            Game game = objectMapper.readValue(reader, Game.class);
             return game;
         } catch (Exception e) {
             log.error("Failed to read game from file: ", e);
