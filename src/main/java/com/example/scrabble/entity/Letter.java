@@ -17,6 +17,7 @@ public class Letter implements Serializable {
     private char letter;
     private int points;
 
+    public Letter(){}
     public Letter(
             char letter,
             int points

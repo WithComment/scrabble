@@ -1,6 +1,8 @@
 package com.example.scrabble.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,9 +20,9 @@ import java.util.Collections;
  * The {@code LetterBag} class represents a bag of letters used in a game.
  * It allows initializing the bag from a file, drawing letters, and adding letters back to the bag.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class LetterBag implements Serializable {
   private List<Letter> bag;
-  private static final long serialVersionUID = 5L;
 
   /**
    * Constructs a {@code LetterBag} and initializes it with letters from a specified file.
@@ -120,7 +122,7 @@ public class LetterBag implements Serializable {
    * @return the number of letters in the letter bag
    */
   public int getLength() {
-    return bag.size();
+    return this.bag.size();
   }
 
   // Custom serialization method

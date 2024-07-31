@@ -1,5 +1,7 @@
 package com.example.scrabble.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.io.Serializable;
  * Represents a cell on the board.
  * A tile has a word multiplier, a letter multiplier, a letter, and a boolean indicating whether the tile is confirmed.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Tile implements Serializable {
     private int wordMult;
     private int letterMult;
@@ -23,6 +26,10 @@ public class Tile implements Serializable {
      * @param letterMult The letter multiplier for the tile.
      * @param letter The letter placed on the tile.
      */
+
+    public Tile(){
+    }
+
     public Tile(int wordMult, int letterMult, Letter letter) {
         this.wordMult = wordMult;
         this.letterMult = letterMult;

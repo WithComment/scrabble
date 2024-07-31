@@ -1,5 +1,7 @@
 class ViewModel{
-    constructor(board, hand, leaderboard, setBoard, setHand, setLeaderboard){
+    constructor(gameId, board, hand, leaderboard, setBoard, setHand, setLeaderboard){
+        this.gameId = gameId;
+        this.baseUrl = 'http://localhost:8080';
         this.board = board;
         this.hand = hand;
         this.leaderboard = leaderboard;
@@ -27,6 +29,14 @@ class ViewModel{
     }
     getLeaderboard(){
         return this.leaderboard;
+    }
+    async sendInput(input){
+        let response = await fetch(this.baseUrl, {
+            method: 'POST',
+            inputType : input.type,
+            x: input.x,
+            y: input.y,
+        })
     }
 }
 

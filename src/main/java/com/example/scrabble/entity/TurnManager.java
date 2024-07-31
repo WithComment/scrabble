@@ -1,6 +1,7 @@
 package com.example.scrabble.entity;
 
-import org.json.JSONObject;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.IOException;
 import java.io.Serial;
@@ -14,9 +15,8 @@ import java.util.List;
  * Keeps track of the current player, manages the end of turns,
  * and handles the contesting process.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TurnManager implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 10L;
     private List<Player> Players;
     private Boolean endTurn;
     private Player CurrentPlayer;
@@ -28,12 +28,15 @@ public class TurnManager implements Serializable {
      * Constructs a TurnManager with an initial state.
      * Initializes the endTurn flag, current player, players list, and contest failure counts.
      */
+    public TurnManager(){}
     public TurnManager(List<Player> players) {
         this.endTurn = false;
-        this.CurrentPlayer = players.getFirst();
         this.Players = players;
         this.NumContestFailed = new ArrayList<Integer>(Collections.nCopies(players.size(), 0));
         this.CurrentPlay = null;
+        if(!players.isEmpty()){
+            this.CurrentPlayer = players.get(0);
+        }
     }
 
 
@@ -146,6 +149,9 @@ public class TurnManager implements Serializable {
      * @param player the player to be added
      */
     public void updatePlayer(Player player) {
+        if(Players.isEmpty()){
+            this.CurrentPlayer = player;
+        }
         Players.add(player);
     }
 
