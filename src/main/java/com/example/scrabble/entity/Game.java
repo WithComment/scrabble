@@ -32,15 +32,15 @@ public class Game implements Serializable {
         this.history = new ArrayList<>();
         this.letterBag = new LetterBag();
         this.turnManager = new TurnManager(new ArrayList<>());
-        for (Player player : players) {
-            player.addLetter(letterBag.drawLetters(7));
-        }
     }
 
     public void setPlayers(List<Player> players) {
         this.players.addAll(players);
         for(Player player : players){
             this.turnManager.updatePlayer(player);
+        }
+        for (Player player : players) {
+            player.addLetter(this.letterBag.drawLetters(7));
         }
     }
 
