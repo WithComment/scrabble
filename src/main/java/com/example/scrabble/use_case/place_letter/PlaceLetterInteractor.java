@@ -40,7 +40,7 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
   }
 
   @Override
-  public Game execute(PlaceLetterInputData data) throws IOException, ClassNotFoundException {
+  public Game execute(PlaceLetterInputData data) {
     int x = data.getX();
     int y = data.getY();
 

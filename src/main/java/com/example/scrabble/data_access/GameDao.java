@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.scrabble.entity.Game;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 
 /**
  * Represents a data access object for the Game entity.
@@ -37,13 +38,17 @@ public class GameDao implements GameDataAccess {
         return directoryPath + "/" + gameId + ".json";
     }
 
-    private void writeGame(Game game) throws FileNotFoundException, IOException {
-        if (!gameExists(game.getId())) {
-            new File(makeFilePath(game.getId())).createNewFile();
+    private void writeGame(Game game) {
+        try {
+            if (!gameExists(game.getId())) {
+                new File(makeFilePath(game.getId())).createNewFile();
+            }
+            FileOutputStream fileOutputStream = new FileOutputStream(makeFilePath(game.getId()));
+            objectMapper.writeValue(fileOutputStream, game);
+            fileOutputStream.close();
+        } catch (IOException e) {
+            throw new GameDaoException("Error writing game to file", e);
         }
-        FileOutputStream fileOutputStream = new FileOutputStream(makeFilePath(game.getId()));
-        objectMapper.writeValue(fileOutputStream, game);
-        fileOutputStream.close();
     }
 
     private boolean gameExists(int gameId) {
@@ -56,7 +61,7 @@ public class GameDao implements GameDataAccess {
      * @param game the Game object to be saved.
      * @return the created Game object.
      */
-    public Game create(Game game) throws FileNotFoundException, IOException, IllegalArgumentException {
+    public Game create(Game game) {
         if (gameExists(game.getId())) {
             return game;
         }
@@ -72,7 +77,7 @@ public class GameDao implements GameDataAccess {
      */
     @Override
     @Cacheable(value = "game", key = "#gameId")
-    public Game get(int gameId) throws FileNotFoundException, IOException, ClassNotFoundException {
+    public Game get(int gameId) {
         log.info("Loading game " + gameId);
         if (!gameExists(gameId)) {
             throw new IllegalArgumentException("Game with the specified ID does not exist.");
@@ -81,8 +86,7 @@ public class GameDao implements GameDataAccess {
             Game game = objectMapper.readValue(fileInputStream, Game.class);
             return game;
         } catch (Exception e) {
-            log.error("Failed to read game from file: ", e);
-            return null;
+            throw new GameDaoException("Error loading game from file", e);
         }
     }
 
@@ -90,7 +94,7 @@ public class GameDao implements GameDataAccess {
      * Update the Game in a file based on gameId.
      * @param game the Game object to be updated.
      */
-    public void update(Game game) throws FileNotFoundException, IOException {
+    public void update(Game game) {
         writeGame(game);
     }
 
@@ -98,7 +102,7 @@ public class GameDao implements GameDataAccess {
      * Delete the Game in a file based on gameId.
      * @param gameId the ID of the Game to be deleted.
      */
-    public void delete(int gameId) throws FileNotFoundException, IOException {
+    public void delete(int gameId) {
         new File(makeFilePath(gameId)).delete();
     }
 }
