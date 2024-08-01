@@ -4,9 +4,11 @@ package com.example.scrabble.entity;
  * Represents a move in a Player's turn.
  */
 public class Move {
-  private final int x;
-  private final int y;
-  private final Letter letter;
+  private int x;
+  private int y;
+  private Letter letter;
+
+  public Move() {}
 
   /**
    * Constructs a new Move with the specified coordinates and letter.

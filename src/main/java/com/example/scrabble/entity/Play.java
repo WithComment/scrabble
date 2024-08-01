@@ -3,13 +3,19 @@ package com.example.scrabble.entity;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * Represents a Player's turn.
  */
 public class Play {
-  private final Player player;
-  private final List<Move> moves;
+
+  private Player player;
+  private List<Move> moves;
   private List<String> words;
+
+  public Play() {}
 
   /**
    * Constructs a new Play for the specified player.
@@ -81,5 +87,14 @@ public class Play {
    */
   public List<String> getWords() {
     return words;
+  }
+
+  @Override
+  public String toString() {
+    try {
+      return new ObjectMapper().writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

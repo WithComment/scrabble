@@ -17,10 +17,10 @@ public class Letter implements Serializable {
     private char letter;
     private int points;
 
-    public Letter(){}
+    public Letter() {}
     public Letter(
-            char letter,
-            int points
+        char letter,
+        int points
     ) {
         this.letter = letter;
         this.points = points;

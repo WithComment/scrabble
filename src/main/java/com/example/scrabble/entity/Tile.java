@@ -98,15 +98,6 @@ public class Tile implements Serializable {
     }
 
     /**
-     * Sets the letter on the tile and confirms the tile.
-     * @param letter The letter to place on the tile.
-     */
-    public void setAndConfirm(Letter letter) {
-        this.letter = letter;
-        isConfirmed = true;
-    }
-
-    /**
      * Checks if the tile is empty.
      * @return True if the tile is empty, false otherwise.
      */
@@ -128,6 +119,19 @@ public class Tile implements Serializable {
      */
     public String toString() {
         return letter == null ? " " : letter.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tile tile = (Tile) o;
+        return (
+            wordMult == tile.wordMult 
+            && letterMult == tile.letterMult 
+            && isConfirmed == tile.isConfirmed 
+            && letter.equals(tile.letter)
+        );
     }
 
     private void writeObject(ObjectOutputStream out) throws IOException {

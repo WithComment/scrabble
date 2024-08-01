@@ -154,17 +154,7 @@ public class Board implements Serializable {
         this.board[y][x].confirm();
         return true;
     }
-
-    /**
-     * Removes the letter at the specified position on the board.
-     *
-     * @param x
-     * @param y
-     */
-    public void setAndConfirm(int x, int y, Letter letter) {
-        this.board[y][x].setAndConfirm(letter);
-    }
-
+    
     /**
      * Removes the letter at the specified position on the board.
      *
