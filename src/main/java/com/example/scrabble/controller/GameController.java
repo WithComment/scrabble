@@ -1,5 +1,7 @@
 package com.example.scrabble.controller;
 
+import com.example.scrabble.use_case.contest.ContestInputData;
+import com.example.scrabble.use_case.contest.ContestInteractor;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputBoundary;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputData;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInteractor;
@@ -36,6 +38,7 @@ public class GameController {
   private final GetEndTurnInputBoundary getEndTurnInteractor;
   private final GetLeaderboardInputBoundary getLeaderboardInteractor;
   private static final Logger log = LoggerFactory.getLogger(GameController.class);
+  private final ContestInteractor contestInteractor;
 
   @Autowired
   public GameController(
@@ -44,7 +47,8 @@ public class GameController {
     PlaceLetterInputBoundary placeLetterInteractor,
     ConfirmPlayInputBoundary confirmPlayInteractor,
     GetEndTurnInputBoundary getEndTurnInteractor,
-    GetLeaderboardInteractor getLeaderboardInteractor
+    GetLeaderboardInteractor getLeaderboardInteractor,
+    ContestInteractor contestInteractor
   ) {
     this.gameDao = gameDao;
     this.createGameInteractor = createGameInteractor;
@@ -52,6 +56,7 @@ public class GameController {
     this.confirmPlayInteractor = confirmPlayInteractor;
     this.getEndTurnInteractor = getEndTurnInteractor;
     this.getLeaderboardInteractor = getLeaderboardInteractor;
+    this.contestInteractor = contestInteractor;
   }
   
   @PostMapping("/create/")
@@ -90,5 +95,11 @@ public class GameController {
     int gameId = data.getGameId();
     log.info("Getting leaderboard for game ID: " + gameId);
     return getLeaderboardInteractor.execute(new GetLeaderboardInputData(gameId, data.getPlayers()));
+  }
+
+  @PostMapping("/contest/")
+  public Game contest(@RequestBody ContestInputData data) {
+    log.info("Player with ID:" + data.getPlayerId() + "is contesting game with ID: " + data.getGameId());
+    return contestInteractor.execute(data);
   }
 }
