@@ -18,10 +18,10 @@ public class StartTurnInteractor implements StartTurnInputBoundary {
     }
 
     @Override
-    public Game execute(StartTurnInputData data)throws IOException, ClassNotFoundException {
+    public StartTurnOutputData execute(StartTurnInputData data)throws IOException, ClassNotFoundException {
         Game game = gameDAO.get(data.getGameId());
         TurnManager turnManager = game.getTurnManager();
         turnManager.startTurn();
-        return game;
+        return new StartTurnOutputData(turnManager.getCurrentPlayer(), turnManager.getCurrentPlay());
     }
 }
