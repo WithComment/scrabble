@@ -106,7 +106,7 @@ public class TurnManager implements Serializable {
      *
      * @param PlayerNumber the number of the player whose contest failure count is being updated
      */
-    public void ContestFailureUpdate(int PlayerNumber) {
+    public void contestFailureUpdate(int PlayerNumber) {
         int CurrentFailure = NumContestFailed.get(PlayerNumber);
         NumContestFailed.set(PlayerNumber, CurrentFailure + 1);
         Player currentPlayer = getCurrentPlayer();
@@ -127,7 +127,7 @@ public class TurnManager implements Serializable {
      * Returns the cause of this exception.
      * @return The cause of this exception.
      */
-    public List<Player> GetPlayers() {
+    public List<Player> getPlayers() {
         return this.Players;
     }
 

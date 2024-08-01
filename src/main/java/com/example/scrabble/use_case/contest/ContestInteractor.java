@@ -57,7 +57,7 @@ public class ContestInteractor implements ContestInputBoundary {
 
     private void fail() {
         TurnManager turnManager = game.getTurnManager();
-        turnManager.ContestFailureUpdate(player.getId());
+        turnManager.contestFailureUpdate(player.getId());
     }
 
     @Override
