@@ -78,7 +78,7 @@ public class GameController {
     return confirmPlayInteractor.execute(data);
   }
 
-  @PostMapping("/<end_turn>/")
+  @PostMapping("/end_turn/")
   public Game EndTurn(@RequestBody GetEndTurnInputData data) {
     // Add a logging message that contains enough information to identify the game, the use case, and the input data,
     log.info("Game ID: " + data.getGameId() + " Ending turn");
