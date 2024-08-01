@@ -19,12 +19,12 @@ import org.json.JSONObject;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TurnManager implements Serializable {
-    private List<Player> Players;
+    private List<Player> players;
     private Boolean endTurn;
-    private Player CurrentPlayer;
-    private int PlayerNumber;
-    private List<Integer> NumContestFailed;
-    private Play CurrentPlay;
+    private Player currentPlayer;
+    private int playerNumber;
+    private List<Integer> numContestFailed;
+    private Play currentPlay;
 
     /**
      * Constructs a TurnManager with an initial state.
@@ -33,11 +33,11 @@ public class TurnManager implements Serializable {
     public TurnManager(){}
     public TurnManager(List<Player> players) {
         this.endTurn = false;
-        this.Players = players;
-        this.NumContestFailed = new ArrayList<Integer>(Collections.nCopies(players.size(), 0));
-        this.CurrentPlay = null;
+        this.players = players;
+        this.numContestFailed = new ArrayList<>(Collections.nCopies(players.size(), 0));
+        this.currentPlay = null;
         if(!players.isEmpty()){
-            this.CurrentPlayer = players.get(0);
+            this.currentPlayer = players.getFirst();
         }
     }
 
@@ -47,14 +47,12 @@ public class TurnManager implements Serializable {
     }
 
     private void parseJSON(JSONObject json){
-        this.Players = (List<Player>) json.getJSONObject("Players");
-        this.NumContestFailed = new ArrayList<Integer>(Collections.nCopies(this.Players.size(), 0));
+        this.players = (List<Player>) json.getJSONObject("Players");
+        this.numContestFailed = new ArrayList<>(Collections.nCopies(this.players.size(), 0));
         this.endTurn = false;
-        this.CurrentPlayer = Players.getFirst();
-        this.PlayerNumber = 0;
-        this.CurrentPlay = null;
-
-
+        this.currentPlayer = players.getFirst();
+        this.playerNumber = 0;
+        this.currentPlay = null;
     }
 
     @Serial
@@ -73,16 +71,15 @@ public class TurnManager implements Serializable {
      * Ends the current turn by setting the endTurn flag to true.
      */
     public void endTurn() {
-        this.CurrentPlayer.resetTempScore();
 
-        while (NumContestFailed.get((PlayerNumber + 1) % Players.size()) > 0) {
-            int NumContestFailedOfNextPlayer = NumContestFailed.get((PlayerNumber + 1) % Players.size());
-            NumContestFailed.set((PlayerNumber + 1) % Players.size(), NumContestFailedOfNextPlayer - 1);
-            PlayerNumber = (PlayerNumber + 1) % Players.size();
+        while (numContestFailed.get((playerNumber + 1) % players.size()) > 0) {
+            int NumContestFailedOfNextPlayer = numContestFailed.get((playerNumber + 1) % players.size());
+            numContestFailed.set((playerNumber + 1) % players.size(), NumContestFailedOfNextPlayer - 1);
+            playerNumber = (playerNumber + 1) % players.size();
         }
-        PlayerNumber = (PlayerNumber + 1) % Players.size();
+        playerNumber = (playerNumber + 1) % players.size();
         // Notify the front-end or other players that the turn has ended and it's the next player's turn
-        CurrentPlayer = Players.get(PlayerNumber);
+        currentPlayer = players.get(playerNumber);
 //        System.out.println("It's now player " + PlayerNumber + "'s turn.");
 //        System.out.println("It's now player " + getCurrentPlayer().getId() + "'s turn.");
 
@@ -96,7 +93,8 @@ public class TurnManager implements Serializable {
      */
 
     public void startTurn(){
-        CurrentPlay = new Play(CurrentPlayer);
+        currentPlay = new Play(currentPlayer);
+        System.out.println(currentPlay);
         this.endTurn = false;
     }
 
@@ -108,8 +106,8 @@ public class TurnManager implements Serializable {
      * @param PlayerNumber the number of the player whose contest failure count is being updated
      */
     public void contestFailureUpdate(int PlayerNumber) {
-        int CurrentFailure = NumContestFailed.get(PlayerNumber);
-        NumContestFailed.set(PlayerNumber, CurrentFailure + 1);
+        int CurrentFailure = numContestFailed.get(PlayerNumber);
+        numContestFailed.set(PlayerNumber, CurrentFailure + 1);
         Player currentPlayer = getCurrentPlayer();
         currentPlayer.BeContested();
     }
@@ -120,8 +118,8 @@ public class TurnManager implements Serializable {
      * @return the current player
      */
     public Player getCurrentPlayer() {
-        CurrentPlayer = Players.get(PlayerNumber);
-        return CurrentPlayer;
+        currentPlayer = players.get(playerNumber);
+        return currentPlayer;
     }
 
     /**
@@ -129,7 +127,7 @@ public class TurnManager implements Serializable {
      * @return The cause of this exception.
      */
     public List<Player> getPlayers() {
-        return this.Players;
+        return this.players;
     }
 
      /**
@@ -140,9 +138,9 @@ public class TurnManager implements Serializable {
      */
     public void dealContest(boolean ContestSucceed) {
         if (ContestSucceed){
-            NumContestFailed.set((PlayerNumber), NumContestFailed.get((PlayerNumber)));
+            numContestFailed.set((playerNumber), numContestFailed.get((playerNumber)));
         }
-        this.CurrentPlayer.confirmTempScore();
+        this.currentPlayer.confirmTempScore();
 //        System.out.println("Player " + this.CurrentPlayer.getId() + " contest result: " + (ContestSucceed ? "Valid" : "Invalid"));
     }
 
@@ -152,10 +150,11 @@ public class TurnManager implements Serializable {
      * @param player the player to be added
      */
     public void updatePlayer(Player player) {
-        if(Players.isEmpty()){
-            this.CurrentPlayer = player;
+        if(players.isEmpty()){
+            this.currentPlayer = player;
         }
-        Players.add(player);
+        players.add(player);
+        numContestFailed.add(0);
     }
 
     /**
@@ -174,7 +173,7 @@ public class TurnManager implements Serializable {
      * @return the number of contest failures for the player
      */
     public int getPlayersNumContestFailed(int PlayerNumber) {
-        return NumContestFailed.get(PlayerNumber);
+        return numContestFailed.get(PlayerNumber);
     }
 
     /**
@@ -183,7 +182,7 @@ public class TurnManager implements Serializable {
      * @return the number of the current player
      */
     public int getCurrentPlayerNum() {
-        return PlayerNumber;
+        return playerNumber;
     }
 
     /**
@@ -192,11 +191,7 @@ public class TurnManager implements Serializable {
      * @return the current play
      */
     public Play getCurrentPlay() {
-        return CurrentPlay;
-    }
-
-    public void addPlayer(Player player) {
-        Players.add(player);
+        return currentPlay;
     }
 }
 
