@@ -48,6 +48,7 @@ public class GetLeaderboardInteractor implements GetLeaderboardInputBoundary {
         }
         Collections.sort(leaderboard, Collections.reverseOrder());
         game.setLeaderboard(leaderboard);
+        gameDao.update(game);
         return new GetLeaderboardOutputData(leaderboard);
     }
 }
