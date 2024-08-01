@@ -61,13 +61,13 @@ public class ContestInteractor implements ContestInputBoundary {
     }
 
     @Override
-    public Game execute(ContestInputData contestInputData) throws ContestException {
+    public ContestOutputData execute(ContestInputData contestInputData) throws ContestException {
         game = gameDAO.get(contestInputData.getGameId());
         player = game.getPlayer(contestInputData.getPlayerId());
 
+        List<String> words = game.getLastPlay().getWords();
+        List<String> invalidWords = new LinkedList<>();
         try {
-            List<String> words = game.getLastPlay().getWords();
-            List<String> invalidWords = new LinkedList<>();
             for (String word : words) {
                 if (!wordIsValid(word)) {
                     invalidWords.add(word);
@@ -91,6 +91,6 @@ public class ContestInteractor implements ContestInputBoundary {
         finally {
             gameDAO.update(game);
         }
-        return game;
+        return new ContestOutputData(invalidWords);
     }
 }

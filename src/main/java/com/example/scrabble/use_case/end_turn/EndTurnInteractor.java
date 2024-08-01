@@ -31,7 +31,7 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
     }
 
     @Override
-    public Game execute(GetEndTurnInputData getEndTurnInputData) {
+    public GetEndTurnOutputData execute(GetEndTurnInputData getEndTurnInputData) {
         Game game = gameDataAccess.get(getEndTurnInputData.getGameId());
         TurnManager turnManager = game.getTurnManager();
 
@@ -64,7 +64,7 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
         }
 
         gameDataAccess.update(game);
-        return game;
+        return new GetEndTurnOutputData(game.getId(), getEndTurnInputData.isContestSucceed(), getEndTurnInputData.isContest());
     }
 }
 
