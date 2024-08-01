@@ -14,6 +14,7 @@ public class Play {
   private Player player;
   private List<Move> moves;
   private List<String> words;
+  private boolean failedContest;
 
   public Play() {}
 
@@ -24,6 +25,7 @@ public class Play {
   public Play(Player player) {
     this.player = player;
     this.moves = new LinkedList<Move>();
+    this.failedContest = false;
   }
 
   /**
@@ -38,7 +40,7 @@ public class Play {
    * Undoes the last move made in the play.
    * @return The move that was undone.
    */
-  public Move undoMove() {
+  public Move removeMove() {
     return moves.removeLast();
   }
 
@@ -87,6 +89,14 @@ public class Play {
    */
   public List<String> getWords() {
     return words;
+  }
+
+  public void setFailedContest(boolean failedContest) {
+    this.failedContest = failedContest;
+  }
+
+  public boolean getFailedContest() {
+    return failedContest;
   }
 
   @Override
