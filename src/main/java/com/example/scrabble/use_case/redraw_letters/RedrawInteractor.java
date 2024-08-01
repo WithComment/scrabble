@@ -33,18 +33,20 @@ public class RedrawInteractor implements RedrawInputBoundary{
     }
 
     @Override
-    public Game execute(RedrawInputData redrawInputData) {
+    public RedrawOutputData execute(RedrawInputData redrawInputData) {
         Game game = gameDao.get(redrawInputData.getGameId());
         Player player = game.getCurrentPlayer();
         List<Letter> letters = getLetters(player.getInventory(), redrawInputData.getCharacters());
         LetterBag letterBag = game.getLetterBag();
         boolean drawSuccessful = false;
 
+        List<Letter> newLetters = new ArrayList<>();
+
         if(letterBag.getLength() > 6) {
             int numToRedraw = letters.size();
             letterBag.addLetters(letters);
             player.removeLetter((ArrayList<Letter>) ((ArrayList<Letter>)letters).clone());
-            List<Letter> newLetters = letterBag.drawLetters(numToRedraw);
+            newLetters = letterBag.drawLetters(numToRedraw);
             player.addLetter(newLetters);
             drawSuccessful = true;
         }
@@ -57,6 +59,6 @@ public class RedrawInteractor implements RedrawInputBoundary{
             playerPresenter.prepareFailView("There are less than 7 letters in the bag");
         }
          */
-        return game;
+        return new RedrawOutputData(drawSuccessful, newLetters);
     }
 }
