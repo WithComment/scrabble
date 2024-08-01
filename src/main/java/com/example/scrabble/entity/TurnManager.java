@@ -73,6 +73,7 @@ public class TurnManager implements Serializable {
      * Ends the current turn by setting the endTurn flag to true.
      */
     public void endTurn() {
+        this.CurrentPlayer.resetTempScore();
 
         while (NumContestFailed.get((PlayerNumber + 1) % Players.size()) > 0) {
             int NumContestFailedOfNextPlayer = NumContestFailed.get((PlayerNumber + 1) % Players.size());
@@ -192,6 +193,10 @@ public class TurnManager implements Serializable {
      */
     public Play getCurrentPlay() {
         return CurrentPlay;
+    }
+
+    public void addPlayer(Player player) {
+        Players.add(player);
     }
 }
 
