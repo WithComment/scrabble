@@ -42,7 +42,7 @@ class PlayTest {
     play.addMove(move1);
     play.addMove(move2);
 
-    Move undoneMove = play.undoMove();
+    Move undoneMove = play.removeMove();
     assertEquals(move2, undoneMove);
     assertEquals(1, play.getMoves().size());
     assertEquals(move1, play.getMoves().get(0));

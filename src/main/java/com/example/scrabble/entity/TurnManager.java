@@ -105,6 +105,7 @@ public class TurnManager implements Serializable {
         numContestFailed.set(PlayerNumber, CurrentFailure + 1);
         Player currentPlayer = getCurrentPlayer();
         currentPlayer.BeContested();
+        currentPlay.setFailedContest(true);
     }
 
     /**
