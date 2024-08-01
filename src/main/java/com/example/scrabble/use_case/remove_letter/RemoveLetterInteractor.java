@@ -22,7 +22,7 @@ public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
         this.gameDao = gameDao;
     }
 
-    public Game execute(RemoveLetterInputData data) {
+    public RemoveLetterOutputData execute(RemoveLetterInputData data) {
         Game game = gameDao.get(data.getGameId());
         Play play = game.getCurrentPlay();
         Player player = play.getPlayer();
@@ -46,7 +46,7 @@ public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
             player.addLetter(selectedTile.getLetter());
             selectedTile.removeLetter();
             gameDao.update(game);
-            return game;
+            return new RemoveLetterOutputData(true, game.getBoard(), player.getInventory());
         }
     }
 }
