@@ -28,21 +28,38 @@ class ConfirmPlayInteractorTest {
     interactor = new ConfirmPlayInteractor(gameDao);
   }
 
-  @Test
-  void testValidFirstPlay() {
-    
+  private Game makeGame() {
+    Game game = new Game();
+    game.addPlayer();
+    game.addPlayer();
+    game.getTurnManager().startTurn();
+    return game;
+  }
+
+  private void addMoves(Play play, List<Move> moves) {
+    for (Move move : moves) {
+      play.addMove(move);
+    }
   }
 
   @Test
-  void testInvalidFirstPlayNotCoveredCenter() {
-    Game game = mockGame(true);
-    when(gameDao.get(anyString())).thenReturn(game);
+  void testInvalidFirstPlay() {
+    Game game = makeGame();
+    when(gameDao.get(anyInt())).thenReturn(game);
+
+    List<Move> moves = List.of(new Moves());
+  }
+
+  @Test
+  void testValidFirstPlay() {
+    Game game = makeGame();
+    when(gameDao.get(anyInt())).thenReturn(game);
 
     List<Move> moves = List.of(new Move(0, 0, new Letter('A', 1)));
     game.getCurrentPlay().setMoves(moves);
 
     InvalidPlayException exception = assertThrows(InvalidPlayException.class,
-        () -> interactor.execute(new ConfirmPlayInputData("game1")));
+        () -> interactor.execute(new ConfirmPlayInputData(1)));
     assertEquals(ConfirmPlayInteractor.CENTER_MSG, exception.getMessage());
   }
 
@@ -89,18 +106,5 @@ class ConfirmPlayInteractorTest {
     InvalidPlayException exception = assertThrows(InvalidPlayException.class,
         () -> interactor.execute(new ConfirmPlayInputData("game1")));
     assertEquals(ConfirmPlayInteractor.CONNECTED_MSG, exception.getMessage());
-  }
-
-  private Game mockGame(boolean isFirstPlay) {
-    Game game = mock(Game.class);
-    Board board = mock(Board.class);
-    Play play = mock(Play.class);
-    Player player = mock(Player.class);
-
-    when(game.getBoard()).thenReturn(board);
-    when(game.getCurrentPlay()).thenReturn(play);
-    when(game.getCurrentPlayer()).thenReturn(player);
-
-    return game;
   }
 }

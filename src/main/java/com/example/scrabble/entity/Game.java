@@ -243,6 +243,7 @@ public class Game implements Serializable {
         for (Player player : players) {
             player.addLetter(letterBag.drawLetters(7));
         }
+        turnManager.startTurn();
     }
 
     /**
