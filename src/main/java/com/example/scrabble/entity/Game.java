@@ -17,7 +17,6 @@ public class Game implements Serializable {
     private static int nextId = 0;
     private final int id; // Unique ID for the game instance
     private LetterBag letterBag; // Bag of letters available to draw from
-    private int nextPlayerId = 0; // Counter to assign unique IDs to players within this game
     private Board board; // The game board
     private List<Player> players; // List of players in the game
     private List<Play> history; // History of plays made during the game
@@ -37,10 +36,24 @@ public class Game implements Serializable {
         this.turnManager = new TurnManager(new ArrayList<>());
     }
 
+    public Game(int numOfPlayers) {
+        this();
+        for (int i = 0; i < numOfPlayers; i++) {
+            players.add(new Player("Player " + (i + 1)));
+        }
+    }
+
+    public Game(List<String> playerNames) {
+        this();
+        for (String playerName : playerNames) {
+            players.add(new Player(playerName));
+        }
+    }
+
     public void setPlayers(List<Player> players) {
         this.players.addAll(players);
         for(Player player : players){
-            this.turnManager.updatePlayer(player);
+            this.turnManager.addPlayer(player);
         }
         for (Player player : players) {
             player.addLetter(letterBag.drawLetters(7));
@@ -209,7 +222,7 @@ public class Game implements Serializable {
      */
     public void SetPlayerToTurnManager(TurnManager turnManager) {
         for (Player player : players) {
-            this.turnManager.updatePlayer(player);
+            this.turnManager.addPlayer(player);
         }
     }
 

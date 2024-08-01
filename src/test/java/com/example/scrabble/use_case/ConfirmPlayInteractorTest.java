@@ -17,6 +17,9 @@ import com.example.scrabble.use_case.confirm_play.ConfirmPlayInteractor;
 
 class ConfirmPlayInteractorTest {
 
+  private static final Letter A = new Letter('A', 1);
+  private static final Letter B = new Letter('B', 2);
+
   @Mock
   private GameDataAccess gameDao;
 
@@ -47,7 +50,7 @@ class ConfirmPlayInteractorTest {
     Game game = makeGame();
     when(gameDao.get(anyInt())).thenReturn(game);
 
-    List<Move> moves = List.of(new Moves());
+    List<Move> moves = List.of(new Move(7, 7, A));
   }
 
   @Test

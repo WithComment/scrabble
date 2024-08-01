@@ -36,7 +36,7 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
         TurnManager turnManager = game.getTurnManager();
 
         for (Player player : game.getPlayers()) {
-            turnManager.updatePlayer(player);
+            turnManager.addPlayer(player);
         }
 
         if (turnManager.isEndTurn()) {
