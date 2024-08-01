@@ -2,9 +2,12 @@ package com.example.scrabble.controller;
 
 import com.example.scrabble.use_case.contest.ContestInputData;
 import com.example.scrabble.use_case.contest.ContestInteractor;
+import com.example.scrabble.use_case.contest.ContestOutputData;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputBoundary;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputData;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInteractor;
+import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardOutputData;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +22,14 @@ import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInputBoundary;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInputData;
+import com.example.scrabble.use_case.confirm_play.ConfirmPlayOutputData;
 import com.example.scrabble.use_case.create_game.CreateGameInputBoundary;
 import com.example.scrabble.use_case.create_game.CreateGameInputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputBoundary;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputData;
+import com.example.scrabble.use_case.place_letter.PlaceLetterOutputData;
 import com.example.scrabble.use_case.end_turn.GetEndTurnInputData;
+import com.example.scrabble.use_case.end_turn.GetEndTurnOutputData;
 import com.example.scrabble.use_case.end_turn.GetEndTurnInputBoundary;
 
 
@@ -72,33 +78,33 @@ public class GameController {
   }
 
   @PostMapping("/place_letter/")
-  public Game placeLetter(@RequestBody PlaceLetterInputData data) {
+  public PlaceLetterOutputData placeLetter(@RequestBody PlaceLetterInputData data) {
     log.info("Game ID: " + data.getGameId() + " Placing letter: " + data.getLetter() + " at position: " + data.getX() + "," + data.getY());
     return placeLetterInteractor.execute(data);
   }
 
   @PostMapping("/confirm_play/")
-  public Game confirmPlay(@RequestBody ConfirmPlayInputData data) {
+  public ConfirmPlayOutputData confirmPlay(@RequestBody ConfirmPlayInputData data) {
     log.info("Game ID: " + data.getGameId() + " Confirming play");
     return confirmPlayInteractor.execute(data);
   }
 
   @PostMapping("/end_turn/")
-  public Game EndTurn(@RequestBody GetEndTurnInputData data) {
+  public GetEndTurnOutputData EndTurn(@RequestBody GetEndTurnInputData data) {
     // Add a logging message that contains enough information to identify the game, the use case, and the input data,
     log.info("Game ID: " + data.getGameId() + " Ending turn");
     return getEndTurnInteractor.execute(data);
   }
 
   @GetMapping("/leaderboard/")
-  public Game getLeaderboard(@RequestBody GetLeaderboardInputData data) {
+  public GetLeaderboardOutputData getLeaderboard(@RequestBody GetLeaderboardInputData data) {
     int gameId = data.getGameId();
     log.info("Getting leaderboard for game ID: " + gameId);
     return getLeaderboardInteractor.execute(new GetLeaderboardInputData(gameId, data.getPlayers()));
   }
 
   @PostMapping("/contest/")
-  public Game contest(@RequestBody ContestInputData data) {
+  public ContestOutputData contest(@RequestBody ContestInputData data) {
     log.info("Player with ID:" + data.getPlayerId() + "is contesting game with ID: " + data.getGameId());
     return contestInteractor.execute(data);
   }
