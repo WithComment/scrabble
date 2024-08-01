@@ -34,10 +34,11 @@ public class GetLeaderboardInteractor implements GetLeaderboardInputBoundary {
      * Executes the use case of getting the leaderboard. It retrieves player data,
      * creates leaderboard entries for each player, sorts these entries in descending
      * order of scores, and then passes the sorted list to the presenter.
+     *
      * @param input Contains the list of players from which to generate the leaderboard.
      */
     @Override
-    public Game execute(GetLeaderboardInputData input) {
+    public GetLeaderboardOutputData execute(GetLeaderboardInputData input) {
         Game game = gameDao.get(input.getGameId());
         List<Integer> players = input.getPlayers();
         List<Player> leaderboard = new ArrayList<>();
@@ -47,6 +48,6 @@ public class GetLeaderboardInteractor implements GetLeaderboardInputBoundary {
         }
         Collections.sort(leaderboard, Collections.reverseOrder());
         game.setLeaderboard(leaderboard);
-        return game;
+        return new GetLeaderboardOutputData(leaderboard);
     }
 }
