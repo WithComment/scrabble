@@ -149,7 +149,7 @@ public class TurnManager implements Serializable {
      *
      * @param player the player to be added
      */
-    public void updatePlayer(Player player) {
+    public void addPlayer(Player player) {
         if(players.isEmpty()){
             this.currentPlayer = player;
         }
