@@ -39,7 +39,7 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
   }
 
   @Override
-  public Game execute(PlaceLetterInputData data) {
+  public PlaceLetterOutputData execute(PlaceLetterInputData data) {
     int x = data.getX();
     int y = data.getY();
 
@@ -58,7 +58,7 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
       play.addMove(new Move(x, y, letter));
       board.setCell(x, y, letter);
       player.removeLetter(letter);
-      return game;
+      return new PlaceLetterOutputData(board, player.getInventory());
     }
   }
 }
