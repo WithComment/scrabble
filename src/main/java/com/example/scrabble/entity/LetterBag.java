@@ -3,12 +3,7 @@ package com.example.scrabble.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectStreamException;
-import java.io.Serializable;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -131,11 +126,13 @@ public class LetterBag implements Serializable {
   }
 
   // Custom deserialization method
+  @Serial
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject();
   }
 
   // Custom method for when no data is found during deserialization
+  @Serial
   private void readObjectNoData() throws ObjectStreamException {
     bag = new ArrayList<>();
     initializeBag(Paths.get("static", "letters.txt"));
