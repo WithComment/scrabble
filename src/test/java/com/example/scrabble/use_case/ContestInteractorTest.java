@@ -79,7 +79,7 @@ public class ContestInteractorTest {
                 new Letter('l', 1),
                 new Letter('o', 1)
             ));
-            game.getTurnManager().startTurn();
+            game.startTurn();
             Play currentPlay = game.getCurrentPlay();
             Board board = game.getBoard();
             currentPlay.addMove(new Move(7, 7, aliceInventory.get(0)));

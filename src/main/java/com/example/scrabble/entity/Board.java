@@ -2,10 +2,7 @@ package com.example.scrabble.entity;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 
 public class Board implements Serializable {
     private Tile[][] board;
@@ -201,11 +198,13 @@ public class Board implements Serializable {
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream out) throws IOException {
         JSONObject jsonObject = new JSONObject(this);
         out.writeChars(jsonObject.toString());
     }
 
+    @Serial
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         String json = in.readLine();
         JSONObject jsonObject = new JSONObject(json);

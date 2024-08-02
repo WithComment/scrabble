@@ -2,10 +2,7 @@ package com.example.scrabble.entity;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 
 /**
  * Represents a playable letter.
@@ -61,10 +58,12 @@ public class Letter implements Serializable {
         return new Letter(this.getLetter(), this.getPoints());
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeChars(new JSONObject(this).toString());
     }
 
+    @Serial
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         String json = in.readUTF();
         System.out.println(json);
