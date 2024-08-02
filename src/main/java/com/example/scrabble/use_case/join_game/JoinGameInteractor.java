@@ -4,7 +4,7 @@ import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Board;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Player;
-import com.example.scrabble.entity.TurnManager;
+import com.example.scrabble.entity.;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,10 +34,9 @@ public class JoinGameInteractor implements JoinGameInputBoundary {
     @Override
     public JoinGameOutputData execute(JoinGameInputData joinGameInputData) {
         Game game = gameDataAccess.get(joinGameInputData.getGameId());
-        TurnManager turnManager = game.getTurnManager();
 
         Player newPlayer = new Player(joinGameInputData.getPlayerName());
-        turnManager.addPlayer(newPlayer);
+        game.addPlayer(newPlayer);
 
         gameDataAccess.update(game);
         return new JoinGameOutputData(joinGameInputData.getPlayerName());
