@@ -24,7 +24,7 @@ public class Play {
    */
   public Play(Player player) {
     this.player = player;
-    this.moves = new LinkedList<Move>();
+    this.moves = new LinkedList<>();
     this.failedContest = false;
   }
 
@@ -73,6 +73,14 @@ public class Play {
      */
   public List<Move> getMoves() {
     return moves;
+  }
+
+    /**
+     * Sets the list of moves made in the play.
+     * @param moves The list of moves made in the play.
+     */
+  public void setMoves(List<Move> moves) {
+    this.moves = moves;
   }
 
   /**

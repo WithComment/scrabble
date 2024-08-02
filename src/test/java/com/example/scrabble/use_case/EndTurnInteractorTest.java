@@ -4,7 +4,6 @@ import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Board;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Player;
-import com.example.scrabble.entity.TurnManager;
 import com.example.scrabble.use_case.end_turn.EndTurnInteractor;
 import com.example.scrabble.use_case.end_turn.GetEndTurnInputData;
 import com.example.scrabble.use_case.end_turn.GetEndTurnOutputData;
@@ -31,9 +30,6 @@ class EndTurnInteractorTest {
     private Game game;
 
     @Mock
-    private TurnManager turnManager;
-
-    @Mock
     private Board board;
 
     @Mock
@@ -47,7 +43,6 @@ class EndTurnInteractorTest {
         MockitoAnnotations.openMocks(this);
 
         // Mocking game behavior
-        when(game.getTurnManager()).thenReturn(turnManager);
         when(game.getBoard()).thenReturn(board);
         when(game.getPlayers()).thenReturn(Arrays.asList(player));
         when(game.getId()).thenReturn(1);
@@ -62,7 +57,7 @@ class EndTurnInteractorTest {
         wordsToBeConfirmed.add(Arrays.asList(0, 0));
         GetEndTurnInputData inputData = new GetEndTurnInputData(1, wordsToBeConfirmed);
 
-        when(turnManager.isEndTurn()).thenReturn(true);
+        when(game.isEndTurn()).thenReturn(true);
         when(player.getInventory()).thenReturn(new ArrayList<>());
 
         GetEndTurnOutputData outputData = endTurnInteractor.execute(inputData);
@@ -70,8 +65,8 @@ class EndTurnInteractorTest {
         assertNotNull(outputData);
         verify(gameDataAccess, times(1)).update(game);
         verify(board, times(1)).confirm(0, 0);
-        verify(turnManager, times(1)).endTurn();
-        verify(turnManager, times(1)).startTurn();
+        verify(game, times(1)).endTurn();
+        verify(game, times(1)).startTurn();
     }
 }
 

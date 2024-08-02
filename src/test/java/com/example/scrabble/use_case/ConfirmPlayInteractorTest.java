@@ -1,3 +1,5 @@
+package com.example.scrabble.use_case;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -35,7 +37,7 @@ class ConfirmPlayInteractorTest {
     Game game = new Game();
     game.addPlayer();
     game.addPlayer();
-    game.getTurnManager().startTurn();
+    game.startTurn();
     return game;
   }
 
