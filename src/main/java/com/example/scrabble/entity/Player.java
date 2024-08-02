@@ -91,9 +91,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * Adds a letter to the player's inventory.
-     *
-     * @param letter the letter to be added
+     * Gets the list of words formed in the play.
      */
     public void addLetter(Letter letter) {
         this.inventory.add(letter);
@@ -161,6 +159,15 @@ public class Player implements Serializable {
      */
     public int getScore() {
         return score;
+    }
+
+    /**
+     * Returns the player's unstable score.
+     *
+     * @return the player's unstable score
+     */
+    public int getTempScore() {
+        return tempScore;
     }
 
     /**

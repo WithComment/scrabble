@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 
 public class Board implements Serializable {
     private Tile[][] board;
@@ -72,11 +69,11 @@ public class Board implements Serializable {
     /**
      * Adds a tile to the board and its 7 other symmetric positions.
      *
-     * @param x
-     * @param y
-     * @param wordMult
-     * @param letterMult
-     * @param board
+     * @param x        the x-coordinate of the tile
+     * @param y       the y-coordinate of the tile
+     * @param wordMult the word multiplier of the tile
+     * @param letterMult the letter multiplier of the tile
+     * @param board   the board to add the tile to
      */
     private static void addToBoardSymmetrically(int x, int y, int wordMult, int letterMult, Tile[][] board) {
         board[x][y] = new Tile(wordMult, letterMult, null);
@@ -125,13 +122,12 @@ public class Board implements Serializable {
     /**
      * Sets the letter at the specified position on the board.
      *
-     * @param x
-     * @param y
-     * @param letter
-     * @return
+     * @param x the x-coordinate of the letter
+     * @param y the y-coordinate of the letter
+     * @param letter the letter to set
      */
-    public Tile setCell(int x, int y, Letter letter) {
-        return this.board[y][x].setLetter(letter);
+    public void setCell(int x, int y, Letter letter) {
+        this.board[y][x].setLetter(letter);
     }
 
     /**
@@ -148,8 +144,8 @@ public class Board implements Serializable {
     /**
      * Returns the letter at the specified position on the board.
      *
-     * @param x
-     * @param y
+     * @param x the x-coordinate of the letter
+     * @param y the y-coordinate of the letter
      * @return
      */
     public boolean confirm(int x, int y) {
@@ -159,22 +155,12 @@ public class Board implements Serializable {
         this.board[y][x].confirm();
         return true;
     }
-
+    
     /**
      * Removes the letter at the specified position on the board.
      *
-     * @param x
-     * @param y
-     */
-    public void setAndConfirm(int x, int y, Letter letter) {
-        this.board[y][x].setAndConfirm(letter);
-    }
-
-    /**
-     * Removes the letter at the specified position on the board.
-     *
-     * @param x
-     * @param y
+     * @param x the x-coordinate of the letter
+     * @param y the y-coordinate of the letter
      */
     public boolean isConfirmed(int x, int y) {
         return this.board[y][x].isConfirmed();
@@ -216,11 +202,13 @@ public class Board implements Serializable {
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream out) throws IOException {
         JSONObject jsonObject = new JSONObject(this);
         out.writeChars(jsonObject.toString());
     }
 
+    @Serial
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         String json = in.readLine();
         JSONObject jsonObject = new JSONObject(json);

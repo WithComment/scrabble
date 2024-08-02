@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * Represents a Player's turn.
  */
@@ -13,15 +16,25 @@ public class Play {
   private final Player player;
   private final List<Move> moves;
   private List<String> words;
+  private boolean failedContest;
+
 
   /**
    * Constructs a new Play for the specified player.
    * @param player The player making the play.
    */
+  public Play(Player player) {
+      this.player = player;
+      this.moves = new LinkedList<>();
+      this.failedContest = false;
+  }
+
   @JsonCreator
-  public Play(@JsonProperty("player") Player player) {
+  public Play(@JsonProperty("player") Player player, @JsonProperty("moves") List<Move> moves, @JsonProperty("words") List<String> words, @JsonProperty("failedContest") boolean failedContest) {
     this.player = player;
-    this.moves = new LinkedList<>();
+    this.moves = moves;
+    this.words = words;
+    this.failedContest = failedContest;
   }
 
   /**
@@ -36,7 +49,7 @@ public class Play {
    * Undoes the last move made in the play.
    * @return The move that was undone.
    */
-  public Move undoMove() {
+  public Move removeMove() {
     return moves.removeLast();
   }
 
@@ -71,6 +84,14 @@ public class Play {
     return moves;
   }
 
+    /**
+     * Sets the list of moves made in the play.
+     * @param moves The list of moves made in the play.
+     */
+  public void setMoves(List<Move> moves) {
+    this.moves = moves;
+  }
+
   /**
    * Sets the list of words formed in the play.
    * @param words The list of words formed in the play.
@@ -85,6 +106,23 @@ public class Play {
    */
   public List<String> getWords() {
     return words;
+  }
+
+  public void setFailedContest(boolean failedContest) {
+    this.failedContest = failedContest;
+  }
+
+  public boolean getFailedContest() {
+    return failedContest;
+  }
+
+  @Override
+  public String toString() {
+    try {
+      return new ObjectMapper().writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override

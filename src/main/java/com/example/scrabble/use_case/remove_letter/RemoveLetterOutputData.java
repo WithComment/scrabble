@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RemoveLetterOutputData {
-    private boolean removeSuccessful;
-    private Board board;
-    private List<Letter> hand;
+    private final boolean removeSuccessful;
+    private final Board board;
+    private final List<Letter> hand;
 
     public RemoveLetterOutputData(boolean removeSuccessful, Board board, List<Letter> hand){
         this.removeSuccessful = removeSuccessful;

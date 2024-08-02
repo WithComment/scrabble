@@ -4,18 +4,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 
 /**
  * Represents a playable letter.
  *
- * @param letter The letter.
- * @param points The points the letter is worth.
  */
-public class Letter implements Serializable, Comparable<Letter>{
+public class Letter implements Serializable {
     private char letter;
     private int points;
 
@@ -57,29 +52,23 @@ public class Letter implements Serializable, Comparable<Letter>{
     }
     @Override
     public String toString() {
-        return "Letter: " + letter + ", Points: " + points;
+        return Character.toString(getLetter());
     }
-    //@Override
-    //public String toString() {return Character.toString(getLetter());}
 
     @Override
     public Letter clone() {
         return new Letter(this.getLetter(), this.getPoints());
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeChars(new JSONObject(this).toString());
     }
 
+    @Serial
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         String json = in.readUTF();
         System.out.println(json);
         this.parseJSON(new JSONObject(json));
     }
-
-    @Override
-    public int compareTo(Letter other) {
-        return Character.compare(this.letter, other.letter);
-    }
-
 }

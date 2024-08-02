@@ -22,7 +22,7 @@ public class EndGameInteractor implements EndGameInputBoundary{
     public EndGameInteractor(GameDataAccess gameDao) {this.gameDao = gameDao;}
 
     @Override
-    public Game execute(EndGameInputData endGameInputData) throws InvalidPlayException {
+    public EndGameOutputData execute(EndGameInputData endGameInputData) throws InvalidPlayException {
         Game game = gameDao.get(endGameInputData.getGameId());
         List<Player> players = game.getPlayers();
 
@@ -77,6 +77,6 @@ public class EndGameInteractor implements EndGameInputBoundary{
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return game;
+        return new EndGameOutputData(winners);
     }
 }

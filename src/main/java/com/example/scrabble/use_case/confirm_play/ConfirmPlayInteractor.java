@@ -44,8 +44,8 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
   }
 
   private boolean isNotInline(List<Move> moves) {
-    Move fMove = moves.get(0);
-    Move lMove = moves.get(moves.size() - 1);
+    Move fMove = moves.getFirst();
+    Move lMove = moves.getLast();
 
     int x, y;
     boolean inVLine, inHLine;
@@ -68,8 +68,8 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
 
   /**
    * Check if the letters form only one main word.
-   * @param moves
-   * @param board
+   * @param moves list of moves
+   * @param board the game board
    * @return true if the letters form one main word, false otherwise.
    */
   private boolean hasGap(List<Move> moves, Board board) {
@@ -144,7 +144,7 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
   private List<Tile> getVTiles(Move move, Board board) {
     int x = move.getX();
     int y = move.getY();
-    List<Tile> tiles = new LinkedList<Tile>();
+    List<Tile> tiles = new LinkedList<>();
     // Go to the top of a set of continuous letters.
     while (y >= 0 && !board.getCell(x, y).isEmpty()) y--;
     y++;
@@ -160,7 +160,7 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
   private List<Tile> getHTiles(Move move, Board board) {
     int x = move.getX();
     int y = move.getY();
-    List<Tile> tiles = new LinkedList<Tile>();
+    List<Tile> tiles = new LinkedList<>();
     while (x >= 0 && !board.getCell(x, y).isEmpty()) x--;
     x++;
     while (x < board.getWidth() && !board.getCell(x, y).isEmpty()) {
@@ -230,7 +230,7 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
   }
 
   @Override
-  public Game execute(ConfirmPlayInputData data) {
+  public ConfirmPlayOutputData execute(ConfirmPlayInputData data) {
 
     Game game = gameDao.get(data.getGameId());
     Board board = game.getBoard();
@@ -239,7 +239,7 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     List<Move> moves = play.getMoves();
  
     if (moves.isEmpty()) {
-      return game;
+      return new ConfirmPlayOutputData(player.getTempScore());
     }
     
     if (moves.size() > 1) {
@@ -270,6 +270,6 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
 
     gameDao.update(game);
     
-    return game;
+    return new ConfirmPlayOutputData(player.getTempScore());
   }
 }

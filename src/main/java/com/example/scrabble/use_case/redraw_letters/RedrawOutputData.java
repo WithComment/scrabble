@@ -1,33 +1,24 @@
 package com.example.scrabble.use_case.redraw_letters;
 
-import com.example.scrabble.entity.Letter;
-
-import java.util.ArrayList;
 import java.util.List;
 
+import com.example.scrabble.entity.Letter;
+
 public class RedrawOutputData {
-    private final boolean drawSuccessful;
-    private final List<Letter> hand;
 
+  private boolean isSuccessful;
+  private List<Letter> newLetters;
 
-    public RedrawOutputData(boolean drawSuccessful, List<Letter> hand) {
-        this.drawSuccessful = drawSuccessful;
-        this.hand = hand;
-    }
+  public RedrawOutputData(boolean isSuccessful, List<Letter> newLetters) {
+    this.isSuccessful = isSuccessful;
+    this.newLetters = newLetters;
+  }
 
-    public boolean isDrawSuccessful() {
-        return drawSuccessful;
-    }
+  public boolean isSuccessful() {
+    return isSuccessful;
+  }
 
-    public List<Letter> getHand() {
-        return hand;
-    }
-
-    public List<Character> getHandCharacters() {
-        List<Character> handChars = new ArrayList<>();
-        for (Letter letter : hand) {
-            handChars.add(letter.getLetter());
-        }
-        return handChars;
-    }
+  public List<Letter> getNewLetters() {
+    return newLetters;
+  }
 }

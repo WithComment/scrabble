@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleException(Exception ex) {
-    logger.error("An unexpected error occurred");
+    logger.error("An unexpected error occurred", ex);
     ErrorResponse error = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An unexpected error occurred");
     return ResponseEntity
         .status(HttpStatus.INTERNAL_SERVER_ERROR)

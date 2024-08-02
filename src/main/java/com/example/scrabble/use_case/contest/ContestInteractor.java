@@ -56,8 +56,7 @@ public class ContestInteractor implements ContestInputBoundary {
     }
 
     private void fail() {
-        TurnManager turnManager = game.getTurnManager();
-        turnManager.ContestFailureUpdate(player.getId());
+        game.contestFailureUpdate(player.getId());
     }
 
     @Override
@@ -66,7 +65,7 @@ public class ContestInteractor implements ContestInputBoundary {
         player = game.getPlayer(contestInputData.getPlayerId());
 
         try {
-            List<String> words = game.getLastPlay().getWords();
+            List<String> words = game.getCurrentPlay().getWords();
             List<String> invalidWords = new LinkedList<>();
             for (String word : words) {
                 if (!wordIsValid(word)) {

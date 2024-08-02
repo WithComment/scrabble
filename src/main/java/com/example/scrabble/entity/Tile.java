@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Objects;
+import java.io.*;
 
 /**
  * Represents a cell on the board.
@@ -23,7 +24,6 @@ public class Tile implements Serializable {
     private int letterMult;
     private Letter letter;
     private boolean isConfirmed;
-
 
     /**
      * Constructs a Tile with specified multipliers and letter.
@@ -49,7 +49,7 @@ public class Tile implements Serializable {
     }
 
 
-  
+
     public Tile(JSONObject json) {
         this.parseJSON(json);
     }
@@ -111,15 +111,6 @@ public class Tile implements Serializable {
     }
 
     /**
-     * Sets the letter on the tile and confirms the tile.
-     * @param letter The letter to place on the tile.
-     */
-    public void setAndConfirm(Letter letter) {
-        this.letter = letter;
-        isConfirmed = true;
-    }
-
-    /**
      * Checks if the tile is empty.
      * @return True if the tile is empty, false otherwise.
      */
@@ -144,10 +135,12 @@ public class Tile implements Serializable {
         return letter == null ? " " : letter.toString();
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeChars(new JSONObject(this).toString());
     }
 
+    @Serial
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         JSONObject json = new JSONObject(in.readUTF());
         this.parseJSON(json);

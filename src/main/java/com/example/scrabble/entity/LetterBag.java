@@ -6,12 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectStreamException;
-import java.io.Serializable;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -92,9 +87,7 @@ public class LetterBag implements Serializable {
    * @param letters the list of {@code Letter} objects to be added
    */
   public void addLetters(List<Letter> letters) {
-    for (Letter letter : letters) {
-      bag.add(letter);
-    }
+    bag.addAll(letters);
   }
 
   /**
@@ -137,16 +130,19 @@ public class LetterBag implements Serializable {
   }
 
   // Custom serialization method
+  @Serial
   private void writeObject(ObjectOutputStream out) throws IOException {
     out.defaultWriteObject();
   }
 
   // Custom deserialization method
+  @Serial
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject();
   }
 
   // Custom method for when no data is found during deserialization
+  @Serial
   private void readObjectNoData() throws ObjectStreamException {
     bag = new ArrayList<>();
     initializeBag(Paths.get("static", "letters.txt"));

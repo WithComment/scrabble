@@ -35,7 +35,12 @@ public class GameDao implements GameDataAccess {
 
     private void writeGame(Game game) {
         try {
-            objectMapper.writeValue(new File(makeFilePath(game.getId())), game);
+            if (!gameExists(game.getId())) {
+                new File(makeFilePath(game.getId())).createNewFile();
+            }
+            FileOutputStream fileOutputStream = new FileOutputStream(makeFilePath(game.getId()));
+            objectMapper.writeValue(fileOutputStream, game);
+            fileOutputStream.close();
         } catch (IOException e) {
             throw new GameDaoException("Error writing game to file", e);
         }
