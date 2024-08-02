@@ -88,8 +88,9 @@ public class Player implements Serializable {
     }
 
     /**
-     * Gets the list of words formed in the play.
-     * @return A list of words formed in the play.
+     * Adds a letter to the player's inventory.
+     *
+     * @param letter the letter to be added
      */
     public void addLetter(Letter letter) {
         this.inventory.add(letter);
@@ -190,6 +191,26 @@ public class Player implements Serializable {
     }
 
     public void eraseTempScore() {
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof Player) {
+            Player o = (Player) other;
+            List<Letter> inv = o.getInventory();
+            if (this.inventory.size() != inv.size()) {
+                return false;
+            }
+            for (int i = 0; i < this.inventory.size(); i++) {
+                if (!this.inventory.get(i).equals(inv.get(i))) {
+                    return false;
+                }
+            }
+            return this.id == o.id && this.name.equals(o.name) &&
+                    this.score == o.score && this.tempScore == o.tempScore;
+        } else {
+            return false;
+        }
     }
 }
 
