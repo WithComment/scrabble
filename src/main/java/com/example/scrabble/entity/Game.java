@@ -60,11 +60,6 @@ public class Game implements Serializable {
         }
     }
 
-    /**
-     * Gets the unique ID of the game.
-     *
-     * @return The unique ID of the game.
-     */
     public int getId() {
         return id;
     }
@@ -91,11 +86,6 @@ public class Game implements Serializable {
         return board.getCell(x, y);
     }
 
-    /**
-     * Gets the letter bag.
-     *
-     * @return The LetterBag.
-     */
     public LetterBag getLetterBag() {
         return letterBag;
     }
@@ -141,7 +131,6 @@ public class Game implements Serializable {
      * @param play The play to add to the history.
      */
     public void addPlay(Play play) {
-
         history.add(play);
     }
 

@@ -1,8 +1,13 @@
 package com.example.scrabble.controller;
 
 import com.example.scrabble.data_access.GameDataAccess;
+import com.example.scrabble.entity.Board;
 import com.example.scrabble.entity.Game;
+import com.example.scrabble.entity.Letter;
+import com.example.scrabble.entity.Play;
+import com.example.scrabble.entity.Player;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInputBoundary;
+import com.example.scrabble.use_case.confirm_play.ConfirmPlayInputData;
 import com.example.scrabble.use_case.contest.ContestInputData;
 import com.example.scrabble.use_case.contest.ContestInteractor;
 import com.example.scrabble.use_case.create_game.CreateGameInputBoundary;
@@ -10,6 +15,8 @@ import com.example.scrabble.use_case.create_game.CreateGameInputData;
 import com.example.scrabble.use_case.end_turn.GetEndTurnInputBoundary;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputBoundary;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputBoundary;
+import com.example.scrabble.use_case.place_letter.PlaceLetterInputData;
+import com.example.scrabble.use_case.place_letter.PlaceLetterOutputData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +29,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -62,11 +71,9 @@ public class GameControllerTest {
 
   @Test
   void testCreateGame() throws Exception {
-    CreateGameInputData inputData = new CreateGameInputData(Arrays.asList("Player1", "Player2"));
-    Game game = new Game(); // Assume Game has a no-args constructor
-
-    when(createGameInteractor.execute(any(CreateGameInputData.class))).thenReturn(game);
-
+    CreateGameInputData inputData = new CreateGameInputData(Arrays.asList("Player1", "Player2", "Player3"));
+    Game game = new Game();
+    when(createGameInteractor.execute(any())).thenReturn(game);
     mockMvc.perform(post("/game/create/")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(inputData)))
@@ -77,9 +84,7 @@ public class GameControllerTest {
   @Test
   void testGetGame() throws Exception {
     Game game = new Game();
-
-    when(gameDao.get(1)).thenReturn(game);
-
+    when(gameDao.get(anyInt())).thenReturn(game);
     mockMvc.perform(get("/game/1/"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(1));
@@ -87,26 +92,22 @@ public class GameControllerTest {
 
   @Test
   void testPlaceLetter() throws Exception {
-    Game game = new Game();
-
-    when(placeLetterInteractor.execute(any())).thenReturn(game);
+    PlaceLetterInputData inputData = new PlaceLetterInputData(1, 0, 0, 'A');
+    PlaceLetterOutputData outputData = new PlaceLetterOutputData(new Board(), Arrays.asList(new Letter('A', 1)));
 
     mockMvc.perform(post("/game/place_letter/")
         .contentType(MediaType.APPLICATION_JSON)
-        .content("{\"gameId\":1,\"letter\":\"A\",\"x\":0,\"y\":0}"))
+        .content(objectMapper.writeValueAsString(inputData)))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id").value(1));
+        .andExpect(content().string());
   }
 
   @Test
   void testConfirmPlay() throws Exception {
-    Game game = new Game();
-
-    when(confirmPlayInteractor.execute(any())).thenReturn(game);
-
+    ConfirmPlayInputData data = new ConfirmPlayInputData(1);
     mockMvc.perform(post("/game/confirm_play/")
         .contentType(MediaType.APPLICATION_JSON)
-        .content("{\"gameId\":1}"))
+        .content(objectMapper.writeValueAsString(data)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(1));
   }
@@ -148,5 +149,11 @@ public class GameControllerTest {
         .content("{\"gameId\":1,\"playerId\":1}"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(1));
+  }
+
+  private GameDataAccess mockGameDao() {
+    Game game = new Game();
+    when(gameDao.get(anyInt())).thenReturn(game);
+    return 
   }
 }

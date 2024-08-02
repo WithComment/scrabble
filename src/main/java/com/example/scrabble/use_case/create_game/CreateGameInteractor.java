@@ -1,15 +1,10 @@
 package com.example.scrabble.use_case.create_game;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Game;
-import com.example.scrabble.entity.Player;
-
 @Service
 public class CreateGameInteractor implements CreateGameInputBoundary {
   
@@ -21,14 +16,10 @@ public class CreateGameInteractor implements CreateGameInputBoundary {
   }
 
   @Override
-  public Game execute(CreateGameInputData data) {
-    List<Player> players = new LinkedList<Player>();
-    for (String name : data.getPlayerNames()) {
-      players.add(new Player(name));
-    }
-    Game game = new Game();
-    game.setPlayers(players);
+  public CreateGameOutputData execute(CreateGameInputData data) {
+    Game game = new Game(data.getPlayerNames());
     game.startGame();
-    return gameDao.create(game);
+    gameDao.create(game);
+    return new CreateGameOutputData(game.getPlayers());
   }
 }
