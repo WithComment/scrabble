@@ -3,8 +3,10 @@ package com.example.scrabble.entity;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class Board implements Serializable {
+public class Board implements Serializable, Iterable<Tile> {
     private Tile[][] board;
     private int height;
     private int width;
@@ -216,5 +218,38 @@ public class Board implements Serializable {
                 this.board[i][j] = new Tile(jsonObject.getJSONObject("board").getJSONObject(i + "," + j));
             }
         }
+    }
+
+    @Override
+    public Iterator<Tile> iterator() {
+        return new BoardIterator(this);
+    }
+}
+
+class BoardIterator implements Iterator<Tile> {
+    private int h, w;
+    private int count;
+    private Tile[][] board;
+
+    public BoardIterator(Board board) {
+        this.count = 0;
+        this.h = board.getHeight();
+        this.w = board.getWidth();
+        this.board = board.getBoard();
+    }
+
+    @Override
+    public boolean hasNext() {
+        return count < h * w;
+    }
+
+    @Override
+    public Tile next() {
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
+        Tile tile = board[count / w][count % w];
+        count++;
+        return tile;
     }
 }
