@@ -91,8 +91,9 @@ public class Player implements Serializable {
     }
 
     /**
-     * Gets the list of words formed in the play.
-     * @return A list of words formed in the play.
+     * Adds a letter to the player's inventory.
+     *
+     * @param letter the letter to be added
      */
     public void addLetter(Letter letter) {
         this.inventory.add(letter);
