@@ -1,16 +1,12 @@
 package com.example.scrabble.use_case.join_game;
 
 import com.example.scrabble.data_access.GameDataAccess;
-import com.example.scrabble.entity.Board;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Player;
-import com.example.scrabble.entity.;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
