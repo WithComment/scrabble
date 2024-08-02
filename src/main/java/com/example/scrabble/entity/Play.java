@@ -82,4 +82,16 @@ public class Play {
   public List<String> getWords() {
     return words;
   }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == this) {
+      return true;
+    }
+    if (!(other instanceof Play)) {
+      return false;
+    }
+    Play otherPlay = (Play) other;
+    return player.equals(otherPlay.player) && moves.equals(otherPlay.moves) && words.equals(otherPlay.words);
+  }
 }
