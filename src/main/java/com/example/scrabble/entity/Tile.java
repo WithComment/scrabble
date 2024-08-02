@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 
 /**
  * Represents a cell on the board.
@@ -134,10 +131,12 @@ public class Tile implements Serializable {
         );
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeChars(new JSONObject(this).toString());
     }
 
+    @Serial
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         JSONObject json = new JSONObject(in.readUTF());
         this.parseJSON(json);

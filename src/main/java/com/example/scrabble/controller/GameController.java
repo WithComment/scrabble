@@ -73,33 +73,33 @@ public class GameController {
 
   @GetMapping("/{gameId}/")
   public Game getGame(@PathVariable("gameId") int gameId) {
-    log.info("Getting game with ID:" + gameId);
+      log.info("Getting game with ID:{}", gameId);
     return gameDao.get(gameId);
   }
 
   @PostMapping("/place_letter/")
   public PlaceLetterOutputData placeLetter(@RequestBody PlaceLetterInputData data) {
-    log.info("Game ID: " + data.getGameId() + " Placing letter: " + data.getLetter() + " at position: " + data.getX() + "," + data.getY());
+      log.info("Game ID: {} Placing letter: {} at position: {},{}", data.getGameId(), data.getLetter(), data.getX(), data.getY());
     return placeLetterInteractor.execute(data);
   }
 
   @PostMapping("/confirm_play/")
   public ConfirmPlayOutputData confirmPlay(@RequestBody ConfirmPlayInputData data) {
-    log.info("Game ID: " + data.getGameId() + " Confirming play");
+      log.info("Game ID: {} Confirming play", data.getGameId());
     return confirmPlayInteractor.execute(data);
   }
 
   @PostMapping("/end_turn/")
   public GetEndTurnOutputData EndTurn(@RequestBody GetEndTurnInputData data) {
     // Add a logging message that contains enough information to identify the game, the use case, and the input data,
-    log.info("Game ID: " + data.getGameId() + " Ending turn");
+      log.info("Game ID: {} Ending turn", data.getGameId());
     return getEndTurnInteractor.execute(data);
   }
 
   @GetMapping("/leaderboard/")
   public GetLeaderboardOutputData getLeaderboard(@RequestBody GetLeaderboardInputData data) {
     int gameId = data.getGameId();
-    log.info("Getting leaderboard for game ID: " + gameId);
+      log.info("Getting leaderboard for game ID: {}", gameId);
     return getLeaderboardInteractor.execute(new GetLeaderboardInputData(gameId, data.getPlayers()));
   }
 

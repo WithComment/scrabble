@@ -111,13 +111,10 @@ public class Game implements Serializable {
     /**
      * Adds a new player to the game.
      * Initializes the player with a unique ID and adds them to the player list.
-     *
-     * @return The player that was added to the game.
      */
-    public Player addPlayer() {
+    public void addPlayer() {
         Player player = new Player();
         players.add(player);
-        return player;
     }
 
     public Player addPlayer(Player player) {
@@ -144,7 +141,7 @@ public class Game implements Serializable {
         if (history.isEmpty()) {
             return null;
         }
-        return history.get(history.size() - 1);
+        return history.getLast();
     }
 
     /**
@@ -157,7 +154,7 @@ public class Game implements Serializable {
         if (history.isEmpty()) {
             return null;
         }
-        return history.remove(history.size() - 1);
+        return history.removeLast();
     }
 
     /**
