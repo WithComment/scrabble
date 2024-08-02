@@ -81,9 +81,7 @@ public class LetterBag implements Serializable {
    * @param letters the list of {@code Letter} objects to be added
    */
   public void addLetters(List<Letter> letters) {
-    for (Letter letter : letters) {
-      bag.add(letter);
-    }
+    bag.addAll(letters);
   }
 
   /**
@@ -121,6 +119,7 @@ public class LetterBag implements Serializable {
   }
 
   // Custom serialization method
+  @Serial
   private void writeObject(ObjectOutputStream out) throws IOException {
     out.defaultWriteObject();
   }

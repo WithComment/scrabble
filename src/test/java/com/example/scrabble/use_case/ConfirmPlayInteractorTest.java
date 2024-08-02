@@ -3,7 +3,6 @@ package com.example.scrabble.use_case;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.*;
-import com.example.scrabble.use_case.InvalidPlayException;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInputData;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInteractor;
 

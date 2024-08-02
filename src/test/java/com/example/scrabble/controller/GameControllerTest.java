@@ -4,8 +4,6 @@ import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Board;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Letter;
-import com.example.scrabble.entity.Play;
-import com.example.scrabble.entity.Player;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInputBoundary;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInputData;
 import com.example.scrabble.use_case.contest.ContestInputData;
@@ -30,7 +28,6 @@ import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -154,6 +151,6 @@ public class GameControllerTest {
   private GameDataAccess mockGameDao() {
     Game game = new Game();
     when(gameDao.get(anyInt())).thenReturn(game);
-    return 
+    return
   }
 }

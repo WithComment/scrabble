@@ -17,16 +17,15 @@ public class Tile implements Serializable {
     private Letter letter;
     private boolean isConfirmed;
 
+    public Tile(){
+    }
+
     /**
      * Constructs a Tile with specified multipliers and letter.
      * @param wordMult The word multiplier for the tile.
      * @param letterMult The letter multiplier for the tile.
      * @param letter The letter placed on the tile.
      */
-
-    public Tile(){
-    }
-
     public Tile(int wordMult, int letterMult, Letter letter) {
         this.wordMult = wordMult;
         this.letterMult = letterMult;

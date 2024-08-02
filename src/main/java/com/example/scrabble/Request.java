@@ -38,7 +38,7 @@ public class Request {
         while ((responseLine = br.readLine()) != null) {
           response.append(responseLine.trim());
         }
-        System.out.println("Response: " + response.toString());
+        System.out.println("Response: " + response);
       }
 
       connection.disconnect();

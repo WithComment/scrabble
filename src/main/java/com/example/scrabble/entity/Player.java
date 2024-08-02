@@ -197,8 +197,6 @@ public class Player implements Serializable {
         return this.score - o.getScore();
     }
 
-    public void eraseTempScore() {
-    }
 }
 
 

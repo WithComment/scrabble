@@ -7,8 +7,6 @@ import java.io.*;
 /**
  * Represents a playable letter.
  *
- * @param letter The letter.
- * @param points The points the letter is worth.
  */
 public class Letter implements Serializable {
     private char letter;
