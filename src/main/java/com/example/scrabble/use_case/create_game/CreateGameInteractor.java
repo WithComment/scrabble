@@ -21,14 +21,15 @@ public class CreateGameInteractor implements CreateGameInputBoundary {
   }
 
   @Override
-  public Game execute(CreateGameInputData data) {
-    List<Player> players = new LinkedList<Player>();
+  public CreateGameOutputData execute(CreateGameInputData data) {
+    List<Player> players = new LinkedList<>();
     for (String name : data.getPlayerNames()) {
       players.add(new Player(name));
     }
     Game game = new Game();
     game.setPlayers(players);
     game.startGame();
-    return gameDao.create(game);
+    gameDao.create(game);
+    return new CreateGameOutputData(players);
   }
 }
