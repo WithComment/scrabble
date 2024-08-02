@@ -40,7 +40,7 @@ class TurnManagerTest {
 
     @Test
     void testContestFailureUpdate() {
-        turnManager.ContestFailureUpdate(0);
+        turnManager.contestFailureUpdate(0);
         assertEquals(1, turnManager.getPlayersNumContestFailed(0));
     }
 
@@ -56,10 +56,10 @@ class TurnManagerTest {
     }
 
     @Test
-    void testUpdatePlayer() {
+    void testAddPlayer() {
         Player newPlayer = new Player("Player4");
-        turnManager.updatePlayer(newPlayer);
-        assertTrue(turnManager.GetPlayers().contains(newPlayer));
+        turnManager.addPlayer(newPlayer);
+        assertTrue(turnManager.getPlayers().contains(newPlayer));
     }
 }
 
