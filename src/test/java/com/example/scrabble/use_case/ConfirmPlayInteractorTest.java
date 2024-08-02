@@ -1,29 +1,39 @@
 package com.example.scrabble.use_case;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.example.scrabble.data_access.GameDataAccess;
-import com.example.scrabble.entity.*;
-import com.example.scrabble.use_case.InvalidPlayException;
+import com.example.scrabble.entity.Board;
+import com.example.scrabble.entity.Game;
+import com.example.scrabble.entity.Letter;
+import com.example.scrabble.entity.Move;
+import com.example.scrabble.entity.Play;
+import com.example.scrabble.entity.Player;
+import com.example.scrabble.entity.Tile;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInputData;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInteractor;
 
-class ConfirmPlayInteractorTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-  private static final Letter A = new Letter('A', 1);
-  private static final Letter B = new Letter('B', 2);
+import java.util.LinkedList;
+
+public class ConfirmPlayInteractorTest {
+  private static final Letter a = new Letter('a', 1);
+  private static final Letter b = new Letter('b', 2);
+  private Game game;
+  private Board board;
+  private Player player;
+  private Play play;
 
   @Mock
   private GameDataAccess gameDao;
@@ -31,39 +41,117 @@ class ConfirmPlayInteractorTest {
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
-  }
-
-  private void mockGame(List<Move> moves) {
-    Game game = mock(Game.class);
-    Board board = new Board();
-    Play play = mock(Play.class);
-    Player player = mock(Player.class);
+    game = new Game(1);
+    board = game.getBoard();
+    game.startGame();
+    player = game.getCurrentPlayer();
+    play = game.getCurrentPlay();
 
     when(gameDao.get(anyInt())).thenReturn(game);
-    when(game.getBoard()).thenReturn(board);
-    when(game.getCurrentPlayer()).thenReturn(player);
-    when(game.getCurrentPlay()).thenReturn(play);
-    when(play.getMoves()).thenReturn(moves);
   }
 
-  @Test
-  void testInvalidFirstMove() {
-    List<Move> moves = new ArrayList<>(
-        Arrays.asList(new Move(0, 0, A)));
+  private void addMoves() {
+    for (Move move : play.getMoves()) {
+      board.setCell(move.getX(), move.getY(), move.getLetter());
+    }
+  }
 
-    mockGame(moves);
+  private int getConfirmedCount() {
+    int count = 0;
+    for (Tile tile : board) {
+      if (tile.isConfirmed()) {
+        count++;
+      }
+    }
+    return count;
+  }
 
-    ConfirmPlayInputData inputData = new ConfirmPlayInputData(1);
-    ConfirmPlayInteractor confirmPlayInteractor = new ConfirmPlayInteractor(gameDao);
-
-    InvalidPlayException exception = assertThrows(InvalidPlayException.class, () -> {
-      confirmPlayInteractor.execute(inputData);
+  private void testForError(String expectedMsg) {
+    ConfirmPlayInteractor interactor = new ConfirmPlayInteractor(gameDao);
+    InvalidPlayException ex = assertThrows(InvalidPlayException.class, () -> {
+      interactor.execute(new ConfirmPlayInputData(game.getId()));
     });
-    assertEquals(ConfirmPlayInteractor.CENTER_MSG, exception.getMessage());
+    assertEquals(expectedMsg, ex.getMessage());
+    verify(gameDao, never()).update(any());
+  }
+
+  private void testForSuccess(int expectedConfirmed, int expectedScore) {
+    ConfirmPlayInteractor interactor = new ConfirmPlayInteractor(gameDao);
+    interactor.execute(new ConfirmPlayInputData(game.getId()));
+    assertEquals(expectedConfirmed, getConfirmedCount());
+    assertEquals(expectedScore, player.getScore());
+    verify(gameDao, times(1)).update(game);
+  }
+
+  private void setAndConfirm(int x, int y, Letter letter) {
+    board.setCell(x, y, letter);
+    board.confirm(x, y);
   }
 
   @Test
-  void testValidFirstMove() {
+  void testIsNotInline() {
+    play.addMove(new Move(0, 0, a));
+    play.addMove(new Move(0, 1, a));
+    play.addMove(new Move(1, 1, a));
+    addMoves();
+    testForError(ConfirmPlayInteractor.INLINE_MSG);
+  }
 
+  @Test
+  void testHasGap() {
+    play.addMove(new Move(0, 0, a));
+    play.addMove(new Move(0, 2, a));
+    addMoves();
+    testForError(ConfirmPlayInteractor.CONTINUOUS_MSG);
+  }
+
+  @Test
+  void testFirstPlayNotCenter() {
+    play.addMove(new Move(0, 0, a));
+    addMoves();
+    testForError(ConfirmPlayInteractor.CENTER_MSG);
+  }
+
+  @Test
+  void testIsolated() {
+    play.addMove(new Move(0, 0, a));
+    board.setCell(7, 7, a);
+    board.confirm(7, 7);
+    addMoves();
+    testForError(ConfirmPlayInteractor.CONNECTED_MSG);
+  }
+
+  @Test
+  void testGetWords() {
+    setAndConfirm(5, 2, a);
+    setAndConfirm(6, 2, b);
+    setAndConfirm(6, 3, b);
+    setAndConfirm(8, 3, b);
+    setAndConfirm(8, 4, b);
+    setAndConfirm(9, 4, a);
+    for (int i = 2; i < 8; i++) {
+      play.addMove(new Move(7, i, a));
+    }
+    addMoves();
+    testForSuccess(6, 30);
+    assertEquals(new LinkedList<String>() {
+      {
+        add("aaaaaa");
+        add("aba");
+        add("bab");
+        add("aba");
+      }
+    }, play.getWords());
+  }
+
+  @Test
+  void testCalcScore() {
+    for (int i = 0; i < 7; i++) {
+      play.addMove(new Move(0, i, a));
+    }
+    ;
+    addMoves();
+    setAndConfirm(1, 0, new Letter('a', 0));
+    testForSuccess(1, 77);
   }
 }

@@ -58,6 +58,7 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
       play.addMove(new Move(x, y, letter));
       board.setCell(x, y, letter);
       player.removeLetter(letter);
+      gameDao.update(game);
       return new PlaceLetterOutputData(board, player.getInventory());
     }
   }
