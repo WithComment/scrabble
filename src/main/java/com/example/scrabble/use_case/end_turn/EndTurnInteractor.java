@@ -48,23 +48,16 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
             }
 
             Player currentPlayer = turnManager.getCurrentPlayer();
-            if (getEndTurnInputData.isContestSucceed()) {
-                currentPlayer.eraseTempScore();
-            } else {
-                currentPlayer.confirmTempScore();
-            }
+
             int toDraw = 7 - currentPlayer.getInventory().size();
             currentPlayer.addLetter(game.getLetterBag().drawLetters(toDraw));
             turnManager.endTurn();
             turnManager.startTurn();
         }
 
-        if (getEndTurnInputData.isContest()) {
-            turnManager.dealContest(getEndTurnInputData.isContestSucceed());
-        }
 
         gameDataAccess.update(game);
-        return new GetEndTurnOutputData(game.getId(), getEndTurnInputData.isContestSucceed(), getEndTurnInputData.isContest());
+        return new GetEndTurnOutputData(game.getId());
     }
 }
 
