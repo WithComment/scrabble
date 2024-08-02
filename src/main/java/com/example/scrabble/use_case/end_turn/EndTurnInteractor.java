@@ -9,6 +9,7 @@ import com.example.scrabble.entity.TurnManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,9 +36,6 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
         Game game = gameDataAccess.get(getEndTurnInputData.getGameId());
         TurnManager turnManager = game.getTurnManager();
 
-        for (Player player : game.getPlayers()) {
-            turnManager.addPlayer(player);
-        }
 
         if (turnManager.isEndTurn()) {
             Board currentBoard = game.getBoard();

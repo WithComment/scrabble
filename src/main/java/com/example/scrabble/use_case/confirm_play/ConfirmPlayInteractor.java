@@ -44,8 +44,8 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
   }
 
   private boolean isNotInline(List<Move> moves) {
-    Move fMove = moves.get(0);
-    Move lMove = moves.get(moves.size() - 1);
+    Move fMove = moves.getFirst();
+    Move lMove = moves.getLast();
 
     int x, y;
     boolean inVLine, inHLine;
