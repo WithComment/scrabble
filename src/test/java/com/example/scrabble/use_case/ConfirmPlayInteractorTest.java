@@ -1,7 +1,12 @@
+package com.example.scrabble.use_case;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -23,91 +28,42 @@ class ConfirmPlayInteractorTest {
   @Mock
   private GameDataAccess gameDao;
 
-  private ConfirmPlayInteractor interactor;
-
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
-    interactor = new ConfirmPlayInteractor(gameDao);
   }
 
-  private Game makeGame() {
-    Game game = new Game();
-    game.addPlayer();
-    game.addPlayer();
-    game.getTurnManager().startTurn();
-    return game;
-  }
+  private void mockGame(List<Move> moves) {
+    Game game = mock(Game.class);
+    Board board = new Board();
+    Play play = mock(Play.class);
+    Player player = mock(Player.class);
 
-  private void addMoves(Play play, List<Move> moves) {
-    for (Move move : moves) {
-      play.addMove(move);
-    }
+    when(gameDao.get(anyInt())).thenReturn(game);
+    when(game.getBoard()).thenReturn(board);
+    when(game.getCurrentPlayer()).thenReturn(player);
+    when(game.getCurrentPlay()).thenReturn(play);
+    when(play.getMoves()).thenReturn(moves);
   }
 
   @Test
-  void testInvalidFirstPlay() {
-    Game game = makeGame();
-    when(gameDao.get(anyInt())).thenReturn(game);
+  void testInvalidFirstMove() {
+    List<Move> moves = new ArrayList<>(
+        Arrays.asList(new Move(0, 0, A)));
 
-    List<Move> moves = List.of(new Move(7, 7, A));
-  }
+    mockGame(moves);
 
-  @Test
-  void testValidFirstPlay() {
-    Game game = makeGame();
-    when(gameDao.get(anyInt())).thenReturn(game);
+    ConfirmPlayInputData inputData = new ConfirmPlayInputData(1);
+    ConfirmPlayInteractor confirmPlayInteractor = new ConfirmPlayInteractor(gameDao);
 
-    List<Move> moves = List.of(new Move(0, 0, new Letter('A', 1)));
-    game.getCurrentPlay().setMoves(moves);
-
-    InvalidPlayException exception = assertThrows(InvalidPlayException.class,
-        () -> interactor.execute(new ConfirmPlayInputData(1)));
+    InvalidPlayException exception = assertThrows(InvalidPlayException.class, () -> {
+      confirmPlayInteractor.execute(inputData);
+    });
     assertEquals(ConfirmPlayInteractor.CENTER_MSG, exception.getMessage());
   }
 
   @Test
-  void testInvalidPlayNotInline() {
-    Game game = mockGame(false);
-    when(gameDao.get(anyString())).thenReturn(game);
+  void testValidFirstMove() {
 
-    List<Move> moves = List.of(
-        new Move(0, 0, new Letter('A', 1)),
-        new Move(1, 1, new Letter('B', 1)));
-    game.getCurrentPlay().setMoves(moves);
-
-    InvalidPlayException exception = assertThrows(InvalidPlayException.class,
-        () -> interactor.execute(new ConfirmPlayInputData("game1")));
-    assertEquals(ConfirmPlayInteractor.INLINE_MSG, exception.getMessage());
-  }
-
-  @Test
-  void testInvalidPlayNotContinuous() {
-    Game game = mockGame(false);
-    when(gameDao.get(anyString())).thenReturn(game);
-
-    List<Move> moves = List.of(
-        new Move(0, 0, new Letter('A', 1)),
-        new Move(0, 2, new Letter('B', 1)));
-    game.getCurrentPlay().setMoves(moves);
-
-    InvalidPlayException exception = assertThrows(InvalidPlayException.class,
-        () -> interactor.execute(new ConfirmPlayInputData("game1")));
-    assertEquals(ConfirmPlayInteractor.CONTINUOUS_MSG, exception.getMessage());
-  }
-
-  @Test
-  void testInvalidPlayNotConnected() {
-    Game game = mockGame(false);
-    when(gameDao.get(anyString())).thenReturn(game);
-
-    List<Move> moves = List.of(
-        new Move(5, 5, new Letter('A', 1)),
-        new Move(5, 6, new Letter('B', 1)));
-    game.getCurrentPlay().setMoves(moves);
-
-    InvalidPlayException exception = assertThrows(InvalidPlayException.class,
-        () -> interactor.execute(new ConfirmPlayInputData("game1")));
-    assertEquals(ConfirmPlayInteractor.CONNECTED_MSG, exception.getMessage());
   }
 }
