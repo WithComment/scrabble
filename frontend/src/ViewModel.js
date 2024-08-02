@@ -37,20 +37,40 @@ class ViewModel{
     setSelectedLetter(selectedLetter){
         this.selectedLetter = selectedLetter;
     }
-    async sendInput(input){
-        let response = await fetch(this.baseUrl, {
+    async handleInput(input){
+        console.log('input handling')
+        let response = null;
+        let request = {            
             method: 'POST',
             gameId: this.gameId,
             inputType : input.type,
             x: input.x,
             y: input.y,
-            char: this.selectedLetter,
-        })
+            char: this.selectedLetter
+        }
+        if (input.type === 'contest'){
+            response = await fetch(`${this.baseUrl}contest/`, request);
+        } else if (input.type === 'redraw'){
+            response = await fetch(`${this.baseUrl}redraw/`, request);
+        } else{
+            if (input.type === 'lclick'){
+                if (this.selectedLetter != null){
+                    response = await fetch(`${this.baseUrl}place_letter/`, request);
+                } else {
+                    return;
+                }
+            } else if (input.type === 'rclick'){
+                response = await fetch(`${this.baseUrl}remove_letter/`, request);
+            }
+        }
+        this.handleResponse(response);
     }
 
     handleResponse(response){
-        return;
+        let reponse = response.json();
+        
     }
+
 }
 
 export default ViewModel;

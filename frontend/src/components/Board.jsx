@@ -12,14 +12,14 @@ function Board({ board, boardViewModel }){
                 x : xCoord,
                 y : yCoord,
             }
-            viewModel. sendInput(input)
+            viewModel.handleInput(input)
         } else if (e.type === "contextmenu"){
             let input = {
                 type : 'rclick',
                 x : xCoord,
                 y : yCoord,
             }
-            viewModel. sendInput(input)
+            viewModel.handleInput(input)
         }
     }
 
