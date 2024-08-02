@@ -33,6 +33,14 @@ public class Player implements Serializable {
         this.tempScore = 0;
     }
 
+    public Player(String name) {
+        this.name = name;
+        this.id = idCounter++;
+        this.inventory = new ArrayList<>();
+        this.score = 0;
+        this.tempScore = 0;
+    }
+
     @JsonCreator
     public Player(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("inventory") List<Letter> inventory, @JsonProperty("score") int score, @JsonProperty("tempScore") int tempScore) {
         this.id = id;

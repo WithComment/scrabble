@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class Play {
   private final Player player;
-  private final List<Move> moves;
+  private List<Move> moves;
   private List<String> words;
   private boolean failedContest;
 
