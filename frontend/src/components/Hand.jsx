@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './Hand.module.css'
 
-function Hand({ handLetters }){
+function Hand({ handLetters, handViewModel }){
+    const viewModel = handViewModel;
     const pointMapping = {
         'A': 1,
         'B': 3,
@@ -32,17 +33,21 @@ function Hand({ handLetters }){
         ' ': 0
     };
 
+    function handleClick(letter){
+        viewModel.setSelectedLetter(letter);
+    }
+
     return (
         <div className={styles.hand}>
             {handLetters.map((letter, index) => {
                 console.log('Rendering letter:', letter); // Debugging log
                 return (
-                    <div className={styles.handtile} key={index}>
+                    <button className={styles.handtile} key={index} onClick={() => handleClick(letter)}>
                         <p>
                             {letter}
                         </p>
                         <div className={styles.value}>{pointMapping[letter]}</div>
-                    </div>
+                    </button>
                 )
             })}
         </div>
