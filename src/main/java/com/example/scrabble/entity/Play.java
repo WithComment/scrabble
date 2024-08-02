@@ -17,7 +17,7 @@ public class Play {
    */
   public Play(Player player) {
     this.player = player;
-    this.moves = new LinkedList<Move>();
+    this.moves = new LinkedList<>();
   }
 
   /**
