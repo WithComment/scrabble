@@ -1,5 +1,8 @@
 package com.example.scrabble.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +18,8 @@ public class Play {
    * Constructs a new Play for the specified player.
    * @param player The player making the play.
    */
-  public Play(Player player) {
+  @JsonCreator
+  public Play(@JsonProperty("player") Player player) {
     this.player = player;
     this.moves = new LinkedList<Move>();
   }
@@ -81,5 +85,18 @@ public class Play {
    */
   public List<String> getWords() {
     return words;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj){return true;}
+
+    if (obj == null || getClass() != obj.getClass()){return false;}
+
+    Play other = (Play) obj;
+
+    return  (player.equals(other.player)) &&
+            (moves.equals(other.moves)) &&
+            (words.equals(other.words));
   }
 }

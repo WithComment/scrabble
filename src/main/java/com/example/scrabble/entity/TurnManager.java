@@ -1,15 +1,16 @@
 package com.example.scrabble.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.json.JSONObject;
 
 /**
@@ -22,7 +23,7 @@ public class TurnManager implements Serializable {
     private List<Player> Players;
     private Boolean endTurn;
     private Player CurrentPlayer;
-    private int PlayerNumber;
+    private int PlayerNumber; //index of the current player in Players
     private List<Integer> NumContestFailed;
     private Play CurrentPlay;
 
@@ -30,7 +31,6 @@ public class TurnManager implements Serializable {
      * Constructs a TurnManager with an initial state.
      * Initializes the endTurn flag, current player, players list, and contest failure counts.
      */
-    public TurnManager(){}
     public TurnManager(List<Player> players) {
         this.endTurn = false;
         this.Players = players;
@@ -41,6 +41,21 @@ public class TurnManager implements Serializable {
         }
     }
 
+    @JsonCreator
+    public TurnManager(
+            @JsonProperty("Players") List<Player> Players,
+            @JsonProperty("endTurn") Boolean endTurn,
+            @JsonProperty("CurrentPlayer") Player CurrentPlayer,
+            @JsonProperty("PlayerNumber") int PlayerNumber,
+            @JsonProperty("NumContestFailed") List<Integer> NumContestFailed,
+            @JsonProperty("CurrentPlay") Play CurrentPlay) {
+        this.Players = Players;
+        this.endTurn = endTurn;
+        this.CurrentPlayer = CurrentPlayer;
+        this.PlayerNumber = PlayerNumber;
+        this.NumContestFailed = NumContestFailed;
+        this.CurrentPlay = CurrentPlay;
+    }
 
     public TurnManager(JSONObject json){
         this.parseJSON(json);
@@ -53,8 +68,6 @@ public class TurnManager implements Serializable {
         this.CurrentPlayer = Players.getFirst();
         this.PlayerNumber = 0;
         this.CurrentPlay = null;
-
-
     }
 
     @Serial
@@ -127,7 +140,8 @@ public class TurnManager implements Serializable {
      * Returns the cause of this exception.
      * @return The cause of this exception.
      */
-    public List<Player> GetPlayers() {
+    @JsonIgnore
+    public List<Player> getPlayers() {
         return this.Players;
     }
 
@@ -181,6 +195,7 @@ public class TurnManager implements Serializable {
      *
      * @return the number of the current player
      */
+    @JsonIgnore
     public int getCurrentPlayerNum() {
         return PlayerNumber;
     }
@@ -190,8 +205,34 @@ public class TurnManager implements Serializable {
      *
      * @return the current play
      */
+    @JsonIgnore
     public Play getCurrentPlay() {
         return CurrentPlay;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj){return true;}
+
+        if (obj == null || getClass() != obj.getClass()){return false;}
+
+        TurnManager other = (TurnManager) obj;
+
+        List<Boolean> list = Arrays.asList(
+                (Players.equals(other.Players)),
+                (endTurn.equals(other.endTurn)),
+                (CurrentPlayer.equals(other.CurrentPlayer)),
+                (PlayerNumber == other.PlayerNumber),
+                (NumContestFailed.equals(other.NumContestFailed)),
+                (Objects.equals(CurrentPlay, other.CurrentPlay)));
+        System.out.println("TM: " + list);
+
+        return  (Players.equals(other.Players)) &&
+                (endTurn.equals(other.endTurn)) &&
+                (CurrentPlayer.equals(other.CurrentPlayer)) &&
+                (PlayerNumber == other.PlayerNumber) &&
+                (NumContestFailed.equals(other.NumContestFailed)) &&
+                (Objects.equals(CurrentPlay, other.CurrentPlay));
     }
 }
 

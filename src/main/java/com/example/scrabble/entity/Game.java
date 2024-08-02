@@ -1,10 +1,15 @@
 package com.example.scrabble.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a game of Scrabble.
@@ -17,7 +22,6 @@ public class Game implements Serializable {
     private static int nextId = 0;
     private final int id; // Unique ID for the game instance
     private LetterBag letterBag; // Bag of letters available to draw from
-    private int nextPlayerId = 0; // Counter to assign unique IDs to players within this game
     private Board board; // The game board
     private List<Player> players; // List of players in the game
     private List<Play> history; // History of plays made during the game
@@ -28,23 +32,34 @@ public class Game implements Serializable {
      * Constructs a new Game instance.
      * Initializes the game with a unique ID, a new board, empty player list, empty play history, and a new letter bag.
      */
-    public Game() {
+    public Game(List<Player> players) {
         this.id = nextId++;
-        this.board = new Board();
-        this.players = new ArrayList<>();
-        this.history = new ArrayList<>();
         this.letterBag = new LetterBag();
-        this.turnManager = new TurnManager(new ArrayList<>());
-    }
-
-    public void setPlayers(List<Player> players) {
-        this.players.addAll(players);
-        for(Player player : players){
-            this.turnManager.updatePlayer(player);
-        }
+        this.board = new Board();
+        this.players = players;
+        this.history = new ArrayList<>();
+        this.turnManager = new TurnManager(players);
+        this.leaderboard = players;
         for (Player player : players) {
             player.addLetter(letterBag.drawLetters(7));
         }
+    }
+
+    @JsonCreator
+    public Game(@JsonProperty("id") int id, 
+                @JsonProperty("letterBag") LetterBag letterBag, 
+                @JsonProperty("board") Board board, 
+                @JsonProperty("players") List<Player> players, 
+                @JsonProperty("history") List<Play> history, 
+                @JsonProperty("turnManager") TurnManager turnManager, 
+                @JsonProperty("leaderboard") List<Player> leaderboard) {
+        this.id = id;
+        this.letterBag = letterBag;
+        this.board = board;
+        this.players = players;
+        this.history = history;
+        this.turnManager = turnManager;
+        this.leaderboard = leaderboard;
     }
 
     /**
@@ -54,6 +69,10 @@ public class Game implements Serializable {
      */
     public int getId() {
         return id;
+    }
+
+    public List<Play> getHistory() {
+        return history;
     }
 
     /**
@@ -74,6 +93,7 @@ public class Game implements Serializable {
      * @param y The y-coordinate of the cell.
      * @return The tile at the specified position.
      */
+    @JsonIgnore
     public Tile getBoardCell(int x, int y) {
         return board.getCell(x, y);
     }
@@ -93,14 +113,17 @@ public class Game implements Serializable {
      * @param playerId The ID of the player.
      * @return The specified player.
      */
+    @JsonIgnore
     public Player getPlayer(int playerId) {
         return players.get(playerId);
     }
 
+    @JsonIgnore
     public Player getCurrentPlayer() {
         return turnManager.getCurrentPlayer();
     }
 
+    @JsonIgnore
     public Play getCurrentPlay() {
         return turnManager.getCurrentPlay();
     }
@@ -138,6 +161,7 @@ public class Game implements Serializable {
      * @return The last play made in the game, or null if the game has no plays.
      * @return The last play made in the game.
      */
+    @JsonIgnore
     public Play getLastPlay() {
         if (history.isEmpty()) {
             return null;
@@ -163,6 +187,7 @@ public class Game implements Serializable {
      *
      * @return The number of players.
      */
+    @JsonIgnore
     public int getNumPlayers() {
         return players.size();
     }
@@ -172,6 +197,7 @@ public class Game implements Serializable {
      *
      * @return A list of player IDs.
      */
+    @JsonIgnore
     public List<Integer> getPlayerIds() {
         List<Integer> playerIds = new ArrayList<>();
         for (Player player : players) {
@@ -186,6 +212,7 @@ public class Game implements Serializable {
      * @param playerId The ID of the player.
      * @return The score of the specified player.
      */
+    @JsonIgnore
     public int getPlayerScore(int playerId) {
         return players.get(playerId).getScore();
     }
@@ -196,6 +223,7 @@ public class Game implements Serializable {
      *
      * @return An List<Integer> containing the scores of all players.
      */
+    @JsonIgnore
     public List<Integer> getPlayerScore() {
         List<Integer> scores = new ArrayList<>();
         for (Player player : players) {
@@ -231,6 +259,7 @@ public class Game implements Serializable {
      * @param playerId The ID of the player whose inventory is requested.
      * @return A List<Letter> representing the player's current inventory of letters.
      */
+    @JsonIgnore
     public List<Letter> getPlayerInventory(int playerId) {
         return players.get(playerId).getInventory();
     }
@@ -290,8 +319,18 @@ public class Game implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        // @RickChen-0918 TODO: implement equals
-        return false;
+    public boolean equals(Object obj) {
+        if (this == obj){return true;}
+
+        if (obj == null || getClass() != obj.getClass()){return false;}
+
+        Game other = (Game) obj;
+
+        return  (id == other.id) &&
+                (letterBag.equals(other.letterBag)) &&
+                (board.equals(other.board)) &&
+                (players.equals(other.players)) &&
+                (history.equals(other.history)) &&
+                (leaderboard.equals(other.leaderboard));
     }
 }

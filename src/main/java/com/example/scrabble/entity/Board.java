@@ -1,5 +1,7 @@
 package com.example.scrabble.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -9,17 +11,20 @@ import java.io.Serializable;
 
 public class Board implements Serializable {
     private Tile[][] board;
-    private int height;
-    private int width;
+    private int height = 15;
+    private int width = 15;
 
 
     /**
      * Constructs a new Board with an initial state.
      */
     public Board() {
-        height = 15;
-        width = 15;
         board = getBlankBoard();
+    }
+
+    @JsonCreator
+    public Board(@JsonProperty("board") Tile[][] board) {
+        this.board = board;
     }
 
     public Board(JSONObject jsonObject) {

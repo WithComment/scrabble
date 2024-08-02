@@ -35,12 +35,7 @@ public class GameDao implements GameDataAccess {
 
     private void writeGame(Game game) {
         try {
-            if (!gameExists(game.getId())) {
-                new File(makeFilePath(game.getId())).createNewFile();
-            }
-            FileOutputStream fileOutputStream = new FileOutputStream(makeFilePath(game.getId()));
-            objectMapper.writeValue(fileOutputStream, game);
-            fileOutputStream.close();
+            objectMapper.writeValue(new File(makeFilePath(game.getId())), game);
         } catch (IOException e) {
             throw new GameDaoException("Error writing game to file", e);
         }
@@ -78,9 +73,8 @@ public class GameDao implements GameDataAccess {
         if (!gameExists(gameId)) {
             throw new IllegalArgumentException("Game with the specified ID does not exist.");
         }
-        try (BufferedReader reader = new BufferedReader(new FileReader(makeFilePath(gameId)));) {
-            Game game = objectMapper.readValue(reader, Game.class);
-            return game;
+        try {
+            return objectMapper.readValue(new File(makeFilePath(gameId)), Game.class);
         } catch (Exception e) {
             throw new GameDaoException("Error loading game from file", e);
         }
