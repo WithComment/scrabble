@@ -61,7 +61,7 @@ public class ContestInteractor implements ContestInputBoundary {
     }
 
     @Override
-    public Game execute(ContestInputData contestInputData) throws ContestException {
+    public ContestOutputData execute(ContestInputData contestInputData) throws ContestException {
         game = gameDAO.get(contestInputData.getGameId());
         player = game.getPlayer(contestInputData.getPlayerId());
 
@@ -77,6 +77,7 @@ public class ContestInteractor implements ContestInputBoundary {
                 Play lastPlay = game.removeLastPlay();
                 Player contestedPlayer = lastPlay.getPlayer();
                 contestedPlayer.BeContested();
+                return new ContestOutputData(invalidWords);
             } else {
                 fail();
                 throw new ContestException("All words in last move are valid.");
@@ -91,6 +92,5 @@ public class ContestInteractor implements ContestInputBoundary {
         finally {
             gameDAO.update(game);
         }
-        return game;
     }
 }
