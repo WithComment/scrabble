@@ -43,4 +43,16 @@ public class Move {
   public Letter getLetter() {
     return letter;
   }
+
+  @Override
+  public boolean equals(Object other) {
+    if (this == other) {
+      return true;
+    }
+    if (other == null || getClass() != other.getClass()) {
+      return false;
+    }
+    Move move = (Move) other;
+    return x == move.x && y == move.y && letter.equals(move.letter);
+  }
 }
