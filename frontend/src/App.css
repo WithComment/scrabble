@@ -13,7 +13,7 @@ body > *{
   background-position: bottom;
 }
 
-.App{
+.Game{
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -64,4 +64,30 @@ body > *{
   background-color: grey;
   border: 2px solid aqua;
   border-radius: 10px;
+}
+
+
+#login{
+  width: fit-content;
+}
+
+.title{
+  margin-top: 100px;
+}
+
+.container{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer{
+  position: fixed;
+  bottom: 0;
+  background-color: rgba(22, 22, 68, 0.4);
+  color: white;
+  width: 100%;
+  text-align: center;
 }
