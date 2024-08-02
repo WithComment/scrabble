@@ -1,5 +1,8 @@
 package com.example.scrabble.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,22 +13,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Represents a Player's turn.
  */
 public class Play {
-
-  private Player player;
+  private final Player player;
   private List<Move> moves;
   private List<String> words;
   private boolean failedContest;
 
-  public Play() {}
 
   /**
    * Constructs a new Play for the specified player.
    * @param player The player making the play.
    */
   public Play(Player player) {
+      this.player = player;
+      this.moves = new LinkedList<>();
+      this.failedContest = false;
+  }
+
+  @JsonCreator
+  public Play(@JsonProperty("player") Player player, @JsonProperty("moves") List<Move> moves, @JsonProperty("words") List<String> words, @JsonProperty("failedContest") boolean failedContest) {
     this.player = player;
-    this.moves = new LinkedList<>();
-    this.failedContest = false;
+    this.moves = moves;
+    this.words = words;
+    this.failedContest = failedContest;
   }
 
   /**
@@ -114,5 +123,18 @@ public class Play {
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj){return true;}
+
+    if (obj == null || getClass() != obj.getClass()){return false;}
+
+    Play other = (Play) obj;
+
+    return  (player.equals(other.player)) &&
+            (moves.equals(other.moves)) &&
+            (words.equals(other.words));
   }
 }

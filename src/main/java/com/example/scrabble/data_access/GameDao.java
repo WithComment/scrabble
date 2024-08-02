@@ -78,8 +78,8 @@ public class GameDao implements GameDataAccess {
         if (!gameExists(gameId)) {
             throw new IllegalArgumentException("Game with the specified ID does not exist.");
         }
-        try (BufferedReader reader = new BufferedReader(new FileReader(makeFilePath(gameId)))) {
-            return objectMapper.readValue(reader, Game.class);
+        try {
+            return objectMapper.readValue(new File(makeFilePath(gameId)), Game.class);
         } catch (Exception e) {
             throw new GameDaoException("Error loading game from file", e);
         }

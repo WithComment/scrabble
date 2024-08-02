@@ -1,5 +1,7 @@
 package com.example.scrabble.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -12,10 +14,10 @@ public class Letter implements Serializable {
     private char letter;
     private int points;
 
-    public Letter() {}
+    @JsonCreator
     public Letter(
-        char letter,
-        int points
+            @JsonProperty("letter") char letter,
+            @JsonProperty("points") int points
     ) {
         this.letter = letter;
         this.points = points;
@@ -43,9 +45,11 @@ public class Letter implements Serializable {
      */
     @Override
     public boolean equals(Object o) {
-        return (o instanceof Letter && ((Letter) o).getLetter() == getLetter());
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Letter letter1 = (Letter) o;
+        return letter == letter1.letter && points == letter1.points;
     }
-
     @Override
     public String toString() {
         return Character.toString(getLetter());
