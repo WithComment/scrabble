@@ -1,0 +1,1779 @@
+{
+  "id": 0,
+  "letterBag": {
+    "length": 84
+  },
+  "board": {
+    "board": [
+      [
+        {
+          "wordMult": 3,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 3,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 3,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        }
+      ],
+      [
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        }
+      ],
+      [
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 3,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 3,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        }
+      ],
+      [
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        }
+      ],
+      [
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        }
+      ],
+      [
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 3,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 3,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 3,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 3,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        }
+      ],
+      [
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        }
+      ],
+      [
+        {
+          "wordMult": 3,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 0,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 3,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        }
+      ],
+      [
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        }
+      ],
+      [
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 3,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 3,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 3,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 3,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        }
+      ],
+      [
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        }
+      ],
+      [
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        }
+      ],
+      [
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 3,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 3,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        }
+      ],
+      [
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 2,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        }
+      ],
+      [
+        {
+          "wordMult": 3,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 3,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 2,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 1,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        },
+        {
+          "wordMult": 3,
+          "letterMult": 1,
+          "letter": null,
+          "empty": true,
+          "confirmed": false
+        }
+      ]
+    ],
+    "height": 15,
+    "width": 15
+  },
+  "players": [
+    {
+      "id": 0,
+      "name": "Player 1",
+      "inventory": [
+        {
+          "letter": "N",
+          "points": 1
+        },
+        {
+          "letter": "I",
+          "points": 1
+        },
+        {
+          "letter": "O",
+          "points": 1
+        },
+        {
+          "letter": "V",
+          "points": 4
+        },
+        {
+          "letter": "N",
+          "points": 1
+        },
+        {
+          "letter": "N",
+          "points": 1
+        },
+        {
+          "letter": "R",
+          "points": 1
+        }
+      ],
+      "score": 0,
+      "tempScore": 0
+    },
+    {
+      "id": 1,
+      "name": "Player 2",
+      "inventory": [
+        {
+          "letter": "T",
+          "points": 1
+        },
+        {
+          "letter": "D",
+          "points": 2
+        },
+        {
+          "letter": "A",
+          "points": 1
+        },
+        {
+          "letter": "O",
+          "points": 1
+        },
+        {
+          "letter": "P",
+          "points": 3
+        },
+        {
+          "letter": "E",
+          "points": 1
+        },
+        {
+          "letter": "G",
+          "points": 2
+        }
+      ],
+      "score": 0,
+      "tempScore": 0
+    }
+  ],
+  "turnManager": {
+    "endTurn": false,
+    "currentPlay": null,
+    "currentPlayer": {
+      "id": 0,
+      "name": "Player 1",
+      "inventory": [
+        {
+          "letter": "N",
+          "points": 1
+        },
+        {
+          "letter": "I",
+          "points": 1
+        },
+        {
+          "letter": "O",
+          "points": 1
+        },
+        {
+          "letter": "V",
+          "points": 4
+        },
+        {
+          "letter": "N",
+          "points": 1
+        },
+        {
+          "letter": "N",
+          "points": 1
+        },
+        {
+          "letter": "R",
+          "points": 1
+        }
+      ],
+      "score": 0,
+      "tempScore": 0
+    },
+    "currentPlayerNum": 0
+  },
+  "currentPlay": null,
+  "currentPlayer": {
+    "id": 0,
+    "name": "Player 1",
+    "inventory": [
+      {
+        "letter": "N",
+        "points": 1
+      },
+      {
+        "letter": "I",
+        "points": 1
+      },
+      {
+        "letter": "O",
+        "points": 1
+      },
+      {
+        "letter": "V",
+        "points": 4
+      },
+      {
+        "letter": "N",
+        "points": 1
+      },
+      {
+        "letter": "N",
+        "points": 1
+      },
+      {
+        "letter": "R",
+        "points": 1
+      }
+    ],
+    "score": 0,
+    "tempScore": 0
+  },
+  "numPlayers": 2,
+  "playerIds": [
+    0,
+    1
+  ],
+  "lastPlay": null,
+  "playerScore": [
+    0,
+    0
+  ]
+}
