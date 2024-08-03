@@ -10,6 +10,15 @@ class ViewModel{
         this.setBoard = setBoard;
         this.setHand = setHand;
         this.selectedLetter = null;
+        this.selectedLettersRedraw = [];
+    }
+    setRedrawLetter(letter){
+        console.log('Setting redraw letter:', letter);
+        this.selectedLettersRedraw.push(letter);
+        console.log('Selected letters redraw:', this.selectedLettersRedraw);
+    }
+    removeRedrawLetter(letter){
+        this.selectedLettersRedraw = this.selectedLettersRedraw.filter((l) => l !== letter);
     }
     setTile(x, y, letter){
         this.board[x][y] = letter;
@@ -58,14 +67,18 @@ class ViewModel{
         } else{
             if (input.type === 'lclick'){
                 if (this.selectedLetter != null){
-                    let request = {            
+                    let request = {      
                         gameId: this.gameId,
                         x: input.x,
                         y: input.y,
-                        char: this.selectedLetter
+                        letter: this.selectedLetter
                     };
                     console.log(request);
-                    response = await fetch(`${this.baseUrl}place_letter/`, request);
+                    console.log(`${this.baseUrl}place_letter/`)
+                    response = await fetch(`${this.baseUrl}place_letter/`, {
+                        method: 'POST',
+                        body: JSON.stringify(request),
+                    });
                 } else {
                     return;
                 }
