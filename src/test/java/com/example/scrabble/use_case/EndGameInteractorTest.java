@@ -7,7 +7,6 @@ import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Letter;
 import com.example.scrabble.entity.Player;
-import com.example.scrabble.use_case.InvalidPlayException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,7 +15,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

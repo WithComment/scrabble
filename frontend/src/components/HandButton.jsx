@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styles from './Hand.module.css';
 
-function HandButton({ letter, handViewModel, index }) {
-    const [selected, setSelected] = useState(false);
+function HandButton({ letter, handViewModel, index, select, selectedTile }) {
+    const [selectedForRedraw, setSelectedForRedraw] = useState(false);
+    const [selectedForPlay, setSelectedForPlay] = useState(false);
+    const ref = useRef();
     const viewModel = handViewModel;
     const pointMapping = {
         'A': 1,
@@ -36,20 +38,25 @@ function HandButton({ letter, handViewModel, index }) {
 
     function handleClick(e, letter){
         if (e.type === "click") {
+            setSelectedForRedraw(false);
+            setSelectedForPlay(true);
+            select(ref);
             viewModel.setSelectedLetter(letter);
         } else if (e.type === "contextmenu") {
-            if (!selected) {
+            e.preventDefault()
+            if (!selectedForRedraw) {
                 viewModel.setRedrawLetter(letter);
-                setSelected(true);
+                setSelectedForRedraw(true);
+                setSelectedForPlay(false);
             } else {
                 viewModel.removeRedrawLetter(letter);
-                setSelected(false);
+                setSelectedForRedraw(false);
             }
         }
     }
 
     return(
-        <button style={selected ? {border:'1px solid red'} : {}} className={styles.handtile} key={index} onContextMenu={(e, letter) => handleClick(e)} onClick={(e) => handleClick(e, letter)}>
+        <button ref={ref} style={selectedForRedraw ? {border:'3px solid red'} : (selectedTile === ref) ? {border:'3px solid #32de84'} :  {}} className={styles.handtile} key={index} onContextMenu={(e, letter) => handleClick(e)} onClick={(e) => handleClick(e, letter)}>
             <p>
                 {letter}
             </p>

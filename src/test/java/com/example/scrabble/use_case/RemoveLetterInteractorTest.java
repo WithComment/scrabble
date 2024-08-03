@@ -5,7 +5,6 @@ import com.example.scrabble.use_case.remove_letter.RemoveLetterInputData;
 import com.example.scrabble.use_case.remove_letter.RemoveLetterOutputData;
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.*;
-import com.example.scrabble.use_case.InvalidPlayException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

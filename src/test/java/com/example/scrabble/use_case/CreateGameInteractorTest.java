@@ -5,7 +5,6 @@ import com.example.scrabble.use_case.create_game.CreateGameInputData;
 import com.example.scrabble.use_case.create_game.CreateGameOutputData;
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Game;
-import com.example.scrabble.entity.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -39,7 +38,6 @@ class CreateGameInteractorTest {
         // Execute the create game interactor
         CreateGameOutputData outputData = createGameInteractor.execute(inputData);
 
-        Game Testgame = gameDao.get(outputData.getGameId());
 
         // Verify that a game was created and the data access was called
         verify(gameDao, times(1)).create(any(Game.class));
