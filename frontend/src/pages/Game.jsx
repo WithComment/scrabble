@@ -32,8 +32,9 @@ function Game() {
         score: 12
       },
     ]);
-    const { id, playerId } = useParams();
-    const viewModel = new ViewModel(id, playerId, board, hand, leaderboard, setBoard, setHand, setLeaderboard)
+    const { gameId, playerId } = useParams();
+    console.log(gameId, playerId)
+    const viewModel = new ViewModel(gameId, playerId, board, hand, leaderboard, setBoard, setHand, setLeaderboard)
     return (
         <div className="Game">
         <Leaderboard players={leaderboard}/>

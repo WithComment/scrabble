@@ -39,7 +39,8 @@ class ViewModel{
         this.selectedLetter = selectedLetter;
     }
     async handleInput(input){
-        console.log('input handling')
+        console.log('input handling');
+        console.log(input);
         let response = null;
         if (input.type === 'contest'){
             let request = {            
@@ -63,7 +64,8 @@ class ViewModel{
                         x: input.x,
                         y: input.y,
                         char: this.selectedLetter
-                    }
+                    };
+                    console.log(request);
                     response = await fetch(`${this.baseUrl}place_letter/`, request);
                 } else {
                     return;
