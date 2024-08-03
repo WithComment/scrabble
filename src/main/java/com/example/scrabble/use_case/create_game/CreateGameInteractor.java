@@ -20,6 +20,7 @@ public class CreateGameInteractor implements CreateGameInputBoundary {
     Game game = new Game(data.getPlayerNames());
     game.startGame();
     gameDao.create(game);
-    return new CreateGameOutputData(game.getPlayers());
+    int gameId = game.getId();
+    return new CreateGameOutputData(game.getPlayers(), gameId);
   }
 }
