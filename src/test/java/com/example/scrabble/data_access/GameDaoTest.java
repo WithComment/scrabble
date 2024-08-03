@@ -2,6 +2,7 @@ package com.example.scrabble.data_access;
 
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Player;
+import com.example.scrabble.entity.Tile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,22 +19,14 @@ public class GameDaoTest {
 
     @Test
     public void testCreateSuccess() throws Exception {
-        List<Player> players = new ArrayList<>();
-        players.add(new Player());
-        players.add(new Player());
-        players.add(new Player());
-        players.add(new Player());
-
-        Game game = new Game();
-        game.setPlayers(players);
+        Game game = new Game(4);
         Game createdGame = gameDao.create(game);
 
         int gameId = game.getId();
         Game fetchedGame = gameDao.get(gameId);
 
-        Assertions.assertEquals(createdGame.getId(), fetchedGame.getId());
+        Assertions.assertEquals(createdGame, game);
         Assertions.assertEquals(createdGame, fetchedGame);
     }
-
 }
 

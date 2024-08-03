@@ -1,6 +1,7 @@
 package com.example.scrabble.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -11,9 +12,9 @@ import org.junit.jupiter.api.Test;
 
 class PlayTest {
 
-  private static Letter a = new Letter('a', 1);
-  private static Letter b = new Letter('a', 1);
-  private static Player player = new Player("John");
+  private final static Letter a = new Letter('a', 1);
+  private final static Letter b = new Letter('a', 1);
+  private final static Player player = new Player("John");
 
   @Test
   void testPlayCreation() {
@@ -67,8 +68,18 @@ class PlayTest {
   }
 
   @Test
+  void testIsVertical() {
+    Play play = new Play(player);
+    play.addMove(new Move(0, 0, a));
+    play.addMove(new Move(1, 0, a));
+    assertFalse(play.isVertical());
+    play.removeMove();
+    play.addMove(new Move(0, 1, a));
+    assertTrue(play.isVertical());
+  }
+
+  @Test
   void testSetAndGetWords() {
-    Player player = new Player("John");
     Play play = new Play(player);
     List<String> words = new ArrayList<>();
     words.add("TEST");

@@ -1,6 +1,9 @@
 package com.example.scrabble.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -25,9 +28,8 @@ public class Game implements Serializable {
 
     // turn manager
     private Boolean endTurn;
-    private Player currentPlayer;
     private int playerNumber;
-    private final List<Integer> numContestFailed;
+    private List<Integer> numContestFailed;
     private Play currentPlay;
 
     /**
@@ -36,10 +38,12 @@ public class Game implements Serializable {
      */
     public Game() {
         this.id = nextId++;
+        this.letterBag = new LetterBag();
         this.board = new Board();
         this.players = new ArrayList<>();
         this.history = new ArrayList<>();
-        this.letterBag = new LetterBag();
+        this.leaderboard = players;
+
         this.endTurn = false;
         this.numContestFailed = new ArrayList<>(Collections.nCopies(players.size(), 0));
         this.currentPlay = null;
@@ -48,10 +52,11 @@ public class Game implements Serializable {
     public Game(int numOfPlayers) {
         this();
         for (int i = 0; i < numOfPlayers; i++) {
-            players.add(new Player("Player " + (i + 1)));
+            players.add(new Player());
+            numContestFailed.add(0);
         }
-        if(numOfPlayers > 0){
-            this.currentPlayer = players.getFirst();
+        for (Player player : players) {
+            player.addLetter(letterBag.drawLetters(7));
         }
     }
 
@@ -59,21 +64,46 @@ public class Game implements Serializable {
         this();
         for (String playerName : playerNames) {
             players.add(new Player(playerName));
+            numContestFailed.add(0);
         }
-        if(!players.isEmpty()){
-            this.currentPlayer = players.getFirst();
-        }
-    }
-
-    public void setPlayers(List<Player> players) {
-        this.players.addAll(players);
         for (Player player : players) {
             player.addLetter(letterBag.drawLetters(7));
         }
     }
 
+    @JsonCreator
+    public Game(@JsonProperty("id") int id,
+                @JsonProperty("letterBag") LetterBag letterBag,
+                @JsonProperty("board") Board board,
+                @JsonProperty("players") List<Player> players,
+                @JsonProperty("history") List<Play> history,
+                @JsonProperty("leaderboard") List<Player> leaderboard,
+                @JsonProperty("endTurn") Boolean endTurn,
+                @JsonProperty("playerNumber") int playerNumber,
+                @JsonProperty("numContestFailed") List<Integer> numContestFailed,
+                @JsonProperty("currentPlay") Play currentPlay) {
+        this.id = id;
+        this.letterBag = letterBag;
+        this.board = board;
+        this.players = players;
+        this.history = history;
+        this.leaderboard = leaderboard;
+        this.endTurn = endTurn;
+        this.playerNumber = playerNumber;
+        this.numContestFailed = numContestFailed;
+        this.currentPlay = currentPlay;
+    }
+    /**
+     * Gets the unique ID of the game.
+     *
+     * @return The unique ID of the game.
+     */
     public int getId() {
         return id;
+    }
+
+    public List<Play> getHistory() {
+        return history;
     }
 
     /**
@@ -94,6 +124,7 @@ public class Game implements Serializable {
      * @param y The y-coordinate of the cell.
      * @return The tile at the specified position.
      */
+    @JsonIgnore
     public Tile getBoardCell(int x, int y) {
         return board.getCell(x, y);
     }
@@ -108,6 +139,7 @@ public class Game implements Serializable {
      * @param playerId The ID of the player.
      * @return The specified player.
      */
+    @JsonIgnore
     public Player getPlayer(int playerId) {
         return players.get(playerId);
     }
@@ -119,6 +151,7 @@ public class Game implements Serializable {
     public void addPlayer() {
         Player player = new Player();
         players.add(player);
+        this.numContestFailed.add(0);
     }
 
     /**
@@ -135,6 +168,7 @@ public class Game implements Serializable {
      *
      * @return The last play made in the game, or null if the game has no plays.
      */
+    @JsonIgnore
     public Play getLastPlay() {
         if (history.isEmpty()) {
             return null;
@@ -159,6 +193,7 @@ public class Game implements Serializable {
      *
      * @return The number of players.
      */
+    @JsonIgnore
     public int getNumPlayers() {
         return players.size();
     }
@@ -168,6 +203,7 @@ public class Game implements Serializable {
      *
      * @return A list of player IDs.
      */
+    @JsonIgnore
     public List<Integer> getPlayerIds() {
         List<Integer> playerIds = new ArrayList<>();
         for (Player player : players) {
@@ -182,8 +218,13 @@ public class Game implements Serializable {
      * @param playerId The ID of the player.
      * @return The score of the specified player.
      */
+    @JsonIgnore
     public int getPlayerScore(int playerId) {
         return players.get(playerId).getScore();
+    }
+
+    public List<Integer> getNumContestFailed(){
+        return numContestFailed;
     }
 
 
@@ -192,6 +233,7 @@ public class Game implements Serializable {
      *
      * @return An List<Integer> containing the scores of all players.
      */
+    @JsonIgnore
     public List<Integer> getPlayerScore() {
         List<Integer> scores = new ArrayList<>();
         for (Player player : players) {
@@ -206,6 +248,7 @@ public class Game implements Serializable {
      * @param playerId The ID of the player whose inventory is requested.
      * @return A List<Letter> representing the player's current inventory of letters.
      */
+    @JsonIgnore
     public List<Letter> getPlayerInventory(int playerId) {
         return players.get(playerId).getInventory();
     }
@@ -262,7 +305,7 @@ public class Game implements Serializable {
      */
 
     public void startTurn(){
-        currentPlay = new Play(currentPlayer);
+        currentPlay = new Play(getCurrentPlayer());
         System.out.println(currentPlay);
         this.endTurn = false;
     }
@@ -286,9 +329,9 @@ public class Game implements Serializable {
      *
      * @return the current player
      */
+    @JsonIgnore
     public Player getCurrentPlayer() {
-        currentPlayer = players.get(playerNumber);
-        return currentPlayer;
+        return players.get(playerNumber);
     }
 
     /**
@@ -301,7 +344,7 @@ public class Game implements Serializable {
         if (ContestSucceed){
             numContestFailed.set((playerNumber), numContestFailed.get((playerNumber)));
         }
-        this.currentPlayer.confirmTempScore();
+        this.getCurrentPlayer().confirmTempScore();
 //        System.out.println("Player " + this.CurrentPlayer.getId() + " contest result: " + (ContestSucceed ? "Valid" : "Invalid"));
     }
 
@@ -311,9 +354,6 @@ public class Game implements Serializable {
      * @param player the player to be added
      */
     public void addPlayer(Player player) {
-        if(players.isEmpty()){
-            this.currentPlayer = player;
-        }
         players.add(player);
         numContestFailed.add(0);
     }
@@ -342,7 +382,7 @@ public class Game implements Serializable {
      *
      * @return the number of the current player
      */
-    public int getCurrentPlayerNum() {
+    public int getPlayerNumber() {
         return playerNumber;
     }
 
@@ -365,8 +405,23 @@ public class Game implements Serializable {
             playerNumber = (playerNumber + 1) % players.size();
         }
         playerNumber = (playerNumber + 1) % players.size();
-        currentPlayer = players.get(playerNumber);
 
         endTurn = true;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj){return true;}
+
+        if (obj == null || getClass() != obj.getClass()){return false;}
+
+        Game other = (Game) obj;
+
+        return  (id == other.id) &&
+                (letterBag.equals(other.letterBag)) &&
+                (board.equals(other.board)) &&
+                (players.equals(other.players)) &&
+                (history.equals(other.history)) &&
+                (leaderboard.equals(other.leaderboard));
     }
 }
