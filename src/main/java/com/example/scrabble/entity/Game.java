@@ -422,6 +422,10 @@ public class Game implements Serializable {
                 (board.equals(other.board)) &&
                 (players.equals(other.players)) &&
                 (history.equals(other.history)) &&
-                (leaderboard.equals(other.leaderboard));
+                (leaderboard.equals(other.leaderboard)) &&
+                (endTurn == other.endTurn) &&
+                (playerNumber == other.playerNumber) &&
+                (numContestFailed.equals(other.numContestFailed)) &&
+                (currentPlay.equals(other.currentPlay));
     }
 }
