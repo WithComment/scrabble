@@ -2,6 +2,7 @@ package com.example.scrabble.use_case.join_game;
 
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Game;
+import com.example.scrabble.entity.LetterBag;
 import com.example.scrabble.entity.Player;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,9 @@ public class JoinGameInteractor implements JoinGameInputBoundary {
         Game game = gameDataAccess.get(joinGameInputData.getGameId());
 
         Player newPlayer = new Player(joinGameInputData.getPlayerName());
+        LetterBag letterBag = game.getLetterBag();
         game.addPlayer(newPlayer);
+        newPlayer.addLetter(letterBag.drawLetters(7));
 
         gameDataAccess.update(game);
         return new JoinGameOutputData(joinGameInputData.getPlayerName());
