@@ -1,9 +1,17 @@
 package com.example.scrabble.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Objects;
 import java.io.*;
 
 /**
@@ -24,8 +32,6 @@ public class Tile implements Serializable {
      * @param letter The letter placed on the tile.
      */
 
-    public Tile(){
-    }
 
     public Tile(int wordMult, int letterMult, Letter letter) {
         this.wordMult = wordMult;
@@ -33,7 +39,17 @@ public class Tile implements Serializable {
         this.letter = letter;
         this.isConfirmed = false;
     }
-  
+
+    @JsonCreator
+    public Tile(@JsonProperty("wordMult") int wordMult, @JsonProperty("letterMult") int letterMult, @JsonProperty("letter") Letter letter, @JsonProperty("isConfirmed") boolean isConfirmed) {
+        this.wordMult = wordMult;
+        this.letterMult = letterMult;
+        this.letter = letter;
+        this.isConfirmed = isConfirmed;
+    }
+
+
+
     public Tile(JSONObject json) {
         this.parseJSON(json);
     }
@@ -98,6 +114,7 @@ public class Tile implements Serializable {
      * Checks if the tile is empty.
      * @return True if the tile is empty, false otherwise.
      */
+    @JsonIgnore
     public boolean isEmpty() {
         return letter == null;
     }
@@ -118,19 +135,6 @@ public class Tile implements Serializable {
         return letter == null ? " " : letter.toString();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tile tile = (Tile) o;
-        return (
-            wordMult == tile.wordMult 
-            && letterMult == tile.letterMult 
-            && isConfirmed == tile.isConfirmed 
-            && letter.equals(tile.letter)
-        );
-    }
-
     @Serial
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeChars(new JSONObject(this).toString());
@@ -140,5 +144,13 @@ public class Tile implements Serializable {
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         JSONObject json = new JSONObject(in.readUTF());
         this.parseJSON(json);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tile tile = (Tile) o;
+        return wordMult == tile.wordMult && letterMult == tile.letterMult && isConfirmed == tile.isConfirmed && (Objects.equals(letter, tile.letter));
     }
 }

@@ -1,5 +1,8 @@
 package com.example.scrabble.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Represents a move in a Player's turn.
  */
@@ -16,7 +19,8 @@ public class Move {
    * @param y The y-coordinate of the move.
    * @param letter The letter placed on the board.
    */
-  public Move(int x, int y, Letter letter) {
+  @JsonCreator
+  public Move(@JsonProperty("x") int x, @JsonProperty("y") int y, @JsonProperty("letter") Letter letter) {
     this.x = x;
     this.y = y;
     this.letter = letter;
@@ -46,4 +50,16 @@ public class Move {
     return letter;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj){return true;}
+
+    if (obj == null || getClass() != obj.getClass()){return false;}
+
+    Move other = (Move) obj;
+
+    return  (x == other.x) &&
+            (y == other.y) &&
+            (letter.equals(other.letter));
+  }
 }

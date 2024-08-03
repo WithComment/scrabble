@@ -6,13 +6,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.example.scrabble.data_access.GameDataAccess;
-import com.example.scrabble.entity.Board;
-import com.example.scrabble.entity.Game;
-import com.example.scrabble.entity.Letter;
-import com.example.scrabble.entity.Move;
-import com.example.scrabble.entity.Play;
-import com.example.scrabble.entity.Player;
-import com.example.scrabble.entity.Tile;
+import com.example.scrabble.entity.*;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInputData;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInteractor;
 

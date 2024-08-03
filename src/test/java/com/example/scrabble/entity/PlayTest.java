@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 
 class PlayTest {
 
-  private static Letter a = new Letter('a', 1);
-  private static Letter b = new Letter('a', 1);
-  private static Player player = new Player("John");
+  private final static Letter a = new Letter('a', 1);
+  private final static Letter b = new Letter('a', 1);
+  private final static Player player = new Player("John");
 
   @Test
   void testPlayCreation() {

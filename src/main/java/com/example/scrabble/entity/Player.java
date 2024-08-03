@@ -1,5 +1,7 @@
 package com.example.scrabble.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -37,6 +39,15 @@ public class Player implements Serializable {
         this.inventory = new ArrayList<>();
         this.score = 0;
         this.tempScore = 0;
+    }
+
+    @JsonCreator
+    public Player(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("inventory") List<Letter> inventory, @JsonProperty("score") int score, @JsonProperty("tempScore") int tempScore) {
+        this.id = id;
+        this.name = name;
+        this.inventory = inventory;
+        this.score = score;
+        this.tempScore = tempScore;
     }
 
     public Player(JSONObject json){
@@ -198,6 +209,21 @@ public class Player implements Serializable {
     }
 
     public void eraseTempScore() {
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj){return true;}
+
+        if (obj == null || getClass() != obj.getClass()){return false;}
+
+        Player other = (Player) obj;
+
+        return  (id == other.id) &&
+                (name.equals(other.name)) &&
+                (inventory.equals(other.inventory)) &&
+                (score == other.score) &&
+                (tempScore == other.tempScore);
     }
 }
 

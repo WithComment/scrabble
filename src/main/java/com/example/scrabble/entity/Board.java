@@ -1,5 +1,7 @@
 package com.example.scrabble.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -8,17 +10,20 @@ import java.util.NoSuchElementException;
 
 public class Board implements Serializable, Iterable<Tile> {
     private Tile[][] board;
-    private int height;
-    private int width;
+    private int height = 15;
+    private int width = 15;
 
 
     /**
      * Constructs a new Board with an initial state.
      */
     public Board() {
-        height = 15;
-        width = 15;
         board = getBlankBoard();
+    }
+
+    @JsonCreator
+    public Board(@JsonProperty("board") Tile[][] board) {
+        this.board = board;
     }
 
     public Board(JSONObject jsonObject) {
@@ -66,11 +71,11 @@ public class Board implements Serializable, Iterable<Tile> {
     /**
      * Adds a tile to the board and its 7 other symmetric positions.
      *
-     * @param x
-     * @param y
-     * @param wordMult
-     * @param letterMult
-     * @param board
+     * @param x        the x-coordinate of the tile
+     * @param y       the y-coordinate of the tile
+     * @param wordMult the word multiplier of the tile
+     * @param letterMult the letter multiplier of the tile
+     * @param board   the board to add the tile to
      */
     private static void addToBoardSymmetrically(int x, int y, int wordMult, int letterMult, Tile[][] board) {
         board[x][y] = new Tile(wordMult, letterMult, null);
@@ -119,13 +124,12 @@ public class Board implements Serializable, Iterable<Tile> {
     /**
      * Sets the letter at the specified position on the board.
      *
-     * @param x
-     * @param y
-     * @param letter
-     * @return
+     * @param x the x-coordinate of the letter
+     * @param y the y-coordinate of the letter
+     * @param letter the letter to set
      */
-    public Tile setCell(int x, int y, Letter letter) {
-        return this.board[y][x].setLetter(letter);
+    public void setCell(int x, int y, Letter letter) {
+        this.board[y][x].setLetter(letter);
     }
 
     /**
@@ -142,8 +146,8 @@ public class Board implements Serializable, Iterable<Tile> {
     /**
      * Returns the letter at the specified position on the board.
      *
-     * @param x
-     * @param y
+     * @param x the x-coordinate of the letter
+     * @param y the y-coordinate of the letter
      * @return
      */
     public boolean confirm(int x, int y) {
@@ -157,8 +161,8 @@ public class Board implements Serializable, Iterable<Tile> {
     /**
      * Removes the letter at the specified position on the board.
      *
-     * @param x
-     * @param y
+     * @param x the x-coordinate of the letter
+     * @param y the y-coordinate of the letter
      */
     public boolean isConfirmed(int x, int y) {
         return this.board[y][x].isConfirmed();
