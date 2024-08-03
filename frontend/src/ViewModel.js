@@ -76,6 +76,10 @@ class ViewModel{
                     console.log(request);
                     console.log(`${this.baseUrl}place_letter/`)
                     response = await fetch(`${this.baseUrl}place_letter/`, {
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                          },
                         method: 'POST',
                         body: JSON.stringify(request),
                     });
