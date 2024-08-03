@@ -3,14 +3,17 @@ import styles from './Hand.module.css'
 import HandButton from './HandButton';
 
 function Hand({ handLetters, handViewModel }){
-    const [redrawSelected, setRedrawSelected] = useState(false);
     const viewModel = handViewModel;
+    const [tileToPlay, setTileToPlay] = useState(null);
+    function selectTile(letter){
+        setTileToPlay(letter);
+    }
     return (
         <div className={styles.hand}>
             {handLetters.map((letter, index) => {
                 console.log('Rendering letter:', letter); // Debugging log
                 return (
-                    <HandButton handViewModel={viewModel} letter={letter} index={index}/>
+                    <HandButton selectedTile={tileToPlay} handViewModel={viewModel} letter={letter} index={index} select={selectTile}/>
                 )
             })}
         </div>

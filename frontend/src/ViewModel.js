@@ -67,32 +67,37 @@ class ViewModel{
         } else{
             if (input.type === 'lclick'){
                 if (this.selectedLetter != null){
-                    let request = {      
+                    let requestBody = {      
                         gameId: this.gameId,
                         x: input.x,
                         y: input.y,
                         letter: this.selectedLetter
                     };
-                    console.log(request);
-                    console.log(`${this.baseUrl}place_letter/`)
                     response = await fetch(`${this.baseUrl}place_letter/`, {
                         headers: {
                             'Accept': 'application/json',
                             'Content-Type': 'application/json'
                           },
                         method: 'POST',
-                        body: request,
+                        requestBody: JSON.stringify(requestBody),
                     });
                 } else {
                     return;
                 }
             } else if (input.type === 'rclick'){
-                let request = {            
+                let requestBody = {            
                     gameId: this.gameId,
                     x: input.x,
                     y: input.y,
                 }
-                response = await fetch(`${this.baseUrl}remove_letter/`, request);
+                response = await fetch(`${this.baseUrl}remove_letter/`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                      },
+                    method: 'POST',
+                    requestBody: requestBody,
+                });
             }
         }
         this.handleResponse(response);
