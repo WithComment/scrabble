@@ -114,8 +114,10 @@ public class Player implements Serializable {
         this.inventory.addAll(tiles);
     }
 
-    public void addTempScore(int score) {
-        this.score += score;
+    
+
+    public void setTempScore(int score) {
+        this.score = score;
     }
 
     /**

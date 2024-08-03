@@ -68,6 +68,13 @@ public class Play {
     return null;
   }
 
+  public boolean isVertical() {
+    if (moves.size() < 2) {
+      return false;
+    }
+    return moves.get(0).getX() == moves.get(moves.size() - 1).getX();
+  }
+
   /**
    * Gets the player making the play.
    * @return The player making the play.
