@@ -33,6 +33,7 @@ function Game() {
       },
     ]);
     const { gameId, playerId } = useParams();
+    gameId = Number(gameId)
     console.log(gameId, playerId)
     const viewModel = new ViewModel(gameId, playerId, board, hand, leaderboard, setBoard, setHand, setLeaderboard)
     return (

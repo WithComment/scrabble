@@ -39,8 +39,7 @@ class ViewModel{
         this.selectedLetter = selectedLetter;
     }
     async handleInput(input){
-        console.log('input handling');
-        console.log(input);
+        console.log('Handling input');
         let response = null;
         if (input.type === 'contest'){
             let request = {            
