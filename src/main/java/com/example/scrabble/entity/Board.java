@@ -64,7 +64,7 @@ public class Board implements Serializable, Iterable<Tile> {
         addToBoardSymmetrically(2, 5, 1, 3, board);
         addToBoardSymmetrically(5, 5, 1, 3, board);
 
-        board[7][7] = new Tile(2, 0, null);
+        board[7][7] = new Tile(2, 1, null);
         return board;
     }
 
@@ -178,6 +178,18 @@ public class Board implements Serializable, Iterable<Tile> {
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 sb.append(board[i][j].toString());
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    public String multiplierString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                String s = board[i][j].getLetterMult() == 1 ? " " : String.valueOf(board[i][j].getLetterMult());
+                sb.append(s);
             }
             sb.append("\n");
         }
