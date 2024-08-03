@@ -1,73 +1,101 @@
 package com.example.scrabble.use_case;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.example.scrabble.data_access.GameDataAccess;
-import com.example.scrabble.entity.Game;
-import com.example.scrabble.entity.Letter;
+import com.example.scrabble.entity.*;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInteractor;
 
 public class PlaceLetterInteractorTest {
 
-  private static final Letter A = new Letter('A', 1);
-  private static final Letter B = new Letter('B', 2);
-  
   @Mock
   private GameDataAccess gameDao;
+
+  @Mock
+  private Game game;
+
+  @Mock
+  private Board board;
+
+  @Mock
+  private Player currentPlayer;
+
+  @Mock
+  private Play play;
+
+  @Mock
+  private Tile tile;
+
+  @Mock
+  private Letter A;
+
+  @Mock
+  private Letter B;
+
+  @InjectMocks
+  private PlaceLetterInteractor interactor;
 
   @BeforeEach
   public void setUp() {
     MockitoAnnotations.openMocks(this);
-    Game game = new Game(1);
-    game.startGame();
-    game.getCurrentPlayer().getInventory().clear();
-    game.getCurrentPlayer().getInventory().add(A);
     when(gameDao.get(anyInt())).thenReturn(game);
+    when(game.getBoard()).thenReturn(board);
+    when(game.getCurrentPlay()).thenReturn(play);
+    when(game.getCurrentPlayer()).thenReturn(currentPlayer);
+    when(board.getCell(anyInt(), anyInt())).thenReturn(tile);
+    when(A.getLetter()).thenReturn('A');
+    when(B.getLetter()).thenReturn('B');
   }
 
   private void testForFailure(PlaceLetterInputData inputData, String expectedMsg) {
-    PlaceLetterInteractor interactor = new PlaceLetterInteractor(gameDao);
     InvalidPlayException ex = assertThrows(InvalidPlayException.class, () -> {
       interactor.execute(inputData);
     });
     assertEquals(expectedMsg, ex.getMessage());
+    verify(gameDao, never()).update(game);
   }
 
   @Test
   public void testOccupied() {
-    gameDao.get(1).getBoard().getCell(1, 1).setLetter(B);
+    when(tile.isEmpty()).thenReturn(false);
     testForFailure(
-      new PlaceLetterInputData(1, 1, 1, B.getLetter()), 
+      new PlaceLetterInputData(1, 1, 1, B.getLetter()),
       PlaceLetterInteractor.OCCUPIED
     );
   }
 
   @Test
   public void testNoLetter() {
+    when(currentPlayer.getInventory()).thenReturn(Arrays.asList(A));
+    when(tile.isEmpty()).thenReturn(true);
     testForFailure(
-      new PlaceLetterInputData(1, 1, 1, 'Z'), 
+      new PlaceLetterInputData(1, 1, 1, 'Z'),
       PlaceLetterInteractor.NO_LETTER
     );
   }
 
   @Test
   public void testSuccess() {
-    PlaceLetterInteractor interactor = new PlaceLetterInteractor(gameDao);
+    ArrayList<Letter> inventory = new ArrayList<Letter>(Arrays.asList(A));
+    when(currentPlayer.getInventory()).thenReturn(inventory);
+    when(tile.isEmpty()).thenReturn(true);
+
     interactor.execute(new PlaceLetterInputData(1, 1, 1, A.getLetter()));
-    verify(gameDao, times(1)).update(any());
-    assertEquals(0, gameDao.get(1).getCurrentPlayer().getInventory().size());
-    assertEquals(A, gameDao.get(1).getBoard().getCell(1, 1).getLetter());
+
+    verify(currentPlayer).removeLetter(A);
+    verify(board).setCell(1, 1, A);
+    verify(play).addMove(new Move(1, 1, A));
+    verify(gameDao).update(game);
   }
 }

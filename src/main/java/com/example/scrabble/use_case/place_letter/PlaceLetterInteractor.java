@@ -32,7 +32,7 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
   private Letter getLetter(List<Letter> inventory, char letter) {
     for (int i = 0; i < inventory.size(); i++) {
       if (inventory.get(i).getLetter() == letter) {
-        return inventory.remove(i);
+        return inventory.get(i);
       }
     }
     return null;
@@ -46,8 +46,8 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     Game game = gameDao.get(data.getGameId());
 
     Play play = game.getCurrentPlay();
+    Player player = game.getCurrentPlayer();
     Board board = game.getBoard();
-    Player player = play.getPlayer();
     Letter letter = getLetter(player.getInventory(), data.getLetter());
     
     if (!board.getCell(x, y).isEmpty()) {

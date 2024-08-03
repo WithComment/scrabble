@@ -45,4 +45,5 @@ public class Move {
   public Letter getLetter() {
     return letter;
   }
+
 }
