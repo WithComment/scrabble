@@ -10,13 +10,12 @@ import com.example.scrabble.entity.LetterBag;
 import com.example.scrabble.entity.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class RedrawInteractorTest {
@@ -61,7 +60,7 @@ class RedrawInteractorTest {
         verify(mockPlayer).addLetter(newLetters);
         verify(mockLetterBag).addLetters(anyList());
         assertEquals(newLetters, outputData.getNewLetters());
-        assertEquals(true, outputData.isSuccessful());
+        assertTrue(outputData.isSuccessful());
     }
 
     @Test
@@ -74,7 +73,7 @@ class RedrawInteractorTest {
         RedrawOutputData outputData = redrawInteractor.execute(inputData);
 
         // Then: Verify the redraw was unsuccessful
-        assertEquals(false, outputData.isSuccessful());
+        assertFalse(outputData.isSuccessful());
         assertEquals(0, outputData.getNewLetters().size());
     }
 }

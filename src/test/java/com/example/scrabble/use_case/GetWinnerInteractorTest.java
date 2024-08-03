@@ -64,7 +64,7 @@ class GetWinnerInteractorTest {
 
         // Verify that only one winner is identified
         assertEquals(1, winners.size());
-        assertEquals(150, winners.get(0).getScore());
+        assertEquals(150, winners.getFirst().getScore());
     }
 
     @Test
