@@ -32,7 +32,7 @@ function Game() {
         score: 12
       },
     ]);
-    const { gameId, playerId } = useParams();
+    let { gameId, playerId } = useParams();
     gameId = Number(gameId)
     console.log(gameId, playerId)
     const viewModel = new ViewModel(gameId, playerId, board, hand, leaderboard, setBoard, setHand, setLeaderboard)
