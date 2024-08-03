@@ -6,12 +6,18 @@ import java.util.List;
 
 public class CreateGameOutputData {
     private final List<Player> players;
+    private int gameId;
 
-    public CreateGameOutputData(List<Player> players) {
+    public CreateGameOutputData(List<Player> players, int gameId) {
         this.players = players;
+        this.gameId = gameId;
     }
 
-    public List<Player> getGameId() {
+    public Integer getGameId() {
+        return gameId;
+    }
+
+    public List<Player> getPlayers() {
         return players;
     }
 }
