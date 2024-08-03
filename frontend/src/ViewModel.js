@@ -79,7 +79,7 @@ class ViewModel{
                             'Content-Type': 'application/json'
                           },
                         method: 'POST',
-                        requestBody: JSON.stringify(requestBody),
+                        body : JSON.stringify(requestBody),
                     });
                 } else {
                     return;
@@ -96,7 +96,7 @@ class ViewModel{
                         'Content-Type': 'application/json'
                       },
                     method: 'POST',
-                    requestBody: requestBody,
+                    body: requestBody,
                 });
             }
         }
