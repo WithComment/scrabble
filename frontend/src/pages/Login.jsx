@@ -31,7 +31,7 @@ function Login(){
     }
     return (
         <>
-        {submitted && <Navigate state={{username: name}} to={`/game/${gameId}`} />}
+        {submitted && <Navigate state={{username: name}} to={`/game/${gameId}/${name}`} />}
         <div className='container'>
             <h1 className='title'>Create a game or join an existing one!</h1>
             <form id='login' onSubmit={(e) => handleSubmit(e)}>

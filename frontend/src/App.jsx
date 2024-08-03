@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
     <Routes>
       <Route path='/' element={<Login/>}/>
-      <Route path='/game/:id' element={<Game/>}/>
+      <Route path='/game/:gameId/:playerId' element={<Game/>}/>
     </Routes>
     <Footer/>
     </BrowserRouter>

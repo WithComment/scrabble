@@ -1,5 +1,6 @@
 class ViewModel{
-    constructor(gameId, board, hand, leaderboard, setBoard, setHand, setLeaderboard){
+    constructor(gameId, playerId, board, hand, leaderboard, setBoard, setHand, setLeaderboard){
+        this.playerId = playerId;
         this.gameId = gameId;
         this.baseUrl = 'http://localhost:8080/game/';
         this.board = board;
@@ -40,26 +41,39 @@ class ViewModel{
     async handleInput(input){
         console.log('input handling')
         let response = null;
-        let request = {            
-            method: 'POST',
-            gameId: this.gameId,
-            inputType : input.type,
-            x: input.x,
-            y: input.y,
-            char: this.selectedLetter
-        }
         if (input.type === 'contest'){
+            let request = {            
+                gameId: this.gameId,
+                playerId : this.playerId,
+            }
             response = await fetch(`${this.baseUrl}contest/`, request);
         } else if (input.type === 'redraw'){
+            let request = {            
+                gameId: this.gameId,
+                x: input.x,
+                y: input.y,
+                char: this.selectedLetter
+            }
             response = await fetch(`${this.baseUrl}redraw/`, request);
         } else{
             if (input.type === 'lclick'){
                 if (this.selectedLetter != null){
+                    let request = {            
+                        gameId: this.gameId,
+                        x: input.x,
+                        y: input.y,
+                        char: this.selectedLetter
+                    }
                     response = await fetch(`${this.baseUrl}place_letter/`, request);
                 } else {
                     return;
                 }
             } else if (input.type === 'rclick'){
+                let request = {            
+                    gameId: this.gameId,
+                    x: input.x,
+                    y: input.y,
+                }
                 response = await fetch(`${this.baseUrl}remove_letter/`, request);
             }
         }
