@@ -66,8 +66,7 @@ public class ContestInteractorTest {
     public void testWordIsValid() {
         try {
             Player alice = new Player("Alice"), bob = new Player("Bob");
-            Game game = new Game();
-            game.setPlayers(List.of(alice, bob));
+            Game game = new Game(List.of("Alice", "Bob"));
             gameDAO.create(game);
             game.startGame();
             List<Letter> aliceInventory = alice.getInventory();

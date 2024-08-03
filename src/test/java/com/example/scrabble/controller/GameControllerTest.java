@@ -10,8 +10,12 @@ import com.example.scrabble.use_case.contest.ContestInputData;
 import com.example.scrabble.use_case.contest.ContestInteractor;
 import com.example.scrabble.use_case.create_game.CreateGameInputBoundary;
 import com.example.scrabble.use_case.create_game.CreateGameInputData;
+import com.example.scrabble.use_case.create_game.CreateGameOutputData;
+import com.example.scrabble.use_case.end_game.EndGameOutputData;
 import com.example.scrabble.use_case.end_turn.GetEndTurnInputBoundary;
+import com.example.scrabble.use_case.end_turn.GetEndTurnOutputData;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputBoundary;
+import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardOutputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputBoundary;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterOutputData;
@@ -69,8 +73,8 @@ public class GameControllerTest {
   @Test
   void testCreateGame() throws Exception {
     CreateGameInputData inputData = new CreateGameInputData(Arrays.asList("Player1", "Player2", "Player3"));
-    Game game = new Game();
-    when(createGameInteractor.execute(any())).thenReturn(game);
+    Game game = new Game(inputData.getPlayerNames());
+    when(createGameInteractor.execute(any())).thenReturn(new CreateGameOutputData(game.getPlayers(), 1));
     mockMvc.perform(post("/game/create/")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(inputData)))
@@ -90,7 +94,7 @@ public class GameControllerTest {
   @Test
   void testPlaceLetter() throws Exception {
     PlaceLetterInputData inputData = new PlaceLetterInputData(1, 0, 0, 'A');
-    PlaceLetterOutputData outputData = new PlaceLetterOutputData(new Board(), Arrays.asList(new Letter('A', 1)));
+    PlaceLetterOutputData outputData = new PlaceLetterOutputData(new Board(), Arrays.asList(new Letter('A', 1)), 1, null);
 
     mockMvc.perform(post("/game/place_letter/")
         .contentType(MediaType.APPLICATION_JSON)
@@ -111,9 +115,7 @@ public class GameControllerTest {
 
   @Test
   void testEndTurn() throws Exception {
-    Game game = new Game();
-
-    when(getEndTurnInteractor.execute(any())).thenReturn(game);
+    when(getEndTurnInteractor.execute(any())).thenReturn(new GetEndTurnOutputData(1));
 
     mockMvc.perform(post("/game/end_turn/")
         .contentType(MediaType.APPLICATION_JSON)
@@ -126,7 +128,7 @@ public class GameControllerTest {
   void testGetLeaderboard() throws Exception {
     Game game = new Game();
 
-    when(getLeaderboardInteractor.execute(any())).thenReturn(game);
+    when(getLeaderboardInteractor.execute(any())).thenReturn(new GetLeaderboardOutputData(game.getLeaderboard()));
 
     mockMvc.perform(get("/game/leaderboard/")
         .contentType(MediaType.APPLICATION_JSON)
@@ -146,11 +148,5 @@ public class GameControllerTest {
         .content("{\"gameId\":1,\"playerId\":1}"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(1));
-  }
-
-  private GameDataAccess mockGameDao() {
-    Game game = new Game();
-    when(gameDao.get(anyInt())).thenReturn(game);
-    return
   }
 }

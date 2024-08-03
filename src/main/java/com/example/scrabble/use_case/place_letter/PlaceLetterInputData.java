@@ -1,10 +1,12 @@
 package com.example.scrabble.use_case.place_letter;
 
 public class PlaceLetterInputData {
-  private final int gameId;
-  private final int x;
-  private final int y;
-  private final char letter;
+  private int gameId;
+  private int x;
+  private int y;
+  private char letter;
+
+  public PlaceLetterInputData() {}
 
   public PlaceLetterInputData(
     int gameId,
@@ -30,7 +32,7 @@ public class PlaceLetterInputData {
     return y;
   }
 
-  public Character getLetter() {
+  public char getLetter() {
     return letter;
   }
 }

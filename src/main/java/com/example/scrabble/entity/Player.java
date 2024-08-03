@@ -98,6 +98,15 @@ public class Player implements Serializable {
         this.inventory.remove(letter);
     }
 
+    public Letter removeLetter(char letter) {
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.get(i).getLetter() == letter) {
+                return inventory.remove(i);
+            }
+        }
+        return null;
+    }
+
     /**
      * Gets the list of words formed in the play.
      */

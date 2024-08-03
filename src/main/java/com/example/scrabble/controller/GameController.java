@@ -8,6 +8,8 @@ import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputData;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInteractor;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardOutputData;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import com.example.scrabble.use_case.confirm_play.ConfirmPlayInputData;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayOutputData;
 import com.example.scrabble.use_case.create_game.CreateGameInputBoundary;
 import com.example.scrabble.use_case.create_game.CreateGameInputData;
+import com.example.scrabble.use_case.create_game.CreateGameOutputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputBoundary;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterOutputData;
@@ -66,12 +69,12 @@ public class GameController {
   }
   
   @PostMapping("/create/")
-  public Game createGame(@RequestBody CreateGameInputData data) {
+  public CreateGameOutputData createGame(@RequestBody CreateGameInputData data) {
     log.info("Creating game with players:" + data.getPlayerNames());
     return createGameInteractor.execute(data);
   }
 
-  @GetMapping("/{gameId}/")
+  @GetMapping("/get/{gameId}/")
   public Game getGame(@PathVariable("gameId") int gameId) {
       log.info("Getting game with ID:{}", gameId);
     return gameDao.get(gameId);
@@ -79,7 +82,7 @@ public class GameController {
 
   @PostMapping("/place_letter/")
   public PlaceLetterOutputData placeLetter(@RequestBody PlaceLetterInputData data) {
-      log.info("Game ID: {} Placing letter: {} at position: {},{}", data.getGameId(), data.getLetter(), data.getX(), data.getY());
+    log.info("Game ID: {} Placing letter: {} at position: {},{}", data.getGameId(), data.getLetter(), data.getX(), data.getY());
     return placeLetterInteractor.execute(data);
   }
 

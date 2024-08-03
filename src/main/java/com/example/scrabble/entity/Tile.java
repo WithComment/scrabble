@@ -23,7 +23,7 @@ public class Tile implements Serializable {
     private int wordMult;
     private int letterMult;
     private Letter letter;
-    private boolean isConfirmed;
+    private boolean isConfirmed = false;
 
     /**
      * Constructs a Tile with specified multipliers and letter.
@@ -90,7 +90,7 @@ public class Tile implements Serializable {
      * @param letter The letter to place on the tile.
      * @return The updated tile.
      */
-    public Tile setLetter(Letter letter) {
+    protected Tile setLetter(Letter letter) {
         this.letter = letter;
         return this;
     }
@@ -98,7 +98,7 @@ public class Tile implements Serializable {
     /**
      * Set the letter on the tile to null. Un-confirm the tile.
      */
-    public void removeLetter() {
+    protected void removeLetter() {
         letter = null;
         isConfirmed = false;
     }
@@ -106,7 +106,7 @@ public class Tile implements Serializable {
     /**
      * Set the tile to confirmed.
      */
-    public void confirm() {
+    protected void confirm() {
         isConfirmed = true;
     }
 
