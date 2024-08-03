@@ -81,7 +81,7 @@ class ViewModel{
                             'Content-Type': 'application/json'
                           },
                         method: 'POST',
-                        body: JSON.stringify(request),
+                        body: request,
                     });
                 } else {
                     return;
