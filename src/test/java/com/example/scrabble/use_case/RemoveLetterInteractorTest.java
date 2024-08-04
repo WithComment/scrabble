@@ -95,7 +95,7 @@ class RemoveLetterInteractorTest {
 
         assertThrows(InvalidPlayException.class, () -> removeLetterInteractor.execute(inputData));
         verify(play, never()).removeMove(anyInt(), anyInt());
-        verify(player, never()).addLetter(new Letter(anyChar(),anyInt()));
+        verify(player, never()).addLetter(any(Letter.class));
         verify(tile, never()).removeLetter();
         verify(gameDao, never()).update(game);
     }
