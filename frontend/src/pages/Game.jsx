@@ -28,7 +28,6 @@ function Game() {
     let gameId = state.gameId;
     const playerId = state.playerId;
     gameId = Number(gameId)
-    console.log(gameId, playerId)
     return (
         <div className="Game">
         <Leaderboard players={leaderboard}/>
