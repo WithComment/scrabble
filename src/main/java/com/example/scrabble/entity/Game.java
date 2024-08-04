@@ -89,7 +89,7 @@ public class Game implements Serializable {
         this.history = history;
         this.leaderboard = leaderboard;
         this.endTurn = endTurn;
-        this.playerNumber = playerNumber;
+        this.playerNumber = 0;
         this.numContestFailed = numContestFailed;
         this.currentPlay = currentPlay;
     }

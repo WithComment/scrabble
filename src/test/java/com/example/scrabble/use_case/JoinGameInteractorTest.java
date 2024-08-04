@@ -2,6 +2,7 @@ package com.example.scrabble.use_case;
 
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Game;
+import com.example.scrabble.entity.LetterBag;
 import com.example.scrabble.entity.Player;
 import com.example.scrabble.use_case.join_game.JoinGameInteractor;
 import com.example.scrabble.use_case.join_game.JoinGameInputData;
@@ -32,6 +33,7 @@ class JoinGameInteractorTest {
 
         // Mocking game behavior
         when(gameDataAccess.get(anyInt())).thenReturn(game);
+        when(game.getLetterBag()).thenReturn(new LetterBag());
     }
 
     @Test
