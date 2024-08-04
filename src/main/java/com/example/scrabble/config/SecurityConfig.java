@@ -14,10 +14,15 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.cors(httpSecurityCorsConfigurer -> 
-      httpSecurityCorsConfigurer.configurationSource(request -> 
-        new CorsConfiguration().applyPermitDefaultValues()
-      )
+    http.cors(httpSecurityCorsConfigurer ->
+      httpSecurityCorsConfigurer.configurationSource(request -> {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("http://localhost:3000");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.setAllowCredentials(true);
+        return corsConfiguration;
+      })
     ).csrf(csrf -> csrf.ignoringRequestMatchers("/**"));
     return http.build();
   }
@@ -30,6 +35,7 @@ public class SecurityConfig {
               registry.addMapping("/**")
                       .allowedOrigins("http://localhost:3000")
                       .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                      .allowedHeaders("*")
                       .allowCredentials(true);
           }
       };

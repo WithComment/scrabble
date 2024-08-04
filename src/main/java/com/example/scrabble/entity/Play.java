@@ -1,6 +1,7 @@
 package com.example.scrabble.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.LinkedList;
@@ -68,6 +69,7 @@ public class Play {
     return null;
   }
 
+  @JsonIgnore
   public boolean isVertical() {
     if (moves.size() < 2) {
       return false;

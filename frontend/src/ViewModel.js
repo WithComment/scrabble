@@ -5,7 +5,7 @@ class ViewModel{
     constructor(gameId, playerId, board, hand, leaderboard, setHand, setBoard, setLeaderboard){
         this.playerId = playerId;
         this.gameId = gameId;
-        this.baseUrl = 'http://localhost:8080/game/';
+        this.baseUrl = `http://localhost:8080/game/${this.gameID}`;
         this.board = board;
         this.hand = hand;
         this.leaderboard = leaderboard;
