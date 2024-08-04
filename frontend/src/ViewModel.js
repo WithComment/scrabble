@@ -11,6 +11,10 @@ class ViewModel{
         this.leaderboard = leaderboard;
         this.selectedLetter = null;
         this.selectedLettersRedraw = [];
+        this.setHand = setHand;
+        this.setBoard = setBoard;
+        this.setLeaderboard = setLeaderboard;
+        this.connectWebSocket()
     }
 
     connectWebSocket() {
