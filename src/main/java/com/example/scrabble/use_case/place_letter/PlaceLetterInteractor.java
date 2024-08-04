@@ -1,5 +1,6 @@
 package com.example.scrabble.use_case.place_letter;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,15 +30,6 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     GameDataAccess gameDao
   ) {
     this.gameDao = gameDao;
-  }
-
-  private Letter getLetter(List<Letter> inventory, char letter) {
-    for (int i = 0; i < inventory.size(); i++) {
-      if (inventory.get(i).getLetter() == letter) {
-        return inventory.get(i);
-      }
-    }
-    return null;
   }
   
   private List<Tile> getVTiles(Move move, Board board) {
@@ -97,6 +89,11 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
         }
       }
     }
+
+    // If the move standsalone, add it to the list of words.
+    if (words.isEmpty()) {
+      words.add(Arrays.asList(board.getCell(fMove.getX(), fMove.getY())));
+    }
     return words;
   }
 
@@ -134,31 +131,37 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     int y = data.getY();
 
     Game game = gameDao.get(data.getGameId());
-
     Play play = game.getCurrentPlay();
     Player player = game.getCurrentPlayer();
     Board board = game.getBoard();
-    Letter letter = getLetter(player.getInventory(), data.getLetter());
     
     if (!board.getCell(x, y).isEmpty()) {
       throw new InvalidPlayException(OCCUPIED);
-    } else if (letter == null) {
+    } 
+
+    Letter letter = player.removeLetter(data.getLetter());
+    if (letter == null) {
       throw new InvalidPlayException(NO_LETTER);
-    } else {
-      play.addMove(new Move(x, y, letter));
-      board.setCell(x, y, letter);
-
-      List<Move> moves = play.getMoves();
-      List<List<Tile>> wordsOnTiles = getWordsOnTiles(play, board);
-      play.setWords(getWords(wordsOnTiles));
-
-      player.setTempScore(calcScore(wordsOnTiles));
-      if (moves.size() >= 7) {
-        player.setTempScore(player.getTempScore() + 50);
-      }
-      player.removeLetter(letter);
-      gameDao.update(game);
-      return new PlaceLetterOutputData(board, player.getInventory());
     }
+    play.addMove(new Move(x, y, letter));
+    board.setCell(x, y, letter);
+
+    List<Move> moves = play.getMoves();
+    List<List<Tile>> wordsOnTiles = getWordsOnTiles(play, board);
+    List<String> words = getWords(wordsOnTiles);
+    play.setWords(words);
+
+    int score = calcScore(wordsOnTiles);
+    if (moves.size() >= 7) {
+      score += 50;
+    }
+    player.setTempScore(score);
+    gameDao.update(game);
+    return new PlaceLetterOutputData(
+      board,
+      player.getInventory(),
+      score,
+      words
+    );
   }
 }

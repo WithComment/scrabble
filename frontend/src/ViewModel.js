@@ -1,16 +1,37 @@
+import { Stomp } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
+
 class ViewModel{
-    constructor(gameId, playerId, board, hand, leaderboard, setBoard, setHand, setLeaderboard){
+    constructor(gameId, playerId, board, hand, leaderboard, setHand, setBoard, setLeaderboard){
         this.playerId = playerId;
         this.gameId = gameId;
         this.baseUrl = 'http://localhost:8080/game/';
         this.board = board;
         this.hand = hand;
         this.leaderboard = leaderboard;
-        this.setLeaderboard = setLeaderboard;
-        this.setBoard = setBoard;
-        this.setHand = setHand;
         this.selectedLetter = null;
         this.selectedLettersRedraw = [];
+    }
+
+    connectWebSocket() {
+        const socket = new SockJS('http://localhost:8080/ws');
+        this.stompClient = Stomp.over(socket);
+
+        this.stompClient.connect({}, (frame) => {
+            console.log('Connected: ' + frame);
+            this.stompClient.subscribe('/topic/messages', (message) => {
+                this.handleWebSocketMessage(JSON.parse(message.body));
+            });
+        });
+    }
+
+    handleWebSocketMessage(message) {
+        console.log('Received message:', message);
+        //TODO: Handle message
+    }
+
+    testIfWorking(){
+        console.log('View Model properly initialized');
     }
     
     setRedrawLetter(letter){

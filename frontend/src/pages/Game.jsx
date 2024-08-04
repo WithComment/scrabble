@@ -7,35 +7,27 @@ import Redraw from '../components/buttons/Redraw';
 import Contest from '../components/buttons/Contest';
 import Leaderboard from '../components/Leaderboard';
 import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 function Game() {
-    let tempBoard = []
-    for (let i = 0; i < 15; i++) {
-        let row = []
-        for (let j = 0; j < 15; j++) {
-        row.push("__")
-        }
-        tempBoard.push(row)
-    }
-
-    let tempHand = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-    const [board, setBoard] = useState(tempBoard);
-    const [hand, setHand] = useState(tempHand);
-    const [leaderboard, setLeaderboard] = useState(
-    [
-      {
-        name: 'Oscar',
-        score: 32
-      },
-      {
-        name: 'Alex',
-        score: 12
-      },
-    ]);
-    let { gameId, playerId } = useParams();
+    const { state } = useLocation();
+    const [board, setBoard] = useState(state.board);
+    const [hand, setHand] = useState(state.hand);
+    const [leaderboard, setLeaderboard] = useState(state.leaderboard);
+    const viewModel = new ViewModel(
+      state.gameId,
+      state.playerId,
+      state.board,
+      state.hand,
+      state.leaderboard,
+      setHand,
+      setBoard,
+      setLeaderboard
+    );
+    viewModel.testIfWorking();
+    let gameId = state.gameId;
+    const playerId = state.playerId;
     gameId = Number(gameId)
-    console.log(gameId, playerId)
-    const viewModel = new ViewModel(gameId, playerId, board, hand, leaderboard, setBoard, setHand, setLeaderboard)
     return (
         <div className="Game">
         <Leaderboard players={leaderboard}/>
