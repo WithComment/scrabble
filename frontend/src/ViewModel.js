@@ -24,7 +24,8 @@ class ViewModel{
 
         this.stompClient.connect({}, (frame) => {
             console.log('Connected: ' + frame);
-            this.stompClient.subscribe('/topic/messages', (message) => {
+            this.stompClient.subscribe(`/topic/game/${this.gameId}`, (message) => {
+                console.log('Received message:', message);
                 this.handleWebSocketMessage(JSON.parse(message.body));
             });
         });
@@ -143,7 +144,7 @@ class ViewModel{
 
     handleResponse(response){
         let reponse = response.json();
-        
+        console.log('Response:', response);
     }
 
 }
