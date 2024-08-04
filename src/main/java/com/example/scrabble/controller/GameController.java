@@ -127,7 +127,7 @@ public class GameController {
             @RequestBody HashMap<String, Object> input) {
         int x = (int) input.get("x");
         int y = (int) input.get("y");
-        char letter = (char) input.get("letter");
+        char letter = ((String) input.get("letter")).charAt(0);
         logger.info("Game ID: {} Placing letter: {} at position: {},{}", gameId, letter, x, y);
         PlaceLetterOutputData output = placeLetterInteractor.execute(new PlaceLetterInputData(gameId, x, y, letter));
         notifyFrontend(gameId);
