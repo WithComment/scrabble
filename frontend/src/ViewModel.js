@@ -14,7 +14,7 @@ class ViewModel{
     }
 
     connectWebSocket() {
-        const socket = new SockJS('http://localhost:8080/ws');
+        const socket = new SockJS('http://localhost:8080/ws', null, {withCredentials: true});
         this.stompClient = Stomp.over(socket);
 
         this.stompClient.connect({}, (frame) => {
