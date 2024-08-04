@@ -34,7 +34,6 @@ public class JoinGameInteractor implements JoinGameInputBoundary {
             Game game = gameDataAccess.get(joinGameInputData.getGameId());
         } catch (Exception e){
             throw new IllegalArgumentException("Game with the specified ID does not exist.");
-            return
         }
 
         Game game = gameDataAccess.get(joinGameInputData.getGameId());
