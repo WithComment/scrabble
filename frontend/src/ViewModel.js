@@ -11,10 +11,14 @@ class ViewModel{
         this.leaderboard = leaderboard;
         this.selectedLetter = null;
         this.selectedLettersRedraw = [];
+        this.setHand = setHand;
+        this.setBoard = setBoard;
+        this.setLeaderboard = setLeaderboard;
+        this.connectWebSocket()
     }
 
     connectWebSocket() {
-        const socket = new SockJS('http://localhost:8080/ws');
+        const socket = new SockJS('http://localhost:8080/ws', null, {withCredentials: true});
         this.stompClient = Stomp.over(socket);
 
         this.stompClient.connect({}, (frame) => {
