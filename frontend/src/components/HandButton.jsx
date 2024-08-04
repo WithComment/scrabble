@@ -38,6 +38,8 @@ function HandButton({ letter, handViewModel, index, select, selectedTile }) {
 
     function handleClick(e, letter){
         if (e.type === "click") {
+            console.log(viewModel);
+
             setSelectedForRedraw(false);
             setSelectedForPlay(true);
             select(ref);
