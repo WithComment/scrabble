@@ -30,7 +30,7 @@ function Board({ board, boardViewModel }){
                 <div className={styles.row}>
                     {row.map((tile, x) =>{
                     return (
-                        <Tile id={`t${x}-${y}`} intitialContent={tile} x={x} y={y} handleClick={handleClick}/>
+                        <Tile id={`t${x}-${y}`} content={tile} x={x} y={y} handleClick={handleClick}/>
                         )
                     })}
                 </div>

@@ -15,6 +15,7 @@ class ViewModel{
         this.setHand = setHand;
         this.setBoard = setBoard;
         this.setLeaderboard = setLeaderboard;
+        this.index = 0;
         this.connectWebSocket()
     }
 
@@ -25,15 +26,36 @@ class ViewModel{
         this.stompClient.connect({}, (frame) => {
             console.log('Connected: ' + frame);
             this.stompClient.subscribe(`/topic/game/${this.gameId}`, (message) => {
-                console.log('Received message:', message);
                 this.handleWebSocketMessage(JSON.parse(message.body));
             });
         });
     }
 
     handleWebSocketMessage(message) {
-        console.log('Received message:', message);
+        console.log('Handling message:', message);
+        let newBoard = message.board.board;
+        let newHand = message.players[this.index].inventory.map((letter) => letter.letter);
+        let newLeaderboard = message.leaderboard;
+        this.updateBoardFromRaw(newBoard);
         //TODO: Handle message
+    }
+
+    updateBoardFromRaw(rawBoard){
+        console.log('Updating board from raw: ' , rawBoard);
+        let newBoard = [];
+        for (let i = 0; i < 15; i++) {
+            let row = [];
+            for (let j = 0; j < 15; j++) {
+                if (rawBoard[i][j].letter === null){
+                    row.push("__")
+                }else{
+                    row.push(rawBoard[i][j].letter.letter);
+                };
+            };
+            newBoard.push(row);
+        };
+        console.log('New board:', newBoard);
+        this.updateBoard(newBoard);
     }
 
     testIfWorking(){
