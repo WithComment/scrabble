@@ -1,0 +1,30 @@
+.hand{
+    display: flex;
+    justify-content: center;
+}
+
+.handtile{
+    margin: 5px;
+    backdrop-filter: blur(5px);
+    border: 1px solid white;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.337);
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    background-color: rgb(75, 157, 130);
+}
+
+.handtile:hover{
+    border: 1px solid black;
+}
+
+.value{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 2px;
+}
