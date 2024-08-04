@@ -6,7 +6,7 @@ import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Player;
 import com.example.scrabble.use_case.end_turn.EndTurnInteractor;
 import com.example.scrabble.use_case.end_turn.GetEndTurnInputData;
-import com.example.scrabble.use_case.end_turn.GetEndTurnOutputData;
+import com.example.scrabble.use_case.end_turn.EndTurnOutputData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -60,7 +60,7 @@ class EndTurnInteractorTest {
         when(game.isEndTurn()).thenReturn(true);
         when(player.getInventory()).thenReturn(new ArrayList<>());
 
-        GetEndTurnOutputData outputData = endTurnInteractor.execute(inputData);
+        EndTurnOutputData outputData = endTurnInteractor.execute(inputData);
 
         assertNotNull(outputData);
         verify(gameDataAccess, times(1)).update(game);

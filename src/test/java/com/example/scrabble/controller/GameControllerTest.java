@@ -13,7 +13,7 @@ import com.example.scrabble.use_case.create_game.CreateGameInputData;
 import com.example.scrabble.use_case.create_game.CreateGameOutputData;
 import com.example.scrabble.use_case.end_game.EndGameOutputData;
 import com.example.scrabble.use_case.end_turn.GetEndTurnInputBoundary;
-import com.example.scrabble.use_case.end_turn.GetEndTurnOutputData;
+import com.example.scrabble.use_case.end_turn.EndTurnOutputData;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputBoundary;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardOutputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputBoundary;
@@ -115,7 +115,7 @@ public class GameControllerTest {
 
   @Test
   void testEndTurn() throws Exception {
-    when(getEndTurnInteractor.execute(any())).thenReturn(new GetEndTurnOutputData(1));
+    when(getEndTurnInteractor.execute(any())).thenReturn(new EndTurnOutputData(1));
 
     mockMvc.perform(post("/game/end_turn/")
         .contentType(MediaType.APPLICATION_JSON)
