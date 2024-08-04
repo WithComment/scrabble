@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -87,84 +89,92 @@ public class GameController {
     template.convertAndSend("topic/game/" + gameId, gameDao.get(gameId));
   }
 
-  @GetMapping("/{gameId}")
-  public EntityModel<Game> getGame(@PathVariable int gameId) {
-    logger.info("Retrieving game with ID: " + gameId);
-    Game output = gameDao.get(gameId);
-    return EntityModel.of(output,
-        linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
-  }
+    @GetMapping("/{gameId}/")
+    public ResponseEntity<EntityModel<Game>> getGame(@PathVariable int gameId) {
+        logger.info("Retrieving game with ID: " + gameId);
+        Game output = gameDao.get(gameId);
+        EntityModel<Game> entityModel = EntityModel.of(output,
+            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
+    }
 
-  @PostMapping("/create")
-  public EntityModel<CreateGameOutputData> create(@RequestBody CreateGameInputData input) {
-    logger.info("Creating new game by players: " + input.getPlayerNames());
-    CreateGameOutputData output = createGameInteractor.execute(input);
-    int gameId = output.getGameId();
-    logger.info("Created new game with ID: " + gameId);
-    notifyFrontend(gameId);
-    return EntityModel.of(output,
-        linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
-  }
+    @PostMapping("/create/")
+    public ResponseEntity<EntityModel<CreateGameOutputData>> create(@RequestBody CreateGameInputData input) {
+        logger.info("Creating new game by players: " + input.getPlayerNames());
+        CreateGameOutputData output = createGameInteractor.execute(input);
+        int gameId = output.getGameId();
+        logger.info("Created new game with ID: " + gameId);
+        notifyFrontend(gameId);
+        EntityModel<CreateGameOutputData> entityModel = EntityModel.of(output,
+            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.status(HttpStatus.CREATED).body(entityModel);
+    }
 
-  @PostMapping("/{gameId}/join")
-  public EntityModel<JoinGameOutputData> join(@PathVariable int gameId, @RequestBody HashMap<String, String> body) {
-    logger.info("Joining game with ID: " + gameId);
-    String name = body.get("name");
-    JoinGameInputData input = new JoinGameInputData(name, gameId);
-    JoinGameOutputData output = joinGameInteractor.execute(input);
-    notifyFrontend(gameId);
-    return EntityModel.of(output,
-        linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
-  }
+    @PostMapping("/{gameId}/join/")
+    public ResponseEntity<EntityModel<JoinGameOutputData>> join(@PathVariable int gameId, @RequestBody HashMap<String, String> body) {
+        logger.info("Joining game with ID: " + gameId);
+        String name = body.get("name");
+        JoinGameInputData input = new JoinGameInputData(name, gameId);
+        JoinGameOutputData output = joinGameInteractor.execute(input);
+        notifyFrontend(gameId);
+        EntityModel<JoinGameOutputData> entityModel = EntityModel.of(output,
+            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
+    }
 
-  @PostMapping("/{gameId}/place_letter")
-  public EntityModel<PlaceLetterOutputData> placeLetter(@PathVariable int gameId,
-      @RequestBody HashMap<String, Object> input) {
-    int x = (int) input.get("x");
-    int y = (int) input.get("y");
-    char letter = (char) input.get("letter");
-    logger.info("Game ID: {} Placing letter: {} at position: {},{}", gameId, letter, x, y);
-    PlaceLetterOutputData output = placeLetterInteractor.execute(new PlaceLetterInputData(gameId, x, y, letter));
-    notifyFrontend(gameId);
-    return EntityModel.of(output,
-        linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
-  }
+    @PostMapping("/{gameId}/place_letter/")
+    public ResponseEntity<EntityModel<PlaceLetterOutputData>> placeLetter(@PathVariable int gameId,
+            @RequestBody HashMap<String, Object> input) {
+        int x = (int) input.get("x");
+        int y = (int) input.get("y");
+        char letter = (char) input.get("letter");
+        logger.info("Game ID: {} Placing letter: {} at position: {},{}", gameId, letter, x, y);
+        PlaceLetterOutputData output = placeLetterInteractor.execute(new PlaceLetterInputData(gameId, x, y, letter));
+        notifyFrontend(gameId);
+        EntityModel<PlaceLetterOutputData> entityModel = EntityModel.of(output,
+            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
+    }
 
-  @PostMapping("/{gameId}/confirm_play")
-  public EntityModel<ConfirmPlayOutputData> confirmPlay(@PathVariable int gameId,
-      @RequestBody ConfirmPlayInputData input) {
-    logger.info("Game ID: {} Confirming play", input.getGameId());
-    ConfirmPlayOutputData output = confirmPlayInteractor.execute(input);
-    notifyFrontend(gameId);
-    return EntityModel.of(output,
-        linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
-  }
+    @PostMapping("/{gameId}/confirm_play/")
+    public ResponseEntity<EntityModel<ConfirmPlayOutputData>> confirmPlay(@PathVariable int gameId,
+            @RequestBody ConfirmPlayInputData input) {
+        logger.info("Game ID: {} Confirming play", input.getGameId());
+        ConfirmPlayOutputData output = confirmPlayInteractor.execute(input);
+        notifyFrontend(gameId);
+        EntityModel<ConfirmPlayOutputData> entityModel = EntityModel.of(output,
+            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
+    }
 
-  @PostMapping("/{gameId}/end_turn")
-  public EntityModel<EndTurnOutputData> endTurn(@PathVariable int gameId, @RequestBody GetEndTurnInputData input) {
-    logger.info("Game ID: {} Ending turn", input.getGameId());
-    EndTurnOutputData output = endTurnInteractor.execute(input);
-    notifyFrontend(gameId);
-    return EntityModel.of(output,
-        linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
-  }
+    @PostMapping("/{gameId}/end_turn/")
+    public ResponseEntity<EntityModel<EndTurnOutputData>> endTurn(@PathVariable int gameId, @RequestBody GetEndTurnInputData input) {
+        logger.info("Game ID: {} Ending turn", input.getGameId());
+        EndTurnOutputData output = endTurnInteractor.execute(input);
+        notifyFrontend(gameId);
+        EntityModel<EndTurnOutputData> entityModel = EntityModel.of(output,
+            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
+    }
 
-  @GetMapping("/{gameId}/leaderboard")
-  public EntityModel<GetLeaderboardOutputData> getLeaderboard(@PathVariable int gameId,
-      @RequestBody GetLeaderboardInputData input) {
-    logger.info("Getting leaderboard for game ID: {}", gameId);
-    GetLeaderboardOutputData output = getLeaderboardInteractor.execute(input);
-    notifyFrontend(gameId);
-    return EntityModel.of(output,
-        linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
-  }
+    @GetMapping("/{gameId}/leaderboard/")
+    public ResponseEntity<EntityModel<GetLeaderboardOutputData>> getLeaderboard(@PathVariable int gameId,
+            @RequestBody GetLeaderboardInputData input) {
+        logger.info("Getting leaderboard for game ID: {}", gameId);
+        GetLeaderboardOutputData output = getLeaderboardInteractor.execute(input);
+        notifyFrontend(gameId);
+        EntityModel<GetLeaderboardOutputData> entityModel = EntityModel.of(output,
+            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
+    }
 
-  @PostMapping("/{gameId}/contest")
-  public EntityModel<Game> contest(@PathVariable int gameId, @RequestBody ContestInputData input) {
-    logger.info("Contesting game ID: {}", gameId);
-    Game output = contestInteractor.execute(input);
-    notifyFrontend(gameId);
-    return EntityModel.of(output,
-        linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
-  }
+    @PostMapping("/{gameId}/contest/")
+    public ResponseEntity<EntityModel<Game>> contest(@PathVariable int gameId, @RequestBody ContestInputData input) {
+        logger.info("Contesting game ID: {}", gameId);
+        Game output = contestInteractor.execute(input);
+        notifyFrontend(gameId);
+        EntityModel<Game> entityModel = EntityModel.of(output,
+            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
+    }
 }
