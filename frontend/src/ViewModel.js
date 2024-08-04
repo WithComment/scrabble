@@ -12,41 +12,53 @@ class ViewModel{
         this.selectedLetter = null;
         this.selectedLettersRedraw = [];
     }
+    
     setRedrawLetter(letter){
         console.log('Setting redraw letter:', letter);
         this.selectedLettersRedraw.push(letter);
         console.log('Selected letters redraw:', this.selectedLettersRedraw);
     }
+
     removeRedrawLetter(letter){
         this.selectedLettersRedraw = this.selectedLettersRedraw.filter((l) => l !== letter);
     }
+
     setTile(x, y, letter){
         this.board[x][y] = letter;
     }
+
     updateBoard(board){
         this.setBoard(board);
     }
+
     updateHand(hand){
         this.setHand(hand);
     }
+
     updateLeaderboard(leaderboard){
         this.setLeaderboard(leaderboard);
     }
+
     getBoard(){
         return this.board;
     }
+
     getHand(){
         return this.hand;
     }
+
     getLeaderboard(){
         return this.leaderboard;
     }
+
     getSelectedLetter(){
         return this.selectedLetter;
     }
+
     setSelectedLetter(selectedLetter){
         this.selectedLetter = selectedLetter;
     }
+
     async handleInput(input){
         console.log('Handling input');
         let response = null;
