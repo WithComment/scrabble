@@ -9,7 +9,7 @@ function Contest({ ButtonViewModel }){
             x : 0,
             y : 0,
             };
-        viewModel.sendInput(input);
+        viewModel.handleInput(input);
         };
     return (
         <button className='input-button' id='contest-button' onClick={handleClick}>

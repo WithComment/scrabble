@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React from 'react';
 import styles from './Board.module.css';
 import './Board.css';
 import Tile from './Tile'

@@ -3,6 +3,7 @@ package com.example.scrabble.use_case;
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Board;
 import com.example.scrabble.entity.Game;
+import com.example.scrabble.entity.LetterBag;
 import com.example.scrabble.entity.Player;
 import com.example.scrabble.use_case.end_turn.EndTurnInteractor;
 import com.example.scrabble.use_case.end_turn.GetEndTurnInputData;
@@ -58,7 +59,9 @@ class EndTurnInteractorTest {
         GetEndTurnInputData inputData = new GetEndTurnInputData(1, wordsToBeConfirmed);
 
         when(game.isEndTurn()).thenReturn(true);
+        when(game.getCurrentPlayer()).thenReturn(new Player());
         when(player.getInventory()).thenReturn(new ArrayList<>());
+        when(game.getLetterBag()).thenReturn(new LetterBag());
 
         EndTurnOutputData outputData = endTurnInteractor.execute(inputData);
 

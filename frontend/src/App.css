@@ -31,8 +31,20 @@ body > *{
   background: linear-gradient(yellow, red);
 }
 
+#dont-contest-button{
+  background: linear-gradient(white, black);
+}
+
 #redraw-button{
   background: linear-gradient(green, rgb(0, 255, 255));
+}
+
+#confirm-play-button{
+  background: linear-gradient(blue, purple);
+}
+
+#start-button{
+  background: linear-gradient(blue, rgb(0, 255, 255));
 }
 
 .input-button{
