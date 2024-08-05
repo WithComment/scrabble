@@ -86,7 +86,7 @@ public class GameController {
 
   private void notifyFrontend(int gameId) {
     logger.info("Notifying frontend of game ID: " + gameId);
-    template.convertAndSend("topic/game/" + gameId, gameDao.get(gameId));
+    template.convertAndSend("/topic/game/" + gameId, gameDao.get(gameId));
   }
 
     @GetMapping("/{gameId}/")
