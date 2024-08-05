@@ -43,13 +43,11 @@ import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputBoundary
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardOutputData;
 import com.example.scrabble.use_case.join_game.JoinGameInputData;
 import com.example.scrabble.use_case.join_game.JoinGameInputBoundary;
-import com.example.scrabble.use_case.join_game.JoinGameOutputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputBoundary;
 import com.example.scrabble.use_case.place_letter.PlaceLetterOutputData;
 import com.example.scrabble.use_case.start_game.StartGameInputBoundary;
 import com.example.scrabble.use_case.start_game.StartGameInputData;
-import com.example.scrabble.use_case.start_game.StartGameInteractor;
 import com.example.scrabble.use_case.start_game.StartGameOutputData;
 
 @RestController

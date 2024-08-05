@@ -197,6 +197,11 @@ public class GameControllerTest {
   @Test
   void testContest() throws Exception {
     int gameId = 1;
-    ContestOutputData outputData = new ContestOutputData(Arrays.asList(new Player("Player1", 0), new Player("Player2", 0)));
+    ContestOutputData outputData = new ContestOutputData(null);
     when(contestInteractor.execute(any())).thenReturn(outputData);
+
+    mockMvc.perform(post("/game/{gameId}/contest", gameId)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+  }
 }

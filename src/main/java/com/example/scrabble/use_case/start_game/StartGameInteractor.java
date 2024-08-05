@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.scrabble.data_access.GameDataAccess;
+import com.example.scrabble.entity.Game;
 
 @Service
 public class StartGameInteractor implements StartGameInputBoundary {
@@ -17,7 +18,11 @@ public class StartGameInteractor implements StartGameInputBoundary {
 
   @Override
   public StartGameOutputData execute(StartGameInputData inputData) {
-    gameDao.get(inputData.getGameId()).startGame();
+    Game game = gameDao.get(inputData.getGameId());
+    game.startGame();
+    game.startTurn();
+
+    gameDao.update(game);
 
     return new StartGameOutputData(true);
   }
