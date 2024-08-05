@@ -28,8 +28,8 @@ public class StartTurnInteractor implements StartTurnInputBoundary {
     }
 
     @Override
-    public StartTurnOutputData execute(StartTurnInputData getEndTurnInputData) {
-        Game game = gameDataAccess.get(StartTurnInputData.getGameId());
+    public StartTurnOutputData execute(StartTurnInputData startTurnInputData) {
+        Game game = gameDataAccess.get(startTurnInputData.getGameId());
 
         game.endTurn();
         game.startTurn();

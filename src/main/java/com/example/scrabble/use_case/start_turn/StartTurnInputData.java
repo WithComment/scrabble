@@ -5,17 +5,17 @@ import java.util.List;
 
 
 public class StartTurnInputData {
-  private static int gameId;
+  private int gameId;
 
   public StartTurnInputData() {
     // Empty constructor for automatic parsing
   }
 
   public StartTurnInputData(int gameId) {
-    StartTurnInputData.gameId = gameId;
+    this.gameId = gameId;
   }
 
-  public static int getGameId() {
+  public int getGameId() {
     return gameId;
   }
 
