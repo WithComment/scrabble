@@ -20,7 +20,6 @@ public class StartGameInteractor implements StartGameInputBoundary {
   public StartGameOutputData execute(StartGameInputData inputData) {
     Game game = gameDao.get(inputData.getGameId());
     game.startGame();
-    game.startTurn();
 
     gameDao.update(game);
 

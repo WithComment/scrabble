@@ -49,6 +49,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(InvalidPlayException.class)
   public ResponseEntity<ErrorResponse> handleException(InvalidPlayException ex) {
     ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+    logger.error(ex.getMessage(), ex);
     return ResponseEntity
         .status(HttpStatus.BAD_REQUEST)
         .contentType(MediaType.APPLICATION_JSON)

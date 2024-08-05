@@ -198,7 +198,7 @@ public class GameControllerTest {
   void testContest() throws Exception {
     int gameId = 1;
     ContestOutputData outputData = new ContestOutputData(null);
-    when(contestInteractor.execute(any())).thenReturn(outputData);
+    when(contestInteractor.execute(any())).thenReturn(null);
 
     mockMvc.perform(post("/game/{gameId}/contest", gameId)
         .contentType(MediaType.APPLICATION_JSON))
