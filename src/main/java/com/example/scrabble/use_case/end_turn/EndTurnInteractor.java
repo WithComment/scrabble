@@ -17,7 +17,7 @@ import java.util.List;
  * handling contests, updating the board, and managing player states.
  */
 @Service
-public class EndTurnInteractor implements GetEndTurnInputBoundary {
+public class EndTurnInteractor implements EndTurnInputBoundary {
     private final GameDataAccess gameDataAccess;
 
     /**
@@ -30,7 +30,7 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
     }
 
     @Override
-    public EndTurnOutputData execute(GetEndTurnInputData getEndTurnInputData) {
+    public EndTurnOutputData execute(EndTurnInputData getEndTurnInputData) {
         Game game = gameDataAccess.get(getEndTurnInputData.getGameId());
 
         if (game.isEndTurn()) {

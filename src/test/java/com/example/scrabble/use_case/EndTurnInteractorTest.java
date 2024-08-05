@@ -6,7 +6,7 @@ import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.LetterBag;
 import com.example.scrabble.entity.Player;
 import com.example.scrabble.use_case.end_turn.EndTurnInteractor;
-import com.example.scrabble.use_case.end_turn.GetEndTurnInputData;
+import com.example.scrabble.use_case.end_turn.EndTurnInputData;
 import com.example.scrabble.use_case.end_turn.EndTurnOutputData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,7 +56,7 @@ class EndTurnInteractorTest {
     void testExecute() {
         List<List<Integer>> wordsToBeConfirmed = new ArrayList<>();
         wordsToBeConfirmed.add(Arrays.asList(0, 0));
-        GetEndTurnInputData inputData = new GetEndTurnInputData(1, wordsToBeConfirmed);
+        EndTurnInputData inputData = new EndTurnInputData(1, wordsToBeConfirmed);
 
         when(game.isEndTurn()).thenReturn(true);
         when(game.getCurrentPlayer()).thenReturn(new Player());

@@ -18,7 +18,6 @@ public class SecurityConfig {
       httpSecurityCorsConfigurer.configurationSource(request -> {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.addAllowedOrigin("http://localhost:3000");
-        corsConfiguration.addAllowedOrigin("https://withcomment.github.io/scrabble/");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.setAllowCredentials(true);
@@ -35,7 +34,6 @@ public class SecurityConfig {
           public void addCorsMappings(@NonNull CorsRegistry registry) {
               registry.addMapping("/**")
                       .allowedOrigins("http://localhost:3000")
-                      .allowedOrigins("https://withcomment.github.io/scrabble/")
                       .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                       .allowedHeaders("*")
                       .allowCredentials(true);

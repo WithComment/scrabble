@@ -14,7 +14,6 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
    public void registerStompEndpoints(@NonNull StompEndpointRegistry registry) {
     registry.addEndpoint("/ws")
             .setAllowedOrigins("http://localhost:3000") // Specify the allowed origin
-            .setAllowedOrigins("https://withcomment.github.io/scrabble/")
             .withSockJS();
   }
 
