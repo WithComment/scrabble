@@ -96,9 +96,10 @@ public class GameController {
     this.endGameInteractor = endGameInteractor;
   }
 
-  private void notifyFrontend(int gameId) {
+  private void notifyFrontend(int gameId, String type) {
     logger.info("Notifying frontend of game ID: " + gameId);
-    template.convertAndSend("topic/game/" + gameId, gameDao.get(gameId));
+    Message message = new Message(gameDao.get(gameId), type);
+    template.convertAndSend("topic/game/" + gameId, message);
   }
 
     @GetMapping("/{gameId}/")
@@ -116,7 +117,7 @@ public class GameController {
         CreateGameOutputData output = createGameInteractor.execute(input);
         int gameId = output.getGameId();
         logger.info("Created new game with ID: " + gameId);
-        notifyFrontend(gameId);
+        notifyFrontend(gameId, "create");
         EntityModel<CreateGameOutputData> entityModel = EntityModel.of(output,
             linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.status(HttpStatus.CREATED).body(entityModel);
@@ -128,7 +129,7 @@ public class GameController {
         String name = body.get("name");
         JoinGameInputData input = new JoinGameInputData(name, gameId);
         joinGameInteractor.execute(input);
-        notifyFrontend(gameId);
+        notifyFrontend(gameId, "join");
         EntityModel<Game> entityModel = EntityModel.of(gameDao.get(gameId),
             linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
@@ -138,7 +139,7 @@ public class GameController {
     public ResponseEntity<EntityModel<StartGameOutputData>> startGame(@PathVariable int gameId) {
         logger.info("Starting game with ID: " + gameId);
         StartGameOutputData output = startGameInteractor.execute(new StartGameInputData(gameId));
-        notifyFrontend(gameId);
+        notifyFrontend(gameId, "start");
         EntityModel<StartGameOutputData> entityModel = EntityModel.of(output,
             linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
@@ -152,7 +153,7 @@ public class GameController {
         char letter = ((String) input.get("letter")).charAt(0);
         logger.info("Game ID: {} Placing letter: {} at position: {},{}", gameId, letter, x, y);
         PlaceLetterOutputData output = placeLetterInteractor.execute(new PlaceLetterInputData(gameId, x, y, letter));
-        notifyFrontend(gameId);
+        notifyFrontend(gameId, "place_letter");
         EntityModel<PlaceLetterOutputData> entityModel = EntityModel.of(output,
             linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
@@ -163,7 +164,7 @@ public class GameController {
             @RequestBody ConfirmPlayInputData input) {
         logger.info("Game ID: {} Confirming play", input.getGameId());
         ConfirmPlayOutputData output = confirmPlayInteractor.execute(input);
-        notifyFrontend(gameId);
+        notifyFrontend(gameId, "confirm_play");
         EntityModel<ConfirmPlayOutputData> entityModel = EntityModel.of(output,
             linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
@@ -173,7 +174,7 @@ public class GameController {
     public ResponseEntity<EntityModel<EndTurnOutputData>> endTurn(@PathVariable int gameId, @RequestBody EndTurnInputData input) {
         logger.info("Game ID: {} Ending turn", input.getGameId());
         EndTurnOutputData output = endTurnInteractor.execute(input);
-        notifyFrontend(gameId);
+        notifyFrontend(gameId, "end_turn");
         EntityModel<EndTurnOutputData> entityModel = EntityModel.of(output,
             linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
@@ -184,7 +185,7 @@ public class GameController {
             @RequestBody GetLeaderboardInputData input) {
         logger.info("Getting leaderboard for game ID: {}", gameId);
         GetLeaderboardOutputData output = getLeaderboardInteractor.execute(input);
-        notifyFrontend(gameId);
+        notifyFrontend(gameId, "get_leaderboard");
         EntityModel<GetLeaderboardOutputData> entityModel = EntityModel.of(output,
             linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
@@ -194,19 +195,39 @@ public class GameController {
     public ResponseEntity<EntityModel<Game>> contest(@PathVariable int gameId, @RequestBody ContestInputData input) {
         logger.info("Contesting game ID: {}", gameId);
         Game output = contestInteractor.execute(input);
-        notifyFrontend(gameId);
+        notifyFrontend(gameId, "contest");
         EntityModel<Game> entityModel = EntityModel.of(output,
             linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
     }
 
-//    @PostMapping("/{gameId}/endgame/")
-//    public ResponseEntity<EntityModel<EndGameOutputData>> endGame(@PathVariable int gameId, @RequestBody EndGameInputData input) {
-//        logger.info("Ending game ID: {}", gameId);
-//        EndGameOutputData output = endGameInteractor.execute(input);
-//        notifyFrontend(gameId);
-//        EntityModel<EndGameOutputData> entityModel = EntityModel.of(output,
-//            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
-//        return ResponseEntity.ok(entityModel);
-//    }
+   @PostMapping("/{gameId}/endgame/")
+   public ResponseEntity<EntityModel<EndGameOutputData>> endGame(@PathVariable int gameId, @RequestBody EndGameInputData input) {
+       logger.info("Ending game ID: {}", gameId);
+       EndGameOutputData output = endGameInteractor.execute(input);
+       notifyFrontend(gameId, "endgame");
+       EntityModel<EndGameOutputData> entityModel = EntityModel.of(output,
+           linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+       return ResponseEntity.ok(entityModel);
+   }
+}
+
+/**
+ * Custom class to send STOMP messages to the frontend
+ */
+class Message {
+    Object data;
+    String type;
+    
+    public Message(Object data, String type) {
+        this.data = data;
+        this.type = type;
+    }
+
+    public Object getData() {
+      return data;
+    }
+    public String getType() {
+      return type;
+    }
 }
