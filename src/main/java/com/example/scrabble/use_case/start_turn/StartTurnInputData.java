@@ -1,5 +1,6 @@
 package com.example.scrabble.use_case.start_turn;
 
+
 public class StartTurnInputData {
   private int gameId;
 

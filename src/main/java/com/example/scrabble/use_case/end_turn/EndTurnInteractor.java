@@ -1,9 +1,7 @@
 package com.example.scrabble.use_case.end_turn;
 
 import com.example.scrabble.data_access.GameDataAccess;
-import com.example.scrabble.entity.Board;
-import com.example.scrabble.entity.Game;
-import com.example.scrabble.entity.Player;
+import com.example.scrabble.entity.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,12 +30,15 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
     @Override
     public EndTurnOutputData execute(GetEndTurnInputData getEndTurnInputData) {
         Game game = gameDataAccess.get(getEndTurnInputData.getGameId());
+        List<Move> Moves;
 
         if (game.isEndTurn()) {
             Board currentBoard = game.getBoard();
-            for (List<Integer> wordToBeConfirmed : getEndTurnInputData.getWordsToBeConfirmed()) {
-                int x = wordToBeConfirmed.get(0);
-                int y = wordToBeConfirmed.get(1);
+            Play play = game.getLastPlay();
+            Moves = play.getMoves();
+            for (Move move : Moves) {
+                int x = move.getX();
+                int y = move.getY();
                 currentBoard.confirm(x, y);
             }
 
