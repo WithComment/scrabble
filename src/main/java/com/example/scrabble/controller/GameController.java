@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.scrabble.use_case.start_turn.StartTurnInputData;
+import com.example.scrabble.use_case.start_turn.StartTurnInteractor;
+import com.example.scrabble.use_case.start_turn.StartTurnOutputData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +38,7 @@ import com.example.scrabble.use_case.create_game.CreateGameOutputData;
 import com.example.scrabble.use_case.end_turn.EndTurnInteractor;
 import com.example.scrabble.use_case.end_turn.GetEndTurnInputData;
 import com.example.scrabble.use_case.end_turn.EndTurnOutputData;
+import com.example.scrabble.use_case.start_turn.StartTurnInteractor;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputData;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInteractor;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardOutputData;
@@ -57,6 +61,7 @@ public class GameController {
   private final PlaceLetterInteractor placeLetterInteractor;
   private final ConfirmPlayInteractor confirmPlayInteractor;
   private final EndTurnInteractor endTurnInteractor;
+  private final StartTurnInteractor startTurnInteractor;
   private final GetLeaderboardInteractor getLeaderboardInteractor;
   private final ContestInteractor contestInteractor;
   private final GameModelAssembler assembler = new GameModelAssembler();
@@ -71,6 +76,7 @@ public class GameController {
       PlaceLetterInteractor placeLetterInteractor,
       ConfirmPlayInteractor confirmPlayInteractor,
       EndTurnInteractor endTurnInteractor,
+      StartTurnInteractor startTurnInteractor,
       GetLeaderboardInteractor getLeaderboardInteractor,
       ContestInteractor contestInteractor) {
     this.template = template;
@@ -82,6 +88,7 @@ public class GameController {
     this.endTurnInteractor = endTurnInteractor;
     this.getLeaderboardInteractor = getLeaderboardInteractor;
     this.contestInteractor = contestInteractor;
+    this.startTurnInteractor = startTurnInteractor;
   }
 
   private void notifyFrontend(int gameId) {
@@ -154,6 +161,16 @@ public class GameController {
         notifyFrontend(gameId);
         EntityModel<EndTurnOutputData> entityModel = EntityModel.of(output,
             linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
+    }
+
+    @PostMapping("/{gameId}/start_turn/")
+    public ResponseEntity<EntityModel<StartTurnOutputData>> startTurn(@PathVariable int gameId, @RequestBody StartTurnInputData input) {
+        logger.info("Game ID: {} Starting turn", input.getGameId());
+        StartTurnOutputData output = startTurnInteractor.execute(input);
+        notifyFrontend(gameId);
+        EntityModel<StartTurnOutputData> entityModel = EntityModel.of(output,
+                linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
     }
 
