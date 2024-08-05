@@ -30,12 +30,19 @@ public class JoinGameInteractor implements JoinGameInputBoundary {
 
     @Override
     public JoinGameOutputData execute(JoinGameInputData joinGameInputData) {
-        Game game = gameDataAccess.get(joinGameInputData.getGameId());
+        try {
+            Game game = gameDataAccess.get(joinGameInputData.getGameId());
+        } catch (Exception e){
+            throw new IllegalArgumentException("Game with the specified ID does not exist.");
+        }
 
+        Game game = gameDataAccess.get(joinGameInputData.getGameId());
         Player newPlayer = new Player(joinGameInputData.getPlayerName());
         LetterBag letterBag = game.getLetterBag();
         game.addPlayer(newPlayer);
-        newPlayer.addLetter(letterBag.drawLetters(7));
+        if (newPlayer.getInventory().isEmpty()) {
+            newPlayer.addLetter(letterBag.drawLetters(7));
+        }
 
         gameDataAccess.update(game);
         return new JoinGameOutputData(joinGameInputData.getPlayerName());

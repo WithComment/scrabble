@@ -89,7 +89,7 @@ public class Game implements Serializable {
         this.history = history;
         this.leaderboard = leaderboard;
         this.endTurn = endTurn;
-        this.playerNumber = playerNumber;
+        this.playerNumber = 0;
         this.numContestFailed = numContestFailed;
         this.currentPlay = currentPlay;
     }
@@ -306,7 +306,6 @@ public class Game implements Serializable {
 
     public void startTurn(){
         currentPlay = new Play(getCurrentPlayer());
-        System.out.println(currentPlay);
         this.endTurn = false;
     }
 
@@ -345,7 +344,6 @@ public class Game implements Serializable {
             numContestFailed.set((playerNumber), numContestFailed.get((playerNumber)));
         }
         this.getCurrentPlayer().confirmTempScore();
-//        System.out.println("Player " + this.CurrentPlayer.getId() + " contest result: " + (ContestSucceed ? "Valid" : "Invalid"));
     }
 
     /**

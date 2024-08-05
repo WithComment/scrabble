@@ -1,52 +1,113 @@
+import { Stomp } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
+
 class ViewModel{
-    constructor(gameId, playerId, board, hand, leaderboard, setBoard, setHand, setLeaderboard){
+    constructor(gameId, playerId, board, hand, leaderboard, setHand, setBoard, setLeaderboard){
         this.playerId = playerId;
         this.gameId = gameId;
-        this.baseUrl = 'http://localhost:8080/game/';
+        this.baseUrl = `http://localhost:8080/game/${this.gameId}/`;
+        console.log('Base URL:', this.baseUrl);
         this.board = board;
         this.hand = hand;
         this.leaderboard = leaderboard;
-        this.setLeaderboard = setLeaderboard;
-        this.setBoard = setBoard;
-        this.setHand = setHand;
         this.selectedLetter = null;
         this.selectedLettersRedraw = [];
+        this.setHand = setHand;
+        this.setBoard = setBoard;
+        this.setLeaderboard = setLeaderboard;
+        this.index = 0;
+        this.connectWebSocket()
     }
+
+    connectWebSocket() {
+        const socket = new SockJS('http://localhost:8080/ws', null, {withCredentials: true});
+        this.stompClient = Stomp.over(socket);
+
+        this.stompClient.connect({}, (frame) => {
+            console.log('Connected: ' + frame);
+            this.stompClient.subscribe(`/topic/game/${this.gameId}`, (message) => {
+                this.handleWebSocketMessage(JSON.parse(message.body));
+            });
+        });
+    }
+
+    handleWebSocketMessage(message) {
+        console.log('Handling message:', message);
+        let newBoard = message.board.board;
+        let newHand = message.players[this.index].inventory.map((letter) => letter.letter);
+        let newLeaderboard = message.leaderboard;
+        this.updateBoardFromRaw(newBoard);
+        //TODO: Handle message
+    }
+
+    updateBoardFromRaw(rawBoard){
+        console.log('Updating board from raw: ' , rawBoard);
+        let newBoard = [];
+        for (let i = 0; i < 15; i++) {
+            let row = [];
+            for (let j = 0; j < 15; j++) {
+                if (rawBoard[i][j].letter === null){
+                    row.push("__")
+                }else{
+                    row.push(rawBoard[i][j].letter.letter);
+                };
+            };
+            newBoard.push(row);
+        };
+        console.log('New board:', newBoard);
+        this.updateBoard(newBoard);
+    }
+
+    testIfWorking(){
+        console.log('View Model properly initialized');
+    }
+    
     setRedrawLetter(letter){
         console.log('Setting redraw letter:', letter);
         this.selectedLettersRedraw.push(letter);
         console.log('Selected letters redraw:', this.selectedLettersRedraw);
     }
+
     removeRedrawLetter(letter){
         this.selectedLettersRedraw = this.selectedLettersRedraw.filter((l) => l !== letter);
     }
+
     setTile(x, y, letter){
         this.board[x][y] = letter;
     }
+
     updateBoard(board){
         this.setBoard(board);
     }
+
     updateHand(hand){
         this.setHand(hand);
     }
+
     updateLeaderboard(leaderboard){
         this.setLeaderboard(leaderboard);
     }
+
     getBoard(){
         return this.board;
     }
+
     getHand(){
         return this.hand;
     }
+
     getLeaderboard(){
         return this.leaderboard;
     }
+
     getSelectedLetter(){
         return this.selectedLetter;
     }
+
     setSelectedLetter(selectedLetter){
         this.selectedLetter = selectedLetter;
     }
+
     async handleInput(input){
         console.log('Handling input');
         let response = null;
@@ -105,7 +166,7 @@ class ViewModel{
 
     handleResponse(response){
         let reponse = response.json();
-        
+        console.log('Response:', response);
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.scrabble.use_case.get_leaderboard;
 
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Player;
+import com.example.scrabble.entity.LeaderboardEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,14 +42,24 @@ public class GetLeaderboardInteractor implements GetLeaderboardInputBoundary {
     public GetLeaderboardOutputData execute(GetLeaderboardInputData input) {
         Game game = gameDao.get(input.getGameId());
         List<Integer> players = input.getPlayers();
-        List<Player> leaderboard = new ArrayList<>();
+        List<LeaderboardEntry> leaderboard = new ArrayList<>();
         for (int playerId : players) {
             Player player = game.getPlayer(playerId);
-            leaderboard.add(player);
+            int score = player.getScore(); // Assume getScore() method exists in Player
+            LeaderboardEntry entry = new LeaderboardEntry(player, score);
+            leaderboard.add(entry);
         }
         Collections.sort(leaderboard, Collections.reverseOrder());
-        game.setLeaderboard(leaderboard);
+        // Extract sorted players from leaderboardEntries
+        List<Player> sortedPlayers = new ArrayList<>();
+        for (LeaderboardEntry entry : leaderboard) {
+            sortedPlayers.add(entry.getPlayer());
+        }
+
+        // Set the sorted players as the leaderboard
+        game.setLeaderboard(sortedPlayers);
         gameDao.update(game);
-        return new GetLeaderboardOutputData(leaderboard);
+
+        return new GetLeaderboardOutputData(sortedPlayers);
     }
 }

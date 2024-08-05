@@ -98,7 +98,7 @@ public class Tile implements Serializable {
     /**
      * Set the letter on the tile to null. Un-confirm the tile.
      */
-    protected void removeLetter() {
+    public void removeLetter() {
         letter = null;
         isConfirmed = false;
     }
