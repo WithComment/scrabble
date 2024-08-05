@@ -1,21 +1,21 @@
 import React from 'react'
 import '../../App.css'
 
-function Redraw({ ButtonViewModel }){
+function DontContest({ ButtonViewModel }){
     const viewModel = ButtonViewModel;
     function handleClick(){
         let input = {
-            type : 'redraw',
+            type : 'no-contest',
             x : 0,
             y : 0,
             };
         viewModel.handleInput(input);
-        }
+        };
     return (
-        <button className='input-button' id='redraw-button' onClick={handleClick}>
-            Redraw Selected
+        <button className='input-button' id='dont-contest-button' onClick={handleClick}>
+            Do Nothing
         </button>
     )
 }
 
-export default Redraw;
+export default DontContest;
