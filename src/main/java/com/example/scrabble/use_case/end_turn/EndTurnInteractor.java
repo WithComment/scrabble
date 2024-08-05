@@ -34,7 +34,7 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
 
         if (game.isEndTurn()) {
             Board currentBoard = game.getBoard();
-            Play play = game.getLastPlay();
+            Play play = game.getCurrentPlay();
             Moves = play.getMoves();
             for (Move move : Moves) {
                 int x = move.getX();
