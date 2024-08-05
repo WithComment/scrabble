@@ -36,10 +36,9 @@ function HandButton({ letter, handViewModel, index, select, selectedTile }) {
         ' ': 0
     };
 
-    function handleClick(e, letter){
+    function handleClick(e){
+        console.log(letter);
         if (e.type === "click") {
-            console.log(viewModel);
-
             setSelectedForRedraw(false);
             setSelectedForPlay(true);
             select(ref);
@@ -47,7 +46,7 @@ function HandButton({ letter, handViewModel, index, select, selectedTile }) {
         } else if (e.type === "contextmenu") {
             e.preventDefault()
             if (!selectedForRedraw) {
-                viewModel.setRedrawLetter(letter);
+                viewModel.addToRedraws(letter);
                 setSelectedForRedraw(true);
                 setSelectedForPlay(false);
             } else {
@@ -58,7 +57,7 @@ function HandButton({ letter, handViewModel, index, select, selectedTile }) {
     }
 
     return(
-        <button ref={ref} style={selectedForRedraw ? {border:'3px solid red'} : (selectedTile === ref) ? {border:'3px solid #32de84'} :  {}} className={styles.handtile} key={index} onContextMenu={(e, letter) => handleClick(e)} onClick={(e) => handleClick(e, letter)}>
+        <button ref={ref} style={selectedForRedraw ? {border:'3px solid red'} : (selectedTile === ref) ? {border:'3px solid #32de84'} :  {}} className={styles.handtile} key={index} onContextMenu={(e) => handleClick(e)} onClick={(e) => handleClick(e)}>
             <p>
                 {letter}
             </p>

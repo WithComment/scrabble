@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './Board.module.css'
 
 function Tile({ id, content, x, y, handleClick}){
-    const SERVER_URL = ""
     const xCoord = x;
     const yCoord = y;
     return (

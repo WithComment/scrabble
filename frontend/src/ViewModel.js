@@ -2,7 +2,7 @@ import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
 class ViewModel{
-    constructor(gameId, playerId, board, hand, leaderboard, setHand, setBoard, setLeaderboard){
+    constructor(gameId, playerId, board, hand, leaderboard, setHand, setBoard, setLeaderboard, setGameStarted, setContestPhase, setYourTurn){
         this.playerId = playerId;
         this.gameId = gameId;
         this.baseUrl = `http://localhost:8080/game/${this.gameId}/`;
@@ -15,6 +15,7 @@ class ViewModel{
         this.setHand = setHand;
         this.setBoard = setBoard;
         this.setLeaderboard = setLeaderboard;
+        this.setGameStarted = setGameStarted;
         this.index = 0;
         this.connectWebSocket()
     }
@@ -36,8 +37,10 @@ class ViewModel{
         let newBoard = message.board.board;
         let newHand = message.players[this.index].inventory.map((letter) => letter.letter);
         let newLeaderboard = message.leaderboard;
+        // Updates the View
         this.updateBoardFromRaw(newBoard);
-        //TODO: Handle message
+        this.updateHand(newHand);
+        this.updateLeaderboard(newLeaderboard);
     }
 
     updateBoardFromRaw(rawBoard){
@@ -58,11 +61,25 @@ class ViewModel{
         this.updateBoard(newBoard);
     }
 
+    updateHandFromRaw(rawHand){
+        console.log('Updating hand from raw:', rawHand);
+        let newHand = rawHand.map((letter) => letter.letter);
+        console.log('New hand:', newHand);
+        this.updateHand(newHand);
+    }
+
+    updateLeaderboardFromRaw(rawLeaderboard){
+        console.log('Updating leaderboard from raw:', rawLeaderboard);
+        let newLeaderboard = rawLeaderboard;
+        console.log('New leaderboard:', newLeaderboard);
+        this.updateLeaderboard(newLeaderboard);
+    }
+
     testIfWorking(){
         console.log('View Model properly initialized');
     }
     
-    setRedrawLetter(letter){
+    addToRedraws(letter){
         console.log('Setting redraw letter:', letter);
         this.selectedLettersRedraw.push(letter);
         console.log('Selected letters redraw:', this.selectedLettersRedraw);
@@ -118,13 +135,37 @@ class ViewModel{
             }
             response = await fetch(`${this.baseUrl}contest/`, request);
         } else if (input.type === 'redraw'){
+            console.log(this.selectedLettersRedraw);
             let request = {            
                 gameId: this.gameId,
-                x: input.x,
-                y: input.y,
-                char: this.selectedLetter
+                char: this.selectedLettersRedraw,
             }
             response = await fetch(`${this.baseUrl}redraw/`, request);
+        } else if (input.type === 'start'){
+            let requestBody = {      
+                gameId: this.gameId,
+            };
+            response = await fetch(`${this.baseUrl}start_game/`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                method: 'POST',
+                body : JSON.stringify(requestBody)
+            });
+        } else if (input.type === 'confirm-play'){
+            let requestBody = {      
+                gameId: this.gameId,
+            };
+            response = await fetch(`${this.baseUrl}end_turn/`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                method: 'POST',
+                body : JSON.stringify(requestBody)
+            });
+
         } else{
             if (input.type === 'lclick'){
                 if (this.selectedLetter != null){
