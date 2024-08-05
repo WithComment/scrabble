@@ -33,8 +33,8 @@ function Login(){
         let response = await fetch(joinUrl, request);
         response = await response.json();
         console.log(response);
-        let newGameId = response.gameId;
-        let newPlayerId = response.players[-1].id;
+        let newGameId = response.id;
+        let newPlayerId = response.players.at(-1).id;
         let hand = response.players[0].inventory.map((letter) => letter.letter);
         let newBoard = []
         for (let i = 0; i < 15; i++) {
