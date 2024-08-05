@@ -24,29 +24,33 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInputData;
-import com.example.scrabble.use_case.confirm_play.ConfirmPlayInteractor;
+import com.example.scrabble.use_case.confirm_play.ConfirmPlayInputBoundary;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayOutputData;
 import com.example.scrabble.use_case.contest.ContestInputData;
-import com.example.scrabble.use_case.contest.ContestInteractor;
+import com.example.scrabble.use_case.contest.ContestInputBoundary;
 import com.example.scrabble.use_case.contest.ContestOutputData;
 import com.example.scrabble.use_case.create_game.CreateGameInputData;
-import com.example.scrabble.use_case.create_game.CreateGameInteractor;
+import com.example.scrabble.use_case.create_game.CreateGameInputBoundary;
 import com.example.scrabble.use_case.create_game.CreateGameOutputData;
 import com.example.scrabble.use_case.end_game.EndGameInputData;
-import com.example.scrabble.use_case.end_game.EndGameInteractor;
+import com.example.scrabble.use_case.end_game.EndGameInputBoundary;
 import com.example.scrabble.use_case.end_game.EndGameOutputData;
-import com.example.scrabble.use_case.end_turn.EndTurnInteractor;
+import com.example.scrabble.use_case.end_turn.EndTurnInputBoundary;
 import com.example.scrabble.use_case.end_turn.EndTurnInputData;
 import com.example.scrabble.use_case.end_turn.EndTurnOutputData;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputData;
-import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInteractor;
+import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputBoundary;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardOutputData;
 import com.example.scrabble.use_case.join_game.JoinGameInputData;
-import com.example.scrabble.use_case.join_game.JoinGameInteractor;
+import com.example.scrabble.use_case.join_game.JoinGameInputBoundary;
 import com.example.scrabble.use_case.join_game.JoinGameOutputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputData;
-import com.example.scrabble.use_case.place_letter.PlaceLetterInteractor;
+import com.example.scrabble.use_case.place_letter.PlaceLetterInputBoundary;
 import com.example.scrabble.use_case.place_letter.PlaceLetterOutputData;
+import com.example.scrabble.use_case.start_game.StartGameInputBoundary;
+import com.example.scrabble.use_case.start_game.StartGameInputData;
+import com.example.scrabble.use_case.start_game.StartGameInteractor;
+import com.example.scrabble.use_case.start_game.StartGameOutputData;
 
 @RestController
 @RequestMapping("/game")
@@ -54,33 +58,36 @@ public class GameController {
 
   private final SimpMessagingTemplate template;
   private final GameDataAccess gameDao;
-  private final CreateGameInteractor createGameInteractor;
-  private final JoinGameInteractor joinGameInteractor;
-  private final PlaceLetterInteractor placeLetterInteractor;
-  private final ConfirmPlayInteractor confirmPlayInteractor;
-  private final EndTurnInteractor endTurnInteractor;
-  private final GetLeaderboardInteractor getLeaderboardInteractor;
-  private final ContestInteractor contestInteractor;
-  private final EndGameInteractor endGameInteractor;
+  private final CreateGameInputBoundary createGameInteractor;
+  private final JoinGameInputBoundary joinGameInteractor;
+  private final StartGameInputBoundary startGameInteractor;
+  private final PlaceLetterInputBoundary placeLetterInteractor;
+  private final ConfirmPlayInputBoundary confirmPlayInteractor;
+  private final EndTurnInputBoundary endTurnInteractor;
+  private final GetLeaderboardInputBoundary getLeaderboardInteractor;
+  private final ContestInputBoundary contestInteractor;
+  private final EndGameInputBoundary endGameInteractor;
   private Logger logger = LoggerFactory.getLogger(GameController.class);
 
   @Autowired
   public GameController(
       SimpMessagingTemplate template,
       GameDataAccess gameDao,
-      JoinGameInteractor joinGameInteractor,
-      CreateGameInteractor createGameInteractor,
-      PlaceLetterInteractor placeLetterInteractor,
-      ConfirmPlayInteractor confirmPlayInteractor,
-      EndTurnInteractor endTurnInteractor,
-      GetLeaderboardInteractor getLeaderboardInteractor,
-      ContestInteractor contestInteractor,
-      EndGameInteractor endGameInteractor
+      CreateGameInputBoundary createGameInteractor,
+      JoinGameInputBoundary joinGameInteractor,
+      StartGameInputBoundary startGameInteractor,
+      PlaceLetterInputBoundary placeLetterInteractor,
+      ConfirmPlayInputBoundary confirmPlayInteractor,
+      EndTurnInputBoundary endTurnInteractor,
+      GetLeaderboardInputBoundary getLeaderboardInteractor,
+      ContestInputBoundary contestInteractor,
+      EndGameInputBoundary endGameInteractor
 ) {
     this.template = template;
     this.gameDao = gameDao;
-    this.joinGameInteractor = joinGameInteractor;
     this.createGameInteractor = createGameInteractor;
+    this.joinGameInteractor = joinGameInteractor;
+    this.startGameInteractor = startGameInteractor;
     this.placeLetterInteractor = placeLetterInteractor;
     this.confirmPlayInteractor = confirmPlayInteractor;
     this.endTurnInteractor = endTurnInteractor;
@@ -123,6 +130,16 @@ public class GameController {
         joinGameInteractor.execute(input);
         notifyFrontend(gameId);
         EntityModel<Game> entityModel = EntityModel.of(gameDao.get(gameId),
+            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
+    }
+
+    @PostMapping("/{gameId}/start_game/")
+    public ResponseEntity<EntityModel<StartGameOutputData>> startGame(@PathVariable int gameId) {
+        logger.info("Starting game with ID: " + gameId);
+        StartGameOutputData output = startGameInteractor.execute(new StartGameInputData(gameId));
+        notifyFrontend(gameId);
+        EntityModel<StartGameOutputData> entityModel = EntityModel.of(output,
             linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
     }

@@ -1,6 +1,6 @@
 package com.example.scrabble.use_case.end_turn;
 
-public interface GetEndTurnInputBoundary {
+public interface EndTurnInputBoundary {
 
      EndTurnOutputData execute(EndTurnInputData getEndTurnInputData);
 
