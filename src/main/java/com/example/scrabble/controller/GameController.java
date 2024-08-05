@@ -32,6 +32,8 @@ import com.example.scrabble.use_case.contest.ContestOutputData;
 import com.example.scrabble.use_case.create_game.CreateGameInputData;
 import com.example.scrabble.use_case.create_game.CreateGameInteractor;
 import com.example.scrabble.use_case.create_game.CreateGameOutputData;
+import com.example.scrabble.use_case.end_game.EndGameInputData;
+import com.example.scrabble.use_case.end_game.EndGameInteractor;
 import com.example.scrabble.use_case.end_game.EndGameOutputData;
 import com.example.scrabble.use_case.end_turn.EndTurnInteractor;
 import com.example.scrabble.use_case.end_turn.EndTurnInputData;
@@ -59,6 +61,7 @@ public class GameController {
   private final EndTurnInteractor endTurnInteractor;
   private final GetLeaderboardInteractor getLeaderboardInteractor;
   private final ContestInteractor contestInteractor;
+  private final EndGameInteractor endGameInteractor;
   private Logger logger = LoggerFactory.getLogger(GameController.class);
 
   @Autowired
@@ -71,7 +74,9 @@ public class GameController {
       ConfirmPlayInteractor confirmPlayInteractor,
       EndTurnInteractor endTurnInteractor,
       GetLeaderboardInteractor getLeaderboardInteractor,
-      ContestInteractor contestInteractor) {
+      ContestInteractor contestInteractor,
+      EndGameInteractor endGameInteractor
+) {
     this.template = template;
     this.gameDao = gameDao;
     this.joinGameInteractor = joinGameInteractor;
@@ -81,6 +86,7 @@ public class GameController {
     this.endTurnInteractor = endTurnInteractor;
     this.getLeaderboardInteractor = getLeaderboardInteractor;
     this.contestInteractor = contestInteractor;
+    this.endGameInteractor = endGameInteractor;
   }
 
   private void notifyFrontend(int gameId) {
