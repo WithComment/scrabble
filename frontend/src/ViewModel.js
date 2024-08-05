@@ -2,21 +2,21 @@ import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
 class ViewModel{
-    constructor(gameId, playerId, board, hand, leaderboard, setHand, setBoard, setLeaderboard, setGameStarted, setContestPhase, setYourTurn){
+    constructor(gameId, playerId, board, hand, leaderboard, gameState, setHand, setBoard, setLeaderboard, setGameStarted, setContestPhase, setYourTurn, setGameState){
         this.playerId = playerId;
         this.gameId = gameId;
         this.baseUrl = `http://localhost:8080/game/${this.gameId}/`;
-        console.log('Base URL:', this.baseUrl);
         this.board = board;
         this.hand = hand;
         this.leaderboard = leaderboard;
+        this.gameState = gameState;
         this.selectedLetter = null;
         this.selectedLettersRedraw = [];
         this.setHand = setHand;
         this.setBoard = setBoard;
         this.setLeaderboard = setLeaderboard;
         this.setGameStarted = setGameStarted;
-        this.index = 0;
+        this.setGameState = setGameState;
         this.connectWebSocket()
     }
 
