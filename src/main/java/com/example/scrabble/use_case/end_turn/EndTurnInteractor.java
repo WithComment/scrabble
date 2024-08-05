@@ -17,7 +17,7 @@ import java.util.List;
  * handling contests, updating the board, and managing player states.
  */
 @Service
-public class EndTurnInteractor implements GetEndTurnInputBoundary {
+public class EndTurnInteractor implements EndTurnInputBoundary {
     private final GameDataAccess gameDataAccess;
 
     /**

@@ -2,6 +2,7 @@ package com.example.scrabble.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,14 +25,17 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Game;
+import com.example.scrabble.entity.Player;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInteractor;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayOutputData;
 import com.example.scrabble.use_case.contest.ContestInteractor;
+import com.example.scrabble.use_case.contest.ContestOutputData;
 import com.example.scrabble.use_case.create_game.CreateGameInteractor;
 import com.example.scrabble.use_case.create_game.CreateGameOutputData;
 import com.example.scrabble.use_case.end_turn.EndTurnInteractor;
 import com.example.scrabble.use_case.end_turn.EndTurnOutputData;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInteractor;
+import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardOutputData;
 import com.example.scrabble.use_case.join_game.JoinGameInteractor;
 import com.example.scrabble.use_case.join_game.JoinGameOutputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInteractor;
@@ -169,11 +173,34 @@ public class GameControllerTest {
   @Test
   void testEndTurn() throws Exception {
     int gameId = 1;
-    when(endTurnInteractor.execute(any())).thenReturn(null);
     EndTurnOutputData outputData = new EndTurnOutputData(gameId);
     when(endTurnInteractor.execute(any())).thenReturn(outputData);
 
     mockMvc.perform(post("/game/{gameId}/end_turn", gameId)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  void testGetLeaderboard() throws Exception {
+    int gameId = 1;
+    Player player1 = mock(Player.class);
+    Player player2 = mock(Player.class);
+    GetLeaderboardOutputData outputData = new GetLeaderboardOutputData(Arrays.asList(player1, player2));
+    when(getLeaderboardInteractor.execute(any())).thenReturn(outputData);
+
+    mockMvc.perform(get("/game/{gameId}/leaderboard", gameId)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  void testContest() throws Exception {
+    int gameId = 1;
+    ContestOutputData outputData = new ContestOutputData(null);
+    when(contestInteractor.execute(any())).thenReturn(outputData);
+
+    mockMvc.perform(post("/game/{gameId}/contest", gameId)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
   }
