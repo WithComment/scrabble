@@ -4,11 +4,12 @@ import ViewModel from '../ViewModel';
 
 function Login(){
     const createUrl = 'http://localhost:8080/game/create/'
-    const joinUrl = 'http://localhost:8080/game/join/'
     const [name, setName] = useState('Username');
     const [gameId, setGameId] = useState(0);
     const [submitted, setSubmitted] = useState(false);
     const [data, setData] = useState({});
+    const joinUrl = `http://localhost:8080/game/${gameId}/join/`
+
     function handleNameChange(e){
         setName(e.target.value);
     }
@@ -25,15 +26,15 @@ function Login(){
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                playerName: [name],
+                playerName: name,
                 gameId: gameId
             })
         }
         let response = await fetch(joinUrl, request);
         response = await response.json();
         console.log(response);
-        let newGameId = response.gameId;
-        let newPlayerId = response.players[0].id;
+        let newGameId = response.id;
+        let newPlayerId = response.players.at(-1).id;
         let hand = response.players[0].inventory.map((letter) => letter.letter);
         let newBoard = []
         for (let i = 0; i < 15; i++) {

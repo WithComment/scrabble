@@ -2,21 +2,21 @@ import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
 class ViewModel{
-    constructor(gameId, playerId, board, hand, leaderboard, setHand, setBoard, setLeaderboard, setGameStarted, setContestPhase, setYourTurn){
+    constructor(gameId, playerId, board, hand, leaderboard, gameState, setHand, setBoard, setLeaderboard, setGameStarted, setContestPhase, setYourTurn, setGameState){
         this.playerId = playerId;
         this.gameId = gameId;
         this.baseUrl = `http://localhost:8080/game/${this.gameId}/`;
-        console.log('Base URL:', this.baseUrl);
         this.board = board;
         this.hand = hand;
         this.leaderboard = leaderboard;
+        this.gameState = gameState;
         this.selectedLetter = null;
         this.selectedLettersRedraw = [];
         this.setHand = setHand;
         this.setBoard = setBoard;
         this.setLeaderboard = setLeaderboard;
         this.setGameStarted = setGameStarted;
-        this.index = 0;
+        this.setGameState = setGameState;
         this.connectWebSocket()
     }
 
@@ -27,20 +27,26 @@ class ViewModel{
         this.stompClient.connect({}, (frame) => {
             console.log('Connected: ' + frame);
             this.stompClient.subscribe(`/topic/game/${this.gameId}`, (message) => {
+                console.log('Received message:', message);
                 this.handleWebSocketMessage(JSON.parse(message.body));
-            });
-        });
+            }, (error) => {
+                console.error('WebSocket connection error:', error);
+            });        });
     }
 
     handleWebSocketMessage(message) {
-        console.log('Handling message:', message);
-        let newBoard = message.board.board;
-        let newHand = message.players[this.index].inventory.map((letter) => letter.letter);
-        let newLeaderboard = message.leaderboard;
+        console.log('Handling message:', message, 'of type ', message.type);
+        let game = message.data;
+        let newBoard = game.board.board;
+        let newHand = game.players.filter((player) => player.id === this.playerId)[0].inventory.map((letter) => letter.letter);
+        let newLeaderboard = game.leaderboard;
         // Updates the View
         this.updateBoardFromRaw(newBoard);
         this.updateHand(newHand);
         this.updateLeaderboard(newLeaderboard);
+        if (message.type === 'start'){
+            this.setGameStarted(true);
+        }
     }
 
     updateBoardFromRaw(rawBoard){

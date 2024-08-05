@@ -14,6 +14,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -60,36 +61,43 @@ public class ContestInteractor implements ContestInputBoundary {
     }
 
     @Override
-    public Game execute(ContestInputData contestInputData) throws ContestException {
+    public ContestOutputData execute(ContestInputData contestInputData) throws ContestException {
         game = gameDAO.get(contestInputData.getGameId());
-        player = game.getPlayer(contestInputData.getPlayerId());
-
-        try {
+        if (contestInputData.getIsContest()) {
+            player = game.getPlayer(contestInputData.getPlayerId());
             List<String> words = game.getCurrentPlay().getWords();
             List<String> invalidWords = new LinkedList<>();
-            for (String word : words) {
-                if (!wordIsValid(word)) {
-                    invalidWords.add(word);
+
+            try {
+                for (String word : words) {
+                    if (!wordIsValid(word)) {
+                        invalidWords.add(word);
+                    }
                 }
-            }
-            if (!invalidWords.isEmpty()) {
-                Play lastPlay = game.removeLastPlay();
-                Player contestedPlayer = lastPlay.getPlayer();
-                contestedPlayer.BeContested();
-            } else {
+                if (!invalidWords.isEmpty()) {
+                    Play lastPlay = game.removeLastPlay();
+                    Player contestedPlayer = lastPlay.getPlayer();
+                    contestedPlayer.BeContested();
+                } else {
+                    fail();
+                    throw new ContestException("All words in last move are valid.");
+                }
+            } catch (NoSuchElementException e) {
                 fail();
-                throw new ContestException("All words in last move are valid.");
+                throw new ContestException("No player has made any move.");
+            } catch (WordValidationException e) {
+                fail();
+                throw new ContestException("Word validation failed.", e);
             }
-        } catch (NoSuchElementException e) {
-            fail();
-            throw new ContestException("No player has made any move.");
-        } catch (WordValidationException e) {
-            fail();
-            throw new ContestException("Word validation failed.", e);
-        }
-        finally {
             gameDAO.update(game);
+            return new ContestOutputData(invalidWords, true);
         }
-        return game;
+        game.increaseNumContests();
+        gameDAO.update(game);
+        if (game.getNumContests() >= game.getNumPlayers() - 1) {
+            return new ContestOutputData(new ArrayList<>(), true);
+        } else {
+            return new ContestOutputData(new ArrayList<>(), false);
+        }
     }
 }
