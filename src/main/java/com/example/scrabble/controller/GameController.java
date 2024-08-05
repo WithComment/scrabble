@@ -183,13 +183,13 @@ public class GameController {
         return ResponseEntity.ok(entityModel);
     }
 
-    @PostMapping("/{gameId}/endgame/")
-    public ResponseEntity<EntityModel<EndGameOutputData>> endGame(@PathVariable int gameId, @RequestBody EndGameInputData input) {
-        logger.info("Ending game ID: {}", gameId);
-        EndGameOutputData output = endGameInteractor.execute(input);
-        notifyFrontend(gameId);
-        EntityModel<EndGameOutputData> entityModel = EntityModel.of(output,
-            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
-        return ResponseEntity.ok(entityModel);
-    }
+//    @PostMapping("/{gameId}/endgame/")
+//    public ResponseEntity<EntityModel<EndGameOutputData>> endGame(@PathVariable int gameId, @RequestBody EndGameInputData input) {
+//        logger.info("Ending game ID: {}", gameId);
+//        EndGameOutputData output = endGameInteractor.execute(input);
+//        notifyFrontend(gameId);
+//        EntityModel<EndGameOutputData> entityModel = EntityModel.of(output,
+//            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+//        return ResponseEntity.ok(entityModel);
+//    }
 }
