@@ -29,8 +29,10 @@ public class Game implements Serializable {
     // turn manager
     private Boolean endTurn;
     private int playerNumber;
-    private List<Integer> numContestFailed;
+    private final List<Integer> numContestFailed;
     private Play currentPlay;
+
+    private int numContests;
 
     /**
      * Constructs a new Game instance.
@@ -393,6 +395,14 @@ public class Game implements Serializable {
         return currentPlay;
     }
 
+    public void increaseNumContests() {
+        numContests++;
+    }
+
+    public int getNumContests() {
+        return numContests;
+    }
+
     /**
      * Ends the current turn by setting the endTurn flag to true.
      */
@@ -405,6 +415,8 @@ public class Game implements Serializable {
         playerNumber = (playerNumber + 1) % players.size();
 
         endTurn = true;
+
+        numContests = 0;
     }
 
     @Override
