@@ -27,20 +27,26 @@ class ViewModel{
         this.stompClient.connect({}, (frame) => {
             console.log('Connected: ' + frame);
             this.stompClient.subscribe(`/topic/game/${this.gameId}`, (message) => {
+                console.log('Received message:', message);
                 this.handleWebSocketMessage(JSON.parse(message.body));
-            });
-        });
+            }, (error) => {
+                console.error('WebSocket connection error:', error);
+            });        });
     }
 
     handleWebSocketMessage(message) {
-        console.log('Handling message:', message);
-        let newBoard = message.board.board;
-        let newHand = message.players[this.index].inventory.map((letter) => letter.letter);
-        let newLeaderboard = message.leaderboard;
+        console.log('Handling message:', message, 'of type ', message.type);
+        let game = message.data;
+        let newBoard = game.board.board;
+        let newHand = game.players.filter((player) => player.id === this.playerId)[0].inventory.map((letter) => letter.letter);
+        let newLeaderboard = game.leaderboard;
         // Updates the View
         this.updateBoardFromRaw(newBoard);
         this.updateHand(newHand);
         this.updateLeaderboard(newLeaderboard);
+        if (message.type === 'start'){
+            this.setGameStarted(true);
+        }
     }
 
     updateBoardFromRaw(rawBoard){

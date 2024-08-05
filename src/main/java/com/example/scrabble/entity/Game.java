@@ -153,6 +153,7 @@ public class Game implements Serializable {
     public void addPlayer() {
         Player player = new Player();
         players.add(player);
+        leaderboard.add(player);
         this.numContestFailed.add(0);
     }
 
@@ -355,6 +356,7 @@ public class Game implements Serializable {
      */
     public void addPlayer(Player player) {
         players.add(player);
+        leaderboard.add(player);
         numContestFailed.add(0);
     }
 

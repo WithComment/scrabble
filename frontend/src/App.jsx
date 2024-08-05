@@ -5,9 +5,8 @@ import Game from './pages/Game';
 import Footer from './components/Footer';
 
 function App() {
-  const baseName = '/scrabble';
   return (
-    <BrowserRouter basename={baseName}>
+    <BrowserRouter>
       <Routes>
         <Route path='/' element={<Login/>}/>
         <Route path='/game/:gameId/:playerId' element={<Game/>}/>
