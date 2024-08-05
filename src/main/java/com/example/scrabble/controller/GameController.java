@@ -32,8 +32,9 @@ import com.example.scrabble.use_case.contest.ContestOutputData;
 import com.example.scrabble.use_case.create_game.CreateGameInputData;
 import com.example.scrabble.use_case.create_game.CreateGameInteractor;
 import com.example.scrabble.use_case.create_game.CreateGameOutputData;
+import com.example.scrabble.use_case.end_game.EndGameOutputData;
 import com.example.scrabble.use_case.end_turn.EndTurnInteractor;
-import com.example.scrabble.use_case.end_turn.GetEndTurnInputData;
+import com.example.scrabble.use_case.end_turn.EndTurnInputData;
 import com.example.scrabble.use_case.end_turn.EndTurnOutputData;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInputData;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInteractor;
@@ -44,7 +45,6 @@ import com.example.scrabble.use_case.join_game.JoinGameOutputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInteractor;
 import com.example.scrabble.use_case.place_letter.PlaceLetterOutputData;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/game")
@@ -59,7 +59,6 @@ public class GameController {
   private final EndTurnInteractor endTurnInteractor;
   private final GetLeaderboardInteractor getLeaderboardInteractor;
   private final ContestInteractor contestInteractor;
-  private final GameModelAssembler assembler = new GameModelAssembler();
   private Logger logger = LoggerFactory.getLogger(GameController.class);
 
   @Autowired
@@ -111,13 +110,13 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/join/")
-    public ResponseEntity<EntityModel<JoinGameOutputData>> join(@PathVariable int gameId, @RequestBody HashMap<String, String> body) {
+    public ResponseEntity<EntityModel<Game>> join(@PathVariable int gameId, @RequestBody HashMap<String, String> body) {
         logger.info("Joining game with ID: " + gameId);
         String name = body.get("name");
         JoinGameInputData input = new JoinGameInputData(name, gameId);
-        JoinGameOutputData output = joinGameInteractor.execute(input);
+        joinGameInteractor.execute(input);
         notifyFrontend(gameId);
-        EntityModel<JoinGameOutputData> entityModel = EntityModel.of(output,
+        EntityModel<Game> entityModel = EntityModel.of(gameDao.get(gameId),
             linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
     }
@@ -148,7 +147,7 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/end_turn/")
-    public ResponseEntity<EntityModel<EndTurnOutputData>> endTurn(@PathVariable int gameId, @RequestBody GetEndTurnInputData input) {
+    public ResponseEntity<EntityModel<EndTurnOutputData>> endTurn(@PathVariable int gameId, @RequestBody EndTurnInputData input) {
         logger.info("Game ID: {} Ending turn", input.getGameId());
         EndTurnOutputData output = endTurnInteractor.execute(input);
         notifyFrontend(gameId);
@@ -174,6 +173,16 @@ public class GameController {
         Game output = contestInteractor.execute(input);
         notifyFrontend(gameId);
         EntityModel<Game> entityModel = EntityModel.of(output,
+            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
+    }
+
+    @PostMapping("/{gameId}/endgame/")
+    public ResponseEntity<EntityModel<EndGameOutputData>> endGame(@PathVariable int gameId, @RequestBody EndGameInputData input) {
+        logger.info("Ending game ID: {}", gameId);
+        EndGameOutputData output = endGameInteractor.execute(input);
+        notifyFrontend(gameId);
+        EntityModel<EndGameOutputData> entityModel = EntityModel.of(output,
             linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
     }
