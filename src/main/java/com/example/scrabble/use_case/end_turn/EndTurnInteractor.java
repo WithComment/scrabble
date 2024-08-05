@@ -46,8 +46,6 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
 
             int toDraw = 7 - currentPlayer.getInventory().size();
             currentPlayer.addLetter(game.getLetterBag().drawLetters(toDraw));
-            game.endTurn();
-            game.startTurn();
         }
 
 

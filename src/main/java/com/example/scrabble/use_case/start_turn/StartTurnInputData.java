@@ -1,16 +1,24 @@
 package com.example.scrabble.use_case.start_turn;
+import java.util.List;
+
+
 
 
 public class StartTurnInputData {
-  private int gameId;
+  private static int gameId;
 
-  public StartTurnInputData() {}
+  public StartTurnInputData() {
+    // Empty constructor for automatic parsing
+  }
 
   public StartTurnInputData(int gameId) {
-    this.gameId = gameId;
+    StartTurnInputData.gameId = gameId;
   }
 
-  public int getGameId() {
+  public static int getGameId() {
     return gameId;
   }
+
+
+
 }
