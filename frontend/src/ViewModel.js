@@ -26,9 +26,7 @@ class ViewModel{
         this.stompClient = Stomp.over(socket);
 
         this.stompClient.connect({}, (frame) => {
-            console.log('Connected: ' + frame);
             this.stompClient.subscribe(`/topic/game/${this.gameId}`, (message) => {
-                console.log('Received message:', message);
                 this.handleWebSocketMessage(JSON.parse(message.body));
             }, (error) => {
                 console.error('WebSocket connection error:', error);
@@ -55,6 +53,18 @@ class ViewModel{
             if (game.currentPlay.player.id === this.playerId) {
                 this.setGameState('Your Turn');
             }
+        } else if (message.type === 'valid-confirm-play'){
+            this.setGameState('Contest');
+        } else if (message.type === 'contest-success'){
+            this.setGameState(game.currentPlay.player.name + 's Turn');
+            if (game.currentPlay.player.id === this.playerId) {
+                this.setGameState('Your Turn');
+            }        
+        } else if (message.type === 'contest-fail'){
+            this.setGameState(game.currentPlay.player.name + 's Turn');
+            if (game.currentPlay.player.id === this.playerId) {
+                this.setGameState('Your Turn');
+            }        
         }
     }
 
@@ -147,13 +157,52 @@ class ViewModel{
         console.log('Handling input');
         let response = null;
         if (input.type === 'contest'){
-            let request = {            
+            let requestBody = {            
                 gameId: this.gameId,
-                playerId : this.playerId,
+                playerId: this.playerId,
+                isContest: true
             }
-            response = await fetch(`${this.baseUrl}contest/`, request);
-        } else if (input.type === 'redraw'){
-            console.log(this.selectedLettersRedraw);
+            response = await fetch(`${this.baseUrl}contest/`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                method: 'POST',
+                body : JSON.stringify(requestBody)
+            });
+            response = await response.json();
+            console.log(response);
+            if (response.invalidWords.length > 0){
+                response = await fetch(`${this.baseUrl}broadcast_contest_success/`, {
+                    method: 'POST'
+                })
+            } else{
+                response = await fetch(`${this.baseUrl}broadcast_contest_fail/`, {
+                    method: 'POST'
+                })
+            }
+        } else if (input.type === 'no-contest'){
+            let requestBody = {            
+                gameId: this.gameId,
+                playerId: this.playerId,
+                isContest: false
+            }
+            response = await fetch(`${this.baseUrl}contest/`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                method: 'POST',
+                body : JSON.stringify(requestBody)
+            });
+            response = await response.json();
+            console.log(response);
+            if (response.goToNextTurn){
+                response = await fetch(`${this.baseUrl}broadcast_contest_success/`, {
+                    method: 'POST'
+                });
+            }
+        }else if (input.type === 'redraw'){
             let requestBody = {            
                 gameId: this.gameId,
                 characters: this.selectedLettersRedraw,
@@ -183,7 +232,7 @@ class ViewModel{
             let requestBody = {      
                 gameId: this.gameId,
             };
-            response = await fetch(`${this.baseUrl}end_turn/`, {
+            response = await fetch(`${this.baseUrl}confirm_play/`, {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -191,6 +240,15 @@ class ViewModel{
                 method: 'POST',
                 body : JSON.stringify(requestBody)
             });
+            response = await response.json();
+            console.log('received response')
+            console.log(response);
+            if (response.valid){
+                response = await fetch(`${this.baseUrl}broadcast_valid_play/`, {
+                    method: 'POST'
+                })
+                this.setGameState('Contest')
+            }
 
         } else{
             if (input.type === 'lclick'){
@@ -228,7 +286,6 @@ class ViewModel{
                 });
             }
         }
-        this.handleResponse(response);
     }
 
     handleResponse(response){
