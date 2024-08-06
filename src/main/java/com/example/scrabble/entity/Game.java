@@ -363,6 +363,9 @@ public class Game implements Serializable {
      */
     public Player addPlayer(String name) {
         Player player = new Player(name, playerIDCounter++);
+        for (Letter letter : letterBag.drawLetters(7)){
+            player.addLetter(letter);
+        };
         players.add(player);
         leaderboard.add(player);
         numContestFailed.add(0);
