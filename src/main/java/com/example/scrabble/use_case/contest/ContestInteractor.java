@@ -93,6 +93,8 @@ public class ContestInteractor implements ContestInputBoundary {
 //                throw new ContestException("Word validation failed.", e);
 //            }
             gameDAO.update(game);
+            EndTurnInteractor endTurnInteractor = new EndTurnInteractor(gameDAO);
+            endTurnInteractor.execute(new EndTurnInputData(game.getId()));
             return new ContestOutputData(invalidWords, true);
         }
         game.increaseNumContests();
