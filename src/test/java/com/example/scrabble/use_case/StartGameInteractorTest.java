@@ -1,6 +1,7 @@
 package com.example.scrabble.use_case;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -40,6 +41,6 @@ public class StartGameInteractorTest {
 
     verify(game).startGame();
     verify(gameDataAccess).update(game);
-    assertEquals(game, output.isSuccessful());
+      assertTrue(output.isSuccessful());
   }
 }
