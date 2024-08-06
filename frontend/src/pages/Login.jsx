@@ -20,6 +20,7 @@ function Login(){
 
     async function handleJoinGameSubmit(e){
         e.preventDefault();
+        console.log("Name is " + name);
         let request = {
             method: 'POST',
             headers: {
@@ -30,10 +31,12 @@ function Login(){
                 gameId: gameId
             })
         }
+        console.log(request);
         let response = await fetch(joinUrl, request);
         response = await response.json();
         console.log(response);
         let newGameId = response.id;
+        let tilesLeft = response.letterBag.bag.length;
         let newPlayerId = response.players.at(-1).id;
         let hand = response.players[0].inventory.map((letter) => letter.letter);
         let newBoard = []
@@ -49,6 +52,7 @@ function Login(){
         let tempData = {
             leaderboard: leaderboard,
             hand: hand,
+            tilesLeft: tilesLeft,
             board: newBoard,
             gameId: newGameId,
             playerId: newPlayerId,
@@ -87,6 +91,7 @@ function Login(){
         let tempData = {
             leaderboard: leaderboard,
             hand: hand,
+            tilesLeft: 93,
             board: newBoard,
             gameId: newGameId,
             playerId: newPlayerId,

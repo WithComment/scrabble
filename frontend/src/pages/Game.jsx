@@ -17,10 +17,9 @@ function Game() {
     const [board, setBoard] = useState(state.board);
     const [hand, setHand] = useState(state.hand);
     const [leaderboard, setLeaderboard] = useState(state.leaderboard);
-    const [gameStarted, setGameStarted] = useState(false);
     const [constestPhase, setContestPhase] = useState(false);
-    const [yourTurn, setYourTurn] = useState(false);
-    const [gameState, setGameState] = useState('Not started');
+    const [gameState, setGameState] = useState('Not Started');
+    const [tilesLeft, setTilesLeft] = useState(state.tilesLeft);
 
     const viewModel = new ViewModel(
         state.gameId,
@@ -28,16 +27,15 @@ function Game() {
         state.board,
         state.hand,
         state.leaderboard,
+        tilesLeft,
         gameState,
         setHand,
         setBoard,
         setLeaderboard, 
-        setGameStarted,
         setContestPhase,
-        setYourTurn,
+        setTilesLeft,
         setGameState
     );
-    
     viewModel.testIfWorking();
     let gameId = state.gameId;
     const playerId = state.playerId;
@@ -54,14 +52,14 @@ function Game() {
           <Board board={board} boardViewModel={viewModel}/>
           <div className='letter-container'>
             <img className='letter-bag'src={diceBag} alt='dice-bag'/>
-            <div className='letter-count'>Letters left: 50</div>
+            <div className='letter-count'>Letters left: {tilesLeft}</div>
           </div>
         </div>
         <div class='inputs-container'>
             <div class='buttons-container'>
-            {yourTurn && <><Redraw ButtonViewModel={viewModel}/><ConfirmPlay ButtonViewModel={viewModel}/></>}
+            {(gameState === 'Your Turn') && <><Redraw ButtonViewModel={viewModel}/><ConfirmPlay ButtonViewModel={viewModel}/></>}
             {constestPhase && <><Contest ButtonViewModel={viewModel}/> <DontContest ButtonViewModel={viewModel}/></>}
-            {!gameStarted && <StartGame ButtonViewModel={viewModel}/>}
+            {(gameState === 'Not Started') && <StartGame ButtonViewModel={viewModel}/>}
             </div>
             <Hand handLetters={hand} handViewModel={viewModel}/>
         </div>
