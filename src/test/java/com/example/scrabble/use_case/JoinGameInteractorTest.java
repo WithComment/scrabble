@@ -44,7 +44,7 @@ class JoinGameInteractorTest {
         JoinGameOutputData outputData = joinGameInteractor.execute(inputData);
 
         // Verify that a new player was added to the game
-        verify(game, times(1)).addPlayer(any(Player.class));
+        verify(game, times(1)).addPlayer(any(String.class));
 
         // Verify that the game state was updated
         verify(gameDataAccess, times(1)).update(game);
