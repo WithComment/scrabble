@@ -261,9 +261,6 @@ public class Game implements Serializable {
      * Each player is given 7 letters from the letter bag at the start of the game.
      */
     public void startGame() {
-        for (Player player : players) {
-            player.addLetter(letterBag.drawLetters(7));
-        }
         startTurn();
     }
 
