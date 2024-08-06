@@ -1,7 +1,6 @@
 package com.example.scrabble.controller;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,7 +16,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -42,7 +43,9 @@ import com.example.scrabble.use_case.place_letter.PlaceLetterInteractor;
 import com.example.scrabble.use_case.place_letter.PlaceLetterOutputData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@SpringBootTest
 @WebMvcTest(GameController.class)
+@AutoConfigureMockMvc
 public class GameControllerTest {
 
   @Autowired
