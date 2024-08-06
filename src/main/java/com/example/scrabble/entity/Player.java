@@ -125,7 +125,7 @@ public class Player implements Serializable {
     
 
     public void setTempScore(int score) {
-        this.score = score;
+        this.tempScore = score;
     }
 
     /**
@@ -148,7 +148,6 @@ public class Player implements Serializable {
      * This indicates the scores were contested and invalidated.
      */
     public void BeContested() {
-        this.score = this.score - this.tempScore;
         this.tempScore = 0;
     }
 
