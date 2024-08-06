@@ -1,16 +1,11 @@
 package com.example.scrabble.use_case.remove_letter;
 
+import com.example.scrabble.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.scrabble.data_access.GameDataAccess;
-import com.example.scrabble.entity.Board;
-import com.example.scrabble.entity.Game;
-import com.example.scrabble.entity.Play;
-import com.example.scrabble.entity.Player;
-import com.example.scrabble.entity.Tile;
 import com.example.scrabble.use_case.InvalidPlayException;
-import com.example.scrabble.entity.Move;
 
 @Service
 public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
@@ -43,7 +38,16 @@ public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
             throw new InvalidPlayException("Remove failed.");
         } else {
             play.removeMove(x, y);
+            System.out.println("Before adding");
+            for (Letter letter : player.getInventory()){
+                System.out.println(letter);
+            };
+            System.out.println("Adding " + selectedTile.getLetter());
             player.addLetter(selectedTile.getLetter());
+            System.out.println("After adding " + selectedTile.getLetter());
+            for (Letter letter : player.getInventory()) {
+                System.out.println(letter);
+            };
             selectedTile.removeLetter();
             gameDao.update(game);
             return new RemoveLetterOutputData(true, game.getBoard(), player.getInventory());
