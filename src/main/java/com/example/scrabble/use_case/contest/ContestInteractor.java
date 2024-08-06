@@ -80,7 +80,7 @@ public class ContestInteractor implements ContestInputBoundary {
                     contestedPlayer.BeContested();
                 } else {
                     fail();
-                    throw new ContestException("All words in last move are valid.");
+//                    throw new ContestException("All words in last move are valid.");
                 }
             } catch (NoSuchElementException e) {
                 fail();
