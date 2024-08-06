@@ -32,7 +32,7 @@ public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
         int y = data.getY();
         boolean isValidClick = false;
         for (Move move : play.getMoves()){
-            if (move.getLetter() == selectedTile.getLetter()
+            if (move.getLetter().equals(selectedTile.getLetter())
                     && move.getX() == x
                     && move.getY() == y){
                 isValidClick = true;
