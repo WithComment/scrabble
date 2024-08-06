@@ -157,6 +157,10 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     }
     player.setTempScore(score);
     gameDao.update(game);
+    System.out.println("After placing Tile:");
+    for (Letter l : player.getInventory()){
+      System.out.println(l);
+    }
     return new PlaceLetterOutputData(
       board,
       player.getInventory(),
