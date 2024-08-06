@@ -11,7 +11,6 @@ function Hand({ handLetters, handViewModel }){
     return (
         <div className={styles.hand}>
             {handLetters.map((letter, index) => {
-                console.log('Rendering letter:', letter); // Debugging log
                 return (
                     <HandButton selectedTile={tileToPlay} handViewModel={viewModel} letter={letter} index={index} select={selectTile}/>
                 )

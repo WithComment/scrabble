@@ -441,4 +441,9 @@ public class Game implements Serializable {
                 (numContestFailed.equals(other.numContestFailed)) &&
                 (currentPlay.equals(other.currentPlay));
     }
+
+    @Override
+    public String toString() {
+        return "Game" + id;
+    }
 }

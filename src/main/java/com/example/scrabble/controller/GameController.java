@@ -5,6 +5,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.HashMap;
 
+import com.example.scrabble.use_case.redraw_letters.RedrawInputBoundary;
+import com.example.scrabble.use_case.redraw_letters.RedrawInputData;
+import com.example.scrabble.use_case.redraw_letters.RedrawInteractor;
+import com.example.scrabble.use_case.redraw_letters.RedrawOutputData;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterInputData;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterInteractor;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterOutputData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +51,9 @@ import com.example.scrabble.use_case.join_game.JoinGameInputBoundary;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputBoundary;
 import com.example.scrabble.use_case.place_letter.PlaceLetterOutputData;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterInputBoundary;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterInputData;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterOutputData;
 import com.example.scrabble.use_case.start_game.StartGameInputBoundary;
 import com.example.scrabble.use_case.start_game.StartGameInputData;
 import com.example.scrabble.use_case.start_game.StartGameOutputData;
@@ -58,11 +68,13 @@ public class GameController {
   private final JoinGameInputBoundary joinGameInteractor;
   private final StartGameInputBoundary startGameInteractor;
   private final PlaceLetterInputBoundary placeLetterInteractor;
+  private final RemoveLetterInputBoundary removeLetterInteractor;
   private final ConfirmPlayInputBoundary confirmPlayInteractor;
   private final EndTurnInputBoundary endTurnInteractor;
   private final GetLeaderboardInputBoundary getLeaderboardInteractor;
   private final ContestInputBoundary contestInteractor;
   private final EndGameInputBoundary endGameInteractor;
+  private final RedrawInputBoundary redrawInteractor;
   private Logger logger = LoggerFactory.getLogger(GameController.class);
 
   @Autowired
@@ -73,6 +85,8 @@ public class GameController {
       JoinGameInputBoundary joinGameInteractor,
       StartGameInputBoundary startGameInteractor,
       PlaceLetterInputBoundary placeLetterInteractor,
+      RemoveLetterInputBoundary removeLetterInteractor,
+      RedrawInputBoundary redrawInteractor,
       ConfirmPlayInputBoundary confirmPlayInteractor,
       EndTurnInputBoundary endTurnInteractor,
       GetLeaderboardInputBoundary getLeaderboardInteractor,
@@ -85,11 +99,13 @@ public class GameController {
     this.joinGameInteractor = joinGameInteractor;
     this.startGameInteractor = startGameInteractor;
     this.placeLetterInteractor = placeLetterInteractor;
+    this.removeLetterInteractor = removeLetterInteractor;
     this.confirmPlayInteractor = confirmPlayInteractor;
     this.endTurnInteractor = endTurnInteractor;
     this.getLeaderboardInteractor = getLeaderboardInteractor;
     this.contestInteractor = contestInteractor;
     this.endGameInteractor = endGameInteractor;
+    this.redrawInteractor = redrawInteractor;
   }
 
   private void notifyFrontend(int gameId, String type) {
@@ -122,7 +138,7 @@ public class GameController {
     @PostMapping("/{gameId}/join/")
     public ResponseEntity<EntityModel<Game>> join(@PathVariable int gameId, @RequestBody HashMap<String, String> body) {
         logger.info("Joining game with ID: " + gameId);
-        String name = body.get("name");
+        String name = body.get("playerName");
         JoinGameInputData input = new JoinGameInputData(name, gameId);
         joinGameInteractor.execute(input);
         notifyFrontend(gameId, "join");
@@ -152,6 +168,31 @@ public class GameController {
         notifyFrontend(gameId, "place_letter");
         EntityModel<PlaceLetterOutputData> entityModel = EntityModel.of(output,
             linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
+    }
+
+    @PostMapping("/{gameId}/remove_letter/")
+    public ResponseEntity<EntityModel<RemoveLetterOutputData>> removeLetter(@PathVariable int gameId,
+        @RequestBody HashMap<String, Object> input) {
+        int x = (int) input.get("x");
+        int y = (int) input.get("y");
+        logger.info("Game ID: {} Removing letter at position: {},{}", gameId, x, y);
+        RemoveLetterOutputData output = removeLetterInteractor.execute(new RemoveLetterInputData(gameId, x, y));
+        notifyFrontend(gameId, "remove_letter");
+        EntityModel<RemoveLetterOutputData> entityModel = EntityModel.of(output,
+                linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
+    }
+
+    @PostMapping("/{gameId}/redraw_letters/")
+    public ResponseEntity<EntityModel<RedrawOutputData>> redrawLetters(@PathVariable int gameId,
+                                                                      @RequestBody HashMap<String, Object> input) {
+        List<String> characters = (List<String>) input.get("characters");
+        logger.info("Game ID: {} Redrawing Letters", gameId);
+        RedrawOutputData output = redrawInteractor.execute(new RedrawInputData(gameId, characters));
+        notifyFrontend(gameId, "redraw_letters");
+        EntityModel<RedrawOutputData> entityModel = EntityModel.of(output,
+                linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
     }
 
@@ -197,11 +238,11 @@ public class GameController {
         return ResponseEntity.ok(entityModel);
     }
 
-   @PostMapping("/{gameId}/endgame/")
+   @PostMapping("/{gameId}/end_game/")
    public ResponseEntity<EntityModel<EndGameOutputData>> endGame(@PathVariable int gameId, @RequestBody EndGameInputData input) {
        logger.info("Ending game ID: {}", gameId);
        EndGameOutputData output = endGameInteractor.execute(input);
-       notifyFrontend(gameId, "endgame");
+       notifyFrontend(gameId, "end_game");
        EntityModel<EndGameOutputData> entityModel = EntityModel.of(output,
            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
        return ResponseEntity.ok(entityModel);
@@ -225,5 +266,20 @@ class Message {
     }
     public String getType() {
       return type;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj){ return true; }
+
+        if (obj == null || getClass() != obj.getClass()){ return false; }
+
+        Message other = (Message) obj;
+        return (data.equals(other.data)) && (type.equals(other.type));
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" + "data=" + data + ", type='" + type + '\'' + '}';
     }
 }

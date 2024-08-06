@@ -2,20 +2,21 @@ import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
 class ViewModel{
-    constructor(gameId, playerId, board, hand, leaderboard, gameState, setHand, setBoard, setLeaderboard, setGameStarted, setContestPhase, setYourTurn, setGameState){
+    constructor(gameId, playerId, board, hand, leaderboard, tilesLeft, gameState, setHand, setBoard, setLeaderboard, setContestPhase, setTilesLeft,  setGameState){
         this.playerId = playerId;
         this.gameId = gameId;
         this.baseUrl = `http://localhost:8080/game/${this.gameId}/`;
         this.board = board;
         this.hand = hand;
         this.leaderboard = leaderboard;
+        this.tilesLeft = tilesLeft;
         this.gameState = gameState;
         this.selectedLetter = null;
         this.selectedLettersRedraw = [];
         this.setHand = setHand;
         this.setBoard = setBoard;
         this.setLeaderboard = setLeaderboard;
-        this.setGameStarted = setGameStarted;
+        this.setTilesLeft = setTilesLeft;
         this.setGameState = setGameState;
         this.connectWebSocket()
     }
@@ -31,7 +32,8 @@ class ViewModel{
                 this.handleWebSocketMessage(JSON.parse(message.body));
             }, (error) => {
                 console.error('WebSocket connection error:', error);
-            });        });
+            });
+        });
     }
 
     handleWebSocketMessage(message) {
@@ -40,12 +42,19 @@ class ViewModel{
         let newBoard = game.board.board;
         let newHand = game.players.filter((player) => player.id === this.playerId)[0].inventory.map((letter) => letter.letter);
         let newLeaderboard = game.leaderboard;
+
         // Updates the View
         this.updateBoardFromRaw(newBoard);
         this.updateHand(newHand);
-        this.updateLeaderboard(newLeaderboard);
-        if (message.type === 'start'){
-            this.setGameStarted(true);
+        this.updateLeaderboardFromRaw(newLeaderboard);
+        this.setTilesLeft(game.letterBag.bag.length);
+
+        if (message.type === 'start') {
+            this.setGameState(game.currentPlay.player.name + 's Turn');
+            console.log(game.currentPlay.player.id, this.playerId);
+            if (game.currentPlay.player.id === this.playerId) {
+                this.setGameState('Your Turn');
+            }
         }
     }
 
@@ -76,7 +85,10 @@ class ViewModel{
 
     updateLeaderboardFromRaw(rawLeaderboard){
         console.log('Updating leaderboard from raw:', rawLeaderboard);
-        let newLeaderboard = rawLeaderboard;
+        let newLeaderboard = [];
+        for (let i = 0; i < rawLeaderboard.length; i++){
+            newLeaderboard.push({name: rawLeaderboard[i].name, score: rawLeaderboard[i].score});
+        }
         console.log('New leaderboard:', newLeaderboard);
         this.updateLeaderboard(newLeaderboard);
     }
@@ -142,11 +154,19 @@ class ViewModel{
             response = await fetch(`${this.baseUrl}contest/`, request);
         } else if (input.type === 'redraw'){
             console.log(this.selectedLettersRedraw);
-            let request = {            
+            let requestBody = {            
                 gameId: this.gameId,
-                char: this.selectedLettersRedraw,
+                characters: this.selectedLettersRedraw,
             }
-            response = await fetch(`${this.baseUrl}redraw/`, request);
+            console.log('Redrawing characters:', requestBody);
+            response = await fetch(`${this.baseUrl}redraw_letters/`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                method: 'POST',
+                body : JSON.stringify(requestBody)
+            });
         } else if (input.type === 'start'){
             let requestBody = {      
                 gameId: this.gameId,
@@ -204,7 +224,7 @@ class ViewModel{
                         'Content-Type': 'application/json'
                       },
                     method: 'POST',
-                    body: requestBody,
+                    body: JSON.stringify(requestBody),
                 });
             }
         }
