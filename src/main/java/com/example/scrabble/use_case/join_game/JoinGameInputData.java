@@ -4,8 +4,12 @@ import com.example.scrabble.entity.Game;
 import com.example.scrabble.data_access.GameDataAccess;
 
 public class JoinGameInputData {
-    private final String playerName;
-    private final int gameId;
+    private String playerName;
+    private int gameId;
+
+    public JoinGameInputData() {
+        // Empty constructor for automatic parsing
+    }
 
     public JoinGameInputData(String playerName, int gameId){
         this.playerName = playerName;
