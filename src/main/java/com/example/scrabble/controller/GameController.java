@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.scrabble.use_case.redraw_letters.RedrawInputBoundary;
 import com.example.scrabble.use_case.redraw_letters.RedrawInputData;
 import com.example.scrabble.use_case.redraw_letters.RedrawInteractor;
 import com.example.scrabble.use_case.redraw_letters.RedrawOutputData;
@@ -75,9 +76,8 @@ public class GameController {
   private final GetLeaderboardInputBoundary getLeaderboardInteractor;
   private final ContestInputBoundary contestInteractor;
   private final EndGameInputBoundary endGameInteractor;
-    private final RemoveLetterInteractor removeLetterInteractor;
-    private final RedrawInteractor redrawInteractor;
-    private Logger logger = LoggerFactory.getLogger(GameController.class);
+  private final RedrawInputBoundary redrawInteractor;
+  private Logger logger = LoggerFactory.getLogger(GameController.class);
 
   @Autowired
   public GameController(
@@ -88,6 +88,7 @@ public class GameController {
       StartGameInputBoundary startGameInteractor,
       PlaceLetterInputBoundary placeLetterInteractor,
       RemoveLetterInputBoundary removeLetterInteractor,
+      RedrawInputBoundary redrawInteractor,
       ConfirmPlayInputBoundary confirmPlayInteractor,
       EndTurnInputBoundary endTurnInteractor,
       GetLeaderboardInputBoundary getLeaderboardInteractor,
@@ -106,8 +107,7 @@ public class GameController {
     this.getLeaderboardInteractor = getLeaderboardInteractor;
     this.contestInteractor = contestInteractor;
     this.endGameInteractor = endGameInteractor;
-      this.removeLetterInteractor = removeLetterInteractor;
-      this.redrawInteractor = redrawInteractor;
+    this.redrawInteractor = redrawInteractor;
   }
 
   private void notifyFrontend(int gameId, String type) {

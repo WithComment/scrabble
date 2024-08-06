@@ -46,6 +46,8 @@ import com.example.scrabble.use_case.join_game.JoinGameInteractor;
 import com.example.scrabble.use_case.join_game.JoinGameOutputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInteractor;
 import com.example.scrabble.use_case.place_letter.PlaceLetterOutputData;
+import com.example.scrabble.use_case.redraw_letters.RedrawInputBoundary;
+import com.example.scrabble.use_case.redraw_letters.RedrawOutputData;
 import com.example.scrabble.use_case.remove_letter.RemoveLetterInputBoundary;
 import com.example.scrabble.use_case.remove_letter.RemoveLetterInputData;
 import com.example.scrabble.use_case.remove_letter.RemoveLetterOutputData;
@@ -82,6 +84,9 @@ public class GameControllerTest {
 
   @MockBean
   private ConfirmPlayInteractor confirmPlayInteractor;
+
+  @MockBean
+  private RedrawInputBoundary redrawInteractor;
 
   @MockBean
   private EndTurnInteractor endTurnInteractor;
@@ -193,6 +198,25 @@ public class GameControllerTest {
         .andExpect(status().isOk());
 
     testNotifyFrontend(gameId, "remove_letter");
+  }
+
+  @Test
+  void testRedraw() throws Exception {
+    int gameId = 1;
+    RedrawOutputData outputData = new RedrawOutputData(false, null);
+    when(redrawInteractor.execute(any())).thenReturn(outputData);
+
+    mockMvc.perform(post("/game/{gameId}/redraw_letters/", gameId)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(new HashMap<String, Object>() {
+          {
+            put("gameId", 1);
+            put("characters", null);
+          }
+        })))
+        .andExpect(status().isOk());
+
+    testNotifyFrontend(gameId, "redraw_letters");
   }
 
   @Test
