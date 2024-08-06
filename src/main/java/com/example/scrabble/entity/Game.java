@@ -49,6 +49,7 @@ public class Game implements Serializable {
         this.endTurn = false;
         this.numContestFailed = new ArrayList<>(Collections.nCopies(players.size(), 0));
         this.currentPlay = null;
+        this.numContests = 0;
     }
 
     public Game(int numOfPlayers) {
