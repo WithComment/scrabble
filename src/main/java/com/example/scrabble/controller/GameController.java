@@ -140,7 +140,7 @@ public class GameController {
     @PostMapping("/{gameId}/join/")
     public ResponseEntity<EntityModel<Game>> join(@PathVariable int gameId, @RequestBody HashMap<String, String> body) {
         logger.info("Joining game with ID: " + gameId);
-        String name = body.get("name");
+        String name = body.get("playerName");
         JoinGameInputData input = new JoinGameInputData(name, gameId);
         joinGameInteractor.execute(input);
         notifyFrontend(gameId, "join");
