@@ -132,8 +132,12 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
 
     Game game = gameDao.get(data.getGameId());
     Play play = game.getCurrentPlay();
-    Player player = game.getCurrentPlayer();
+    Player player = play.getPlayer();
     Board board = game.getBoard();
+
+    for (Letter letter : player.getInventory()){
+      System.out.println(letter);
+    }
 
     if (!board.getCell(x, y).isEmpty()) {
       throw new InvalidPlayException(OCCUPIED);
