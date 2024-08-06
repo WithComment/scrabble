@@ -14,7 +14,8 @@ class PlayTest {
 
   private final static Letter a = new Letter('a', 1);
   private final static Letter b = new Letter('a', 1);
-  private final static Player player = new Player("John");
+  private final static Game game = new Game();
+  private final static Player player = game.addPlayer("John");
 
   @Test
   void testPlayCreation() {

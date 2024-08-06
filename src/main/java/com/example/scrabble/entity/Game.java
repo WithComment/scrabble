@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a game of Scrabble.
@@ -34,6 +35,8 @@ public class Game implements Serializable {
 
     private int numContests;
 
+    private int playerIDCounter;
+
     /**
      * Constructs a new Game instance.
      * Initializes the game with a unique ID, a new board, empty player list, empty play history, and a new letter bag.
@@ -49,12 +52,14 @@ public class Game implements Serializable {
         this.endTurn = false;
         this.numContestFailed = new ArrayList<>(Collections.nCopies(players.size(), 0));
         this.currentPlay = null;
+        this.numContests = 0;
+        this.playerIDCounter = 0;
     }
 
     public Game(int numOfPlayers) {
         this();
         for (int i = 0; i < numOfPlayers; i++) {
-            players.add(new Player());
+            players.add(new Player(playerIDCounter++));
             numContestFailed.add(0);
         }
         for (Player player : players) {
@@ -65,7 +70,7 @@ public class Game implements Serializable {
     public Game(List<String> playerNames) {
         this();
         for (String playerName : playerNames) {
-            players.add(new Player(playerName));
+            players.add(new Player(playerName, playerIDCounter++));
             numContestFailed.add(0);
         }
         for (Player player : players) {
@@ -83,7 +88,9 @@ public class Game implements Serializable {
                 @JsonProperty("endTurn") Boolean endTurn,
                 @JsonProperty("playerNumber") int playerNumber,
                 @JsonProperty("numContestFailed") List<Integer> numContestFailed,
-                @JsonProperty("currentPlay") Play currentPlay) {
+                @JsonProperty("currentPlay") Play currentPlay,
+                @JsonProperty("numContests") int numContests,
+                @JsonProperty("playerIDCounter") int playerIdCounter){
         this.id = id;
         this.letterBag = letterBag;
         this.board = board;
@@ -91,9 +98,11 @@ public class Game implements Serializable {
         this.history = history;
         this.leaderboard = leaderboard;
         this.endTurn = endTurn;
-        this.playerNumber = 0;
+        this.playerNumber = playerNumber;
         this.numContestFailed = numContestFailed;
         this.currentPlay = currentPlay;
+        this.numContests = numContests;
+        this.playerIDCounter = playerIdCounter;
     }
     /**
      * Gets the unique ID of the game.
@@ -150,11 +159,12 @@ public class Game implements Serializable {
      * Adds a new player to the game.
      * Initializes the player with a unique ID and adds them to the player list.
      */
-    public void addPlayer() {
-        Player player = new Player();
+    public Player addPlayer() {
+        Player player = new Player(playerIDCounter++);
         players.add(player);
         leaderboard.add(player);
         this.numContestFailed.add(0);
+        return player;
     }
 
     /**
@@ -261,9 +271,6 @@ public class Game implements Serializable {
      * Each player is given 7 letters from the letter bag at the start of the game.
      */
     public void startGame() {
-        for (Player player : players) {
-            player.addLetter(letterBag.drawLetters(7));
-        }
         startTurn();
     }
 
@@ -323,7 +330,7 @@ public class Game implements Serializable {
         int CurrentFailure = numContestFailed.get(PlayerNumber);
         numContestFailed.set(PlayerNumber, CurrentFailure + 1);
         Player currentPlayer = getCurrentPlayer();
-        currentPlayer.BeContested();
+        currentPlayer.resetTempScore();
     }
 
     /**
@@ -352,12 +359,17 @@ public class Game implements Serializable {
     /**
      * Updates the list of players by adding a new player.
      *
-     * @param player the player to be added
+     * @param name the name of the player to be added
      */
-    public void addPlayer(Player player) {
+    public Player addPlayer(String name) {
+        Player player = new Player(name, playerIDCounter++);
+        for (Letter letter : letterBag.drawLetters(7)){
+            player.addLetter(letter);
+        };
         players.add(player);
         leaderboard.add(player);
         numContestFailed.add(0);
+        return player;
     }
 
     /**
@@ -405,6 +417,10 @@ public class Game implements Serializable {
         return numContests;
     }
 
+    public int getPlayerIDCounter() {
+        return playerIDCounter;
+    }
+
     /**
      * Ends the current turn by setting the endTurn flag to true.
      */
@@ -438,7 +454,9 @@ public class Game implements Serializable {
                 (endTurn == other.endTurn) &&
                 (playerNumber == other.playerNumber) &&
                 (numContestFailed.equals(other.numContestFailed)) &&
-                (currentPlay.equals(other.currentPlay));
+                (Objects.equals(currentPlay,other.currentPlay)) &&
+                (numContests == other.numContests) &&
+                (playerIDCounter == other.playerIDCounter);
     }
 
     @Override

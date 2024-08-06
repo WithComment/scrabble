@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -27,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.example.scrabble.data_access.GameDataAccess;
+import com.example.scrabble.entity.Board;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Player;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInteractor;
@@ -184,7 +186,8 @@ public class GameControllerTest {
   @Test
   void testRemoveLetter() throws Exception {
     int gameId = 1;
-    RemoveLetterOutputData outputData = new RemoveLetterOutputData(true, null, null);
+    RemoveLetterOutputData outputData = new RemoveLetterOutputData(true, mock(Board.class), new ArrayList<>());
+    objectMapper.writeValueAsString(outputData);
     when(removeLetterInteractor.execute(any())).thenReturn(outputData);
 
     mockMvc.perform(post("/game/{gameId}/remove_letter/", gameId)

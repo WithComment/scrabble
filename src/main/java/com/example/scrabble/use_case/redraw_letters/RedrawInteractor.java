@@ -61,15 +61,6 @@ public class RedrawInteractor implements RedrawInputBoundary{
             player.addLetter(newLetters);
             drawSuccessful = true;
         }
-
-        /*
-        if (drawSuccessful) {
-            List<Letter> hand = player.getInventory();
-            playerPresenter.prepareSuccessView(new RedrawOutputData(true, hand));
-        } else{
-            playerPresenter.prepareFailView("There are less than 7 letters in the bag");
-        }
-         */
         gameDao.update(game);
         return new RedrawOutputData(drawSuccessful, newLetters);
     }

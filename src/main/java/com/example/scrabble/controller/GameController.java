@@ -5,7 +5,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.example.scrabble.use_case.redraw_letters.RedrawInputBoundary;
 import com.example.scrabble.use_case.redraw_letters.RedrawInputData;
@@ -209,6 +208,22 @@ public class GameController {
         return ResponseEntity.ok(entityModel);
     }
 
+    @PostMapping("/{gameId}/broadcast_valid_play/")
+    public void broadcastValidPlay(@PathVariable int gameId){
+        notifyFrontend(gameId, "valid-confirm-play");
+    }
+
+    @PostMapping("/{gameId}/broadcast_contest_success/")
+    public void broadcastContestSuccess(@PathVariable int gameId){
+        notifyFrontend(gameId, "contest-success");
+    }
+
+    @PostMapping("/{gameId}/broadcast_contest_fail/")
+    public void broadcastContestFail(@PathVariable int gameId){
+        notifyFrontend(gameId, "contest-fail");
+    }
+
+
     @PostMapping("/{gameId}/end_turn/")
     public ResponseEntity<EntityModel<EndTurnOutputData>> endTurn(@PathVariable int gameId, @RequestBody EndTurnInputData input) {
         logger.info("Game ID: {} Ending turn", input.getGameId());
@@ -249,39 +264,4 @@ public class GameController {
            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
        return ResponseEntity.ok(entityModel);
    }
-}
-
-/**
- * Custom class to send STOMP messages to the frontend
- */
-class Message {
-    Object data;
-    String type;
-    
-    public Message(Object data, String type) {
-        this.data = data;
-        this.type = type;
-    }
-
-    public Object getData() {
-      return data;
-    }
-    public String getType() {
-      return type;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj){ return true; }
-
-        if (obj == null || getClass() != obj.getClass()){ return false; }
-
-        Message other = (Message) obj;
-        return (data.equals(other.data)) && (type.equals(other.type));
-    }
-
-    @Override
-    public String toString() {
-        return "Message{" + "data=" + data + ", type='" + type + '\'' + '}';
-    }
 }

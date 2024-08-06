@@ -164,6 +164,8 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     } else if (isIsolated(moves, board)) {
       throw new InvalidPlayException(CONNECTED_MSG);
     }
+    game.addPlay(play);
+    gameDao.update(game);
 
     return new ConfirmPlayOutputData(true);
   }

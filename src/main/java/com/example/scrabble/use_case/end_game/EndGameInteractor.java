@@ -21,11 +21,7 @@ public class EndGameInteractor implements EndGameInputBoundary{
     @Autowired
     public EndGameInteractor(GameDataAccess gameDao) {this.gameDao = gameDao;}
 
-    @Override
-    public EndGameOutputData execute(EndGameInputData endGameInputData) throws InvalidPlayException {
-        Game game = gameDao.get(endGameInputData.getGameId());
-        List<Player> players = game.getPlayers();
-
+    private Map<Player, Integer> calculateUnplayedScores(List<Player> players){
         Map<Player, Integer> unplayedScores = new HashMap<>();
         for (Player player : players) {
             List<Letter> playerInventory = player.getInventory();
@@ -35,7 +31,10 @@ public class EndGameInteractor implements EndGameInputBoundary{
             }
             unplayedScores.put(player, unplayedScore);
         }
+        return unplayedScores;
+    }
 
+    private int calculateBonus(Map<Player, Integer> unplayedScores){
         boolean onePlayerEmptied = false;
         int bonus = 0;
         for (Integer value : unplayedScores.values()) {
@@ -44,21 +43,26 @@ public class EndGameInteractor implements EndGameInputBoundary{
                 onePlayerEmptied = true;
             }
         }
-
         if(!onePlayerEmptied){
             throw new InvalidPlayException("The game shouldn't have ended yet");
         }
+        return bonus;
+    }
 
+    private List<Integer> getWinners(Map<Player, Integer> unplayedScores, int bonus){
         int highestScore = 0;
         List<Integer> winners = new ArrayList<>();
-        for (Player player : players) {
-            int playerPoints = player.getScore();
-            int playerFinalScore;
+        for (Player player : unplayedScores.keySet()) {
             if (unplayedScores.get(player) == 0) {
-                playerFinalScore = playerPoints + bonus;
+                player.setTempScore(bonus);
+                player.confirmTempScore();
             } else {
-                playerFinalScore = playerPoints - unplayedScores.get(player);
+                player.setTempScore(-1 * unplayedScores.get(player));
+                player.confirmTempScore();
             }
+
+            int playerFinalScore = player.getScore();
+
             if (playerFinalScore == highestScore) {
                 winners.add(player.getId());
             }
@@ -68,15 +72,20 @@ public class EndGameInteractor implements EndGameInputBoundary{
                 winners.add(player.getId());
             }
         }
+        return winners;
+    }
 
-        // presenter.prepareSuccessView(new EndGameOutputData(winners));
-        // EndGameData endGameData = new EndGameData(game);
-        GameDao endGameDataAccessObject = new GameDao();
-        try {
-            endGameDataAccessObject.create(game);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @Override
+    public EndGameOutputData execute(EndGameInputData endGameInputData) throws InvalidPlayException {
+        Game game = gameDao.get(endGameInputData.getGameId());
+        List<Player> players = game.getPlayers();
+
+        Map<Player, Integer> unplayedScores = calculateUnplayedScores(players); //calculate the total scores of each player's unplayed letters
+
+        int bonus = calculateBonus(unplayedScores); //based on the score of the unplayed letters, calculate the bonus, which will be added to the score of the player who emptied their rack
+
+        List<Integer> winners = getWinners(unplayedScores, bonus); //calculate the final scores for each player, and find the winners
+
         return new EndGameOutputData(winners);
     }
 }

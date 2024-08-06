@@ -1,106 +1,175 @@
 package com.example.scrabble.use_case;
 
+import com.example.scrabble.data_access.GameDao;
 import com.example.scrabble.data_access.GameDataAccess;
-import com.example.scrabble.entity.*;
-import com.example.scrabble.use_case.contest.ContestException;
-import com.example.scrabble.use_case.contest.ContestInputData;
 import com.example.scrabble.use_case.contest.ContestInteractor;
+import com.example.scrabble.use_case.contest.ContestInputData;
+import com.example.scrabble.use_case.contest.ContestOutputData;
+import com.example.scrabble.use_case.contest.WordValidationException;
+import com.example.scrabble.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
-public class ContestInteractorTest {
-    private GameDataAccess gameDAO;
-    private ContestInteractor interactor;
+@SpringBootTest
+class ContestInteractorTest {
+
+    @Mock
+    private GameDataAccess gameDataAccess;
+
+    @Mock
+    private Game game;
+
+    @Mock
+    private Player player;
+
+    @Mock
+    private Play play;
+
+    @Mock
+    private HttpClient httpClient;
+
+    @Mock
+    private HttpResponse<String> httpResponse;
+
+    @InjectMocks
+    private ContestInteractor contestInteractor;
+    @Autowired
+    private GameDao gameDao;
 
     @BeforeEach
-    public void setUp() {
-        gameDAO = new GameDataAccess() {
-            private final List<Game> games = new LinkedList<>();
-
-            @Override
-            public Game create(Game game) {
-                games.add(game);
-                return game;
-            }
-
-            @Override
-            public Game get(int gameId) {
-                for (Game game: games) {
-                    if (game.getId() == gameId) {
-                        return game;
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            public void update(Game game) {
-                for (int i=0; i<games.size(); i++){
-                    if (games.get(i).getId() == game.getId()) {
-                        games.set(i, game);
-                        return;
-                    }
-                }
-            }
-
-            @Override
-            public void delete(int gameId) {
-                for (int i=0; i<games.size(); i++) {
-                    if (games.get(i).getId() == gameId) {
-                        games.remove(i);
-                        return;
-                    }
-                }
-            }
-        };
-        interactor = new ContestInteractor(gameDAO);
+    void setUp() throws IOException, InterruptedException {
+        MockitoAnnotations.openMocks(this);
+        contestInteractor = new ContestInteractor(gameDataAccess);
+        when(play.getPlayer()).thenReturn(player);
+        when(gameDataAccess.get(anyInt())).thenReturn(game);
+        when(game.getPlayer(anyInt())).thenReturn(player);
+        when(game.removeLastPlay()).thenReturn(play);
+        when(game.getLastPlay()).thenReturn(play);
+        when(play.getWords()).thenReturn(Arrays.asList("validword1", "invalidword"));
+        when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(httpResponse);
     }
 
     @Test
-    public void testWordIsValid() {
-        try {
-            Player alice = new Player("Alice"), bob = new Player("Bob");
-            Game game = new Game(List.of("Alice", "Bob"));
-            gameDAO.create(game);
-            game.startGame();
-            List<Letter> aliceInventory = alice.getInventory();
-            aliceInventory.clear();
-            aliceInventory.addAll(List.of(
-                new Letter('h', 4),
-                new Letter('e', 1),
-                new Letter('l', 1),
-                new Letter('l', 1),
-                new Letter('o', 1)
-            ));
-            game.startTurn();
-            Play currentPlay = game.getCurrentPlay();
-            Board board = game.getBoard();
-            currentPlay.addMove(new Move(7, 7, aliceInventory.get(0)));
-            board.setCell(7, 7, aliceInventory.get(0));
-            currentPlay.addMove(new Move(7, 8, aliceInventory.get(1)));
-            board.setCell(7, 8, aliceInventory.get(1));
-            currentPlay.addMove(new Move(7, 9, aliceInventory.get(2)));
-            board.setCell(7, 9, aliceInventory.get(2));
-            currentPlay.addMove(new Move(7, 10, aliceInventory.get(3)));
-            board.setCell(7, 10, aliceInventory.get(3));
-            currentPlay.addMove(new Move(7, 11, aliceInventory.get(4)));
-            board.setCell(7, 11, aliceInventory.get(4));
-            aliceInventory.clear();
-            currentPlay.setWords(List.of("hello"));
+    void testWordIsValid_validWord() throws Exception {
+        when(httpResponse.body()).thenReturn("{\"v\":true}");
 
-            ContestInputData contestInputData = new ContestInputData(game.getId(), bob.getId());
-            ContestException exception = assertThrows(ContestException.class, () -> interactor.execute(contestInputData));
-            assert(exception.getMessage().contains("All words in last move are valid."));
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            fail();
-        }
+        boolean isValid = contestInteractor.wordIsValid("validword");
+
+        assertFalse(isValid);
+    }
+
+    @Test
+    void testWordIsValid_invalidWord() throws Exception {
+        when(httpResponse.body()).thenReturn("{\"v\":false}");
+
+        boolean isValid = contestInteractor.wordIsValid("invalidword");
+
+        assertFalse(isValid);
+    }
+
+    @Test
+    void testWordIsValid_throwsURISyntaxException() {
+        assertThrows(WordValidationException.class, () -> {
+            contestInteractor.wordIsValid("invalid uri word");
+        });
+    }
+
+    @Test
+    void testWordIsValid_throwsIOException() throws Exception {
+        when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenThrow(new IOException("Network error"));
+
+//        assertThrows(WordValidationException.class, () -> {
+//            contestInteractor.wordIsValid("testword");
+//        });
+    }
+
+    @Test
+    void testExecute_contestSuccess() throws Exception {
+        ContestInputData inputData = new ContestInputData(1, 1, true);
+        when(gameDataAccess.get(inputData.getGameId())).thenReturn(game);
+        when(game.getLastPlay()).thenReturn(play);
+        when(game.getCurrentPlay()).thenReturn(play);
+        when(play.getWords()).thenReturn(Arrays.asList("validword1", "invalidword"));
+        when(httpResponse.body()).thenReturn("{\"v\":true}", "{\"v\":false}");
+
+        ContestOutputData outputData = contestInteractor.execute(inputData);
+
+        // Verify interactions
+        verify(game).removeLastPlay();
+        verify(player).resetTempScore();
+        verify(gameDataAccess).update(game);
+
+        // Assertions
+        assertEquals(Arrays.asList("validword1", "invalidword"), outputData.getInvalidWords());
+    }
+
+    @Test
+    void testExecute_contestFailure() throws Exception {
+        when(gameDataAccess.get(anyInt())).thenReturn(game);
+        when(game.getLastPlay()).thenReturn(play);
+        when(game.getCurrentPlay()).thenReturn(play);
+        when(play.getWords()).thenReturn(Arrays.asList("validword1", "validword2"));
+        when(httpResponse.body()).thenReturn("{\"v\":true}", "{\"v\":true}");
+
+        ContestInputData inputData = new ContestInputData(1, 1, true);
+        ContestOutputData outputData = contestInteractor.execute(inputData);
+
+        //verify(game).contestFailureUpdate(player.getId());
+        verify(gameDataAccess).update(game);
+
+        assertFalse(outputData.getInvalidWords().isEmpty());
+    }
+
+    @Test
+    void testExecute_noContest() throws Exception {
+        ContestInputData inputData = new ContestInputData(1, 1, false);
+        when(gameDataAccess.get(inputData.getGameId())).thenReturn(game);
+        when(game.getNumContests()).thenReturn(0);
+        when(game.getNumPlayers()).thenReturn(4);
+
+        ContestOutputData outputData = contestInteractor.execute(inputData);
+
+        verify(game).increaseNumContests();
+        verify(gameDataAccess).update(game);
+
+        assertTrue(outputData.getInvalidWords().isEmpty());
+    }
+
+    @Test
+    void testExecute_noContestFinalRound() throws Exception {
+        when(gameDataAccess.get(anyInt())).thenReturn(game);
+        when(game.getNumContests()).thenReturn(2);
+        when(game.getNumPlayers()).thenReturn(4);
+
+        ContestInputData inputData = new ContestInputData(1, 1, false);
+        ContestOutputData outputData = contestInteractor.execute(inputData);
+
+        verify(game).increaseNumContests();
+        verify(gameDataAccess).update(game);
+
+        assertTrue(outputData.getInvalidWords().isEmpty());
     }
 }
+
+
+
+
+

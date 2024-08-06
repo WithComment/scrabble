@@ -31,7 +31,7 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
   ) {
     this.gameDao = gameDao;
   }
-  
+
   private List<Tile> getVTiles(Move move, Board board) {
     int x = move.getX();
     int y = move.getY();
@@ -132,12 +132,16 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
 
     Game game = gameDao.get(data.getGameId());
     Play play = game.getCurrentPlay();
-    Player player = game.getCurrentPlayer();
+    Player player = play.getPlayer();
     Board board = game.getBoard();
-    
+
+    for (Letter letter : player.getInventory()){
+      System.out.println(letter);
+    }
+
     if (!board.getCell(x, y).isEmpty()) {
       throw new InvalidPlayException(OCCUPIED);
-    } 
+    }
 
     Letter letter = player.removeLetter(data.getLetter());
     if (letter == null) {
@@ -157,10 +161,6 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     }
     player.setTempScore(score);
     gameDao.update(game);
-    System.out.println("After placing Tile:");
-    for (Letter l : player.getInventory()){
-      System.out.println(l);
-    }
     return new PlaceLetterOutputData(
       board,
       player.getInventory(),

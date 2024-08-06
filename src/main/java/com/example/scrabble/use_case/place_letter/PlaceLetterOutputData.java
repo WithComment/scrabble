@@ -33,16 +33,4 @@ public class PlaceLetterOutputData {
     public List<String> getWords() {
       return words;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        PlaceLetterOutputData other = (PlaceLetterOutputData) obj;
-        return board.equals(other.board) && hand.equals(other.hand) && tempScore == other.tempScore;
-    }
 }

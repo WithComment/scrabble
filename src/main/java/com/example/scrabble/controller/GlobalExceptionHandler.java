@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import com.example.scrabble.data_access.GameDataAccess;
+import com.example.scrabble.data_access.GameDataAccess.GameDaoException;
 import com.example.scrabble.use_case.InvalidPlayException;
 
 @RestControllerAdvice
@@ -27,8 +27,8 @@ public class GlobalExceptionHandler {
         .body(error);
   }
 
-  @ExceptionHandler(GameDataAccess.GameDaoException.class)
-  public ResponseEntity<ErrorResponse> handleException(GameDataAccess.GameDaoException ex) {
+  @ExceptionHandler(GameDaoException.class)
+  public ResponseEntity<ErrorResponse> handleException(GameDaoException ex) {
     logger.error(ex.getMessage(), ex);
     ErrorResponse error = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An error occurred while accessing the game data");
     return ResponseEntity

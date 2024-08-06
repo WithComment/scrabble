@@ -52,6 +52,7 @@ class RemoveLetterInteractorTest {
         when(gameDao.get(anyInt())).thenReturn(game);
         when(game.getCurrentPlay()).thenReturn(play);
         when(game.getBoard()).thenReturn(board);
+        when(game.getPlayer(anyInt())).thenReturn(player);
         when(play.getPlayer()).thenReturn(player);
 
         // Mock board behavior
