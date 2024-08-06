@@ -1,29 +1,28 @@
 package com.example.scrabble.data_access;
 
 import com.example.scrabble.entity.Game;
-import com.example.scrabble.entity.Player;
-import com.example.scrabble.entity.Tile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @SpringBootTest
-public class GameDaoTest {
-
-    @InjectMocks
-    private GameDao gameDao; // The class under test
+public class GameDatabaseTest {
+    @Autowired
+    private GameDatabase gameDatabase; // The class under test
+//
+//    @BeforeEach
+//    public void setUp() {
+//        gameDatabase.gameRepository.deleteAll();
+//    }
 
     @Test
-    public void testCreateSuccess() throws Exception {
+    public void testCreateSuccess() {
         Game game = new Game(4);
-        Game createdGame = gameDao.create(game);
+        Game createdGame = gameDatabase.create(game);
 
         int gameId = game.getId();
-        Game fetchedGame = gameDao.get(gameId);
+        Game fetchedGame = gameDatabase.get(gameId);
 
         Assertions.assertEquals(createdGame, game);
         Assertions.assertEquals(createdGame, fetchedGame);

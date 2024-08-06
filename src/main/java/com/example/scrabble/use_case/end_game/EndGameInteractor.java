@@ -71,9 +71,8 @@ public class EndGameInteractor implements EndGameInputBoundary{
 
         // presenter.prepareSuccessView(new EndGameOutputData(winners));
         // EndGameData endGameData = new EndGameData(game);
-        GameDao endGameDataAccessObject = new GameDao();
         try {
-            endGameDataAccessObject.create(game);
+            gameDao.create(game);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

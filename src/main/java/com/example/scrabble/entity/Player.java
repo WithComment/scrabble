@@ -68,7 +68,7 @@ public class Player implements Serializable {
     @Serial
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         JSONObject jsonObject = new JSONObject(this);
-        out.writeChars(jsonObject.toString());
+        out.writeUTF(jsonObject.toString());
     }
 
     @Serial
