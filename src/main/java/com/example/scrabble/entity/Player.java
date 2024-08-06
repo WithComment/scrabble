@@ -60,8 +60,6 @@ public class Player implements Serializable {
         this.inventory = new ArrayList<>();
         this.score = 0;
         this.tempScore = 0;
-
-
     }
 
 
@@ -140,15 +138,6 @@ public class Player implements Serializable {
      * Resets the player's unstable score to 0.
      */
     public void resetTempScore() {
-        this.tempScore = 0;
-    }
-
-    /**
-     * Adjusts the player's score by subtracting the unstable score and then resets the unstable score to 0.
-     * This indicates the scores were contested and invalidated.
-     */
-    public void BeContested() {
-        this.score = this.score - this.tempScore;
         this.tempScore = 0;
     }
 

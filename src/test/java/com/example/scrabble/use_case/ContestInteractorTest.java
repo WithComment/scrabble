@@ -113,7 +113,7 @@ class ContestInteractorTest {
 
         // Verify interactions
         verify(game).removeLastPlay();
-        verify(player).BeContested();
+        verify(player).resetTempScore();
         verify(gameDataAccess).update(game);
 
         // Assertions
