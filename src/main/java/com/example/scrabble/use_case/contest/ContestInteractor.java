@@ -14,6 +14,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -60,14 +61,14 @@ public class ContestInteractor implements ContestInputBoundary {
     }
 
     @Override
-    public Game execute(ContestInputData contestInputData) throws ContestException {
+    public ContestOutputData execute(ContestInputData contestInputData) throws ContestException {
         game = gameDAO.get(contestInputData.getGameId());
         if (contestInputData.getIsContest()) {
             player = game.getPlayer(contestInputData.getPlayerId());
+            List<String> words = game.getCurrentPlay().getWords();
+            List<String> invalidWords = new LinkedList<>();
 
             try {
-                List<String> words = game.getCurrentPlay().getWords();
-                List<String> invalidWords = new LinkedList<>();
                 for (String word : words) {
                     if (!wordIsValid(word)) {
                         invalidWords.add(word);
@@ -88,10 +89,15 @@ public class ContestInteractor implements ContestInputBoundary {
                 fail();
                 throw new ContestException("Word validation failed.", e);
             }
+            gameDAO.update(game);
+            return new ContestOutputData(invalidWords, true);
         }
         game.increaseNumContests();
         gameDAO.update(game);
-        return game;
-
+        if (game.getNumContests() >= game.getNumPlayers() - 1) {
+            return new ContestOutputData(new ArrayList<>(), true);
+        } else {
+            return new ContestOutputData(new ArrayList<>(), false);
+        }
     }
 }

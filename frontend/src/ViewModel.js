@@ -204,7 +204,7 @@ class ViewModel{
                         'Content-Type': 'application/json'
                       },
                     method: 'POST',
-                    body: requestBody,
+                    body: JSON.stringify(requestBody),
                 });
             }
         }

@@ -14,6 +14,7 @@ function Board({ board, boardViewModel }){
             }
             viewModel.handleInput(input)
         } else if (e.type === "contextmenu"){
+            e.preventDefault();
             let input = {
                 type : 'rclick',
                 x : xCoord,
