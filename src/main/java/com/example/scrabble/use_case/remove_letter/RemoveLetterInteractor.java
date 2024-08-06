@@ -9,7 +9,7 @@ import com.example.scrabble.use_case.InvalidPlayException;
 
 @Service
 public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
-    
+
     private final GameDataAccess gameDao;
 
     @Autowired
@@ -38,16 +38,7 @@ public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
             throw new InvalidPlayException("Remove failed.");
         } else {
             play.removeMove(x, y);
-            System.out.println("Before adding");
-            for (Letter letter : player.getInventory()){
-                System.out.println(letter);
-            };
-            System.out.println("Adding " + selectedTile.getLetter());
-            player.addLetter(selectedTile.getLetter());
-            System.out.println("After adding " + selectedTile.getLetter());
-            for (Letter letter : player.getInventory()) {
-                System.out.println(letter);
-            };
+            game.getPlayer(player.getId()).addLetter(selectedTile.getLetter());
             selectedTile.removeLetter();
             gameDao.update(game);
             return new RemoveLetterOutputData(true, game.getBoard(), player.getInventory());
