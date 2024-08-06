@@ -98,7 +98,7 @@ public class Game implements Serializable {
         this.history = history;
         this.leaderboard = leaderboard;
         this.endTurn = endTurn;
-        this.playerNumber = 0;
+        this.playerNumber = playerNumber;
         this.numContestFailed = numContestFailed;
         this.currentPlay = currentPlay;
         this.numContests = numContests;
@@ -330,7 +330,7 @@ public class Game implements Serializable {
         int CurrentFailure = numContestFailed.get(PlayerNumber);
         numContestFailed.set(PlayerNumber, CurrentFailure + 1);
         Player currentPlayer = getCurrentPlayer();
-        currentPlayer.BeContested();
+        currentPlayer.resetTempScore();
     }
 
     /**

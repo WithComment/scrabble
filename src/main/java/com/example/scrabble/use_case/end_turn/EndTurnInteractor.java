@@ -35,17 +35,18 @@ public class EndTurnInteractor implements EndTurnInputBoundary {
         Game game = gameDataAccess.get(getEndTurnInputData.getGameId());
         List<Move> moves = game.getCurrentPlay().getMoves();
 
-            Board currentBoard = game.getBoard();
-            for (Move move : moves) {
-                currentBoard.confirm(move.getX(), move.getY());
-            }
+        Board currentBoard = game.getBoard();
+        for (Move move : moves) {
+            currentBoard.confirm(move.getX(), move.getY());
+        }
 
-            Player currentPlayer = game.getCurrentPlayer();
+        Player currentPlayer = game.getCurrentPlayer();
 
-            int toDraw = 7 - currentPlayer.getInventory().size();
-            currentPlayer.addLetter(game.getLetterBag().drawLetters(toDraw));
-            game.endTurn();
-            game.startTurn();
+        int toDraw = 7 - currentPlayer.getInventory().size();
+        currentPlayer.addLetter(game.getLetterBag().drawLetters(toDraw));
+        currentPlayer.confirmTempScore();
+        game.endTurn();
+        game.startTurn();
 
 
         gameDataAccess.update(game);

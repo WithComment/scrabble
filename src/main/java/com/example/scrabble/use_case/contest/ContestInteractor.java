@@ -83,7 +83,7 @@ public class ContestInteractor implements ContestInputBoundary {
                 if (!invalidWords.isEmpty()) {
                     Play lastPlay = game.removeLastPlay();
                     Player contestedPlayer = lastPlay.getPlayer();
-                    contestedPlayer.BeContested();
+                    contestedPlayer.resetTempScore();
                 } else {
                     fail();
 //                    throw new ContestException("All words in last move are valid.");
