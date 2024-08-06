@@ -46,6 +46,9 @@ import com.example.scrabble.use_case.join_game.JoinGameInteractor;
 import com.example.scrabble.use_case.join_game.JoinGameOutputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInteractor;
 import com.example.scrabble.use_case.place_letter.PlaceLetterOutputData;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterInputBoundary;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterInputData;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterOutputData;
 import com.example.scrabble.use_case.start_game.StartGameInteractor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -75,6 +78,9 @@ public class GameControllerTest {
   private PlaceLetterInteractor placeLetterInteractor;
 
   @MockBean
+  private RemoveLetterInputBoundary removeLetterInteractor;
+
+  @MockBean
   private ConfirmPlayInteractor confirmPlayInteractor;
 
   @MockBean
@@ -89,14 +95,13 @@ public class GameControllerTest {
   @MockBean
   private EndGameInteractor endGameInteractor;
 
-  @Mock
   private Game game;
 
   private ObjectMapper objectMapper = new ObjectMapper();
 
   @BeforeEach
   void setUp() {
-    this.game = new Game();
+    game = new Game();
     when(gameDao.get(anyInt())).thenReturn(game);
   }
 
@@ -172,6 +177,25 @@ public class GameControllerTest {
   }
 
   @Test
+  void testRemoveLetter() throws Exception {
+    int gameId = 1;
+    RemoveLetterOutputData outputData = new RemoveLetterOutputData(true, null, null);
+    when(removeLetterInteractor.execute(any())).thenReturn(outputData);
+
+    mockMvc.perform(post("/game/{gameId}/remove_letter/", gameId)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(new HashMap<String, Object>() {
+          {
+            put("x", 0);
+            put("y", 0);
+          }
+        })))
+        .andExpect(status().isOk());
+
+    testNotifyFrontend(gameId, "remove_letter");
+  }
+
+  @Test
   void testConfirmPlay() throws Exception {
     int gameId = 1;
     ConfirmPlayOutputData outputData = new ConfirmPlayOutputData(true);
@@ -232,8 +256,8 @@ public class GameControllerTest {
   @Test
   void testContest() throws Exception {
     int gameId = 1;
-    ContestOutputData outputData = new ContestOutputData(null);
-    when(contestInteractor.execute(any())).thenReturn(game);
+    ContestOutputData outputData = new ContestOutputData(null, true);
+    when(contestInteractor.execute(any())).thenReturn(outputData);
 
     mockMvc.perform(post("/game/{gameId}/contest/", gameId)
         .contentType(MediaType.APPLICATION_JSON)

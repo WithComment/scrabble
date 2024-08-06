@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.scrabble.use_case.remove_letter.RemoveLetterInputData;
-import com.example.scrabble.use_case.remove_letter.RemoveLetterInteractor;
-import com.example.scrabble.use_case.remove_letter.RemoveLetterOutputData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +46,9 @@ import com.example.scrabble.use_case.join_game.JoinGameInputBoundary;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInputBoundary;
 import com.example.scrabble.use_case.place_letter.PlaceLetterOutputData;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterInputBoundary;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterInputData;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterOutputData;
 import com.example.scrabble.use_case.start_game.StartGameInputBoundary;
 import com.example.scrabble.use_case.start_game.StartGameInputData;
 import com.example.scrabble.use_case.start_game.StartGameOutputData;
@@ -63,13 +63,13 @@ public class GameController {
   private final JoinGameInputBoundary joinGameInteractor;
   private final StartGameInputBoundary startGameInteractor;
   private final PlaceLetterInputBoundary placeLetterInteractor;
+  private final RemoveLetterInputBoundary removeLetterInteractor;
   private final ConfirmPlayInputBoundary confirmPlayInteractor;
   private final EndTurnInputBoundary endTurnInteractor;
   private final GetLeaderboardInputBoundary getLeaderboardInteractor;
   private final ContestInputBoundary contestInteractor;
   private final EndGameInputBoundary endGameInteractor;
-    private final RemoveLetterInteractor removeLetterInteractor;
-    private Logger logger = LoggerFactory.getLogger(GameController.class);
+  private final Logger logger = LoggerFactory.getLogger(GameController.class);
 
   @Autowired
   public GameController(
@@ -79,24 +79,25 @@ public class GameController {
       JoinGameInputBoundary joinGameInteractor,
       StartGameInputBoundary startGameInteractor,
       PlaceLetterInputBoundary placeLetterInteractor,
+      RemoveLetterInputBoundary removeLetterInteractor,
       ConfirmPlayInputBoundary confirmPlayInteractor,
       EndTurnInputBoundary endTurnInteractor,
       GetLeaderboardInputBoundary getLeaderboardInteractor,
       ContestInputBoundary contestInteractor,
-      EndGameInputBoundary endGameInteractor,
-      RemoveLetterInteractor removeLetterInteractor) {
+      EndGameInputBoundary endGameInteractor
+) {
     this.template = template;
     this.gameDao = gameDao;
     this.createGameInteractor = createGameInteractor;
     this.joinGameInteractor = joinGameInteractor;
     this.startGameInteractor = startGameInteractor;
     this.placeLetterInteractor = placeLetterInteractor;
+    this.removeLetterInteractor = removeLetterInteractor;
     this.confirmPlayInteractor = confirmPlayInteractor;
     this.endTurnInteractor = endTurnInteractor;
     this.getLeaderboardInteractor = getLeaderboardInteractor;
     this.contestInteractor = contestInteractor;
     this.endGameInteractor = endGameInteractor;
-      this.removeLetterInteractor = removeLetterInteractor;
   }
 
   private void notifyFrontend(int gameId, String type) {
@@ -164,7 +165,7 @@ public class GameController {
 
     @PostMapping("/{gameId}/remove_letter/")
     public ResponseEntity<EntityModel<RemoveLetterOutputData>> removeLetter(@PathVariable int gameId,
-                                                                          @RequestBody HashMap<String, Object> input) {
+        @RequestBody HashMap<String, Object> input) {
         int x = (int) input.get("x");
         int y = (int) input.get("y");
         logger.info("Game ID: {} Removing letter at position: {},{}", gameId, x, y);
@@ -174,7 +175,6 @@ public class GameController {
                 linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
     }
-
     @PostMapping("/{gameId}/confirm_play/")
     public ResponseEntity<EntityModel<ConfirmPlayOutputData>> confirmPlay(@PathVariable int gameId,
             @RequestBody ConfirmPlayInputData input) {
@@ -207,14 +207,15 @@ public class GameController {
         return ResponseEntity.ok(entityModel);
     }
 
-//    @PostMapping("/{gameId}/contest/")
-//    public ResponseEntity<EntityModel<Game>> contest(@PathVariable int gameId, @RequestBody ContestInputData input) {
-////        logger.info("Contesting game ID: {}", gameId);
-////z        notifyFrontend(gameId, "contest");
-//        EntityModel<Game> entityModel = EntityModel.of(output,
-//            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
-//        return ResponseEntity.ok(entityModel);
-//    }
+    @PostMapping("/{gameId}/contest/")
+    public ResponseEntity<EntityModel<ContestOutputData>> contest(@PathVariable int gameId, @RequestBody ContestInputData input) {
+        logger.info("Contesting game ID: {}", gameId);
+        ContestOutputData output = contestInteractor.execute(input);
+        notifyFrontend(gameId, "contest");
+        EntityModel<ContestOutputData> entityModel = EntityModel.of(output,
+            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
+    }
 
    @PostMapping("/{gameId}/end_game/")
    public ResponseEntity<EntityModel<EndGameOutputData>> endGame(@PathVariable int gameId, @RequestBody EndGameInputData input) {
