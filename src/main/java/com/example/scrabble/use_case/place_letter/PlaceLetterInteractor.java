@@ -132,7 +132,7 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
 
     Game game = gameDao.get(data.getGameId());
     Play play = game.getCurrentPlay();
-    Player player = play.getPlayer();
+    Player player = game.getCurrentPlayer();
     Board board = game.getBoard();
 
     for (Letter letter : player.getInventory()){
