@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -70,14 +71,17 @@ class EndGameInteractorTest {
 
     @Test
     void testExecuteWithInvalidEndGame() {
+        letter = new Letter('A', 2);
+        List<Letter> letters = Arrays.asList(letter);
+
         when(gameDao.get(anyInt())).thenReturn(game);
 
         // Mock players
         when(game.getPlayers()).thenReturn(Arrays.asList(player1, player2));
 
         // Neither player has emptied their inventory
-        when(player1.getInventory()).thenReturn(Collections.singletonList(letter));
-        when(player2.getInventory()).thenReturn(Collections.singletonList(letter));
+        when(player1.getInventory()).thenReturn(letters);
+        when(player2.getInventory()).thenReturn(letters);
 
         EndGameInputData inputData = new EndGameInputData(1);
 

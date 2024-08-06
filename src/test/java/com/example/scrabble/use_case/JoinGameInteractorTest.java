@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class JoinGameInteractorTest {
@@ -33,6 +34,7 @@ class JoinGameInteractorTest {
 
         // Mocking game behavior
         when(gameDataAccess.get(anyInt())).thenReturn(game);
+        when(gameDataAccess.get(-1)).thenThrow(new IllegalArgumentException("Game with the specified ID does not exist."));
         when(game.getLetterBag()).thenReturn(new LetterBag());
     }
 
@@ -51,5 +53,25 @@ class JoinGameInteractorTest {
 
         // Check the output data
         assertEquals(playerName, outputData.getPlayerName());
+    }
+
+    @Test
+    void testExecute_gameNotFound() {
+        String playerName = "NewPlayer";
+        JoinGameInputData inputData = new JoinGameInputData(playerName, -1);
+
+        // Act & Assert: Check that an IllegalArgumentException is thrown
+        assertThrows(IllegalArgumentException.class, () -> {
+            joinGameInteractor.execute(inputData);
+        });
+
+        // Verify that gameDAO.get(-1) was called
+        verify(gameDataAccess, times(1)).get(-1);
+
+        // Verify that no player was added to the game, as the game doesn't exist
+        verify(game, never()).addPlayer(anyString());
+
+        // Verify that the game state was not updated
+        verify(gameDataAccess, never()).update(game);
     }
 }

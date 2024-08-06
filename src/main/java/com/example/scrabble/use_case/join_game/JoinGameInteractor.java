@@ -38,10 +38,6 @@ public class JoinGameInteractor implements JoinGameInputBoundary {
 
         Game game = gameDataAccess.get(joinGameInputData.getGameId());
         game.addPlayer(joinGameInputData.getPlayerName());
-        LetterBag letterBag = game.getLetterBag();
-//        if (newPlayer.getInventory().isEmpty()) {
-//            newPlayer.addLetter(letterBag.drawLetters(7));
-//        }
 
         gameDataAccess.update(game);
         return new JoinGameOutputData(joinGameInputData.getPlayerName());

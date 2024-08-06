@@ -4,8 +4,6 @@ import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.use_case.contest.ContestInputData;
 import com.example.scrabble.use_case.contest.ContestInteractor;
 import com.example.scrabble.use_case.contest.ContestOutputData;
-import com.example.scrabble.use_case.contest.ContestException;
-import com.example.scrabble.use_case.contest.WordValidationException;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Player;
 import com.example.scrabble.entity.Play;
