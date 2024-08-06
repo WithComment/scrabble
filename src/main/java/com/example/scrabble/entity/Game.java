@@ -89,7 +89,8 @@ public class Game implements Serializable {
                 @JsonProperty("playerNumber") int playerNumber,
                 @JsonProperty("numContestFailed") List<Integer> numContestFailed,
                 @JsonProperty("currentPlay") Play currentPlay,
-                @JsonProperty("numContests") int numContests){
+                @JsonProperty("numContests") int numContests,
+                @JsonProperty("playerIDCounter") int playerIdCounter){
         this.id = id;
         this.letterBag = letterBag;
         this.board = board;
@@ -101,6 +102,7 @@ public class Game implements Serializable {
         this.numContestFailed = numContestFailed;
         this.currentPlay = currentPlay;
         this.numContests = numContests;
+        this.playerIDCounter = playerIdCounter;
     }
     /**
      * Gets the unique ID of the game.
@@ -426,6 +428,10 @@ public class Game implements Serializable {
         return numContests;
     }
 
+    public int getPlayerIDCounter() {
+        return playerIDCounter;
+    }
+
     /**
      * Ends the current turn by setting the endTurn flag to true.
      */
@@ -460,7 +466,8 @@ public class Game implements Serializable {
                 (playerNumber == other.playerNumber) &&
                 (numContestFailed.equals(other.numContestFailed)) &&
                 (Objects.equals(currentPlay,other.currentPlay)) &&
-                (numContests == other.numContests);
+                (numContests == other.numContests) &&
+                (playerIDCounter == other.playerIDCounter);
     }
 
     @Override
