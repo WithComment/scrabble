@@ -106,6 +106,7 @@ class ContestInteractorTest {
         ContestInputData inputData = new ContestInputData(1, 1, true);
         when(gameDataAccess.get(inputData.getGameId())).thenReturn(game);
         when(game.getLastPlay()).thenReturn(play);
+        when(game.getCurrentPlay()).thenReturn(play);
         when(play.getWords()).thenReturn(Arrays.asList("validword1", "invalidword"));
         when(httpResponse.body()).thenReturn("{\"v\":true}", "{\"v\":false}");
 
@@ -124,6 +125,7 @@ class ContestInteractorTest {
     void testExecute_contestFailure() throws Exception {
         when(gameDataAccess.get(anyInt())).thenReturn(game);
         when(game.getLastPlay()).thenReturn(play);
+        when(game.getCurrentPlay()).thenReturn(play);
         when(play.getWords()).thenReturn(Arrays.asList("validword1", "validword2"));
         when(httpResponse.body()).thenReturn("{\"v\":true}", "{\"v\":true}");
 

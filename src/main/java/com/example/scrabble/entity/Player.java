@@ -123,7 +123,7 @@ public class Player implements Serializable {
     
 
     public void setTempScore(int score) {
-        this.score = score;
+        this.tempScore = score;
     }
 
     /**
