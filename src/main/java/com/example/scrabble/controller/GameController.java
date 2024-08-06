@@ -4,8 +4,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,11 +188,11 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/contest/")
-    public ResponseEntity<EntityModel<Game>> contest(@PathVariable int gameId, @RequestBody ContestInputData input) {
+    public ResponseEntity<EntityModel<ContestOutputData>> contest(@PathVariable int gameId, @RequestBody ContestInputData input) {
         logger.info("Contesting game ID: {}", gameId);
-        Game output = contestInteractor.execute(input);
+        ContestOutputData output = contestInteractor.execute(input);
         notifyFrontend(gameId, "contest");
-        EntityModel<Game> entityModel = EntityModel.of(output,
+        EntityModel<ContestOutputData> entityModel = EntityModel.of(output,
             linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
     }
