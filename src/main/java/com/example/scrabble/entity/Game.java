@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a game of Scrabble.
@@ -84,7 +85,8 @@ public class Game implements Serializable {
                 @JsonProperty("endTurn") Boolean endTurn,
                 @JsonProperty("playerNumber") int playerNumber,
                 @JsonProperty("numContestFailed") List<Integer> numContestFailed,
-                @JsonProperty("currentPlay") Play currentPlay) {
+                @JsonProperty("currentPlay") Play currentPlay,
+                @JsonProperty("numContests") int numContests){
         this.id = id;
         this.letterBag = letterBag;
         this.board = board;
@@ -95,6 +97,7 @@ public class Game implements Serializable {
         this.playerNumber = 0;
         this.numContestFailed = numContestFailed;
         this.currentPlay = currentPlay;
+        this.numContests = numContests;
     }
     /**
      * Gets the unique ID of the game.
@@ -441,7 +444,8 @@ public class Game implements Serializable {
                 (endTurn == other.endTurn) &&
                 (playerNumber == other.playerNumber) &&
                 (numContestFailed.equals(other.numContestFailed)) &&
-                (currentPlay.equals(other.currentPlay));
+                (Objects.equals(currentPlay,other.currentPlay)) &&
+                (numContests == other.numContests);
     }
 
     @Override

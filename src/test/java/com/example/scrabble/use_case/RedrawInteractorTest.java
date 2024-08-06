@@ -52,7 +52,7 @@ class RedrawInteractorTest {
         when(mockLetterBag.drawLetters(2)).thenReturn(newLetters);
 
         // When: Redraw is executed
-        RedrawInputData inputData = new RedrawInputData(1, Arrays.asList('A', 'B'));
+        RedrawInputData inputData = new RedrawInputData(1, Arrays.asList("A", "B"));
         RedrawOutputData outputData = redrawInteractor.execute(inputData);
 
         // Then: Verify the interactions and results
@@ -69,7 +69,7 @@ class RedrawInteractorTest {
         when(mockLetterBag.getLength()).thenReturn(5);
 
         // When: Redraw is executed
-        RedrawInputData inputData = new RedrawInputData(1, Arrays.asList('A', 'B'));
+        RedrawInputData inputData = new RedrawInputData(1, Arrays.asList("A", "B"));
         RedrawOutputData outputData = redrawInteractor.execute(inputData);
 
         // Then: Verify the redraw was unsuccessful

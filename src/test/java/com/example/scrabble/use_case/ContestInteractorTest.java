@@ -94,7 +94,7 @@ public class ContestInteractorTest {
             aliceInventory.clear();
             currentPlay.setWords(List.of("hello"));
 
-            ContestInputData contestInputData = new ContestInputData(game.getId(), bob.getId());
+            ContestInputData contestInputData = new ContestInputData(game.getId(), bob.getId(), true);
             ContestException exception = assertThrows(ContestException.class, () -> interactor.execute(contestInputData));
             assert(exception.getMessage().contains("All words in last move are valid."));
         }
