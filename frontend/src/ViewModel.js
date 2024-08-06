@@ -153,11 +153,19 @@ class ViewModel{
             response = await fetch(`${this.baseUrl}contest/`, request);
         } else if (input.type === 'redraw'){
             console.log(this.selectedLettersRedraw);
-            let request = {            
+            let requestBody = {            
                 gameId: this.gameId,
                 characters: this.selectedLettersRedraw,
             }
-            response = await fetch(`${this.baseUrl}redraw_letters/`, request);
+            console.log('Redrawing characters:', requestBody);
+            response = await fetch(`${this.baseUrl}redraw_letters/`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                method: 'POST',
+                body : JSON.stringify(requestBody)
+            });
         } else if (input.type === 'start'){
             let requestBody = {      
                 gameId: this.gameId,

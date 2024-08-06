@@ -7,6 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.scrabble.use_case.redraw_letters.RedrawInputData;
+import com.example.scrabble.use_case.redraw_letters.RedrawInteractor;
+import com.example.scrabble.use_case.redraw_letters.RedrawOutputData;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterInputData;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterInteractor;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterOutputData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +75,9 @@ public class GameController {
   private final GetLeaderboardInputBoundary getLeaderboardInteractor;
   private final ContestInputBoundary contestInteractor;
   private final EndGameInputBoundary endGameInteractor;
-  private final Logger logger = LoggerFactory.getLogger(GameController.class);
+    private final RemoveLetterInteractor removeLetterInteractor;
+    private final RedrawInteractor redrawInteractor;
+    private Logger logger = LoggerFactory.getLogger(GameController.class);
 
   @Autowired
   public GameController(
@@ -98,6 +106,8 @@ public class GameController {
     this.getLeaderboardInteractor = getLeaderboardInteractor;
     this.contestInteractor = contestInteractor;
     this.endGameInteractor = endGameInteractor;
+      this.removeLetterInteractor = removeLetterInteractor;
+      this.redrawInteractor = redrawInteractor;
   }
 
   private void notifyFrontend(int gameId, String type) {
@@ -175,6 +185,19 @@ public class GameController {
                 linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
     }
+
+    @PostMapping("/{gameId}/redraw_letters/")
+    public ResponseEntity<EntityModel<RedrawOutputData>> redrawLetters(@PathVariable int gameId,
+                                                                      @RequestBody HashMap<String, Object> input) {
+        List<String> characters = (List<String>) input.get("characters");
+        logger.info("Game ID: {} Redrawing Letters", gameId);
+        RedrawOutputData output = redrawInteractor.execute(new RedrawInputData(gameId, characters));
+        notifyFrontend(gameId, "redraw_letters");
+        EntityModel<RedrawOutputData> entityModel = EntityModel.of(output,
+                linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
+    }
+
     @PostMapping("/{gameId}/confirm_play/")
     public ResponseEntity<EntityModel<ConfirmPlayOutputData>> confirmPlay(@PathVariable int gameId,
             @RequestBody ConfirmPlayInputData input) {
