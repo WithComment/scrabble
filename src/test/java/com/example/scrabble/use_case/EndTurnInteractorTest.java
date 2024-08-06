@@ -59,7 +59,7 @@ class EndTurnInteractorTest {
         EndTurnInputData inputData = new EndTurnInputData(1, wordsToBeConfirmed);
 
         when(game.isEndTurn()).thenReturn(true);
-        when(game.getCurrentPlayer()).thenReturn(game.addPlayer());
+        when(game.getCurrentPlayer()).thenReturn(new Player(0));
         when(player.getInventory()).thenReturn(new ArrayList<>());
         when(game.getLetterBag()).thenReturn(new LetterBag());
 

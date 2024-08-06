@@ -37,7 +37,7 @@ public class ContestInteractor implements ContestInputBoundary {
      * @return {@code true} if the word is valid, {@code false} otherwise
      * @throws WordValidationException if there is an issue with the URL or network communication
      */
-    private boolean wordIsValid(String word) throws WordValidationException {
+    public boolean wordIsValid(String word) throws WordValidationException {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI("https://scrabble.us.wordsdb.ws/validateDict/" + word))
@@ -56,7 +56,7 @@ public class ContestInteractor implements ContestInputBoundary {
         }
     }
 
-    private void fail() {
+    public void fail() {
         game.contestFailureUpdate(player.getId());
     }
 
@@ -68,7 +68,7 @@ public class ContestInteractor implements ContestInputBoundary {
             List<String> words = game.getLastPlay().getWords();
             List<String> invalidWords = new LinkedList<>();
 
-            try {
+            //try {
                 for (String word : words) {
                     if (!wordIsValid(word)) {
                         invalidWords.add(word);
@@ -82,13 +82,10 @@ public class ContestInteractor implements ContestInputBoundary {
                     fail();
 //                    throw new ContestException("All words in last move are valid.");
                 }
-            } catch (NoSuchElementException e) {
-                fail();
-                throw new ContestException("No player has made any move.");
-            } catch (WordValidationException e) {
-                fail();
-                throw new ContestException("Word validation failed.", e);
-            }
+//            } catch (WordValidationException e) {
+//                fail();
+//                throw new ContestException("Word validation failed.", e);
+//            }
             gameDAO.update(game);
             return new ContestOutputData(invalidWords, true);
         }

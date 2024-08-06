@@ -1,107 +1,147 @@
 package com.example.scrabble.use_case;
 
 import com.example.scrabble.data_access.GameDataAccess;
-import com.example.scrabble.entity.*;
-import com.example.scrabble.use_case.contest.ContestException;
 import com.example.scrabble.use_case.contest.ContestInputData;
 import com.example.scrabble.use_case.contest.ContestInteractor;
+import com.example.scrabble.use_case.contest.ContestOutputData;
+import com.example.scrabble.use_case.contest.ContestException;
+import com.example.scrabble.use_case.contest.WordValidationException;
+import com.example.scrabble.entity.Game;
+import com.example.scrabble.entity.Player;
+import com.example.scrabble.entity.Play;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 
 public class ContestInteractorTest {
-    private GameDataAccess gameDAO;
-    private ContestInteractor interactor;
+
+    private ContestInteractor contestInteractor;
+    private GameDataAccess gameDao;
+    private Game mockGame;
+    private Player mockPlayer;
+    private Play mockPlay;
 
     @BeforeEach
     public void setUp() {
-        gameDAO = new GameDataAccess() {
-            private final List<Game> games = new LinkedList<>();
+        gameDao = mock(GameDataAccess.class);
+        contestInteractor = Mockito.spy(new ContestInteractor(gameDao));
+        mockGame = mock(Game.class);
+        mockPlayer = mock(Player.class);
+        mockPlay = mock(Play.class);
 
-            @Override
-            public Game create(Game game) {
-                games.add(game);
-                return game;
-            }
-
-            @Override
-            public Game get(int gameId) {
-                for (Game game: games) {
-                    if (game.getId() == gameId) {
-                        return game;
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            public void update(Game game) {
-                for (int i=0; i<games.size(); i++){
-                    if (games.get(i).getId() == game.getId()) {
-                        games.set(i, game);
-                        return;
-                    }
-                }
-            }
-
-            @Override
-            public void delete(int gameId) {
-                for (int i=0; i<games.size(); i++) {
-                    if (games.get(i).getId() == gameId) {
-                        games.remove(i);
-                        return;
-                    }
-                }
-            }
-        };
-        interactor = new ContestInteractor(gameDAO);
+        when(gameDao.get(anyInt())).thenReturn(mockGame);
+        when(mockGame.getPlayer(anyInt())).thenReturn(mockPlayer);
+        when(mockGame.getLastPlay()).thenReturn(new Play(mockPlayer));
     }
 
     @Test
-    public void testWordIsValid() {
-        try {
-            Game game = new Game(List.of("Alice", "Bob"));
-            Player alice = game.getPlayer(0);
-            Player bob = game.getPlayer(1);
-            gameDAO.create(game);
-            game.startGame();
-            List<Letter> aliceInventory = alice.getInventory();
-            aliceInventory.clear();
-            aliceInventory.addAll(List.of(
-                new Letter('h', 4),
-                new Letter('e', 1),
-                new Letter('l', 1),
-                new Letter('l', 1),
-                new Letter('o', 1)
-            ));
-            game.startTurn();
-            Play currentPlay = game.getCurrentPlay();
-            Board board = game.getBoard();
-            currentPlay.addMove(new Move(7, 7, aliceInventory.get(0)));
-            board.setCell(7, 7, aliceInventory.get(0));
-            currentPlay.addMove(new Move(7, 8, aliceInventory.get(1)));
-            board.setCell(7, 8, aliceInventory.get(1));
-            currentPlay.addMove(new Move(7, 9, aliceInventory.get(2)));
-            board.setCell(7, 9, aliceInventory.get(2));
-            currentPlay.addMove(new Move(7, 10, aliceInventory.get(3)));
-            board.setCell(7, 10, aliceInventory.get(3));
-            currentPlay.addMove(new Move(7, 11, aliceInventory.get(4)));
-            board.setCell(7, 11, aliceInventory.get(4));
-            aliceInventory.clear();
-            currentPlay.setWords(List.of("hello"));
+    public void testExecute_AllWordsValid_ThrowsContestException() throws Exception {
+        // Setup the input data
+        ContestInputData inputData = new ContestInputData(1, 1, true);
+        List<String> validWords = Arrays.asList("VALID", "WORDS");
 
-            ContestInputData contestInputData = new ContestInputData(game.getId(), bob.getId(), true);
-            ContestException exception = assertThrows(ContestException.class, () -> interactor.execute(contestInputData));
-            assert(exception.getMessage().contains("All words in last move are valid."));
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            fail();
-        }
+        when(mockPlay.getWords()).thenReturn(validWords);
+        when(mockGame.getLastPlay()).thenReturn(mockPlay);
+        doReturn(true).when(contestInteractor).wordIsValid(anyString());
+
+        // Execute the method
+        ContestOutputData result = contestInteractor.execute(inputData);
+
+        // Verify that fail() was called
+        verify(contestInteractor).fail();
+
+        // Verify that gameDao.update(game) was called
+        verify(gameDao).update(mockGame);
+
+        // Verify the result
+        assertTrue(result.getInvalidWords().isEmpty());
+        assertEquals(0, result.getInvalidWords().size());
+    }
+
+    @Test
+    public void testExecute_InvalidWords_ReturnsInvalidWords() throws Exception {
+        // Setup the input data
+        ContestInputData inputData = new ContestInputData(1, 1, true);
+        List<String> words = Arrays.asList("VALID", "INVALID");
+        when(mockGame.removeLastPlay()).thenReturn(mockPlay);
+        when(mockGame.getLastPlay()).thenReturn(mockPlay);
+        when(mockPlay.getWords()).thenReturn(words);
+        when(mockPlay.getPlayer()).thenReturn(mockPlayer);
+        when(mockGame.getPlayer(anyInt())).thenReturn(mockPlayer);
+        doReturn(true).when(contestInteractor).wordIsValid("VALID");
+        doReturn(false).when(contestInteractor).wordIsValid("INVALID");
+
+        // Execute the method
+        ContestOutputData result = contestInteractor.execute(inputData);
+
+        // Verify that the fail() method was NOT called
+        verify(contestInteractor, never()).fail();
+
+        // Verify that gameDao.update(game) was called
+        verify(gameDao).update(mockGame);
+
+        // Verify the result
+        assertFalse(result.getInvalidWords().isEmpty());
+        assertEquals(1, result.getInvalidWords().size());
+        assertEquals("INVALID", result.getInvalidWords().get(0));
+    }
+
+    @Test
+    public void testExecute_NoContestIncreasesNumContests() {
+        // Setup the input data
+        ContestInputData inputData = new ContestInputData(1, 1, false);
+
+        when(mockGame.getNumContests()).thenReturn(0);
+        when(mockGame.getNumPlayers()).thenReturn(3);
+
+        // Execute the method
+        ContestOutputData result = contestInteractor.execute(inputData);
+
+        // Verify that the game's number of contests is increased
+        verify(mockGame).increaseNumContests();
+
+        // Verify that gameDao.update(game) was called
+        verify(gameDao).update(mockGame);
+
+        // Verify the result
+        assertTrue(result.getInvalidWords().isEmpty());
+    }
+
+    @Test
+    public void testExecute_AllPlayersHaveContested_ReturnsContestSuccessful() {
+        // Setup the input data
+        ContestInputData inputData = new ContestInputData(1, 1, false);
+
+        when(mockGame.getNumContests()).thenReturn(2);
+        when(mockGame.getNumPlayers()).thenReturn(3);
+
+        // Execute the method
+        ContestOutputData result = contestInteractor.execute(inputData);
+
+        // Verify that the game's number of contests is increased
+        verify(mockGame).increaseNumContests();
+
+        // Verify that gameDao.update(game) was called
+        verify(gameDao).update(mockGame);
+
+        // Verify the result
+        assertTrue(result.getInvalidWords().isEmpty());
+        assertTrue(result.getInvalidWords().isEmpty());
     }
 }
+
+
+
