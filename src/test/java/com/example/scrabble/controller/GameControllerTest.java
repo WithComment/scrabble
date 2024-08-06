@@ -1,7 +1,7 @@
 package com.example.scrabble.controller;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,21 +17,27 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Player;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInteractor;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayOutputData;
+import com.example.scrabble.use_case.contest.ContestInputData;
 import com.example.scrabble.use_case.contest.ContestInteractor;
 import com.example.scrabble.use_case.contest.ContestOutputData;
 import com.example.scrabble.use_case.create_game.CreateGameInteractor;
 import com.example.scrabble.use_case.create_game.CreateGameOutputData;
+import com.example.scrabble.use_case.end_game.EndGameInteractor;
+import com.example.scrabble.use_case.end_game.EndGameOutputData;
 import com.example.scrabble.use_case.end_turn.EndTurnInteractor;
 import com.example.scrabble.use_case.end_turn.EndTurnOutputData;
 import com.example.scrabble.use_case.get_leaderboard.GetLeaderboardInteractor;
@@ -40,9 +46,11 @@ import com.example.scrabble.use_case.join_game.JoinGameInteractor;
 import com.example.scrabble.use_case.join_game.JoinGameOutputData;
 import com.example.scrabble.use_case.place_letter.PlaceLetterInteractor;
 import com.example.scrabble.use_case.place_letter.PlaceLetterOutputData;
+import com.example.scrabble.use_case.start_game.StartGameInteractor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(GameController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class GameControllerTest {
 
   @Autowired
@@ -61,6 +69,9 @@ public class GameControllerTest {
   private JoinGameInteractor joinGameInteractor;
 
   @MockBean
+  private StartGameInteractor startGameInteractor;
+
+  @MockBean
   private PlaceLetterInteractor placeLetterInteractor;
 
   @MockBean
@@ -75,6 +86,9 @@ public class GameControllerTest {
   @MockBean
   private ContestInteractor contestInteractor;
 
+  @MockBean
+  private EndGameInteractor endGameInteractor;
+
   @Mock
   private Game game;
 
@@ -83,18 +97,18 @@ public class GameControllerTest {
   @BeforeEach
   void setUp() {
     this.game = new Game();
+    when(gameDao.get(anyInt())).thenReturn(game);
   }
 
-  private void testNotifyFrontend(int gameId) {
-    verify(template).convertAndSend("topic/game/" + gameId, game);
+  private void testNotifyFrontend(int gameId, String type) {
+    verify(template).convertAndSend("/topic/game/" + gameId, new Message(game, type));
   }
 
   @Test
   void testGetGame() throws Exception {
     int gameId = 1;
-    when(gameDao.get(gameId)).thenReturn(game);
 
-    mockMvc.perform(get("/game/{gameId}", gameId))
+    mockMvc.perform(get("/game/{gameId}/", gameId))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.id").exists());
   }
@@ -105,17 +119,17 @@ public class GameControllerTest {
     CreateGameOutputData outputData = new CreateGameOutputData(null, gameId);
     when(createGameInteractor.execute(any())).thenReturn(outputData);
 
-    mockMvc.perform(post("/game/create")
+    mockMvc.perform(post("/game/create/")
       .contentType(MediaType.APPLICATION_JSON)
       .content(objectMapper.writeValueAsString(new HashMap<String, Object>() {
         {
           put("playerNames", Arrays.asList("Player1", "Player2"));
         }
       })))
-      .andExpect(status().isOk())
+      .andExpect(status().isCreated())
       .andExpect(jsonPath("$.gameId").value(1));
 
-    testNotifyFrontend(gameId);
+    testNotifyFrontend(gameId, "create");
   }
 
   @Test
@@ -124,17 +138,17 @@ public class GameControllerTest {
     JoinGameOutputData outputData = new JoinGameOutputData("Player3");
     when(joinGameInteractor.execute(any())).thenReturn(outputData);
 
-    mockMvc.perform(post("/game/{gameId}/join", gameId)
+    mockMvc.perform(post("/game/{gameId}/join/", gameId)
       .contentType(MediaType.APPLICATION_JSON)
-      .content(objectMapper.writeValueAsString(new HashMap<String, String>() {
+      .content(objectMapper.writeValueAsString(new HashMap<String, Object>() {
         {
-          put("name", "Player3");
+          put("gameId", 1);
+          put("playerName", "Player3");
         }
       })))
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$.playerName").value("Player3"));
+      .andExpect(status().isOk());
 
-    testNotifyFrontend(gameId);
+    testNotifyFrontend(gameId, "join");
   }
 
   @Test
@@ -143,7 +157,7 @@ public class GameControllerTest {
     PlaceLetterOutputData outputData = new PlaceLetterOutputData(null, null, 0, null);
     when(placeLetterInteractor.execute(any())).thenReturn(outputData);
 
-    mockMvc.perform(post("/game/{gameId}/place_letter", gameId)
+    mockMvc.perform(post("/game/{gameId}/place_letter/", gameId)
       .contentType(MediaType.APPLICATION_JSON)
       .content(objectMapper.writeValueAsString(new HashMap<String, Object>() {
         {
@@ -154,7 +168,7 @@ public class GameControllerTest {
       })))
       .andExpect(status().isOk());
 
-    testNotifyFrontend(gameId);
+    testNotifyFrontend(gameId, "place_letter");
   }
 
   @Test
@@ -163,11 +177,16 @@ public class GameControllerTest {
     ConfirmPlayOutputData outputData = new ConfirmPlayOutputData(true);
     when(confirmPlayInteractor.execute(any())).thenReturn(outputData);
 
-    mockMvc.perform(post("/game/{gameId}/confirm_play", gameId)
-        .contentType(MediaType.APPLICATION_JSON))
+    mockMvc.perform(post("/game/{gameId}/confirm_play/", gameId)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(new HashMap<String, Object>() {
+          {
+            put("gameId", 1);
+          }
+        })))
         .andExpect(status().isOk());
 
-    testNotifyFrontend(gameId);
+    testNotifyFrontend(gameId, "confirm_play");
   }
 
   @Test
@@ -176,9 +195,17 @@ public class GameControllerTest {
     EndTurnOutputData outputData = new EndTurnOutputData(gameId);
     when(endTurnInteractor.execute(any())).thenReturn(outputData);
 
-    mockMvc.perform(post("/game/{gameId}/end_turn", gameId)
-        .contentType(MediaType.APPLICATION_JSON))
+    mockMvc.perform(post("/game/{gameId}/end_turn/", gameId)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(new HashMap<String, Object>() {
+          {
+            put("gameId", 1);
+            put("wordsToBeConfirmed", null);
+          }
+        })))
         .andExpect(status().isOk());
+
+    testNotifyFrontend(gameId, "end_turn");
   }
 
   @Test
@@ -189,19 +216,48 @@ public class GameControllerTest {
     GetLeaderboardOutputData outputData = new GetLeaderboardOutputData(Arrays.asList(player1, player2));
     when(getLeaderboardInteractor.execute(any())).thenReturn(outputData);
 
-    mockMvc.perform(get("/game/{gameId}/leaderboard", gameId)
-        .contentType(MediaType.APPLICATION_JSON))
+    mockMvc.perform(get("/game/{gameId}/leaderboard/", gameId)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(new HashMap<String, Object>() {
+          {
+            put("gameId", 1);
+            put("players", Arrays.asList(0, 1));
+          }
+        })))
         .andExpect(status().isOk());
+
+    testNotifyFrontend(gameId, "get_leaderboard");
   }
 
   @Test
   void testContest() throws Exception {
     int gameId = 1;
     ContestOutputData outputData = new ContestOutputData(null);
-    when(contestInteractor.execute(any())).thenReturn(null);
+    when(contestInteractor.execute(any())).thenReturn(game);
 
-    mockMvc.perform(post("/game/{gameId}/contest", gameId)
-        .contentType(MediaType.APPLICATION_JSON))
+    mockMvc.perform(post("/game/{gameId}/contest/", gameId)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(new ContestInputData(1, 0, true))))
         .andExpect(status().isOk());
+
+    testNotifyFrontend(gameId, "contest");
+  }
+
+  @Test
+  void testEndGame() throws Exception {
+    int gameId = 1;
+    EndGameOutputData outputData = new EndGameOutputData(null);
+    when(endGameInteractor.execute(any())).thenReturn(outputData);
+
+    mockMvc.perform(post("/game/{gameId}/end_game/", gameId)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(new HashMap<String, Object>() {
+          {
+            put("gameId", 1);
+          }
+        })))
+        .andExpect(status().isOk());
+
+    testNotifyFrontend(gameId, "end_game");
   }
 }
