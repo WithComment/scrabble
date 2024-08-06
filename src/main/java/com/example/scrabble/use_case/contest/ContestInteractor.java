@@ -63,6 +63,9 @@ public class ContestInteractor implements ContestInputBoundary {
     @Override
     public ContestOutputData execute(ContestInputData contestInputData) throws ContestException {
         game = gameDAO.get(contestInputData.getGameId());
+        if (game == null) {
+            throw new ContestException("Game not found");
+        }
         if (contestInputData.getIsContest()) {
             player = game.getPlayer(contestInputData.getPlayerId());
             List<String> words = game.getLastPlay().getWords();

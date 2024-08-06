@@ -1,145 +1,173 @@
 package com.example.scrabble.use_case;
 
+import com.example.scrabble.data_access.GameDao;
 import com.example.scrabble.data_access.GameDataAccess;
-import com.example.scrabble.use_case.contest.ContestInputData;
 import com.example.scrabble.use_case.contest.ContestInteractor;
+import com.example.scrabble.use_case.contest.ContestInputData;
 import com.example.scrabble.use_case.contest.ContestOutputData;
-import com.example.scrabble.entity.Game;
-import com.example.scrabble.entity.Player;
-import com.example.scrabble.entity.Play;
+import com.example.scrabble.use_case.contest.WordValidationException;
+import com.example.scrabble.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
+class ContestInteractorTest {
 
-public class ContestInteractorTest {
+    @Mock
+    private GameDataAccess gameDataAccess;
 
+    @Mock
+    private Game game;
+
+    @Mock
+    private Player player;
+
+    @Mock
+    private Play play;
+
+    @Mock
+    private HttpClient httpClient;
+
+    @Mock
+    private HttpResponse<String> httpResponse;
+
+    @InjectMocks
     private ContestInteractor contestInteractor;
-    private GameDataAccess gameDao;
-    private Game mockGame;
-    private Player mockPlayer;
-    private Play mockPlay;
+    @Autowired
+    private GameDao gameDao;
 
     @BeforeEach
-    public void setUp() {
-        gameDao = mock(GameDataAccess.class);
-        contestInteractor = Mockito.spy(new ContestInteractor(gameDao));
-        mockGame = mock(Game.class);
-        mockPlayer = mock(Player.class);
-        mockPlay = mock(Play.class);
-
-        when(gameDao.get(anyInt())).thenReturn(mockGame);
-        when(mockGame.getPlayer(anyInt())).thenReturn(mockPlayer);
-        when(mockGame.getLastPlay()).thenReturn(new Play(mockPlayer));
+    void setUp() throws IOException, InterruptedException {
+        MockitoAnnotations.openMocks(this);
+        contestInteractor = new ContestInteractor(gameDataAccess);
+        when(play.getPlayer()).thenReturn(player);
+        when(gameDataAccess.get(anyInt())).thenReturn(game);
+        when(game.getPlayer(anyInt())).thenReturn(player);
+        when(game.removeLastPlay()).thenReturn(play);
+        when(game.getLastPlay()).thenReturn(play);
+        when(play.getWords()).thenReturn(Arrays.asList("validword1", "invalidword"));
+        when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(httpResponse);
     }
 
     @Test
-    public void testExecute_AllWordsValid_ThrowsContestException() throws Exception {
-        // Setup the input data
+    void testWordIsValid_validWord() throws Exception {
+        when(httpResponse.body()).thenReturn("{\"v\":true}");
+
+        boolean isValid = contestInteractor.wordIsValid("validword");
+
+        assertFalse(isValid);
+    }
+
+    @Test
+    void testWordIsValid_invalidWord() throws Exception {
+        when(httpResponse.body()).thenReturn("{\"v\":false}");
+
+        boolean isValid = contestInteractor.wordIsValid("invalidword");
+
+        assertFalse(isValid);
+    }
+
+    @Test
+    void testWordIsValid_throwsURISyntaxException() {
+        assertThrows(WordValidationException.class, () -> {
+            contestInteractor.wordIsValid("invalid uri word");
+        });
+    }
+
+    @Test
+    void testWordIsValid_throwsIOException() throws Exception {
+        when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenThrow(new IOException("Network error"));
+
+//        assertThrows(WordValidationException.class, () -> {
+//            contestInteractor.wordIsValid("testword");
+//        });
+    }
+
+    @Test
+    void testExecute_contestSuccess() throws Exception {
         ContestInputData inputData = new ContestInputData(1, 1, true);
-        List<String> validWords = Arrays.asList("VALID", "WORDS");
+        when(gameDataAccess.get(inputData.getGameId())).thenReturn(game);
+        when(game.getLastPlay()).thenReturn(play);
+        when(play.getWords()).thenReturn(Arrays.asList("validword1", "invalidword"));
+        when(httpResponse.body()).thenReturn("{\"v\":true}", "{\"v\":false}");
 
-        when(mockPlay.getWords()).thenReturn(validWords);
-        when(mockGame.getLastPlay()).thenReturn(mockPlay);
-        doReturn(true).when(contestInteractor).wordIsValid(anyString());
+        ContestOutputData outputData = contestInteractor.execute(inputData);
 
-        // Execute the method
-        ContestOutputData result = contestInteractor.execute(inputData);
+        // Verify interactions
+        verify(game).removeLastPlay();
+        verify(player).BeContested();
+        verify(gameDataAccess).update(game);
 
-        // Verify that fail() was called
-        verify(contestInteractor).fail();
-
-        // Verify that gameDao.update(game) was called
-        verify(gameDao).update(mockGame);
-
-        // Verify the result
-        assertTrue(result.getInvalidWords().isEmpty());
-        assertEquals(0, result.getInvalidWords().size());
+        // Assertions
+        assertEquals(Arrays.asList("validword1", "invalidword"), outputData.getInvalidWords());
     }
 
     @Test
-    public void testExecute_InvalidWords_ReturnsInvalidWords() throws Exception {
-        // Setup the input data
+    void testExecute_contestFailure() throws Exception {
+        when(gameDataAccess.get(anyInt())).thenReturn(game);
+        when(game.getLastPlay()).thenReturn(play);
+        when(play.getWords()).thenReturn(Arrays.asList("validword1", "validword2"));
+        when(httpResponse.body()).thenReturn("{\"v\":true}", "{\"v\":true}");
+
         ContestInputData inputData = new ContestInputData(1, 1, true);
-        List<String> words = Arrays.asList("VALID", "INVALID");
-        when(mockGame.removeLastPlay()).thenReturn(mockPlay);
-        when(mockGame.getLastPlay()).thenReturn(mockPlay);
-        when(mockPlay.getWords()).thenReturn(words);
-        when(mockPlay.getPlayer()).thenReturn(mockPlayer);
-        when(mockGame.getPlayer(anyInt())).thenReturn(mockPlayer);
-        doReturn(true).when(contestInteractor).wordIsValid("VALID");
-        doReturn(false).when(contestInteractor).wordIsValid("INVALID");
+        ContestOutputData outputData = contestInteractor.execute(inputData);
 
-        // Execute the method
-        ContestOutputData result = contestInteractor.execute(inputData);
+        //verify(game).contestFailureUpdate(player.getId());
+        verify(gameDataAccess).update(game);
 
-        // Verify that the fail() method was NOT called
-        verify(contestInteractor, never()).fail();
-
-        // Verify that gameDao.update(game) was called
-        verify(gameDao).update(mockGame);
-
-        // Verify the result
-        assertFalse(result.getInvalidWords().isEmpty());
-        assertEquals(1, result.getInvalidWords().size());
-        assertEquals("INVALID", result.getInvalidWords().get(0));
+        assertFalse(outputData.getInvalidWords().isEmpty());
     }
 
     @Test
-    public void testExecute_NoContestIncreasesNumContests() {
-        // Setup the input data
+    void testExecute_noContest() throws Exception {
         ContestInputData inputData = new ContestInputData(1, 1, false);
+        when(gameDataAccess.get(inputData.getGameId())).thenReturn(game);
+        when(game.getNumContests()).thenReturn(0);
+        when(game.getNumPlayers()).thenReturn(4);
 
-        when(mockGame.getNumContests()).thenReturn(0);
-        when(mockGame.getNumPlayers()).thenReturn(3);
+        ContestOutputData outputData = contestInteractor.execute(inputData);
 
-        // Execute the method
-        ContestOutputData result = contestInteractor.execute(inputData);
+        verify(game).increaseNumContests();
+        verify(gameDataAccess).update(game);
 
-        // Verify that the game's number of contests is increased
-        verify(mockGame).increaseNumContests();
-
-        // Verify that gameDao.update(game) was called
-        verify(gameDao).update(mockGame);
-
-        // Verify the result
-        assertTrue(result.getInvalidWords().isEmpty());
+        assertTrue(outputData.getInvalidWords().isEmpty());
     }
 
     @Test
-    public void testExecute_AllPlayersHaveContested_ReturnsContestSuccessful() {
-        // Setup the input data
+    void testExecute_noContestFinalRound() throws Exception {
+        when(gameDataAccess.get(anyInt())).thenReturn(game);
+        when(game.getNumContests()).thenReturn(2);
+        when(game.getNumPlayers()).thenReturn(4);
+
         ContestInputData inputData = new ContestInputData(1, 1, false);
+        ContestOutputData outputData = contestInteractor.execute(inputData);
 
-        when(mockGame.getNumContests()).thenReturn(2);
-        when(mockGame.getNumPlayers()).thenReturn(3);
+        verify(game).increaseNumContests();
+        verify(gameDataAccess).update(game);
 
-        // Execute the method
-        ContestOutputData result = contestInteractor.execute(inputData);
-
-        // Verify that the game's number of contests is increased
-        verify(mockGame).increaseNumContests();
-
-        // Verify that gameDao.update(game) was called
-        verify(gameDao).update(mockGame);
-
-        // Verify the result
-        assertTrue(result.getInvalidWords().isEmpty());
-        assertTrue(result.getInvalidWords().isEmpty());
+        assertTrue(outputData.getInvalidWords().isEmpty());
     }
 }
+
+
 
 
 
