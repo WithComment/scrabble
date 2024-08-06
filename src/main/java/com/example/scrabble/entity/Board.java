@@ -61,7 +61,7 @@ public class Board implements Serializable, Iterable<Tile> {
         addToBoardSymmetrically(2, 6, 1, 2, board);
         addToBoardSymmetrically(3, 7, 1, 2, board);
         addToBoardSymmetrically(6, 6, 1, 2, board);
-        addToBoardSymmetrically(2, 5, 1, 3, board);
+        addToBoardSymmetrically(1, 5, 1, 3, board);
         addToBoardSymmetrically(5, 5, 1, 3, board);
 
         board[7][7] = new Tile(2, 1, null);
