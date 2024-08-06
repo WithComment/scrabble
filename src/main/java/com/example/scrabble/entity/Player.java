@@ -15,7 +15,6 @@ import java.util.List;
  * A player has an ID, an inventory of letters, a score, and an unstable score.
  */
 public class Player implements Serializable {
-    private static int idCounter = 0;
     private int id;
     private String name;
     private List<Letter> inventory;
@@ -25,17 +24,17 @@ public class Player implements Serializable {
     /**
      * Constructs a Player with a specified ID.
      */
-    public Player() {
-        this.id = idCounter++;
+    public Player(int id) {
+        this.id = id;
         this.name = "Player " + id;
         this.inventory = new ArrayList<>();
         this.score = 0;
         this.tempScore = 0;
     }
 
-    public Player(String name) {
+    public Player(String name, int id) {
         this.name = name;
-        this.id = idCounter++;
+        this.id = id;
         this.inventory = new ArrayList<>();
         this.score = 0;
         this.tempScore = 0;

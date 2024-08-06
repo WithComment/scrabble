@@ -35,6 +35,8 @@ public class Game implements Serializable {
 
     private int numContests;
 
+    private int playerIDCounter;
+
     /**
      * Constructs a new Game instance.
      * Initializes the game with a unique ID, a new board, empty player list, empty play history, and a new letter bag.
@@ -51,12 +53,13 @@ public class Game implements Serializable {
         this.numContestFailed = new ArrayList<>(Collections.nCopies(players.size(), 0));
         this.currentPlay = null;
         this.numContests = 0;
+        this.playerIDCounter = 0;
     }
 
     public Game(int numOfPlayers) {
         this();
         for (int i = 0; i < numOfPlayers; i++) {
-            players.add(new Player());
+            players.add(new Player(playerIDCounter++));
             numContestFailed.add(0);
         }
         for (Player player : players) {
@@ -67,7 +70,7 @@ public class Game implements Serializable {
     public Game(List<String> playerNames) {
         this();
         for (String playerName : playerNames) {
-            players.add(new Player(playerName));
+            players.add(new Player(playerName, playerIDCounter++));
             numContestFailed.add(0);
         }
         for (Player player : players) {
@@ -160,7 +163,7 @@ public class Game implements Serializable {
      * Initializes the player with a unique ID and adds them to the player list.
      */
     public void addPlayer() {
-        Player player = new Player();
+        Player player = new Player(playerIDCounter++);
         players.add(player);
         leaderboard.add(player);
         this.numContestFailed.add(0);
