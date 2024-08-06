@@ -4,6 +4,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.HashMap;
+import java.util.List;
 
 import com.example.scrabble.use_case.redraw_letters.RedrawInputBoundary;
 import com.example.scrabble.use_case.redraw_letters.RedrawInputData;
