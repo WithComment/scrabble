@@ -65,7 +65,7 @@ public class ContestInteractor implements ContestInputBoundary {
         game = gameDAO.get(contestInputData.getGameId());
         if (contestInputData.getIsContest()) {
             player = game.getPlayer(contestInputData.getPlayerId());
-            List<String> words = game.getCurrentPlay().getWords();
+            List<String> words = game.getLastPlay().getWords();
             List<String> invalidWords = new LinkedList<>();
 
             try {
@@ -80,7 +80,7 @@ public class ContestInteractor implements ContestInputBoundary {
                     contestedPlayer.BeContested();
                 } else {
                     fail();
-                    throw new ContestException("All words in last move are valid.");
+//                    throw new ContestException("All words in last move are valid.");
                 }
             } catch (NoSuchElementException e) {
                 fail();
