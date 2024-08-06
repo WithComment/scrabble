@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.scrabble.use_case.redraw_letters.RedrawInputData;
+import com.example.scrabble.use_case.redraw_letters.RedrawInteractor;
+import com.example.scrabble.use_case.redraw_letters.RedrawOutputData;
 import com.example.scrabble.use_case.remove_letter.RemoveLetterInputData;
 import com.example.scrabble.use_case.remove_letter.RemoveLetterInteractor;
 import com.example.scrabble.use_case.remove_letter.RemoveLetterOutputData;
@@ -69,22 +72,23 @@ public class GameController {
   private final ContestInputBoundary contestInteractor;
   private final EndGameInputBoundary endGameInteractor;
     private final RemoveLetterInteractor removeLetterInteractor;
+    private final RedrawInteractor redrawInteractor;
     private Logger logger = LoggerFactory.getLogger(GameController.class);
 
   @Autowired
   public GameController(
-      SimpMessagingTemplate template,
-      GameDataAccess gameDao,
-      CreateGameInputBoundary createGameInteractor,
-      JoinGameInputBoundary joinGameInteractor,
-      StartGameInputBoundary startGameInteractor,
-      PlaceLetterInputBoundary placeLetterInteractor,
-      ConfirmPlayInputBoundary confirmPlayInteractor,
-      EndTurnInputBoundary endTurnInteractor,
-      GetLeaderboardInputBoundary getLeaderboardInteractor,
-      ContestInputBoundary contestInteractor,
-      EndGameInputBoundary endGameInteractor,
-      RemoveLetterInteractor removeLetterInteractor) {
+          SimpMessagingTemplate template,
+          GameDataAccess gameDao,
+          CreateGameInputBoundary createGameInteractor,
+          JoinGameInputBoundary joinGameInteractor,
+          StartGameInputBoundary startGameInteractor,
+          PlaceLetterInputBoundary placeLetterInteractor,
+          ConfirmPlayInputBoundary confirmPlayInteractor,
+          EndTurnInputBoundary endTurnInteractor,
+          GetLeaderboardInputBoundary getLeaderboardInteractor,
+          ContestInputBoundary contestInteractor,
+          EndGameInputBoundary endGameInteractor,
+          RemoveLetterInteractor removeLetterInteractor, RedrawInteractor redrawInteractor) {
     this.template = template;
     this.gameDao = gameDao;
     this.createGameInteractor = createGameInteractor;
@@ -97,6 +101,7 @@ public class GameController {
     this.contestInteractor = contestInteractor;
     this.endGameInteractor = endGameInteractor;
       this.removeLetterInteractor = removeLetterInteractor;
+      this.redrawInteractor = redrawInteractor;
   }
 
   private void notifyFrontend(int gameId, String type) {
@@ -171,6 +176,18 @@ public class GameController {
         RemoveLetterOutputData output = removeLetterInteractor.execute(new RemoveLetterInputData(gameId, x, y));
         notifyFrontend(gameId, "remove_letter");
         EntityModel<RemoveLetterOutputData> entityModel = EntityModel.of(output,
+                linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
+    }
+
+    @PostMapping("/{gameId}/redraw_letters/")
+    public ResponseEntity<EntityModel<RedrawOutputData>> redrawLetters(@PathVariable int gameId,
+                                                                      @RequestBody HashMap<String, Object> input) {
+        List<String> characters = (List<String>) input.get("characters");
+        logger.info("Game ID: {} Redrawing Letters", gameId);
+        RedrawOutputData output = redrawInteractor.execute(new RedrawInputData(gameId, characters));
+        notifyFrontend(gameId, "redraw_letters");
+        EntityModel<RedrawOutputData> entityModel = EntityModel.of(output,
                 linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
         return ResponseEntity.ok(entityModel);
     }

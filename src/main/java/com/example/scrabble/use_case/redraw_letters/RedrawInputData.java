@@ -4,11 +4,11 @@ import java.util.List;
 
 public class RedrawInputData {
     private int gameId;
-    private List<Character> characters;
+    private List<String> characters;
 
     public RedrawInputData() {}
 
-    public RedrawInputData(int gameId, List<Character> letters) {
+    public RedrawInputData(int gameId, List<String> letters) {
         this.gameId = gameId;
         this.characters = letters;
     }
@@ -17,7 +17,7 @@ public class RedrawInputData {
         return gameId;
     }
 
-    public List<Character> getCharacters() {
+    public List<String> getCharacters() {
         return characters;
     }
 

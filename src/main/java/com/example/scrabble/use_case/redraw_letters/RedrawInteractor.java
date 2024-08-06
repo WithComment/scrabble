@@ -20,13 +20,13 @@ public class RedrawInteractor implements RedrawInputBoundary{
         this.gameDao = gameDao;
     }
 
-    private List<Letter> getLetters(List<Letter> inventory, List<Character> characters) {
+    private List<Letter> getLetters(List<Letter> inventory, List<String> characters) {
         List<Letter> letters = new ArrayList<>();
         List<Letter> toRemove = new ArrayList<>();
 
-        for (char character : characters) {
+        for (String character : characters) {
             for (Letter letter : inventory) {
-                if (letter.getLetter() == character) {
+                if (letter.getLetter() == character.charAt(0)) {
                     letters.add(letter);
                     toRemove.add(letter);
                     break; // Stop after finding the first matching letter
@@ -70,6 +70,7 @@ public class RedrawInteractor implements RedrawInputBoundary{
             playerPresenter.prepareFailView("There are less than 7 letters in the bag");
         }
          */
+        gameDao.update(game);
         return new RedrawOutputData(drawSuccessful, newLetters);
     }
 }
