@@ -1,11 +1,10 @@
 package com.example.scrabble.use_case.join_game;
 
-import com.example.scrabble.entity.Game;
-import com.example.scrabble.data_access.GameDataAccess;
-
 public class JoinGameInputData {
-    private final String playerName;
-    private final int gameId;
+    private String playerName;
+    private int gameId;
+
+    public JoinGameInputData() {}
 
     public JoinGameInputData(String playerName, int gameId){
         this.playerName = playerName;
