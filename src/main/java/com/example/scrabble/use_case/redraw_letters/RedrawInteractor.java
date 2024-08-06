@@ -70,6 +70,7 @@ public class RedrawInteractor implements RedrawInputBoundary{
             playerPresenter.prepareFailView("There are less than 7 letters in the bag");
         }
          */
+        gameDao.update(game);
         return new RedrawOutputData(drawSuccessful, newLetters);
     }
 }
