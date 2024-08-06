@@ -208,6 +208,11 @@ public class GameController {
         return ResponseEntity.ok(entityModel);
     }
 
+    @PostMapping("/{gameId}/broadcast/")
+    public void broadcastValidPlay(@PathVariable int gameId){
+        notifyFrontend(gameId, "valid-confirm-play");
+    }
+
     @PostMapping("/{gameId}/end_turn/")
     public ResponseEntity<EntityModel<EndTurnOutputData>> endTurn(@PathVariable int gameId, @RequestBody EndTurnInputData input) {
         logger.info("Game ID: {} Ending turn", input.getGameId());
