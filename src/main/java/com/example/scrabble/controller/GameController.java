@@ -216,11 +216,11 @@ public class GameController {
 //        return ResponseEntity.ok(entityModel);
 //    }
 
-   @PostMapping("/{gameId}/endgame/")
+   @PostMapping("/{gameId}/end_game/")
    public ResponseEntity<EntityModel<EndGameOutputData>> endGame(@PathVariable int gameId, @RequestBody EndGameInputData input) {
        logger.info("Ending game ID: {}", gameId);
        EndGameOutputData output = endGameInteractor.execute(input);
-       notifyFrontend(gameId, "endgame");
+       notifyFrontend(gameId, "end_game");
        EntityModel<EndGameOutputData> entityModel = EntityModel.of(output,
            linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
        return ResponseEntity.ok(entityModel);
@@ -244,5 +244,20 @@ class Message {
     }
     public String getType() {
       return type;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj){ return true; }
+
+        if (obj == null || getClass() != obj.getClass()){ return false; }
+
+        Message other = (Message) obj;
+        return (data.equals(other.data)) && (type.equals(other.type));
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" + "data=" + data + ", type='" + type + '\'' + '}';
     }
 }
