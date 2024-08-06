@@ -370,6 +370,18 @@ public class Game implements Serializable {
     }
 
     /**
+     * Updates the list of players by adding a new player.
+     *
+     * @param name the name of the player to be added
+     */
+    public void addPlayer(String name) {
+        Player player = new Player(name, playerIDCounter++);
+        players.add(player);
+        leaderboard.add(player);
+        numContestFailed.add(0);
+    }
+
+    /**
      * Checks if the turn has ended.
      *
      * @return true if the turn has ended, false otherwise
