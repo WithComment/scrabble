@@ -164,11 +164,12 @@ public class Game implements Serializable {
      * Adds a new player to the game.
      * Initializes the player with a unique ID and adds them to the player list.
      */
-    public void addPlayer() {
+    public Player addPlayer() {
         Player player = new Player(playerIDCounter++);
         players.add(player);
         leaderboard.add(player);
         this.numContestFailed.add(0);
+        return player;
     }
 
     /**
@@ -363,24 +364,14 @@ public class Game implements Serializable {
     /**
      * Updates the list of players by adding a new player.
      *
-     * @param player the player to be added
-     */
-    public void addPlayer(Player player) {
-        players.add(player);
-        leaderboard.add(player);
-        numContestFailed.add(0);
-    }
-
-    /**
-     * Updates the list of players by adding a new player.
-     *
      * @param name the name of the player to be added
      */
-    public void addPlayer(String name) {
+    public Player addPlayer(String name) {
         Player player = new Player(name, playerIDCounter++);
         players.add(player);
         leaderboard.add(player);
         numContestFailed.add(0);
+        return player;
     }
 
     /**
