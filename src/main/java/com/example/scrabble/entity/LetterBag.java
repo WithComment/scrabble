@@ -1,20 +1,16 @@
 package com.example.scrabble.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectStreamException;
-import java.io.Serializable;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Collections;
+import java.util.*;
 
 /**
  * The {@code LetterBag} class represents a bag of letters used in a game.
@@ -30,6 +26,11 @@ public class LetterBag implements Serializable {
   public LetterBag() {
     bag = new ArrayList<>();
     initializeBag(Paths.get("static", "letters.txt"));
+  }
+
+  @JsonCreator
+  public LetterBag(@JsonProperty("bag") List<Letter> bag){
+    this.bag = bag;
   }
 
   /**
@@ -86,9 +87,7 @@ public class LetterBag implements Serializable {
    * @param letters the list of {@code Letter} objects to be added
    */
   public void addLetters(List<Letter> letters) {
-    for (Letter letter : letters) {
-      bag.add(letter);
-    }
+    bag.addAll(letters);
   }
 
   /**
@@ -121,24 +120,66 @@ public class LetterBag implements Serializable {
    *
    * @return the number of letters in the letter bag
    */
+  @JsonIgnore
   public int getLength() {
     return this.bag.size();
   }
 
+  public List<Letter> getBag() {
+    return bag;
+  }
+
   // Custom serialization method
+  @Serial
   private void writeObject(ObjectOutputStream out) throws IOException {
     out.defaultWriteObject();
   }
 
   // Custom deserialization method
+  @Serial
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject();
   }
 
   // Custom method for when no data is found during deserialization
+  @Serial
   private void readObjectNoData() throws ObjectStreamException {
     bag = new ArrayList<>();
     initializeBag(Paths.get("static", "letters.txt"));
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj){return true;}
+
+    if (obj == null || getClass() != obj.getClass()){return false;}
+
+    LetterBag other = (LetterBag) obj;
+
+    if (bag.size() != other.bag.size()) {
+      return false;
+    }
+
+    Map<Character, Integer> map1 = new HashMap<>();
+    Map<Character, Integer> map2 = new HashMap<>();
+
+    boolean flag = true;
+    for(int i = 0; i < bag.size(); i++){
+      map1.put(bag.get(i).getLetter(), map1.getOrDefault(bag.get(i).getLetter(), 0) + 1);
+      map2.put(other.bag.get(i).getLetter(), map2.getOrDefault(other.bag.get(i).getLetter(), 0) + 1);
+      if(!bag.get(i).equals(other.bag.get(i))){
+        flag = false;
+      }
+    }
+    return flag;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("LetterBag contains:\n");
+    for (Letter letter : bag) {
+      sb.append(letter.toString()).append("\n");
+    }
+    return sb.toString();
+  }
 }

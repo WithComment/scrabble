@@ -9,11 +9,11 @@ function Redraw({ ButtonViewModel }){
             x : 0,
             y : 0,
             };
-        viewModel.sendInput(input);
+        viewModel.handleInput(input);
         }
     return (
         <button className='input-button' id='redraw-button' onClick={handleClick}>
-            Redraw
+            Redraw Selected
         </button>
     )
 }

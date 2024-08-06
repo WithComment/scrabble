@@ -1,5 +1,7 @@
 package com.example.scrabble.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -13,7 +15,6 @@ import java.util.List;
  * A player has an ID, an inventory of letters, a score, and an unstable score.
  */
 public class Player implements Serializable {
-    private static int idCounter = 0;
     private int id;
     private String name;
     private List<Letter> inventory;
@@ -23,20 +24,29 @@ public class Player implements Serializable {
     /**
      * Constructs a Player with a specified ID.
      */
-    public Player() {
-        this.id = idCounter++;
+    public Player(int id) {
+        this.id = id;
         this.name = "Player " + id;
         this.inventory = new ArrayList<>();
         this.score = 0;
         this.tempScore = 0;
     }
 
-    public Player(String name) {
+    public Player(String name, int id) {
         this.name = name;
-        this.id = idCounter++;
+        this.id = id;
         this.inventory = new ArrayList<>();
         this.score = 0;
         this.tempScore = 0;
+    }
+
+    @JsonCreator
+    public Player(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("inventory") List<Letter> inventory, @JsonProperty("score") int score, @JsonProperty("tempScore") int tempScore) {
+        this.id = id;
+        this.name = name;
+        this.inventory = inventory;
+        this.score = score;
+        this.tempScore = tempScore;
     }
 
     public Player(JSONObject json){
@@ -87,6 +97,15 @@ public class Player implements Serializable {
         this.inventory.remove(letter);
     }
 
+    public Letter removeLetter(char letter) {
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.get(i).getLetter() == letter) {
+                return inventory.remove(i);
+            }
+        }
+        return null;
+    }
+
     /**
      * Gets the list of words formed in the play.
      */
@@ -103,8 +122,10 @@ public class Player implements Serializable {
         this.inventory.addAll(tiles);
     }
 
-    public void addTempScore(int score) {
-        this.score += score;
+    
+
+    public void setTempScore(int score) {
+        this.score = score;
     }
 
     /**
@@ -198,6 +219,21 @@ public class Player implements Serializable {
     }
 
     public void eraseTempScore() {
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj){return true;}
+
+        if (obj == null || getClass() != obj.getClass()){return false;}
+
+        Player other = (Player) obj;
+
+        return  (id == other.id) &&
+                (name.equals(other.name)) &&
+                (inventory.equals(other.inventory)) &&
+                (score == other.score) &&
+                (tempScore == other.tempScore);
     }
 }
 

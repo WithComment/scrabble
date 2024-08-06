@@ -1,20 +1,15 @@
 package com.example.scrabble.use_case.remove_letter;
 
+import com.example.scrabble.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.scrabble.data_access.GameDataAccess;
-import com.example.scrabble.entity.Board;
-import com.example.scrabble.entity.Game;
-import com.example.scrabble.entity.Play;
-import com.example.scrabble.entity.Player;
-import com.example.scrabble.entity.Tile;
 import com.example.scrabble.use_case.InvalidPlayException;
-import com.example.scrabble.entity.Move;
 
 @Service
 public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
-    
+
     private final GameDataAccess gameDao;
 
     @Autowired
@@ -32,7 +27,7 @@ public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
         int y = data.getY();
         boolean isValidClick = false;
         for (Move move : play.getMoves()){
-            if (move.getLetter() == selectedTile.getLetter()
+            if (move.getLetter().equals(selectedTile.getLetter())
                     && move.getX() == x
                     && move.getY() == y){
                 isValidClick = true;
@@ -43,7 +38,7 @@ public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
             throw new InvalidPlayException("Remove failed.");
         } else {
             play.removeMove(x, y);
-            player.addLetter(selectedTile.getLetter());
+            game.getPlayer(player.getId()).addLetter(selectedTile.getLetter());
             selectedTile.removeLetter();
             gameDao.update(game);
             return new RemoveLetterOutputData(true, game.getBoard(), player.getInventory());

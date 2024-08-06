@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 public class TileTest {
 
-  private static Letter a = new Letter('a', 1);
+  private static final Letter a = new Letter('a', 1);
 
   @Test
   void testConfirm() {

@@ -1,13 +1,13 @@
 package com.example.scrabble.use_case.confirm_play;
 
 public class ConfirmPlayOutputData {
-    private final int tempScore;
+    private final boolean isValid;
 
-    public ConfirmPlayOutputData(int tempScore) {
-        this.tempScore = tempScore;
+    public ConfirmPlayOutputData(boolean isValid) {
+        this.isValid = isValid;
     }
 
-    public int getTempScore() {
-        return tempScore;
+    public boolean isValid() {
+        return isValid;
     }
 }

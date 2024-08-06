@@ -4,7 +4,6 @@ import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Board;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Player;
-import com.example.scrabble.entity.TurnManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ import java.util.List;
  * handling contests, updating the board, and managing player states.
  */
 @Service
-public class EndTurnInteractor implements GetEndTurnInputBoundary {
+public class EndTurnInteractor implements EndTurnInputBoundary {
     private final GameDataAccess gameDataAccess;
 
     /**
@@ -31,15 +30,10 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
     }
 
     @Override
-    public GetEndTurnOutputData execute(GetEndTurnInputData getEndTurnInputData) {
+    public EndTurnOutputData execute(EndTurnInputData getEndTurnInputData) {
         Game game = gameDataAccess.get(getEndTurnInputData.getGameId());
-        TurnManager turnManager = game.getTurnManager();
 
-        for (Player player : game.getPlayers()) {
-            turnManager.addPlayer(player);
-        }
-
-        if (turnManager.isEndTurn()) {
+        if (game.isEndTurn()) {
             Board currentBoard = game.getBoard();
             for (List<Integer> wordToBeConfirmed : getEndTurnInputData.getWordsToBeConfirmed()) {
                 int x = wordToBeConfirmed.get(0);
@@ -47,17 +41,17 @@ public class EndTurnInteractor implements GetEndTurnInputBoundary {
                 currentBoard.confirm(x, y);
             }
 
-            Player currentPlayer = turnManager.getCurrentPlayer();
+            Player currentPlayer = game.getCurrentPlayer();
 
             int toDraw = 7 - currentPlayer.getInventory().size();
             currentPlayer.addLetter(game.getLetterBag().drawLetters(toDraw));
-            turnManager.endTurn();
-            turnManager.startTurn();
+            game.endTurn();
+            game.startTurn();
         }
 
 
         gameDataAccess.update(game);
-        return new GetEndTurnOutputData(game.getId());
+        return new EndTurnOutputData(game.getId());
     }
 }
 

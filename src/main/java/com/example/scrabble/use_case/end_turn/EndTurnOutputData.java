@@ -1,12 +1,12 @@
 package com.example.scrabble.use_case.end_turn;
 
 
-public class GetEndTurnOutputData {
+public class EndTurnOutputData {
     private int gameId;
 
-    public GetEndTurnOutputData() {}
+    public EndTurnOutputData() {}
 
-    public GetEndTurnOutputData(int gameId) {
+    public EndTurnOutputData(int gameId) {
         this.gameId = gameId;
     }
 

@@ -43,4 +43,17 @@ public class LeaderboardEntry implements Comparable<LeaderboardEntry>{
     {
         return this.score - o.getScore();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj){return true;}
+
+        if (obj == null || getClass() != obj.getClass()){return false;}
+
+        LeaderboardEntry other = (LeaderboardEntry) obj;
+
+        return  (player.equals(other.player)) &&
+                (score == other.score);
+    }
+
 }

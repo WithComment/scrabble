@@ -20,17 +20,28 @@ public class RedrawInteractor implements RedrawInputBoundary{
         this.gameDao = gameDao;
     }
 
-    private List<Letter> getLetters(List<Letter> inventory, List<Character> characters) {
+    private List<Letter> getLetters(List<Letter> inventory, List<String> characters) {
         List<Letter> letters = new ArrayList<>();
-        for(char character : characters) {
-            for (int i = 0; i < inventory.size(); i++) {
-                if (inventory.get(i).getLetter() == character) {
-                    letters.add(inventory.remove(i));
+        List<Letter> toRemove = new ArrayList<>();
+
+        for (String character : characters) {
+            for (Letter letter : inventory) {
+                if (letter.getLetter() == character.charAt(0)) {
+                    letters.add(letter);
+                    toRemove.add(letter);
+                    break; // Stop after finding the first matching letter
                 }
             }
         }
+
+        // Ensure inventory is mutable
+        List<Letter> mutableInventory = new ArrayList<>(inventory);
+        mutableInventory.removeAll(toRemove);
+
         return letters;
     }
+
+
 
     @Override
     public RedrawOutputData execute(RedrawInputData redrawInputData) {
@@ -50,15 +61,7 @@ public class RedrawInteractor implements RedrawInputBoundary{
             player.addLetter(newLetters);
             drawSuccessful = true;
         }
-
-        /*
-        if (drawSuccessful) {
-            List<Letter> hand = player.getInventory();
-            playerPresenter.prepareSuccessView(new RedrawOutputData(true, hand));
-        } else{
-            playerPresenter.prepareFailView("There are less than 7 letters in the bag");
-        }
-         */
+        gameDao.update(game);
         return new RedrawOutputData(drawSuccessful, newLetters);
     }
 }

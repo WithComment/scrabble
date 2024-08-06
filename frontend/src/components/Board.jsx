@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React from 'react';
 import styles from './Board.module.css';
 import './Board.css';
 import Tile from './Tile'
@@ -12,14 +12,15 @@ function Board({ board, boardViewModel }){
                 x : xCoord,
                 y : yCoord,
             }
-            viewModel. sendInput(input)
+            viewModel.handleInput(input)
         } else if (e.type === "contextmenu"){
+            e.preventDefault();
             let input = {
                 type : 'rclick',
                 x : xCoord,
                 y : yCoord,
             }
-            viewModel. sendInput(input)
+            viewModel.handleInput(input)
         }
     }
 
@@ -30,7 +31,7 @@ function Board({ board, boardViewModel }){
                 <div className={styles.row}>
                     {row.map((tile, x) =>{
                     return (
-                        <Tile id={`t${x}-${y}`} intitialContent={tile} x={x} y={y} handleClick={handleClick}/>
+                        <Tile id={`t${x}-${y}`} content={tile} x={x} y={y} handleClick={handleClick}/>
                         )
                     })}
                 </div>

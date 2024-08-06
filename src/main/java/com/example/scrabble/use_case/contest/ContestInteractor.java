@@ -14,6 +14,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -36,7 +37,7 @@ public class ContestInteractor implements ContestInputBoundary {
      * @return {@code true} if the word is valid, {@code false} otherwise
      * @throws WordValidationException if there is an issue with the URL or network communication
      */
-    private boolean wordIsValid(String word) throws WordValidationException {
+    public boolean wordIsValid(String word) throws WordValidationException {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI("https://scrabble.us.wordsdb.ws/validateDict/" + word))
@@ -55,42 +56,48 @@ public class ContestInteractor implements ContestInputBoundary {
         }
     }
 
-    private void fail() {
-        TurnManager turnManager = game.getTurnManager();
-        turnManager.contestFailureUpdate(player.getId());
+    public void fail() {
+        game.contestFailureUpdate(player.getId());
     }
 
     @Override
     public ContestOutputData execute(ContestInputData contestInputData) throws ContestException {
         game = gameDAO.get(contestInputData.getGameId());
-        player = game.getPlayer(contestInputData.getPlayerId());
-
-        try {
-            List<String> words = game.getCurrentPlay().getWords();
-            List<String> invalidWords = new LinkedList<>();
-            for (String word : words) {
-                if (!wordIsValid(word)) {
-                    invalidWords.add(word);
-                }
-            }
-            if (!invalidWords.isEmpty()) {
-                Play lastPlay = game.removeLastPlay();
-                Player contestedPlayer = lastPlay.getPlayer();
-                contestedPlayer.BeContested();
-                return new ContestOutputData(invalidWords);
-            } else {
-                fail();
-                throw new ContestException("All words in last move are valid.");
-            }
-        } catch (NoSuchElementException e) {
-            fail();
-            throw new ContestException("No player has made any move.");
-        } catch (WordValidationException e) {
-            fail();
-            throw new ContestException("Word validation failed.", e);
+        if (game == null) {
+            throw new ContestException("Game not found");
         }
-        finally {
+        if (contestInputData.getIsContest()) {
+            player = game.getPlayer(contestInputData.getPlayerId());
+            List<String> words = game.getLastPlay().getWords();
+            List<String> invalidWords = new LinkedList<>();
+
+            //try {
+                for (String word : words) {
+                    if (!wordIsValid(word)) {
+                        invalidWords.add(word);
+                    }
+                }
+                if (!invalidWords.isEmpty()) {
+                    Play lastPlay = game.removeLastPlay();
+                    Player contestedPlayer = lastPlay.getPlayer();
+                    contestedPlayer.BeContested();
+                } else {
+                    fail();
+//                    throw new ContestException("All words in last move are valid.");
+                }
+//            } catch (WordValidationException e) {
+//                fail();
+//                throw new ContestException("Word validation failed.", e);
+//            }
             gameDAO.update(game);
+            return new ContestOutputData(invalidWords, true);
+        }
+        game.increaseNumContests();
+        gameDAO.update(game);
+        if (game.getNumContests() >= game.getNumPlayers() - 1) {
+            return new ContestOutputData(new ArrayList<>(), true);
+        } else {
+            return new ContestOutputData(new ArrayList<>(), false);
         }
     }
 }

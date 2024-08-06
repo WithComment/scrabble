@@ -1,6 +1,5 @@
 package com.example.scrabble.use_case.confirm_play;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,6 @@ import com.example.scrabble.entity.Board;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Move;
 import com.example.scrabble.entity.Play;
-import com.example.scrabble.entity.Player;
-import com.example.scrabble.entity.Tile;
 import com.example.scrabble.use_case.InvalidPlayException;
 
 
@@ -44,8 +41,8 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
   }
 
   private boolean isNotInline(List<Move> moves) {
-    Move fMove = moves.get(0);
-    Move lMove = moves.get(moves.size() - 1);
+    Move fMove = moves.getFirst();
+    Move lMove = moves.getLast();
 
     int x, y;
     boolean inVLine, inHLine;
@@ -62,20 +59,17 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     return false;
   }
 
-  private boolean isVertical(List<Move> moves) {
-    return moves.get(0).getX() == moves.get(moves.size() - 1).getX();
-  }
-
   /**
    * Check if the letters form only one main word.
    * @param moves list of moves
    * @param board the game board
    * @return true if the letters form one main word, false otherwise.
    */
-  private boolean hasGap(List<Move> moves, Board board) {
+  private boolean hasGap(Play play, Board board) {
+    List<Move> moves = play.getMoves();
     Move fMove = moves.get(0);
     int start, end;
-    if (isVertical(moves)) {
+    if (play.isVertical()) {
       int x = fMove.getX();
       start = fMove.getY();
       end = fMove.getY();
@@ -141,105 +135,16 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     return true;
   }
 
-  private List<Tile> getVTiles(Move move, Board board) {
-    int x = move.getX();
-    int y = move.getY();
-    List<Tile> tiles = new LinkedList<>();
-    // Go to the top of a set of continuous letters.
-    while (y >= 0 && !board.getCell(x, y).isEmpty()) y--;
-    y++;
-
-    // Go to the end, add tiles to the list along the way.
-    while (y < board.getHeight() && !board.getCell(x, y).isEmpty()) {
-      tiles.add(board.getCell(x, y++));
-    }
-    if (tiles.size() <= 1) return null;
-    return tiles;
-  }
-
-  private List<Tile> getHTiles(Move move, Board board) {
-    int x = move.getX();
-    int y = move.getY();
-    List<Tile> tiles = new LinkedList<>();
-    while (x >= 0 && !board.getCell(x, y).isEmpty()) x--;
-    x++;
-    while (x < board.getWidth() && !board.getCell(x, y).isEmpty()) {
-      tiles.add(board.getCell(x++, y));
-    }
-    if (tiles.size() <= 1) return null;
-    return tiles;
-  }
-
-  private List<List<Tile>> getWordsOnTiles(List<Move> moves, Board board) {
-    List<List<Tile>> words = new LinkedList<>();
-    Move fMove = moves.get(0);
-    List<Tile> word;
-    if (isVertical(moves)) {
-      word = getVTiles(fMove, board);
-      if (word != null) {
-        words.add(word);
-      }
-      for (Move move : moves) {
-        word = getHTiles(move, board);
-        if (word != null) {
-          words.add(word);
-        }
-      }
-    } else {
-      word = getHTiles(fMove, board);
-      if (word != null) {
-        words.add(word);
-      }
-      for (Move move : moves) {
-        word = getVTiles(move, board);
-        if (word != null) {
-          words.add(word);
-        }
-      }
-    }
-    System.out.println(words);
-    return words;
-  }
-
-  private List<String> getWords(List<List<Tile>> words) {
-    List<String> wordStrings = new LinkedList<>();
-    StringBuilder word;
-    for (List<Tile> tiles : words) {
-      word = new StringBuilder();
-      for (Tile tile : tiles) {
-        word.append(tile.getLetter().getLetter());
-      }
-      wordStrings.add(word.toString());
-    }
-    return wordStrings;
-  }
-
-  private int calcScore(List<List<Tile>> words) {
-    int total = 0;
-    int wordScore, wordMult;
-    for (List<Tile> word : words) {
-      wordScore = 0;
-      wordMult = 1;
-      for (Tile tile : word) {
-        wordScore += tile.getLetterMult() * tile.getLetter().getPoints();
-        wordMult *= tile.getWordMult();
-      }
-      total += wordScore * wordMult;
-    }
-    return total;
-  }
-
   @Override
   public ConfirmPlayOutputData execute(ConfirmPlayInputData data) {
 
     Game game = gameDao.get(data.getGameId());
     Board board = game.getBoard();
-    Player player = game.getCurrentPlayer();
     Play play = game.getCurrentPlay();
     List<Move> moves = play.getMoves();
  
     if (moves.isEmpty()) {
-      return new ConfirmPlayOutputData(player.getTempScore());
+      return new ConfirmPlayOutputData(true);
     }
     
     if (moves.size() > 1) {
@@ -247,7 +152,7 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
         throw new InvalidPlayException(INLINE_MSG);
       }
 
-      if (hasGap(moves, board)) {
+      if (hasGap(play, board)) {
         throw new InvalidPlayException(CONTINUOUS_MSG);
       }
     }
@@ -259,17 +164,9 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     } else if (isIsolated(moves, board)) {
       throw new InvalidPlayException(CONNECTED_MSG);
     }
-
-    List<List<Tile>> wordsOnTiles = getWordsOnTiles(moves, board);
-    play.setWords(getWords(wordsOnTiles));
-    
-    player.addTempScore(calcScore(wordsOnTiles));
-    if (moves.size() >= 7) {
-      player.addTempScore(50);
-    }
-
+    game.addPlay(play);
     gameDao.update(game);
-    
-    return new ConfirmPlayOutputData(player.getTempScore());
+
+    return new ConfirmPlayOutputData(true);
   }
 }

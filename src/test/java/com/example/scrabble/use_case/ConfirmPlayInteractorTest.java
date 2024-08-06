@@ -1,113 +1,119 @@
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.example.scrabble.use_case;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.*;
-import com.example.scrabble.use_case.InvalidPlayException;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInputData;
 import com.example.scrabble.use_case.confirm_play.ConfirmPlayInteractor;
 
-class ConfirmPlayInteractorTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-  private static final Letter A = new Letter('A', 1);
-  private static final Letter B = new Letter('B', 2);
+import java.util.Arrays;
+
+public class ConfirmPlayInteractorTest {
+  private static final Letter a = new Letter('a', 1);
+
+  @Mock
+  private Game game;
+
+  @Mock
+  private Board board;
+
+  @Mock
+  private Player player;
+
+  @Mock
+  private Play play;
 
   @Mock
   private GameDataAccess gameDao;
 
+  @InjectMocks
   private ConfirmPlayInteractor interactor;
 
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
-    interactor = new ConfirmPlayInteractor(gameDao);
+    when(gameDao.get(anyInt())).thenReturn(game);
+    when(game.getBoard()).thenReturn(board);
+    when(board.getHeight()).thenReturn(15);
+    when(board.getWidth()).thenReturn(15);
+    when(game.getCurrentPlayer()).thenReturn(player);
+    when(game.getCurrentPlay()).thenReturn(play);
   }
 
-  private Game makeGame() {
-    Game game = new Game();
-    game.addPlayer();
-    game.addPlayer();
-    game.getTurnManager().startTurn();
-    return game;
-  }
-
-  private void addMoves(Play play, List<Move> moves) {
-    for (Move move : moves) {
-      play.addMove(move);
+  private void placeMovesOfPlay() {
+    int x, y;
+    for (Move move : play.getMoves()) {
+      Tile tile = mock(Tile.class);
+      when(tile.getLetter()).thenReturn(move.getLetter());
+      x = move.getX();
+      y = move.getY();
+      when(board.getCell(x, y)).thenReturn(tile);
+      when(board.isConfirmed(x, y)).thenReturn(false);
     }
   }
 
-  @Test
-  void testInvalidFirstPlay() {
-    Game game = makeGame();
-    when(gameDao.get(anyInt())).thenReturn(game);
+  private void testForError(String expectedMsg) {
+    ConfirmPlayInteractor interactor = new ConfirmPlayInteractor(gameDao);
+    InvalidPlayException ex = assertThrows(InvalidPlayException.class, () -> {
+      interactor.execute(new ConfirmPlayInputData(game.getId()));
+    });
+    assertEquals(expectedMsg, ex.getMessage());
+  }
 
-    List<Move> moves = List.of(new Move(7, 7, A));
+  private void testForSuccess() {
+    ConfirmPlayInteractor interactor = new ConfirmPlayInteractor(gameDao);
+    assertTrue(interactor.execute(new ConfirmPlayInputData(game.getId())).isValid());
+  }
+
+  @Test
+  void testIsNotInline() {
+    when(play.getMoves()).thenReturn(Arrays.asList(new Move(0, 0, a), new Move(0, 1, a), new Move(1, 1, a)));
+    placeMovesOfPlay();
+    testForError(ConfirmPlayInteractor.INLINE_MSG);
+  }
+
+  @Test
+  void testHasGap() {
+    Tile tile = mock(Tile.class);
+    when(tile.isEmpty()).thenReturn(true);
+    when(board.getCell(anyInt(), anyInt())).thenReturn(tile);
+
+    when(play.getMoves()).thenReturn(Arrays.asList(new Move(0, 0, a), new Move(0, 2, a)));
+    when(play.isVertical()).thenReturn(true);
+    when(board.isConfirmed(7, 7)).thenReturn(true);
+    placeMovesOfPlay();
+    testForError(ConfirmPlayInteractor.CONTINUOUS_MSG);
+  }
+
+  @Test
+  void testFirstPlayNotCenter() {
+    when(play.getMoves()).thenReturn(Arrays.asList(new Move(0, 0, a)));
+    placeMovesOfPlay();
+    testForError(ConfirmPlayInteractor.CENTER_MSG);
+  }
+
+  @Test
+  void testIsolated() {
+    when(play.getMoves()).thenReturn(Arrays.asList(new Move(0, 0, a), new Move(0, 1, a)));
+    placeMovesOfPlay();
+    when(board.isConfirmed(7, 7)).thenReturn(true);
+    testForError(ConfirmPlayInteractor.CONNECTED_MSG);
   }
 
   @Test
   void testValidFirstPlay() {
-    Game game = makeGame();
-    when(gameDao.get(anyInt())).thenReturn(game);
-
-    List<Move> moves = List.of(new Move(0, 0, new Letter('A', 1)));
-    game.getCurrentPlay().setMoves(moves);
-
-    InvalidPlayException exception = assertThrows(InvalidPlayException.class,
-        () -> interactor.execute(new ConfirmPlayInputData(1)));
-    assertEquals(ConfirmPlayInteractor.CENTER_MSG, exception.getMessage());
-  }
-
-  @Test
-  void testInvalidPlayNotInline() {
-    Game game = mockGame(false);
-    when(gameDao.get(anyString())).thenReturn(game);
-
-    List<Move> moves = List.of(
-        new Move(0, 0, new Letter('A', 1)),
-        new Move(1, 1, new Letter('B', 1)));
-    game.getCurrentPlay().setMoves(moves);
-
-    InvalidPlayException exception = assertThrows(InvalidPlayException.class,
-        () -> interactor.execute(new ConfirmPlayInputData("game1")));
-    assertEquals(ConfirmPlayInteractor.INLINE_MSG, exception.getMessage());
-  }
-
-  @Test
-  void testInvalidPlayNotContinuous() {
-    Game game = mockGame(false);
-    when(gameDao.get(anyString())).thenReturn(game);
-
-    List<Move> moves = List.of(
-        new Move(0, 0, new Letter('A', 1)),
-        new Move(0, 2, new Letter('B', 1)));
-    game.getCurrentPlay().setMoves(moves);
-
-    InvalidPlayException exception = assertThrows(InvalidPlayException.class,
-        () -> interactor.execute(new ConfirmPlayInputData("game1")));
-    assertEquals(ConfirmPlayInteractor.CONTINUOUS_MSG, exception.getMessage());
-  }
-
-  @Test
-  void testInvalidPlayNotConnected() {
-    Game game = mockGame(false);
-    when(gameDao.get(anyString())).thenReturn(game);
-
-    List<Move> moves = List.of(
-        new Move(5, 5, new Letter('A', 1)),
-        new Move(5, 6, new Letter('B', 1)));
-    game.getCurrentPlay().setMoves(moves);
-
-    InvalidPlayException exception = assertThrows(InvalidPlayException.class,
-        () -> interactor.execute(new ConfirmPlayInputData("game1")));
-    assertEquals(ConfirmPlayInteractor.CONNECTED_MSG, exception.getMessage());
+    when(play.getMoves()).thenReturn(Arrays.asList(new Move(7, 6, a), new Move(7, 7, a)));
   }
 }

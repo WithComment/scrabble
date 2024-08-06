@@ -1,25 +1,29 @@
 package com.example.scrabble.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class Board implements Serializable {
+public class Board implements Serializable, Iterable<Tile> {
     private Tile[][] board;
-    private int height;
-    private int width;
+    private int height = 15;
+    private int width = 15;
 
 
     /**
      * Constructs a new Board with an initial state.
      */
     public Board() {
-        height = 15;
-        width = 15;
         board = getBlankBoard();
+    }
+
+    @JsonCreator
+    public Board(@JsonProperty("board") Tile[][] board) {
+        this.board = board;
     }
 
     public Board(JSONObject jsonObject) {
@@ -57,21 +61,21 @@ public class Board implements Serializable {
         addToBoardSymmetrically(2, 6, 1, 2, board);
         addToBoardSymmetrically(3, 7, 1, 2, board);
         addToBoardSymmetrically(6, 6, 1, 2, board);
-        addToBoardSymmetrically(2, 5, 1, 3, board);
+        addToBoardSymmetrically(1, 5, 1, 3, board);
         addToBoardSymmetrically(5, 5, 1, 3, board);
 
-        board[7][7] = new Tile(2, 0, null);
+        board[7][7] = new Tile(2, 1, null);
         return board;
     }
 
     /**
      * Adds a tile to the board and its 7 other symmetric positions.
      *
-     * @param x
-     * @param y
-     * @param wordMult
-     * @param letterMult
-     * @param board
+     * @param x        the x-coordinate of the tile
+     * @param y       the y-coordinate of the tile
+     * @param wordMult the word multiplier of the tile
+     * @param letterMult the letter multiplier of the tile
+     * @param board   the board to add the tile to
      */
     private static void addToBoardSymmetrically(int x, int y, int wordMult, int letterMult, Tile[][] board) {
         board[x][y] = new Tile(wordMult, letterMult, null);
@@ -120,13 +124,12 @@ public class Board implements Serializable {
     /**
      * Sets the letter at the specified position on the board.
      *
-     * @param x
-     * @param y
-     * @param letter
-     * @return
+     * @param x the x-coordinate of the letter
+     * @param y the y-coordinate of the letter
+     * @param letter the letter to set
      */
-    public Tile setCell(int x, int y, Letter letter) {
-        return this.board[y][x].setLetter(letter);
+    public void setCell(int x, int y, Letter letter) {
+        this.board[y][x].setLetter(letter);
     }
 
     /**
@@ -143,8 +146,8 @@ public class Board implements Serializable {
     /**
      * Returns the letter at the specified position on the board.
      *
-     * @param x
-     * @param y
+     * @param x the x-coordinate of the letter
+     * @param y the y-coordinate of the letter
      * @return
      */
     public boolean confirm(int x, int y) {
@@ -158,8 +161,8 @@ public class Board implements Serializable {
     /**
      * Removes the letter at the specified position on the board.
      *
-     * @param x
-     * @param y
+     * @param x the x-coordinate of the letter
+     * @param y the y-coordinate of the letter
      */
     public boolean isConfirmed(int x, int y) {
         return this.board[y][x].isConfirmed();
@@ -175,6 +178,18 @@ public class Board implements Serializable {
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 sb.append(board[i][j].toString());
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    public String multiplierString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                String s = board[i][j].getLetterMult() == 1 ? " " : String.valueOf(board[i][j].getLetterMult());
+                sb.append(s);
             }
             sb.append("\n");
         }
@@ -201,11 +216,13 @@ public class Board implements Serializable {
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream out) throws IOException {
         JSONObject jsonObject = new JSONObject(this);
         out.writeChars(jsonObject.toString());
     }
 
+    @Serial
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         String json = in.readLine();
         JSONObject jsonObject = new JSONObject(json);
@@ -217,5 +234,38 @@ public class Board implements Serializable {
                 this.board[i][j] = new Tile(jsonObject.getJSONObject("board").getJSONObject(i + "," + j));
             }
         }
+    }
+
+    @Override
+    public Iterator<Tile> iterator() {
+        return new BoardIterator(this);
+    }
+}
+
+class BoardIterator implements Iterator<Tile> {
+    private int h, w;
+    private int count;
+    private Tile[][] board;
+
+    public BoardIterator(Board board) {
+        this.count = 0;
+        this.h = board.getHeight();
+        this.w = board.getWidth();
+        this.board = board.getBoard();
+    }
+
+    @Override
+    public boolean hasNext() {
+        return count < h * w;
+    }
+
+    @Override
+    public Tile next() {
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
+        Tile tile = board[count / w][count % w];
+        count++;
+        return tile;
     }
 }
