@@ -32,7 +32,8 @@ class ViewModel{
                 this.handleWebSocketMessage(JSON.parse(message.body));
             }, (error) => {
                 console.error('WebSocket connection error:', error);
-            });        });
+            });
+        });
     }
 
     handleWebSocketMessage(message) {

@@ -47,7 +47,7 @@ function Login(){
             }
             newBoard.push(row)
         };
-        let leaderboard = [{name: name, score: 0}];
+        let leaderboard = response.leaderboard.map((player) => {return {name: player.name, score: player.score}});
 
         let tempData = {
             leaderboard: leaderboard,
