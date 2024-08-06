@@ -165,8 +165,6 @@ class ContestInteractorTest {
 
         assertTrue(outputData.getInvalidWords().isEmpty());
     }
-
-
 }
 
 

@@ -137,7 +137,7 @@ public class Tile implements Serializable {
 
     @Serial
     private void writeObject(ObjectOutputStream out) throws IOException {
-        out.writeUTF(new JSONObject(this).toString());
+        out.writeChars(new JSONObject(this).toString());
     }
 
     @Serial

@@ -2,10 +2,8 @@ package com.example.scrabble.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.example.scrabble.converter.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -19,48 +17,20 @@ import java.util.Objects;
  * The game is responsible for managing the state of the game, including the board, players, and letter bag.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
-@Table(name="game")
 public class Game implements Serializable {
     // Serializable vars
     private static int nextId = 0;
-
-    @Id
     private final int id; // Unique ID for the game instance
-
-    @Column(name="letter_bag")
-    @Convert(converter= LetterBagConverter.class)
-    private LetterBag letterBag; // Bag of letters available to draw from
-
-    @Column(name="board")
-    @Convert(converter= BoardConverter.class)
-    private Board board; // The game board
-
-    @Column(name="players")
-    @Convert(converter= PlayersConverter.class)
-    private List<Player> players; // List of players in the game
-
-    @Column(name="history")
-    @Convert(converter= HistoryConverter.class)
-    private List<Play> history; // History of plays made during the game
-
-    @Column(name="leaderboard")
-    @Convert(converter=LeaderBoardConverter.class)
+    private final LetterBag letterBag; // Bag of letters available to draw from
+    private final Board board; // The game board
+    private final List<Player> players; // List of players in the game
+    private final List<Play> history; // History of plays made during the game
     private List<Player> leaderboard;
 
     // turn manager
-    @Column(name="end_turn")
     private Boolean endTurn;
-
-    @Column(name="player_number")
     private int playerNumber;
-
-    @Column(name="num_contest_failed")
-    @Convert(converter=NumContestFailedConverter.class)
     private final List<Integer> numContestFailed;
-
-    @Column(name="current_play")
-    @Convert(converter=PlayConverter.class)
     private Play currentPlay;
 
     private int numContests;
