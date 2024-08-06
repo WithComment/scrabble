@@ -32,7 +32,7 @@ public class PlaceLetterInteractorTest {
   private PlaceLetterInteractor interactor;
 
   private static final Letter a = new Letter('a', 1);
-  private static final Letter b = new Letter('b', 1);
+  private static final Letter b = new Letter('b', 3);
   private Game game;
   private Board board;
   private Player player;
@@ -80,12 +80,13 @@ public class PlaceLetterInteractorTest {
     setAndConfirm(8, 3, b);
     setAndConfirm(8, 4, b);
     setAndConfirm(9, 4, a);
+
     for (int i = 2; i < 7; i++) {
       play.addMove(new Move(7, i, a));
     }
     addMoves();
     List<String> expected = Arrays.asList("aaaaaa", "aba", "bab", "aba");
-    testForSuccess(new PlaceLetterInputData(1, 7, 7, a.getLetter()), 21, expected);
+    testForSuccess(new PlaceLetterInputData(1, 7, 7, a.getLetter()), 35, expected);
   }
 
   @Test

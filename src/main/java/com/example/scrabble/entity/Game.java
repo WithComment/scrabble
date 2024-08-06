@@ -152,12 +152,7 @@ public class Game implements Serializable {
      */
     @JsonIgnore
     public Player getPlayer(int playerId) {
-        for (Player player : players) {
-            if (player.getId() == playerId) {
-                return player;
-            }
-        }
-        return null;
+        return players.get(playerId);
     }
 
     /**
