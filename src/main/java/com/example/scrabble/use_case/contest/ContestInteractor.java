@@ -65,7 +65,7 @@ public class ContestInteractor implements ContestInputBoundary {
         game = gameDAO.get(contestInputData.getGameId());
         if (contestInputData.getIsContest()) {
             player = game.getPlayer(contestInputData.getPlayerId());
-            List<String> words = game.getCurrentPlay().getWords();
+            List<String> words = game.getLastPlay().getWords();
             List<String> invalidWords = new LinkedList<>();
 
             try {
