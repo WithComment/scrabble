@@ -13,4 +13,6 @@ public interface GameDataAccess {
     Game get(int gameId);
     void update(Game game);
     void delete(int gameId);
+    void deleteAll();
+    int getGameCount();
 }

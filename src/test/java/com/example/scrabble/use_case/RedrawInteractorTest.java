@@ -64,8 +64,8 @@ class RedrawInteractorTest {
         RedrawOutputData outputData = redrawInteractor.execute(inputData);
 
         // Assert
-        assertTrue(outputData.isSuccessful());
-        assertEquals(newLetters, outputData.getNewLetters());
+        assertTrue(outputData.isDrawSuccessful());
+        assertEquals(newLetters, outputData.getHand());
 
         // Verify that letters were added back to the letter bag
         verify(letterBag).addLetters(lettersToRedraw);
@@ -98,8 +98,8 @@ class RedrawInteractorTest {
         RedrawOutputData outputData = redrawInteractor.execute(inputData);
 
         // Assert
-        assertFalse(outputData.isSuccessful());
-        assertTrue(outputData.getNewLetters().isEmpty());
+        assertFalse(outputData.isDrawSuccessful());
+        assertTrue(outputData.getHand().isEmpty());
 
         // Verify that letters were not redrawn
         verify(letterBag, never()).drawLetters(anyInt());

@@ -25,6 +25,9 @@ public class Game implements Serializable {
     // Serializable vars
     private static int nextId = 0;
 
+    @Version
+    private long version;
+
     @Id
     private final int id; // Unique ID for the game instance
 
@@ -66,6 +69,10 @@ public class Game implements Serializable {
     private int numContests;
 
     private int playerIDCounter;
+
+    public static void setIdCounter(int idCounter){
+        nextId = idCounter;
+    }
 
     /**
      * Constructs a new Game instance.
@@ -466,6 +473,7 @@ public class Game implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
+        System.out.println("Game equals");
         if (this == obj){return true;}
 
         if (obj == null || getClass() != obj.getClass()){return false;}
@@ -473,14 +481,14 @@ public class Game implements Serializable {
         Game other = (Game) obj;
 
         return  (id == other.id) &&
-                (letterBag.equals(other.letterBag)) &&
-                (board.equals(other.board)) &&
-                (players.equals(other.players)) &&
-                (history.equals(other.history)) &&
-                (leaderboard.equals(other.leaderboard)) &&
+                (Objects.equals(letterBag, other.letterBag)) &&
+                (Objects.equals(board,other.board)) &&
+                (Objects.equals(players,other.players)) &&
+                (Objects.equals(history,other.history)) &&
+                (Objects.equals(leaderboard, other.leaderboard)) &&
                 (endTurn == other.endTurn) &&
                 (playerNumber == other.playerNumber) &&
-                (numContestFailed.equals(other.numContestFailed)) &&
+                (Objects.equals(numContestFailed, other.numContestFailed)) &&
                 (Objects.equals(currentPlay,other.currentPlay)) &&
                 (numContests == other.numContests) &&
                 (playerIDCounter == other.playerIDCounter);

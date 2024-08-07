@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -136,14 +137,15 @@ public class Play {
 
   @Override
   public boolean equals(Object obj) {
+    System.out.println("Play equals");
     if (this == obj){return true;}
 
     if (obj == null || getClass() != obj.getClass()){return false;}
 
     Play other = (Play) obj;
 
-    return  (player.equals(other.player)) &&
-            (moves.equals(other.moves)) &&
-            (words.equals(other.words));
+    return  (Objects.equals(player, other.player)) &&
+            (Objects.equals(moves, other.moves)) &&
+            (Objects.equals(words, other.words));
   }
 }

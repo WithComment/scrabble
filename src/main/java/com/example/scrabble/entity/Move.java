@@ -62,4 +62,13 @@ public class Move {
             (y == other.y) &&
             (letter.equals(other.letter));
   }
+
+  @Override
+  public String toString() {
+    return "{" +
+            "x=" + x +
+            ", y=" + y +
+            ", letter=" + letter +
+            '}';
+  }
 }
