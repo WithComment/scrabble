@@ -41,10 +41,9 @@ public class GetLeaderboardInteractor implements GetLeaderboardInputBoundary {
     @Override
     public GetLeaderboardOutputData execute(GetLeaderboardInputData input) {
         Game game = gameDao.get(input.getGameId());
-        List<Integer> players = input.getPlayers();
+        List<Player> players = game.getPlayers();
         List<LeaderboardEntry> leaderboard = new ArrayList<>();
-        for (int playerId : players) {
-            Player player = game.getPlayer(playerId);
+        for (Player player : players) {
             int score = player.getScore(); // Assume getScore() method exists in Player
             LeaderboardEntry entry = new LeaderboardEntry(player, score);
             leaderboard.add(entry);
