@@ -1,11 +1,14 @@
 package com.example.scrabble.use_case.contest;
 
 
+import com.example.scrabble.data_access.GameDao;
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.*;
 import com.example.scrabble.use_case.end_turn.EndTurnInputBoundary;
 import com.example.scrabble.use_case.end_turn.EndTurnInputData;
 import com.example.scrabble.use_case.end_turn.EndTurnInteractor;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterInputData;
+import com.example.scrabble.use_case.remove_letter.RemoveLetterInteractor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,7 +68,9 @@ public class ContestInteractor implements ContestInputBoundary {
 
     @Override
     public ContestOutputData execute(ContestInputData contestInputData) throws ContestException {
+        int gameId = contestInputData.getGameId();
         game = gameDAO.get(contestInputData.getGameId());
+        Board board = game.getBoard();
         if (game == null) {
             throw new ContestException("Game not found");
         }
@@ -81,8 +86,15 @@ public class ContestInteractor implements ContestInputBoundary {
                     }
                 }
                 if (!invalidWords.isEmpty()) {
+                    RemoveLetterInteractor removeLetterInteractor = new RemoveLetterInteractor(gameDAO);
                     Play lastPlay = game.removeLastPlay();
                     Player contestedPlayer = lastPlay.getPlayer();
+                    RemoveLetterInputData removeLetterInputData;
+                    for (Move move : lastPlay.getMoves()) {
+                        game = gameDAO.get(gameId);
+                        removeLetterInputData = new RemoveLetterInputData(game.getId(), move.getX(), move.getY());
+                        removeLetterInteractor.execute(removeLetterInputData);
+                    }
                     contestedPlayer.resetTempScore();
                 } else {
                     fail();
@@ -92,6 +104,7 @@ public class ContestInteractor implements ContestInputBoundary {
 //                fail();
 //                throw new ContestException("Word validation failed.", e);
 //            }
+            game = gameDAO.get(gameId);
             gameDAO.update(game);
             EndTurnInteractor endTurnInteractor = new EndTurnInteractor(gameDAO);
             endTurnInteractor.execute(new EndTurnInputData(game.getId()));
