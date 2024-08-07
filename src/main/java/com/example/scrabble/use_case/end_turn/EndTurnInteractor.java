@@ -32,7 +32,8 @@ public class EndTurnInteractor implements EndTurnInputBoundary {
 
     @Override
     public EndTurnOutputData execute(EndTurnInputData getEndTurnInputData) {
-        Game game = gameDataAccess.get(getEndTurnInputData.getGameId());
+        int gameID = getEndTurnInputData.getGameId();
+        Game game = gameDataAccess.get(gameID);
         List<Move> moves = game.getCurrentPlay().getMoves();
 
         Board currentBoard = game.getBoard();
@@ -48,11 +49,8 @@ public class EndTurnInteractor implements EndTurnInputBoundary {
         game.endTurn();
         game.startTurn();
 
-        System.out.println(game.getBoard().getCell(7, 7).isConfirmed());
         gameDataAccess.update(game);
-        game = gameDataAccess.get(game.getId());
-        System.out.println(game.getBoard().getCell(7, 7).isConfirmed());
-        return new EndTurnOutputData(game.getId());
+        return new EndTurnOutputData(gameID);
     }
 }
 
