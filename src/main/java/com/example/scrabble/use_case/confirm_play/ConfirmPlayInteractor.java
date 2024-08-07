@@ -2,6 +2,8 @@ package com.example.scrabble.use_case.confirm_play;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import com.example.scrabble.entity.Board;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Move;
 import com.example.scrabble.entity.Play;
+import com.example.scrabble.entity.Tile;
 import com.example.scrabble.use_case.InvalidPlayException;
 
 
@@ -34,6 +37,8 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
   public static final String CONTINUOUS_MSG = "The letters must be continuous.";
   public static final String CENTER_MSG = "The first word must cover the center.";
   public static final String CONNECTED_MSG = "The word must be connected to another word.";
+
+  private static final Logger logger = LoggerFactory.getLogger(ConfirmPlayInteractor.class);
 
   @Autowired
   public ConfirmPlayInteractor(GameDataAccess gameDao) {
@@ -103,11 +108,9 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
   }
 
   private boolean isFirstPlay(Board board) {
-    for (int i = 0; i < board.getWidth(); i++) {
-      for (int j = 0; j < board.getHeight(); j++) {
-        if (board.isConfirmed(i, j)) {
-          return false;
-        }
+    for (Tile t : board) {
+      if (t.isConfirmed()) {
+        return false;
       }
     }
     return true;
@@ -158,10 +161,13 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     }
 
     if (isFirstPlay(board)) {
+      logger.info(String.valueOf(isFirstPlay(board)));
+      logger.info(String.valueOf(board.isConfirmed(7, 7)));
       if (isNotCenter(moves)) {
         throw new InvalidPlayException(CENTER_MSG);
       }
     } else if (isIsolated(moves, board)) {
+      logger.info(String.valueOf(isFirstPlay(board)));
       throw new InvalidPlayException(CONNECTED_MSG);
     }
     game.addPlay(play);

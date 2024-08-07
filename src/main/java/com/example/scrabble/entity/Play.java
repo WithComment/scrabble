@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Represents a Player's turn.
  */
 public class Play {
-  private final Player player;
+  private Player player;
   private List<Move> moves;
   private List<String> words;
   private boolean failedContest;

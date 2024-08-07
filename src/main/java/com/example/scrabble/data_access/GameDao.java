@@ -74,7 +74,7 @@ public class GameDao implements GameDataAccess {
     @Override
     @Cacheable(value = "game", key = "#gameId")
     public Game get(int gameId) {
-        log.info("Loading game " + gameId);
+        log.debug("Loading game " + gameId);
         if (!gameExists(gameId)) {
             throw new IllegalArgumentException("Game with the specified ID does not exist.");
         }
