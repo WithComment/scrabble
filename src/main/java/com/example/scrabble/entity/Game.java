@@ -68,6 +68,7 @@ public class Game implements Serializable {
     private int playerIDCounter;
 
     public static void setIdCounter(int idCounter){
+        System.out.println("Setting nextId to " + idCounter);
         nextId = idCounter;
     }
 

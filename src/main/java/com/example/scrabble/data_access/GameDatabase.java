@@ -1,16 +1,13 @@
 package com.example.scrabble.data_access;
 
 import com.example.scrabble.entity.Game;
-import com.example.scrabble.entity.Move;
 import com.example.scrabble.repository.GameRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,11 +49,6 @@ public class GameDatabase implements GameDataAccess{
     @Transactional
     public void update(Game game){
         logger.info("Updating game: " + game);
-        List<Move> moves = game.getCurrentPlay().getMoves();
-        logger.info("Game Current Play moves: ");
-        for (Move move: moves){
-            logger.info(move.getX() + " " +move.getY() + " " + move.getLetter());
-        }
         gameRepository.delete(game);
         gameRepository.flush();
         gameRepository.saveAndFlush(game);
