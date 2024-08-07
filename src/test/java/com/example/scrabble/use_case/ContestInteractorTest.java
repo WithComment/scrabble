@@ -42,6 +42,9 @@ class ContestInteractorTest {
     private Play play;
 
     @Mock
+    private LetterBag letterBag;
+
+    @Mock
     private HttpClient httpClient;
 
     @Mock
@@ -61,6 +64,9 @@ class ContestInteractorTest {
         when(game.getPlayer(anyInt())).thenReturn(player);
         when(game.removeLastPlay()).thenReturn(play);
         when(game.getLastPlay()).thenReturn(play);
+        when(game.getCurrentPlay()).thenReturn(play);
+        when(game.getLetterBag()).thenReturn(letterBag);
+        when(game.getCurrentPlayer()).thenReturn(player);
         when(play.getWords()).thenReturn(Arrays.asList("validword1", "invalidword"));
         when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
                 .thenReturn(httpResponse);
@@ -106,7 +112,6 @@ class ContestInteractorTest {
         ContestInputData inputData = new ContestInputData(1, 1, true);
         when(gameDataAccess.get(inputData.getGameId())).thenReturn(game);
         when(game.getLastPlay()).thenReturn(play);
-        when(game.getCurrentPlay()).thenReturn(play);
         when(play.getWords()).thenReturn(Arrays.asList("validword1", "invalidword"));
         when(httpResponse.body()).thenReturn("{\"v\":true}", "{\"v\":false}");
 
@@ -115,7 +120,7 @@ class ContestInteractorTest {
         // Verify interactions
         verify(game).removeLastPlay();
         verify(player).resetTempScore();
-        verify(gameDataAccess).update(game);
+        verify(gameDataAccess, times(2)).update(game);
 
         // Assertions
         assertEquals(Arrays.asList("validword1", "invalidword"), outputData.getInvalidWords());
@@ -125,7 +130,6 @@ class ContestInteractorTest {
     void testExecute_contestFailure() throws Exception {
         when(gameDataAccess.get(anyInt())).thenReturn(game);
         when(game.getLastPlay()).thenReturn(play);
-        when(game.getCurrentPlay()).thenReturn(play);
         when(play.getWords()).thenReturn(Arrays.asList("validword1", "validword2"));
         when(httpResponse.body()).thenReturn("{\"v\":true}", "{\"v\":true}");
 
@@ -133,7 +137,7 @@ class ContestInteractorTest {
         ContestOutputData outputData = contestInteractor.execute(inputData);
 
         //verify(game).contestFailureUpdate(player.getId());
-        verify(gameDataAccess).update(game);
+        verify(gameDataAccess, times(2)).update(game);
 
         assertFalse(outputData.getInvalidWords().isEmpty());
     }
