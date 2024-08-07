@@ -107,8 +107,8 @@ public class ConfirmPlayInteractorTest {
   @Test
   void testIsolated() {
     when(play.getMoves()).thenReturn(Arrays.asList(new Move(0, 0, a), new Move(0, 1, a)));
+    when(game.getHistory()).thenReturn(Arrays.asList(new Play(mock(Player.class))));
     placeMovesOfPlay();
-    when(board.isConfirmed(7, 7)).thenReturn(true);
     testForError(ConfirmPlayInteractor.CONNECTED_MSG);
   }
 
