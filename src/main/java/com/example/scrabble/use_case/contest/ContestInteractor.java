@@ -95,11 +95,6 @@ public class ContestInteractor implements ContestInputBoundary {
                         removeLetterInputData = new RemoveLetterInputData(game.getId(), move.getX(), move.getY());
                         removeLetterInteractor.execute(removeLetterInputData);
                     }
-//                    for (Move move : lastPlay.getMoves()) {
-//                        System.out.println(board.getCell(move.getX(), move.getY()).getLetter());
-//                        contestedPlayer.addLetter(board.getCell(move.getX(), move.getY()).getLetter());
-//                        board.getCell(move.getX(), move.getY()).removeLetter();
-//                    }
                     contestedPlayer.resetTempScore();
                 } else {
                     fail();
@@ -109,6 +104,7 @@ public class ContestInteractor implements ContestInputBoundary {
 //                fail();
 //                throw new ContestException("Word validation failed.", e);
 //            }
+            game = gameDAO.get(gameId);
             gameDAO.update(game);
             EndTurnInteractor endTurnInteractor = new EndTurnInteractor(gameDAO);
             endTurnInteractor.execute(new EndTurnInputData(game.getId()));
