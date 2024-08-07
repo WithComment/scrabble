@@ -1,6 +1,6 @@
 import '../App.css';
 import Board from '../components/Board';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import ViewModel from '../ViewModel';
 import Hand from '../components/Hand'
 import Redraw from '../components/buttons/Redraw';
@@ -18,26 +18,33 @@ function Game() {
     const [board, setBoard] = useState(state.board);
     const [hand, setHand] = useState(state.hand);
     const [leaderboard, setLeaderboard] = useState(state.leaderboard);
-    const [constestPhase, setContestPhase] = useState(false);
     const [gameState, setGameState] = useState('Not Started');
     const [tilesLeft, setTilesLeft] = useState(state.tilesLeft);
+    const [events, setEvents] = useState(['Welcome to the beginning of the game!']);
 
-    const viewModel = new ViewModel(
-        state.gameId,
-        state.playerId,
-        state.board,
-        state.hand,
-        state.leaderboard,
-        tilesLeft,
-        gameState,
-        setHand,
-        setBoard,
-        setLeaderboard, 
-        setContestPhase,
-        setTilesLeft,
-        setGameState
-    );
-    viewModel.testIfWorking();
+    const viewModelRef = useRef(null);
+
+    if (!viewModelRef.current) {
+        viewModelRef.current = new ViewModel(
+            state.gameId,
+            state.playerId,
+            state.board,
+            state.hand,
+            state.leaderboard,
+            tilesLeft,
+            gameState,
+            events,
+            setHand,
+            setBoard,
+            setLeaderboard, 
+            setTilesLeft,
+            setGameState,
+            setEvents
+        );
+        viewModelRef.current.testIfWorking();
+    }
+
+    const viewModel = viewModelRef.current;
     let gameId = state.gameId;
     const playerId = state.playerId;
     gameId = Number(gameId)
@@ -49,6 +56,12 @@ function Game() {
             <div className='game-state'>Game State: {gameState}</div>
             <div className='game-id'>Game ID: {gameId}</div>
             <div className='player-id'>Player ID: {playerId}</div>
+            <div className='event-log'>{events.map((event, index) => {
+              return (
+                <div key={index}>{event}</div>
+                )}
+              )}
+            </div>
           </div>
           <Board board={board} boardViewModel={viewModel}/>
           <div className='letter-container'>

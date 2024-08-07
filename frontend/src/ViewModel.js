@@ -2,7 +2,7 @@ import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
 class ViewModel{
-    constructor(gameId, playerId, board, hand, leaderboard, tilesLeft, gameState, setHand, setBoard, setLeaderboard, setContestPhase, setTilesLeft,  setGameState){
+    constructor(gameId, playerId, board, hand, leaderboard, tilesLeft, gameState, events, setHand, setBoard, setLeaderboard, setTilesLeft,  setGameState, setEvents){
         this.playerId = playerId;
         this.gameId = gameId;
         this.baseUrl = `http://localhost:8080/game/${this.gameId}/`;
@@ -11,6 +11,7 @@ class ViewModel{
         this.leaderboard = leaderboard;
         this.tilesLeft = tilesLeft;
         this.gameState = gameState;
+        this.events = events;
         this.selectedLetter = null;
         this.selectedLettersRedraw = [];
         this.setHand = setHand;
@@ -18,6 +19,8 @@ class ViewModel{
         this.setLeaderboard = setLeaderboard;
         this.setTilesLeft = setTilesLeft;
         this.setGameState = setGameState;
+        this.setEvents = setEvents;
+        this.lastMessageReceivedTime = 0;
         this.connectWebSocket()
     }
 
@@ -48,25 +51,23 @@ class ViewModel{
         this.setTilesLeft(game.letterBag.bag.length);
 
         if (message.type === 'start') {
-            this.setGameState(game.currentPlay.player.name + 's Turn');
-            console.log(game.currentPlay.player.id, this.playerId);
-            if (game.currentPlay.player.id === this.playerId) {
-                this.setGameState('Your Turn');
-            }
+            this.addNewEvent('- Game Started');
+            this.setNewTurn(game.currentPlay.player.name, game.currentPlay.player.id);
         } else if (message.type === 'valid-confirm-play'){
             this.setGameState('Contest');
         } else if (message.type === 'contest-success'){
-            this.setGameState(game.currentPlay.player.name + 's Turn');
-            if (game.currentPlay.player.id === this.playerId) {
-                this.setGameState('Your Turn');
-            }        
+            this.addNewEvent('- Contest Successful');
+            this.setNewTurn(game.currentPlay.player.name, game.currentPlay.player.id);
         } else if (message.type === 'contest-fail'){
-            this.setGameState(game.currentPlay.player.name + 's Turn');
-            if (game.currentPlay.player.id === this.playerId) {
-                this.setGameState('Your Turn');
-            }        
+            this.addNewEvent('- Contest Failed');
+            this.setNewTurn(game.currentPlay.player.name, game.currentPlay.player.id);
+        } else if (message.type === 'no-contests'){
+            this.addNewEvent('- No Contests');
+            this.setNewTurn(game.currentPlay.player.name, game.currentPlay.player.id);
+        } else if (message.type === 'redraw'){
+            this.setNewTurn(game.currentPlay.player.name, game.currentPlay.player.id);
         }
-    }
+    };
 
     updateBoardFromRaw(rawBoard){
         console.log('Updating board from raw: ' , rawBoard);
@@ -196,9 +197,8 @@ class ViewModel{
                 body : JSON.stringify(requestBody)
             });
             response = await response.json();
-            console.log(response);
             if (response.goToNextTurn){
-                response = await fetch(`${this.baseUrl}broadcast_contest_success/`, {
+                response = await fetch(`${this.baseUrl}broadcast_no_contests/`, {
                     method: 'POST'
                 });
             }
@@ -216,6 +216,7 @@ class ViewModel{
                 method: 'POST',
                 body : JSON.stringify(requestBody)
             });
+            response = await fetch(`${this.baseUrl}broadcast_redraw/`, {method: 'POST'});
         } else if (input.type === 'start'){
             let requestBody = {      
                 gameId: this.gameId,
@@ -291,6 +292,19 @@ class ViewModel{
     handleResponse(response){
         let reponse = response.json();
         console.log('Response:', response);
+    }
+
+    addNewEvent(event){
+        this.setEvents([...this.events, event]);
+        this.events.push(event);
+    }
+
+    setNewTurn(name, id){
+        this.setGameState(name + 's Turn');
+        if (id === this.playerId){
+            this.setGameState('Your Turn');
+        }
+        this.addNewEvent('- ' + name + '\'s Turn');
     }
 
 }
