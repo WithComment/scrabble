@@ -38,7 +38,7 @@ function Login(){
         let newGameId = response.id;
         let tilesLeft = response.letterBag.bag.length;
         let newPlayerId = response.players.at(-1).id;
-        let hand = response.players[0].inventory.map((letter) => letter.letter);
+        let hand = response.players.at(-1).inventory.map((letter) => letter.letter);
         let newBoard = []
         for (let i = 0; i < 15; i++) {
             let row = []

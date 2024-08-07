@@ -14,6 +14,7 @@ import diceBag from '../diceBag.png';
 
 function Game() {
     const { state } = useLocation();
+    console.log(state.hand)
     const [board, setBoard] = useState(state.board);
     const [hand, setHand] = useState(state.hand);
     const [leaderboard, setLeaderboard] = useState(state.leaderboard);
@@ -58,7 +59,7 @@ function Game() {
         <div class='inputs-container'>
             <div class='buttons-container'>
             {(gameState === 'Your Turn') && <><Redraw ButtonViewModel={viewModel}/><ConfirmPlay ButtonViewModel={viewModel}/></>}
-            {constestPhase && <><Contest ButtonViewModel={viewModel}/> <DontContest ButtonViewModel={viewModel}/></>}
+            {(gameState === 'Contest') && <><Contest ButtonViewModel={viewModel}/> <DontContest ButtonViewModel={viewModel}/></>}
             {(gameState === 'Not Started') && <StartGame ButtonViewModel={viewModel}/>}
             </div>
             <Hand handLetters={hand} handViewModel={viewModel}/>
