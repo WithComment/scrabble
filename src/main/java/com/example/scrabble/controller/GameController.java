@@ -223,6 +223,16 @@ public class GameController {
         notifyFrontend(gameId, "contest-fail");
     }
 
+    @PostMapping("/{gameId}/broadcast_no_contests/")
+    public void broadcastNoContests(@PathVariable int gameId){
+        notifyFrontend(gameId, "no-contests");
+    }
+
+    @PostMapping("/{gameId}/broadcast_redraw/")
+    public void broadcastRedraw(@PathVariable int gameId){
+        notifyFrontend(gameId, "redraw");
+    }
+
 
     @PostMapping("/{gameId}/end_turn/")
     public ResponseEntity<EntityModel<EndTurnOutputData>> endTurn(@PathVariable int gameId, @RequestBody EndTurnInputData input) {

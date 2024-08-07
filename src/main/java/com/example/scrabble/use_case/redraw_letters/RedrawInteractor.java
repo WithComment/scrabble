@@ -5,6 +5,8 @@ import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Letter;
 import com.example.scrabble.entity.LetterBag;
 import com.example.scrabble.entity.Player;
+import com.example.scrabble.use_case.end_turn.EndTurnInputData;
+import com.example.scrabble.use_case.end_turn.EndTurnInteractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +64,8 @@ public class RedrawInteractor implements RedrawInputBoundary{
             drawSuccessful = true;
         }
         gameDao.update(game);
+        EndTurnInteractor endTurnInteractor = new EndTurnInteractor(gameDao);
+        endTurnInteractor.execute(new EndTurnInputData(game.getId()));
         return new RedrawOutputData(drawSuccessful, newLetters);
     }
 }

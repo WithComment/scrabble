@@ -103,7 +103,6 @@ public class ContestInteractor implements ContestInputBoundary {
             EndTurnInteractor endTurnInteractor = new EndTurnInteractor(gameDAO);
             endTurnInteractor.execute(new EndTurnInputData(game.getId()));
             game = gameDAO.get(game.getId());
-            System.out.println(game.getBoard().getCell(7, 7).isConfirmed());
             return new ContestOutputData(new ArrayList<>(), true);
         } else {
             return new ContestOutputData(new ArrayList<>(), false);
