@@ -1,6 +1,6 @@
 import '../App.css';
 import Board from '../components/Board';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ViewModel from '../ViewModel';
 import Hand from '../components/Hand'
 import Redraw from '../components/buttons/Redraw';
@@ -13,6 +13,13 @@ import ConfirmPlay from '../components/buttons/ConfirmPlay';
 import diceBag from '../diceBag.png';
 
 function Game() {
+    const [bgMusic, setBgMusic] = useState(null);
+    useEffect(() => {
+      const audio = new Audio('/ScrabbleSerenade.mp3');
+      audio.load();
+      audio.loop = true;
+      audio.play();
+  }, []);
     const { state } = useLocation();
     console.log(state.hand)
     const [board, setBoard] = useState(state.board);
