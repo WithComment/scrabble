@@ -4,7 +4,8 @@ import '../../App.css'
 function DontContest({ ButtonViewModel }){
     const viewModel = ButtonViewModel;
     function handleClick(){
-        let input = {
+        const click = new Audio('/click.mp3');
+        click.play();        let input = {
             type : 'no-contest',
             x : 0,
             y : 0,

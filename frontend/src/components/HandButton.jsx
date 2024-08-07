@@ -37,7 +37,8 @@ function HandButton({ letter, handViewModel, index, select, selectedTile }) {
     };
 
     function handleClick(e){
-        console.log(letter);
+        const click = new Audio('/click.mp3');
+        click.play();
         if (e.type === "click") {
             setSelectedForRedraw(false);
             setSelectedForPlay(true);

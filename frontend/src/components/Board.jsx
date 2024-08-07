@@ -6,6 +6,8 @@ import Tile from './Tile'
 function Board({ board, boardViewModel }){
     let viewModel = boardViewModel;
     async function handleClick(e, xCoord, yCoord){
+        const click = new Audio('/click.mp3');
+        click.play();
         if (e.type === "click"){
             let input = {
                 type : 'lclick',
