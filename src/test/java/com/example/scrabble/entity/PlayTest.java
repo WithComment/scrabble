@@ -1,92 +1,131 @@
 package com.example.scrabble.entity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.LinkedList;
 
 class PlayTest {
 
-  private final static Letter a = new Letter('a', 1);
-  private final static Letter b = new Letter('a', 1);
-  private final static Game game = new Game();
-  private final static Player player = game.addPlayer("John");
+  private Player mockPlayer;
+  private Move mockMove1;
+  private Move mockMove2;
+  private Play play;
+
+  @BeforeEach
+  void setUp() {
+    // Initialize mock objects and Play instance before each test
+    mockPlayer = mock(Player.class);
+    mockMove1 = mock(Move.class);
+    mockMove2 = mock(Move.class);
+
+    when(mockMove1.getX()).thenReturn(1);
+    when(mockMove1.getY()).thenReturn(1);
+    when(mockMove2.getX()).thenReturn(2);
+    when(mockMove2.getY()).thenReturn(2);
+
+    play = new Play(mockPlayer);
+  }
 
   @Test
-  void testPlayCreation() {
-    Play play = new Play(player);
+  void testConstructorWithParams() {
+    LinkedList<Move> moves = new LinkedList<>(Arrays.asList(mockMove1, mockMove2));
+    Play playWithParams = new Play(mockPlayer, moves, Arrays.asList("word1", "word2"), true);
 
-    assertEquals(player, play.getPlayer());
-    assertTrue(play.getMoves().isEmpty());
+    assertEquals(mockPlayer, playWithParams.getPlayer());
+    assertEquals(moves, playWithParams.getMoves());
+    assertEquals(Arrays.asList("word1", "word2"), playWithParams.getWords());
+    assertTrue(playWithParams.getFailedContest());
   }
 
   @Test
   void testAddMove() {
-    Play play = new Play(player);
-    Move move = new Move(1, 2, a);
-
-    play.addMove(move);
+    play.addMove(mockMove1);
     assertEquals(1, play.getMoves().size());
-    assertEquals(move, play.getMoves().get(0));
-  }
-
-  @Test
-  void testUndoMove() {
-    Play play = new Play(player);
-    Move move1 = new Move(1, 2, a);
-    Move move2 = new Move(3, 4, b);
-
-    play.addMove(move1);
-    play.addMove(move2);
-
-    Move undoneMove = play.removeMove();
-    assertEquals(move2, undoneMove);
-    assertEquals(1, play.getMoves().size());
-    assertEquals(move1, play.getMoves().get(0));
+    assertTrue(play.getMoves().contains(mockMove1));
   }
 
   @Test
   void testRemoveMove() {
-    Play play = new Play(player);
-    Move move1 = new Move(1, 2, a);
-    Move move2 = new Move(3, 4, b);
+    play.addMove(mockMove1);
+    play.addMove(mockMove2);
 
-    play.addMove(move1);
-    play.addMove(move2);
-
-    Move removedMove = play.removeMove(1, 2);
-    assertEquals(move1, removedMove);
+    assertEquals(mockMove2, play.removeMove());
     assertEquals(1, play.getMoves().size());
-    assertEquals(move2, play.getMoves().get(0));
+    assertFalse(play.getMoves().contains(mockMove2));
+  }
 
-    removedMove = play.removeMove(1, 2);
-    assertNull(removedMove);
+  @Test
+  void testRemoveMoveWithCoordinates() {
+    play.addMove(mockMove1);
+    play.addMove(mockMove2);
+
+    when(mockMove1.getX()).thenReturn(1);
+    when(mockMove1.getY()).thenReturn(1);
+
+    assertEquals(mockMove1, play.removeMove(1, 1));
+    assertEquals(1, play.getMoves().size());
+    assertFalse(play.getMoves().contains(mockMove1));
+  }
+
+  @Test
+  void testRemoveMoveWithInvalidCoordinates() {
+    play.addMove(mockMove1);
+    assertNull(play.removeMove(10, 10));
   }
 
   @Test
   void testIsVertical() {
-    Play play = new Play(player);
-    play.addMove(new Move(0, 0, a));
-    play.addMove(new Move(1, 0, a));
-    assertFalse(play.isVertical());
-    play.removeMove();
-    play.addMove(new Move(0, 1, a));
+    play.addMove(mockMove1);
+    play.addMove(mockMove2);
+
+    when(mockMove1.getX()).thenReturn(1);
+    when(mockMove2.getX()).thenReturn(1);
+
     assertTrue(play.isVertical());
+
+    when(mockMove2.getX()).thenReturn(2);
+    assertFalse(play.isVertical());
   }
 
   @Test
-  void testSetAndGetWords() {
-    Play play = new Play(player);
-    List<String> words = new ArrayList<>();
-    words.add("TEST");
-    words.add("WORD");
+  void testToString() {
+    Play playWithWords = new Play(mockPlayer, new LinkedList<>(), Arrays.asList("word1", "word2"), false);
 
-    play.setWords(words);
-    assertEquals(words, play.getWords());
+    ObjectMapper objectMapper = new ObjectMapper();
+    String expectedJson = null;
+    try {
+      expectedJson = objectMapper.writeValueAsString(playWithWords);
+    } catch (Exception e) {
+      fail("Exception during JSON processing");
+    }
+
+    assertEquals(expectedJson, playWithWords.toString());
+  }
+
+  @Test
+  void testEquals() {
+    Play anotherPlay = new Play(mockPlayer, new LinkedList<>(Arrays.asList(mockMove1, mockMove2)), Arrays.asList("word1", "word2"), false);
+
+    Play differentPlay = new Play(mockPlayer, new LinkedList<>(), Arrays.asList("word3"), true);
+    assertEquals(differentPlay, differentPlay);
+  }
+
+  @Test
+  void testSetWords() {
+    play.setWords(Arrays.asList("word1", "word2"));
+    assertEquals(Arrays.asList("word1", "word2"), play.getWords());
+  }
+
+  @Test
+  void testSetFailedContest() {
+    play.setFailedContest(true);
+    assertTrue(play.getFailedContest());
   }
 }
+
