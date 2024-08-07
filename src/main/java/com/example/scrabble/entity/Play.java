@@ -27,6 +27,7 @@ public class Play {
    */
   public Play(Player player) {
       this.player = player;
+      this.words=new LinkedList<>();
       this.moves = new LinkedList<>();
       this.failedContest = false;
   }
