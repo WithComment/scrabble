@@ -137,7 +137,6 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     Play play = game.getCurrentPlay();
     Player player = game.getCurrentPlayer();
     Board board = game.getBoard();
-    game.startTurn();
 
     if (!board.getCell(x, y).isEmpty()) {
       throw new InvalidPlayException(OCCUPIED);

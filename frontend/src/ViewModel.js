@@ -172,7 +172,7 @@ class ViewModel{
                 body : JSON.stringify(requestBody)
             });
             response = await response.json();
-            console.log(response);
+            console.log("Contest Response:",response);
             if (response.invalidWords.length > 0){
                 response = await fetch(`${this.baseUrl}broadcast_contest_success/`, {
                     method: 'POST'

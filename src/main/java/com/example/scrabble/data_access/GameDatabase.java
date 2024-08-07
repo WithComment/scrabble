@@ -35,6 +35,7 @@ public class GameDatabase implements GameDataAccess{
     @Override
     @Transactional
     public Game get(int gameId){
+        gameRepository.flush();
         Optional<Game> game = gameRepository.findById(gameId);
         if (game.isPresent()){
             if (game.get().getCurrentPlay() != null) {
@@ -56,6 +57,8 @@ public class GameDatabase implements GameDataAccess{
         for (Move move: moves){
             logger.info(move.getX() + " " +move.getY() + " " + move.getLetter());
         }
+        gameRepository.delete(game);
+        gameRepository.flush();
         gameRepository.saveAndFlush(game);
         get(game.getId());
     }
@@ -77,6 +80,7 @@ public class GameDatabase implements GameDataAccess{
     @Override
     @Transactional
     public int getGameCount(){
+        gameRepository.flush();
         return (int) gameRepository.count();
     }
 }

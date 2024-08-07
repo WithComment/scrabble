@@ -25,9 +25,6 @@ public class Game implements Serializable {
     // Serializable vars
     private static int nextId = 0;
 
-    @Version
-    private long version;
-
     @Id
     private final int id; // Unique ID for the game instance
 
