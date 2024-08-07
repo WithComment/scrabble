@@ -49,6 +49,8 @@ class GetLeaderboardInteractorTest {
         when(player2.getScore()).thenReturn(150);
         when(player3.getScore()).thenReturn(120);
 
+        when(game.getPlayers()).thenReturn(Arrays.asList(player1, player2, player3));
+
         when(game.getPlayer(1)).thenReturn(player1);
         when(game.getPlayer(2)).thenReturn(player2);
         when(game.getPlayer(3)).thenReturn(player3);

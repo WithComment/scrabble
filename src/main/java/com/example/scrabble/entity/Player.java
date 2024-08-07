@@ -14,7 +14,7 @@ import java.util.List;
  * Represents a player in the game.
  * A player has an ID, an inventory of letters, a score, and an unstable score.
  */
-public class Player implements Serializable {
+public class Player implements Serializable, Comparable<Player> {
     private int id;
     private String name;
     private List<Letter> inventory;

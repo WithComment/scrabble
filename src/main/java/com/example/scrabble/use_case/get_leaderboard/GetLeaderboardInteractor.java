@@ -41,22 +41,22 @@ public class GetLeaderboardInteractor implements GetLeaderboardInputBoundary {
     @Override
     public GetLeaderboardOutputData execute(GetLeaderboardInputData input) {
         Game game = gameDao.get(input.getGameId());
-        List<Player> players = game.getPlayers();
-        List<LeaderboardEntry> leaderboard = new ArrayList<>();
-        for (Player player : players) {
-            int score = player.getScore(); // Assume getScore() method exists in Player
-            LeaderboardEntry entry = new LeaderboardEntry(player, score);
-            leaderboard.add(entry);
-        }
-        Collections.sort(leaderboard, Collections.reverseOrder());
-        // Extract sorted players from leaderboardEntries
-        List<Player> sortedPlayers = new ArrayList<>();
-        for (LeaderboardEntry entry : leaderboard) {
-            sortedPlayers.add(entry.getPlayer());
-        }
+        // List<Player> players = game.getPlayers();
+        // List<LeaderboardEntry> leaderboard = new ArrayList<>();
+        // for (Player player : players) {
+        //     int score = player.getScore(); // Assume getScore() method exists in Player
+        //     LeaderboardEntry entry = new LeaderboardEntry(player, score);
+        //     leaderboard.add(entry);
+        // }
+        // Collections.sort(leaderboard, Collections.reverseOrder());
+        // // Extract sorted players from leaderboardEntries
+        // List<Player> sortedPlayers = new ArrayList<>();
+        // for (LeaderboardEntry entry : leaderboard) {
+        //     sortedPlayers.add(entry.getPlayer());
+        // }
 
-        // Set the sorted players as the leaderboard
-        game.setLeaderboard(sortedPlayers);
+    // Set the sorted players as the leaderboard
+        List<Player> sortedPlayers = game.getLeaderboard();
         gameDao.update(game);
 
         return new GetLeaderboardOutputData(sortedPlayers);

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -47,8 +48,7 @@ public class Game implements Serializable {
         this.board = new Board();
         this.players = new ArrayList<>();
         this.history = new ArrayList<>();
-        this.leaderboard = players;
-
+        this.leaderboard = new ArrayList<>();
         this.endTurn = false;
         this.numContestFailed = new ArrayList<>(Collections.nCopies(players.size(), 0));
         this.currentPlay = null;
@@ -296,6 +296,11 @@ public class Game implements Serializable {
      * @return the leaderboard
      */
     public List<Player> getLeaderboard() {
+        List<Player> leaderboard = new ArrayList<>(players);
+
+        Collections.sort(leaderboard, Collections.reverseOrder());
+
+        this.leaderboard = leaderboard;
         return leaderboard;
     }
 
