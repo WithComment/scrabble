@@ -107,13 +107,8 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     return false;
   }
 
-  private boolean isFirstPlay(Board board) {
-    for (Tile t : board) {
-      if (t.isConfirmed()) {
-        return false;
-      }
-    }
-    return true;
+  private boolean isFirstPlay(Game game) {
+    return game.getHistory().size() == 0;
   }
 
   private boolean isNotCenter(List<Move> moves) {
@@ -160,14 +155,11 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
       }
     }
 
-    if (isFirstPlay(board)) {
-      logger.info(String.valueOf(isFirstPlay(board)));
-      logger.info(String.valueOf(board.isConfirmed(7, 7)));
+    if (isFirstPlay(game)) {
       if (isNotCenter(moves)) {
         throw new InvalidPlayException(CENTER_MSG);
       }
     } else if (isIsolated(moves, board)) {
-      logger.info(String.valueOf(isFirstPlay(board)));
       throw new InvalidPlayException(CONNECTED_MSG);
     }
     game.addPlay(play);
