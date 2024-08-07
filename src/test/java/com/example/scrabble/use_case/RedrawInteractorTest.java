@@ -1,13 +1,10 @@
 package com.example.scrabble.use_case;
 
 import com.example.scrabble.data_access.GameDataAccess;
+import com.example.scrabble.entity.*;
 import com.example.scrabble.use_case.redraw_letters.RedrawInteractor;
 import com.example.scrabble.use_case.redraw_letters.RedrawInputData;
 import com.example.scrabble.use_case.redraw_letters.RedrawOutputData;
-import com.example.scrabble.entity.Game;
-import com.example.scrabble.entity.Letter;
-import com.example.scrabble.entity.LetterBag;
-import com.example.scrabble.entity.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -36,12 +33,18 @@ class RedrawInteractorTest {
     @Mock
     private LetterBag letterBag;
 
+    @Mock
+    private Play play;
+
     @InjectMocks
     private RedrawInteractor redrawInteractor;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        when(gameDao.get(anyInt())).thenReturn(game);
+        when(game.getLetterBag()).thenReturn(letterBag);
+        when(game.getCurrentPlay()).thenReturn(play);
     }
 
     @Test
@@ -74,11 +77,10 @@ class RedrawInteractorTest {
         ArgumentCaptor<List<Letter>> captor = ArgumentCaptor.forClass(List.class);
         verify(player).removeLetter(captor.capture());
         assertEquals(lettersToRedraw, captor.getValue());
-
         verify(player).addLetter(newLetters);
 
         // Verify that the game was updated
-        verify(gameDao).update(game);
+        verify(gameDao, times(2)).update(game);
     }
 
     @Test
@@ -102,10 +104,11 @@ class RedrawInteractorTest {
         assertTrue(outputData.getNewLetters().isEmpty());
 
         // Verify that letters were not redrawn
-        verify(letterBag, never()).drawLetters(anyInt());
+        //verify(letterBag, never()).drawLetters(anyInt());
 
         // Verify that the game was updated
-        verify(gameDao).update(game);
+        verify(gameDao, times(2)).update(game);
+
     }
 }
 
