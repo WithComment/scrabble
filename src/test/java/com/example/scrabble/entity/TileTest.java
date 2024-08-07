@@ -1,78 +1,103 @@
 package com.example.scrabble.entity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class TileTest {
+class TileTest {
+  private Tile tile;
+  private Letter mockLetter;
 
-  private static final Letter a = new Letter('a', 1);
-
-  @Test
-  void testConfirm() {
-    Tile t = new Tile(1, 1, a);
-    assertFalse(t.isConfirmed());
-    t.confirm();
-    assertTrue(t.isConfirmed());
+  @BeforeEach
+  void setUp() {
+    // Initialize mock Letter object and Tile instance before each test
+    mockLetter = mock(Letter.class);
+    tile = new Tile(2, 3, mockLetter);
   }
 
   @Test
-  void testEquals() {
-    Tile t = new Tile(1, 1, a);
-    Tile t2 = new Tile(1, 1, a.clone());
-    Tile t3 = new Tile(2, 1, new Letter('b', 1));
-    assertEquals(t, t2);
-    assertNotEquals(t, t3);
+  void testConstructorWithParams() {
+    assertNotNull(tile);
+    assertEquals(2, tile.getWordMult());
+    assertEquals(3, tile.getLetterMult());
+    assertEquals(mockLetter, tile.getLetter());
+    assertFalse(tile.isConfirmed());
   }
 
-  @Test
-  void testGetLetter() {
-    Tile t = new Tile(1, 1, a);
-    assertEquals(a, t.getLetter());
-  }
+//  @Test
+//  void testConstructorWithJson() {
+//    JSONObject json = new JSONObject()
+//            .put("wordMult", 2)
+//            .put("letterMult", 3)
+//            .put("letter", new JSONObject().put("someKey", "someValue")) // Mock Letter JSON representation
+//            .put("isConfirmed", false);
+//
+//    tile = new Tile(json);
+//
+//    assertEquals(2, tile.getWordMult());
+//    assertEquals(3, tile.getLetterMult());
+//    assertNotNull(tile.getLetter()); // Check if the Letter is correctly parsed
+//    assertFalse(tile.isConfirmed());
+//  }
 
   @Test
-  void testGetLetterMult() {
-    Tile t = new Tile(1, 2, a);
-    assertEquals(2, t.getLetterMult());
-  }
+  void testSetLetter() {
+    Letter newLetter = mock(Letter.class);
+    tile.setLetter(newLetter);
 
-  @Test
-  void testGetWordMult() {
-    Tile t = new Tile(2, 1, a);
-    assertEquals(2, t.getWordMult());
-  }
-
-  @Test
-  void testIsEmpty() {
-    Tile t = new Tile(1, 1, a);
-    Tile t2 = new Tile(1, 1, null);
-    assertFalse(t.isEmpty());
-    assertTrue(t2.isEmpty());
+    assertEquals(newLetter, tile.getLetter());
   }
 
   @Test
   void testRemoveLetter() {
-    Tile t = new Tile(1, 1, a);
-    t.removeLetter();
-    assertTrue(t.isEmpty());
+    tile.removeLetter();
+
+    assertNull(tile.getLetter());
+    assertFalse(tile.isConfirmed());
   }
 
   @Test
-  void testSetLetter() {
-    Tile t = new Tile(1, 1, null);
-    t.setLetter(a);
-    assertEquals(a, t.getLetter());
+  void testSetConfirmed() {
+    tile.setConfirmed(true);
+
+    assertTrue(tile.isConfirmed());
+  }
+
+  @Test
+  void testConfirm() {
+    tile.confirm();
+
+    assertTrue(tile.isConfirmed());
+  }
+
+  @Test
+  void testIsEmpty() {
+    assertFalse(tile.isEmpty());
+
+    tile.removeLetter();
+    assertTrue(tile.isEmpty());
   }
 
   @Test
   void testToString() {
-    Tile t = new Tile(1, 1, a);
-    assertEquals("a", t.toString());
-    t.removeLetter();
-    assertEquals(" ", t.toString());
+    when(mockLetter.toString()).thenReturn("A");
+    assertEquals("A", tile.toString());
+
+    tile.removeLetter();
+    assertEquals(" ", tile.toString());
+  }
+
+  @Test
+  void testEquals() {
+    Tile anotherTile = new Tile(2, 3, mockLetter);
+    assertEquals(tile, anotherTile);
+
+    Tile differentTile = new Tile(1, 2, null);
+    assertNotEquals(tile, differentTile);
   }
 }
+
