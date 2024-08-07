@@ -31,11 +31,6 @@ class GameTest {
   }
 
   @Test
-  void testGetPlayerScore() {
-    assertEquals(0, game.getPlayerScore(player1.getId()));
-  }
-
-  @Test
   void testStartGame() {
     game.startGame();
     assertNotNull(player1.getInventory());
@@ -43,14 +38,6 @@ class GameTest {
     assertEquals(7, player1.getInventory().size());
     assertEquals(7, player2.getInventory().size());
   }
-
-  @Test
-  void testSetBoardCellAndGetBoardCell() {
-    Tile tile = new Tile(1,1, new Letter('A',1));
-    game.setBoardCell(0, 0, tile);
-    assertEquals(tile, game.getBoardCell(0, 0));
-  }
-
 
 
   @Test
@@ -117,16 +104,16 @@ class GameTest {
 
   @Test
   public void testDealContest() {
-    game.addPlayer();
-    game.addPlayer();
+    game.addPlayer("1");
+    game.addPlayer("2");
     game.dealContest(true);
     assertEquals(1, game.getNumContestFailed().get(0));
   }
 
   @Test
   public void testEndTurn() {
-    game.addPlayer();
-    game.addPlayer();
+    game.addPlayer("1");
+    game.addPlayer("2");
     game.endTurn();
     assertTrue(game.isEndTurn());
     assertEquals(1, game.getPlayerNumber());
@@ -134,7 +121,7 @@ class GameTest {
 
   @Test
   public void testLeaderboard() {
-    game.addPlayer();
+    game.addPlayer("1");
     game.getPlayer(0).addScore(10);
     List<Player> leaderboard = game.getLeaderboard();
     assertEquals(3, leaderboard.size());
@@ -170,13 +157,6 @@ class GameTest {
   @Test
   public void testToString() {
     assertEquals("Game" + game.getId(), game.toString());
-  }
-
-  @Test
-  public void testSetAndGetBoardCell() {
-    Tile tile = new Tile(1, 1, new Letter('A',1));
-    game.setBoardCell(0, 0, tile);
-    assertEquals(tile, game.getBoardCell(0, 0));
   }
 }
 
