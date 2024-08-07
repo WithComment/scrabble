@@ -4,6 +4,8 @@ import '../../App.css'
 function Redraw({ ButtonViewModel }){
     const viewModel = ButtonViewModel;
     function handleClick(){
+        const click = new Audio('/click.mp3');
+        click.play();
         let input = {
             type : 'redraw',
             x : 0,

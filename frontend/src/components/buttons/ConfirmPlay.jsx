@@ -4,6 +4,8 @@ import '../../App.css'
 function ConfirmPlay({ ButtonViewModel }){
     const viewModel = ButtonViewModel;
     function handleClick(){
+        const click = new Audio('/click.mp3');
+        click.play();
         let input = {
             type : 'confirm-play',
             x : 0,

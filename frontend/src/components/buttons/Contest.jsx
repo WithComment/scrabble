@@ -4,6 +4,8 @@ import '../../App.css'
 function Contest({ ButtonViewModel }){
     const viewModel = ButtonViewModel;
     function handleClick(){
+        const click = new Audio('/click.mp3');
+        click.play();
         let input = {
             type : 'contest',
             x : 0,
