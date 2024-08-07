@@ -4,7 +4,7 @@ import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Letter;
 import com.example.scrabble.entity.Player;
-import com.example.scrabble.data_access.GameDao;
+import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.use_case.InvalidPlayException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

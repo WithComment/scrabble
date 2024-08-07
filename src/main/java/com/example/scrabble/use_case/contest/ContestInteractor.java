@@ -66,6 +66,7 @@ public class ContestInteractor implements ContestInputBoundary {
     @Override
     public ContestOutputData execute(ContestInputData contestInputData) throws ContestException {
         game = gameDAO.get(contestInputData.getGameId());
+        Board board = game.getBoard();
         if (game == null) {
             throw new ContestException("Game not found");
         }
@@ -83,6 +84,11 @@ public class ContestInteractor implements ContestInputBoundary {
                 if (!invalidWords.isEmpty()) {
                     Play lastPlay = game.removeLastPlay();
                     Player contestedPlayer = lastPlay.getPlayer();
+                    for (Move move : lastPlay.getMoves()) {
+                        System.out.println(board.getCell(move.getX(), move.getY()).getLetter());
+                        contestedPlayer.addLetter(board.getCell(move.getX(), move.getY()).getLetter());
+                        board.getCell(move.getX(), move.getY()).removeLetter();
+                    }
                     contestedPlayer.resetTempScore();
                 } else {
                     fail();
