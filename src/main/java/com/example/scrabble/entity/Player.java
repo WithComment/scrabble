@@ -95,6 +95,10 @@ public class Player implements Serializable, Comparable<Player> {
         this.inventory.remove(letter);
     }
 
+    public void addScore(int score) {
+        this.score += score;
+    }
+
     public Letter removeLetter(char letter) {
         for (int i = 0; i < inventory.size(); i++) {
             if (inventory.get(i).getLetter() == letter) {
