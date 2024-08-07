@@ -164,13 +164,6 @@ public class GameController {
     @PostMapping("/{gameId}/place_letter/")
     public ResponseEntity<EntityModel<PlaceLetterOutputData>> placeLetter(@PathVariable int gameId,
             @RequestBody HashMap<String, Object> input) {
-
-        Game game = gameDao.get(gameId);
-        List<Move> moves = game.getCurrentPlay().getMoves();
-        logger.info("Game Current Play moves: ");
-        for (Move move: moves){
-            logger.info(move.getX() + " " +move.getY() + " " + move.getLetter());
-        }
         int x = (int) input.get("x");
         int y = (int) input.get("y");
         char letter = ((String) input.get("letter")).charAt(0);
@@ -179,15 +172,6 @@ public class GameController {
         notifyFrontend(gameId, "place_letter");
         EntityModel<PlaceLetterOutputData> entityModel = EntityModel.of(output,
             linkTo(methodOn(GameController.class).getGame(gameId)).withSelfRel());
-
-        game = gameDao.get(gameId);
-        moves = game.getCurrentPlay().getMoves();
-        logger.info("Game Current Play moves: ");
-        for (Move move: moves){
-            logger.info(move.getX() + " " +move.getY() + " " + move.getLetter());
-        }
-
-
         return ResponseEntity.ok(entityModel);
     }
 
