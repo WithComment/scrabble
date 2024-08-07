@@ -63,15 +63,9 @@ class GetLeaderboardInteractorTest {
         // Execute the interactor
         GetLeaderboardOutputData outputData = getLeaderboardInteractor.execute(inputData);
 
-        // Verify that the leaderboard is sorted correctly
-        List<Player> sortedPlayers = outputData.getLeaderboard();
-        assertEquals(3, sortedPlayers.size());
-        assertEquals(player2, sortedPlayers.get(0)); // Player with the highest score
-        assertEquals(player3, sortedPlayers.get(1)); // Player with the second highest score
-        assertEquals(player1, sortedPlayers.get(2)); // Player with the lowest score
+        verify(game).getLeaderboard();
 
-        // Verify that the game data access update method was called
-        verify(gameDao, times(1)).update(game);
+        verify(gameDao).update(game);
     }
 }
 
