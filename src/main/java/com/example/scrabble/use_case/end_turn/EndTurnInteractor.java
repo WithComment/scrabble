@@ -48,8 +48,10 @@ public class EndTurnInteractor implements EndTurnInputBoundary {
         game.endTurn();
         game.startTurn();
 
-
+        System.out.println(game.getBoard().getCell(7, 7).isConfirmed());
         gameDataAccess.update(game);
+        game = gameDataAccess.get(game.getId());
+        System.out.println(game.getBoard().getCell(7, 7).isConfirmed());
         return new EndTurnOutputData(game.getId());
     }
 }
