@@ -23,7 +23,9 @@ public class Tile implements Serializable {
     private int wordMult;
     private int letterMult;
     private Letter letter;
-    private boolean isConfirmed = false;
+
+    @JsonProperty("isConfirmed")
+    private boolean isConfirmed;
 
     /**
      * Constructs a Tile with specified multipliers and letter.
@@ -47,7 +49,6 @@ public class Tile implements Serializable {
         this.letter = letter;
         this.isConfirmed = isConfirmed;
     }
-
 
 
     public Tile(JSONObject json) {
@@ -103,11 +104,16 @@ public class Tile implements Serializable {
         isConfirmed = false;
     }
 
+    @JsonProperty("isConfirmed")
+    public void setConfirmed(boolean confirmed) {
+        isConfirmed = confirmed;
+    }
+
     /**
      * Set the tile to confirmed.
      */
     protected void confirm() {
-        isConfirmed = true;
+        this.isConfirmed = true;
     }
 
     /**
@@ -123,6 +129,7 @@ public class Tile implements Serializable {
      * Checks if the tile is confirmed.
      * @return True if the tile is confirmed, false otherwise.
      */
+    @JsonProperty("isConfirmed")
     public boolean isConfirmed() {
         return letter != null && isConfirmed;
     }

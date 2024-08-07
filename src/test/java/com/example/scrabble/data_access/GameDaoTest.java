@@ -1,11 +1,10 @@
 package com.example.scrabble.data_access;
 
-import com.example.scrabble.entity.Game;
-import com.example.scrabble.entity.Player;
-import com.example.scrabble.entity.Tile;
+import com.example.scrabble.entity.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -13,6 +12,8 @@ import java.util.List;
 
 @SpringBootTest
 public class GameDaoTest {
+    @Mock
+    private Letter letter;
 
     @InjectMocks
     private GameDao gameDao; // The class under test

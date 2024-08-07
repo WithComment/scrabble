@@ -151,9 +151,10 @@ public class Board implements Serializable, Iterable<Tile> {
      * @return
      */
     public boolean confirm(int x, int y) {
+        /*
         if (this.board[y][x].isEmpty()) {
             return false;
-        }
+        }*/
         this.board[y][x].confirm();
         return true;
     }
