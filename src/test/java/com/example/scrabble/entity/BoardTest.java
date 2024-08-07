@@ -25,7 +25,7 @@ public class BoardTest {
   @Test
   void testSetLetter() {
     board.setCell(0, 0, A);
-    assertEquals(A, board.getCell(0, 0).getLetter());
+    assertEquals(A, board.getTile(0, 0).getLetter());
   }
 
   @Test

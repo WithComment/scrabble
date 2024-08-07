@@ -86,7 +86,7 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
       }
 
       for (int i = start; i <= end; i++) {
-        if (board.getCell(x, i).isEmpty()) {
+        if (board.getTile(x, i).isEmpty()) {
           return true;
         }
       }
@@ -99,7 +99,7 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
         end = Integer.max(end, move.getX());
       }
       for (int i = start; i <= end; i++) {
-        if (board.getCell(i, y).isEmpty()) {
+        if (board.getTile(i, y).isEmpty()) {
           return true;
         }
       }

@@ -18,18 +18,18 @@ public class GameTest {
 
   @Test
   void testAddPlayer() {
-    game.addPlayer();
-    game.addPlayer();
+    game.addPlayer("1");
+    game.addPlayer("2");
     assertEquals(2, game.getPlayers().size());
-    game.addPlayer();
+    game.addPlayer("3");
     assertEquals(3, game.getPlayers().size());
   }
 
   @Test
   void testGetLeaderboard() {
-    game.addPlayer();
-    game.addPlayer();
-    game.addPlayer();
+    game.addPlayer("1");
+    game.addPlayer("2");
+    game.addPlayer("2");
     game.getPlayer(0).setTempScore(100);
     game.getPlayer(1).setTempScore(150);
     game.getPlayer(2).setTempScore(120);

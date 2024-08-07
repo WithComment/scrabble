@@ -66,11 +66,12 @@ public class ContestInteractor implements ContestInputBoundary {
     public ContestOutputData execute(ContestInputData contestInputData) throws ContestException {
         int gameID = contestInputData.getGameId();
         game = gameDAO.get(gameID);
+        Play currentPlay = game.getCurrentPlay();
         EndTurnInteractor endTurnInteractor = new EndTurnInteractor(gameDAO);
         List<String> invalidWords = new LinkedList<>();
         if (contestInputData.getIsContest()) {
             player = game.getPlayer(contestInputData.getPlayerId());
-            List<String> words = game.getLastPlay().getWords();
+            List<String> words = currentPlay.getWords();
             for (String word : words) {
                 if (!wordIsValid(word)) {
                     invalidWords.add(word);
@@ -85,7 +86,7 @@ public class ContestInteractor implements ContestInputBoundary {
             } else {
                 game.contestFailureUpdate(player.getId());
             }
-            game.getLastPlay().getPlayer().resetTempScore();
+            currentPlay.getPlayer().resetTempScore();
         }
         game.increaseNumContests();
         gameDAO.update(game);

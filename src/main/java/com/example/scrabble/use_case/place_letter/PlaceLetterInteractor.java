@@ -40,12 +40,12 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     int y = move.getY();
     List<Tile> tiles = new LinkedList<>();
     // Go to the top of a set of continuous letters.
-    while (y >= 0 && !board.getCell(x, y).isEmpty()) y--;
+    while (y >= 0 && !board.getTile(x, y).isEmpty()) y--;
     y++;
 
     // Go to the end, add tiles to the list along the way.
-    while (y < board.getHeight() && !board.getCell(x, y).isEmpty()) {
-      tiles.add(board.getCell(x, y++));
+    while (y < board.getHeight() && !board.getTile(x, y).isEmpty()) {
+      tiles.add(board.getTile(x, y++));
     }
     if (tiles.size() <= 1) return null;
     return tiles;
@@ -55,10 +55,10 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     int x = move.getX();
     int y = move.getY();
     List<Tile> tiles = new LinkedList<>();
-    while (x >= 0 && !board.getCell(x, y).isEmpty()) x--;
+    while (x >= 0 && !board.getTile(x, y).isEmpty()) x--;
     x++;
-    while (x < board.getWidth() && !board.getCell(x, y).isEmpty()) {
-      tiles.add(board.getCell(x++, y));
+    while (x < board.getWidth() && !board.getTile(x, y).isEmpty()) {
+      tiles.add(board.getTile(x++, y));
     }
     if (tiles.size() <= 1) return null;
     return tiles;
@@ -95,7 +95,7 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
 
     // If the move standsalone, add it to the list of words.
     if (words.isEmpty()) {
-      words.add(Arrays.asList(board.getCell(fMove.getX(), fMove.getY())));
+      words.add(Arrays.asList(board.getTile(fMove.getX(), fMove.getY())));
     }
     return words;
   }
@@ -138,7 +138,7 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     Player player = game.getCurrentPlayer();
     Board board = game.getBoard();
 
-    if (!board.getCell(x, y).isEmpty()) {
+    if (!board.getTile(x, y).isEmpty()) {
       throw new InvalidPlayException(OCCUPIED);
     }
 

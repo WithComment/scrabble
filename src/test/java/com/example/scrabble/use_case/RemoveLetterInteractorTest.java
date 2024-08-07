@@ -56,7 +56,7 @@ class RemoveLetterInteractorTest {
         when(play.getPlayer()).thenReturn(player);
 
         // Mock board behavior
-        when(board.getCell(anyInt(), anyInt())).thenReturn(tile);
+        when(board.getTile(anyInt(), anyInt())).thenReturn(tile);
 
         // Mock tile behavior
         when(tile.getLetter()).thenReturn(testLetter);
@@ -81,7 +81,7 @@ class RemoveLetterInteractorTest {
         assertNotNull(outputData);
         assertTrue(outputData.isRemoveSuccessful());
         verify(play, times(1)).removeMove(0, 0);
-        Letter verifyLetter = game.getBoard().getCell(0, 0).getLetter();
+        Letter verifyLetter = game.getBoard().getTile(0, 0).getLetter();
         verify(player, times(1)).addLetter(verifyLetter);
         verify(tile, times(1)).removeLetter();
         verify(gameDao, times(1)).update(game);

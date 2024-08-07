@@ -59,7 +59,7 @@ public class ConfirmPlayInteractorTest {
       when(tile.getLetter()).thenReturn(move.getLetter());
       x = move.getX();
       y = move.getY();
-      when(board.getCell(x, y)).thenReturn(tile);
+      when(board.getTile(x, y)).thenReturn(tile);
       when(board.isConfirmed(x, y)).thenReturn(false);
     }
   }
@@ -88,7 +88,7 @@ public class ConfirmPlayInteractorTest {
   void testHasGap() {
     Tile tile = mock(Tile.class);
     when(tile.isEmpty()).thenReturn(true);
-    when(board.getCell(anyInt(), anyInt())).thenReturn(tile);
+    when(board.getTile(anyInt(), anyInt())).thenReturn(tile);
 
     when(play.getMoves()).thenReturn(Arrays.asList(new Move(0, 0, a), new Move(0, 2, a)));
     when(play.isVertical()).thenReturn(true);
