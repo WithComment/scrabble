@@ -329,13 +329,10 @@ public class Game implements Serializable {
      * Increments the number of contest failures for the specified player
      * and adjusts the current player's score based on contest results.
      *
-     * @param PlayerNumber the number of the player whose contest failure count is being updated
+     * @param playerNumber the number of the player whose contest failure count is being updated
      */
-    public void contestFailureUpdate(int PlayerNumber) {
-        int CurrentFailure = numContestFailed.get(PlayerNumber);
-        numContestFailed.set(PlayerNumber, CurrentFailure + 1);
-        Player currentPlayer = getCurrentPlayer();
-        currentPlayer.resetTempScore();
+    public void contestFailureUpdate(int playerNumber) {
+        numContestFailed.set(playerNumber, numContestFailed.get(playerNumber) + 1);
     }
 
     /**
@@ -356,7 +353,7 @@ public class Game implements Serializable {
      */
     public void dealContest(boolean ContestSucceed) {
         if (ContestSucceed){
-            numContestFailed.set((playerNumber), numContestFailed.get((playerNumber)));
+            numContestFailed.set((playerNumber), numContestFailed.get(playerNumber) + 1);
         }
         this.getCurrentPlayer().confirmTempScore();
     }
