@@ -1,6 +1,5 @@
 package com.example.scrabble.use_case;
 
-import com.example.scrabble.data_access.GameDao;
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.use_case.contest.ContestInteractor;
 import com.example.scrabble.use_case.contest.ContestInputData;
@@ -52,8 +51,6 @@ class ContestInteractorTest {
 
     @InjectMocks
     private ContestInteractor contestInteractor;
-    @Autowired
-    private GameDao gameDao;
 
     @BeforeEach
     void setUp() throws IOException, InterruptedException {

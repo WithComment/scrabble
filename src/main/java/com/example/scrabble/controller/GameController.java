@@ -6,6 +6,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.HashMap;
 import java.util.List;
 
+import com.example.scrabble.entity.Move;
 import com.example.scrabble.use_case.redraw_letters.RedrawInputBoundary;
 import com.example.scrabble.use_case.redraw_letters.RedrawInputData;
 import com.example.scrabble.use_case.redraw_letters.RedrawInteractor;
@@ -107,6 +108,8 @@ public class GameController {
     this.contestInteractor = contestInteractor;
     this.endGameInteractor = endGameInteractor;
     this.redrawInteractor = redrawInteractor;
+
+    Game.setIdCounter(gameDao.getGameCount());
   }
 
   private void notifyFrontend(int gameId, String type) {
