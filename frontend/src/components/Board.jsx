@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Board.module.css';
 import './Board.css';
 import Tile from './Tile'
 
 function Board({ board, boardViewModel }){
+    const [clickSound, setClickSound] = useState(null);
+    useEffect(() => {
+        const audio = new Audio('/click.mp3');
+        audio.load();
+        setClickSound(audio);
+    }, []);
+
     let viewModel = boardViewModel;
     async function handleClick(e, xCoord, yCoord){
-        const click = new Audio('/click.mp3');
-        click.play();
+        if (clickSound) {
+            clickSound.currentTime = 0;
+            clickSound.play();
+        }
         if (e.type === "click"){
             let input = {
                 type : 'lclick',

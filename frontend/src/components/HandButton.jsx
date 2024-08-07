@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './Hand.module.css';
 
 function HandButton({ letter, handViewModel, index, select, selectedTile }) {
+    const [clickSound, setClickSound] = useState(null);
     const [selectedForRedraw, setSelectedForRedraw] = useState(false);
     const [selectedForPlay, setSelectedForPlay] = useState(false);
     const ref = useRef();
@@ -36,9 +37,17 @@ function HandButton({ letter, handViewModel, index, select, selectedTile }) {
         ' ': 0
     };
 
+    useEffect(() => {
+        const audio = new Audio('/click.mp3');
+        audio.load();
+        setClickSound(audio);
+    }, []);
+
     function handleClick(e){
-        const click = new Audio('/click.mp3');
-        click.play();
+        if (clickSound) {
+            clickSound.currentTime = 0;
+            clickSound.play();
+        }
         if (e.type === "click") {
             setSelectedForRedraw(false);
             setSelectedForPlay(true);
