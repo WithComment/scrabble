@@ -32,23 +32,23 @@ public class Game implements Serializable {
     private final int id; // Unique ID for the game instance
 
     @Column(name="letter_bag")
-    @Convert(converter= LetterBagConverter.class)
+    @Convert(converter=LetterBagConverter.class)
     private LetterBag letterBag; // Bag of letters available to draw from
 
     @Column(name="board")
-    @Convert(converter= BoardConverter.class)
+    @Convert(converter=BoardConverter.class)
     private Board board; // The game board
 
     @Column(name="players")
-    @Convert(converter= PlayersConverter.class)
+    @Convert(converter=PlayersConverter.class)
     private List<Player> players; // List of players in the game
 
     @Column(name="history")
-    @Convert(converter= HistoryConverter.class)
+    @Convert(converter=HistoryConverter.class)
     private List<Play> history; // History of plays made during the game
 
     @Column(name="leaderboard")
-    @Convert(converter=LeaderBoardConverter.class)
+    @Convert(converter=PlayersConverter.class)
     private List<Player> leaderboard;
 
     // turn manager
@@ -135,7 +135,7 @@ public class Game implements Serializable {
         this.history = history;
         this.leaderboard = leaderboard;
         this.endTurn = endTurn;
-        this.playerNumber = 0;
+        this.playerNumber = playerNumber;
         this.numContestFailed = numContestFailed;
         this.currentPlay = currentPlay;
         this.numContests = numContests;
@@ -367,7 +367,7 @@ public class Game implements Serializable {
         int CurrentFailure = numContestFailed.get(PlayerNumber);
         numContestFailed.set(PlayerNumber, CurrentFailure + 1);
         Player currentPlayer = getCurrentPlayer();
-        currentPlayer.BeContested();
+        currentPlayer.resetTempScore();
     }
 
     /**
@@ -400,6 +400,9 @@ public class Game implements Serializable {
      */
     public Player addPlayer(String name) {
         Player player = new Player(name, playerIDCounter++);
+        for (Letter letter : letterBag.drawLetters(7)){
+            player.addLetter(letter);
+        };
         players.add(player);
         leaderboard.add(player);
         numContestFailed.add(0);
@@ -473,7 +476,6 @@ public class Game implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        System.out.println("Game equals");
         if (this == obj){return true;}
 
         if (obj == null || getClass() != obj.getClass()){return false;}

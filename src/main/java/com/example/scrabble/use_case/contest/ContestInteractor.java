@@ -3,6 +3,9 @@ package com.example.scrabble.use_case.contest;
 
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.*;
+import com.example.scrabble.use_case.end_turn.EndTurnInputBoundary;
+import com.example.scrabble.use_case.end_turn.EndTurnInputData;
+import com.example.scrabble.use_case.end_turn.EndTurnInteractor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,7 +83,7 @@ public class ContestInteractor implements ContestInputBoundary {
                 if (!invalidWords.isEmpty()) {
                     Play lastPlay = game.removeLastPlay();
                     Player contestedPlayer = lastPlay.getPlayer();
-                    contestedPlayer.BeContested();
+                    contestedPlayer.resetTempScore();
                 } else {
                     fail();
 //                    throw new ContestException("All words in last move are valid.");
@@ -90,11 +93,16 @@ public class ContestInteractor implements ContestInputBoundary {
 //                throw new ContestException("Word validation failed.", e);
 //            }
             gameDAO.update(game);
+            EndTurnInteractor endTurnInteractor = new EndTurnInteractor(gameDAO);
+            endTurnInteractor.execute(new EndTurnInputData(game.getId()));
             return new ContestOutputData(invalidWords, true);
         }
         game.increaseNumContests();
         gameDAO.update(game);
         if (game.getNumContests() >= game.getNumPlayers() - 1) {
+            EndTurnInteractor endTurnInteractor = new EndTurnInteractor(gameDAO);
+            endTurnInteractor.execute(new EndTurnInputData(game.getId()));
+            game = gameDAO.get(game.getId());
             return new ContestOutputData(new ArrayList<>(), true);
         } else {
             return new ContestOutputData(new ArrayList<>(), false);

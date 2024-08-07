@@ -148,11 +148,13 @@ public class Board implements Serializable, Iterable<Tile> {
      *
      * @param x the x-coordinate of the letter
      * @param y the y-coordinate of the letter
+     * @return
      */
     public boolean confirm(int x, int y) {
+        /*
         if (this.board[y][x].isEmpty()) {
             return false;
-        }
+        }*/
         this.board[y][x].confirm();
         return true;
     }
@@ -218,12 +220,12 @@ public class Board implements Serializable, Iterable<Tile> {
     @Serial
     private void writeObject(ObjectOutputStream out) throws IOException {
         JSONObject jsonObject = new JSONObject(this);
-        out.writeUTF(jsonObject.toString());
+        out.writeChars(jsonObject.toString());
     }
 
     @Serial
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        String json = in.readUTF();
+        String json = in.readLine();
         JSONObject jsonObject = new JSONObject(json);
         this.height = jsonObject.getInt("height");
         this.width = jsonObject.getInt("width");

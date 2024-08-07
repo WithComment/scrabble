@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.util.List;
 
-public class HistoryConverter extends JsonConverter{
+public class HistoryConverter extends JsonConverter {
     public HistoryConverter() {
         super(new TypeReference<List<Play>>() {});
     }

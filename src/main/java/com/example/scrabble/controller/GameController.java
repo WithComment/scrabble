@@ -227,10 +227,31 @@ public class GameController {
         return ResponseEntity.ok(entityModel);
     }
 
-    @PostMapping("/{gameId}/broadcast/")
+    @PostMapping("/{gameId}/broadcast_valid_play/")
     public void broadcastValidPlay(@PathVariable int gameId){
         notifyFrontend(gameId, "valid-confirm-play");
     }
+
+    @PostMapping("/{gameId}/broadcast_contest_success/")
+    public void broadcastContestSuccess(@PathVariable int gameId){
+        notifyFrontend(gameId, "contest-success");
+    }
+
+    @PostMapping("/{gameId}/broadcast_contest_fail/")
+    public void broadcastContestFail(@PathVariable int gameId){
+        notifyFrontend(gameId, "contest-fail");
+    }
+
+    @PostMapping("/{gameId}/broadcast_no_contests/")
+    public void broadcastNoContests(@PathVariable int gameId){
+        notifyFrontend(gameId, "no-contests");
+    }
+
+    @PostMapping("/{gameId}/broadcast_redraw/")
+    public void broadcastRedraw(@PathVariable int gameId){
+        notifyFrontend(gameId, "redraw");
+    }
+
 
     @PostMapping("/{gameId}/end_turn/")
     public ResponseEntity<EntityModel<EndTurnOutputData>> endTurn(@PathVariable int gameId, @RequestBody EndTurnInputData input) {

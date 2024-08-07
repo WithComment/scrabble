@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,7 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
   public static final String NO_LETTER = "You don't have the letter in your inventory!";
 
   private final GameDataAccess gameDao;
+  private final static Logger logger = LoggerFactory.getLogger(PlaceLetterInteractor.class);
 
   @Autowired
   public PlaceLetterInteractor(

@@ -41,6 +41,9 @@ class ContestInteractorTest {
     private Play play;
 
     @Mock
+    private LetterBag letterBag;
+
+    @Mock
     private HttpClient httpClient;
 
     @Mock
@@ -58,6 +61,9 @@ class ContestInteractorTest {
         when(game.getPlayer(anyInt())).thenReturn(player);
         when(game.removeLastPlay()).thenReturn(play);
         when(game.getLastPlay()).thenReturn(play);
+        when(game.getCurrentPlay()).thenReturn(play);
+        when(game.getLetterBag()).thenReturn(letterBag);
+        when(game.getCurrentPlayer()).thenReturn(player);
         when(play.getWords()).thenReturn(Arrays.asList("validword1", "invalidword"));
         when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
                 .thenReturn(httpResponse);
@@ -110,8 +116,8 @@ class ContestInteractorTest {
 
         // Verify interactions
         verify(game).removeLastPlay();
-        verify(player).BeContested();
-        verify(gameDataAccess).update(game);
+        verify(player).resetTempScore();
+        verify(gameDataAccess, times(2)).update(game);
 
         // Assertions
         assertEquals(Arrays.asList("validword1", "invalidword"), outputData.getInvalidWords());
@@ -128,7 +134,7 @@ class ContestInteractorTest {
         ContestOutputData outputData = contestInteractor.execute(inputData);
 
         //verify(game).contestFailureUpdate(player.getId());
-        verify(gameDataAccess).update(game);
+        verify(gameDataAccess, times(2)).update(game);
 
         assertFalse(outputData.getInvalidWords().isEmpty());
     }
