@@ -11,10 +11,14 @@ public class Move {
   private int y;
   private Letter letter;
 
+  /**
+   * Default constructor for creating an empty Move.
+   */
   public Move() {}
 
   /**
    * Constructs a new Move with the specified coordinates and letter.
+   *
    * @param x The x-coordinate of the move.
    * @param y The y-coordinate of the move.
    * @param letter The letter placed on the board.
@@ -28,6 +32,7 @@ public class Move {
 
   /**
    * Gets the x-coordinate of the move.
+   *
    * @return The x-coordinate of the move.
    */
   public int getX() {
@@ -36,6 +41,7 @@ public class Move {
 
   /**
    * Gets the y-coordinate of the move.
+   *
    * @return The y-coordinate of the move.
    */
   public int getY() {
@@ -44,12 +50,19 @@ public class Move {
 
   /**
    * Gets the letter placed on the board.
+   *
    * @return The letter placed on the board.
    */
   public Letter getLetter() {
     return letter;
   }
 
+  /**
+   * Compares this Move to another object for equality.
+   *
+   * @param obj The object to compare to.
+   * @return true if the moves are equal, false otherwise.
+   */
   @Override
   public boolean equals(Object obj) {
     if (this == obj){return true;}

@@ -1,10 +1,7 @@
 package com.example.scrabble.use_case.contest;
 
-
-import com.example.scrabble.data_access.GameDao;
 import com.example.scrabble.data_access.GameDataAccess;
 import com.example.scrabble.entity.*;
-import com.example.scrabble.use_case.end_turn.EndTurnInputBoundary;
 import com.example.scrabble.use_case.end_turn.EndTurnInputData;
 import com.example.scrabble.use_case.end_turn.EndTurnInteractor;
 import com.example.scrabble.use_case.remove_letter.RemoveLetterInputData;
@@ -20,17 +17,21 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
+/**
+ * Handle the contest use case.
+ */
 @Service
 public class ContestInteractor implements ContestInputBoundary {
     private final GameDataAccess gameDAO;
-    private Game game;
-    private Player player;
 
+    /**
+     * Constructs a ContestInteractor instance with the specified GameDataAccess.
+     *
+     * @param gameDAO the data access object for game data
+     */
     @Autowired
     public ContestInteractor(GameDataAccess gameDAO) {
         this.gameDAO = gameDAO;
@@ -62,15 +63,22 @@ public class ContestInteractor implements ContestInputBoundary {
         }
     }
 
+    /**
+     * Executes the contest use case.
+     *
+     * @param contestInputData the input data for the contest
+     * @return the output data containing the list of invalid words and a boolean indicating if the turn should end
+     * @throws ContestException if there is an issue during the contest execution
+     */
     @Override
     public ContestOutputData execute(ContestInputData contestInputData) throws ContestException {
         int gameID = contestInputData.getGameId();
-        game = gameDAO.get(gameID);
+        Game game = gameDAO.get(gameID);
         Play currentPlay = game.getCurrentPlay();
         EndTurnInteractor endTurnInteractor = new EndTurnInteractor(gameDAO);
         List<String> invalidWords = new LinkedList<>();
         if (contestInputData.getIsContest()) {
-            player = game.getPlayer(contestInputData.getPlayerId());
+            Player player = game.getPlayer(contestInputData.getPlayerId());
             List<String> words = currentPlay.getWords();
             for (String word : words) {
                 if (!wordIsValid(word)) {

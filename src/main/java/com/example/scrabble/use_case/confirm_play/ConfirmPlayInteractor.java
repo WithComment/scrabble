@@ -12,21 +12,19 @@ import com.example.scrabble.entity.Board;
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Move;
 import com.example.scrabble.entity.Play;
-import com.example.scrabble.entity.Tile;
 import com.example.scrabble.use_case.InvalidPlayException;
 
-
 /**
- * Usecase interactor for confirming a play.
+ * Use case interactor for confirming a play.
  * Responsible for checking if a play is valid and updating the player's score.
- * *
+ *
  * <p>
  * Constants:
  * <ul>
  * <li>{@code INLINE_MSG} - Message indicating that all letters must be in-line.
- * <li>{@code CONTINUOUS_MSG} - Message indicating that the.
- * <li>{@code CENTER_MSG} - Message indicating that the first word must cover
- * the center.
+ * <li>{@code CONTINUOUS_MSG} - Message indicating that the letters must be continuous.
+ * <li>{@code CENTER_MSG} - Message indicating that the first word must cover the center.
+ * <li>{@code CONNECTED_MSG} - Message indicating that the word must be connected to another word.
  * </ul>
  */
 @Service
@@ -38,13 +36,24 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
   public static final String CENTER_MSG = "The first word must cover the center.";
   public static final String CONNECTED_MSG = "The word must be connected to another word.";
 
-  private static final Logger logger = LoggerFactory.getLogger(ConfirmPlayInteractor.class);
+//  private static final Logger logger = LoggerFactory.getLogger(ConfirmPlayInteractor.class);
 
+  /**
+   * Constructs a ConfirmPlayInteractor instance with the specified GameDataAccess.
+   *
+   * @param gameDao the data access object for game data
+   */
   @Autowired
   public ConfirmPlayInteractor(GameDataAccess gameDao) {
     this.gameDao = gameDao;
   }
 
+  /**
+   * Checks if the moves are not in-line.
+   *
+   * @param moves the list of moves
+   * @return true if the moves are not in-line, false otherwise
+   */
   private boolean isNotInline(List<Move> moves) {
     Move fMove = moves.getFirst();
     Move lMove = moves.getLast();
@@ -65,10 +74,11 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
   }
 
   /**
-   * Check if the letters form only one main word.
-   * @param moves list of moves
+   * Checks if the letters form only one main word.
+   *
+   * @param play the play to check
    * @param board the game board
-   * @return true if the letters form one main word, false otherwise.
+   * @return true if the letters form one main word, false otherwise
    */
   private boolean hasGap(Play play, Board board) {
     List<Move> moves = play.getMoves();
@@ -107,10 +117,22 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     return false;
   }
 
+  /**
+   * Checks if it is the first play of the game.
+   *
+   * @param game the game to check
+   * @return true if it is the first play, false otherwise
+   */
   private boolean isFirstPlay(Game game) {
     return game.getHistory().size() == 0;
   }
 
+  /**
+   * Checks if the moves do not cover the center.
+   *
+   * @param moves the list of moves
+   * @return true if the moves do not cover the center, false otherwise
+   */
   private boolean isNotCenter(List<Move> moves) {
     for (Move move : moves) {
       if (move.getX() == 7 && move.getY() == 7) {
@@ -120,6 +142,13 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     return true;
   }
 
+  /**
+   * Checks if the moves are isolated.
+   *
+   * @param moves the list of moves
+   * @param board the game board
+   * @return true if the moves are isolated, false otherwise
+   */
   private boolean isIsolated(List<Move> moves, Board board) {
     int x, y;
     for (Move move : moves) {
@@ -133,6 +162,13 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     return true;
   }
 
+  /**
+   * Executes the confirm play use case.
+   *
+   * @param data the input data for confirming the play
+   * @return the output data indicating the result of the confirmation
+   * @throws InvalidPlayException if the play is invalid
+   */
   @Override
   public ConfirmPlayOutputData execute(ConfirmPlayInputData data) {
 
@@ -140,11 +176,11 @@ public class ConfirmPlayInteractor implements ConfirmPlayInputBoundary {
     Board board = game.getBoard();
     Play play = game.getCurrentPlay();
     List<Move> moves = play.getMoves();
- 
+
     if (moves.isEmpty()) {
       return new ConfirmPlayOutputData(true);
     }
-    
+
     if (moves.size() > 1) {
       if (isNotInline(moves)) {
         throw new InvalidPlayException(INLINE_MSG);

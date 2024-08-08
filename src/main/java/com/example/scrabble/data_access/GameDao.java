@@ -22,6 +22,10 @@ public class GameDao implements GameDataAccess {
     private static final String directoryPath = "database";
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Create a GameDao object.
+     * If the directory for storing Game files does not exist, create it.
+     */
     public GameDao() {
         File directory = new File(directoryPath);
         if (!directory.exists()) {

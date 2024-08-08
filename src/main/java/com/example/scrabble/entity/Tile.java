@@ -3,7 +3,6 @@ package com.example.scrabble.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.json.JSONObject;
 
@@ -33,8 +32,6 @@ public class Tile implements Serializable {
      * @param letterMult The letter multiplier for the tile.
      * @param letter The letter placed on the tile.
      */
-
-
     public Tile(int wordMult, int letterMult, Letter letter) {
         this.wordMult = wordMult;
         this.letterMult = letterMult;
@@ -42,6 +39,13 @@ public class Tile implements Serializable {
         this.isConfirmed = false;
     }
 
+    /**
+     * Constructs a Tile with specified multipliers, letter, and confirmation status.
+     * @param wordMult The word multiplier for the tile.
+     * @param letterMult The letter multiplier for the tile.
+     * @param letter The letter placed on the tile.
+     * @param isConfirmed Whether the tile is confirmed.
+     */
     @JsonCreator
     public Tile(@JsonProperty("wordMult") int wordMult, @JsonProperty("letterMult") int letterMult, @JsonProperty("letter") Letter letter, @JsonProperty("isConfirmed") boolean isConfirmed) {
         this.wordMult = wordMult;
@@ -50,18 +54,25 @@ public class Tile implements Serializable {
         this.isConfirmed = isConfirmed;
     }
 
-
+    /**
+     * Constructs a Tile from a JSON object.
+     * @param json The JSON object containing tile data.
+     */
     public Tile(JSONObject json) {
         this.parseJSON(json);
     }
 
+    /**
+     * Parses the JSON object to set the tile's properties.
+     * @param json The JSON object containing tile data.
+     */
     private void parseJSON(JSONObject json) {
         this.wordMult = json.getInt("wordMult");
         this.letterMult = json.getInt("letterMult");
         this.letter = json.has("letter") ? new Letter(json.getJSONObject("letter")) : null;
         this.isConfirmed = json.getBoolean("isConfirmed");
     }
-  
+
     /**
      * Gets the word multiplier of the tile.
      * @return The word multiplier.
@@ -104,6 +115,10 @@ public class Tile implements Serializable {
         isConfirmed = false;
     }
 
+    /**
+     * Sets the confirmation status of the tile.
+     * @param confirmed The confirmation status to set.
+     */
     @JsonProperty("isConfirmed")
     public void setConfirmed(boolean confirmed) {
         isConfirmed = confirmed;
@@ -142,17 +157,33 @@ public class Tile implements Serializable {
         return letter == null ? " " : letter.toString();
     }
 
+    /**
+     * Serializes this Tile object.
+     * @param out The output stream to which the object is to be written.
+     * @throws IOException If an I/O error occurs while writing the object.
+     */
     @Serial
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeChars(new JSONObject(this).toString());
     }
 
+    /**
+     * Deserializes a Tile object from the specified input stream.
+     * @param in The input stream from which the object is to be read.
+     * @throws IOException If an I/O error occurs while reading the object.
+     * @throws ClassNotFoundException If the class of a serialized object cannot be found.
+     */
     @Serial
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         JSONObject json = new JSONObject(in.readUTF());
         this.parseJSON(json);
     }
 
+    /**
+     * Compares this Tile to another object for equality.
+     * @param o The object to compare to.
+     * @return True if the tiles are equal, false otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

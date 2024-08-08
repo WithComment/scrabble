@@ -9,9 +9,19 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * Configuration class for security settings.
+ */
 @Configuration
 public class SecurityConfig {
 
+  /**
+   * Configures the security filter chain.
+   *
+   * @param http the HttpSecurity to modify
+   * @return the configured SecurityFilterChain
+   * @throws Exception if an error occurs while configuring the security filter chain
+   */
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.cors(httpSecurityCorsConfigurer ->
@@ -27,6 +37,11 @@ public class SecurityConfig {
     return http.build();
   }
 
+  /**
+   * Configures CORS settings.
+   *
+   * @return the configured WebMvcConfigurer
+   */
   @Bean
   public WebMvcConfigurer corsConfigurer() {
       return new WebMvcConfigurer() {

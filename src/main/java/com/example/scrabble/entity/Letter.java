@@ -8,7 +8,6 @@ import java.io.*;
 
 /**
  * Represents a playable letter.
- *
  */
 public class Letter implements Serializable {
     private char letter;
@@ -20,7 +19,6 @@ public class Letter implements Serializable {
      * @param letter the character representing the letter.
      * @param points the point value associated with the letter.
      */
-
     @JsonCreator
     public Letter(
             @JsonProperty("letter") char letter,
@@ -36,7 +34,6 @@ public class Letter implements Serializable {
      *
      * @param json the JSON object containing the letter and points.
      */
-
     public Letter(JSONObject json) {
         this.parseJSON(json);
     }
@@ -46,22 +43,34 @@ public class Letter implements Serializable {
      *
      * @param json the JSON object containing the letter and points.
      */
-
     private void parseJSON(JSONObject json) {
         this.letter = json.getString("letter").charAt(0);
         this.points = json.getInt("points");
     }
 
+    /**
+     * Returns the character representing the letter.
+     *
+     * @return the character representing the letter.
+     */
     public char getLetter() {
         return letter;
     }
 
+    /**
+     * Returns the point value associated with the letter.
+     *
+     * @return the point value associated with the letter.
+     */
     public int getPoints() {
         return points;
     }
 
     /**
      * Two Letter are equal if they have the same letter.
+     *
+     * @param o the object to compare to.
+     * @return true if the letters are equal, false otherwise.
      */
     @Override
     public boolean equals(Object o) {
@@ -100,7 +109,6 @@ public class Letter implements Serializable {
      * @param out the output stream to which the object is to be written.
      * @throws IOException if an I/O error occurs while writing the object.
      */
-
     @Serial
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeChars(new JSONObject(this).toString());
@@ -114,7 +122,6 @@ public class Letter implements Serializable {
      * @throws IOException if an I/O error occurs while reading the object.
      * @throws ClassNotFoundException if the class of a serialized object cannot be found.
      */
-
     @Serial
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         String json = in.readUTF();
