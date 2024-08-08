@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -104,40 +103,13 @@ public class Game implements Serializable {
         this.numContests = numContests;
         this.playerIDCounter = playerIdCounter;
     }
-    /**
-     * Gets the unique ID of the game.
-     *
-     * @return The unique ID of the game.
-     */
+    
     public int getId() {
         return id;
     }
 
     public List<Play> getHistory() {
         return history;
-    }
-
-    /**
-     * Sets a tile at the specified position on the board.
-     *
-     * @param x    The x-coordinate of the cell.
-     * @param y    The y-coordinate of the cell.
-     * @param tile The tile to place at the specified position.
-     */
-    public void setBoardCell(int x, int y, Tile tile) {
-        board.setCell(x, y, tile);
-    }
-
-    /**
-     * Retrieves the tile at the specified position on the board.
-     *
-     * @param x The x-coordinate of the cell.
-     * @param y The y-coordinate of the cell.
-     * @return The tile at the specified position.
-     */
-    @JsonIgnore
-    public Tile getBoardCell(int x, int y) {
-        return board.getCell(x, y);
     }
 
     public LetterBag getLetterBag() {
@@ -156,14 +128,18 @@ public class Game implements Serializable {
     }
 
     /**
-     * Adds a new player to the game.
-     * Initializes the player with a unique ID and adds them to the player list.
+     * Updates the list of players by adding a new player.
+     *
+     * @param name the name of the player to be added
      */
-    public Player addPlayer() {
-        Player player = new Player(playerIDCounter++);
+    public Player addPlayer(String name) {
+        Player player = new Player(name, playerIDCounter++);
+        for (Letter letter : letterBag.drawLetters(7)) {
+            player.addLetter(letter);
+        };
         players.add(player);
         leaderboard.add(player);
-        this.numContestFailed.add(0);
+        numContestFailed.add(0);
         return player;
     }
 
@@ -175,19 +151,7 @@ public class Game implements Serializable {
     public void addPlay(Play play) {
         history.add(play);
     }
-
-    /**
-     * Returns the last play from the game's history.
-     *
-     * @return The last play made in the game, or null if the game has no plays.
-     */
-    @JsonIgnore
-    public Play getLastPlay() {
-        if (history.isEmpty()) {
-            return null;
-        }
-        return history.getLast();
-    }
+    
 
     /**
      * Removes and returns the last play from the game's history.
@@ -201,69 +165,13 @@ public class Game implements Serializable {
         return history.removeLast();
     }
 
-    /**
-     * Gets the number of players in the game.
-     *
-     * @return The number of players.
-     */
     @JsonIgnore
     public int getNumPlayers() {
         return players.size();
     }
-
-    /**
-     * Gets a list of player IDs for all players in the game.
-     *
-     * @return A list of player IDs.
-     */
-    @JsonIgnore
-    public List<Integer> getPlayerIds() {
-        List<Integer> playerIds = new ArrayList<>();
-        for (Player player : players) {
-            playerIds.add(player.getId());
-        }
-        return playerIds;
-    }
-
-    /**
-     * Gets the score of a specific player by their ID.
-     *
-     * @param playerId The ID of the player.
-     * @return The score of the specified player.
-     */
-    @JsonIgnore
-    public int getPlayerScore(int playerId) {
-        return players.get(playerId).getScore();
-    }
-
-    public List<Integer> getNumContestFailed(){
+    
+    public List<Integer> getNumContestFailed() {
         return numContestFailed;
-    }
-
-
-    /**
-     * Gets a list of scores for all players in the game.
-     *
-     * @return An List<Integer> containing the scores of all players.
-     */
-    @JsonIgnore
-    public List<Integer> getPlayerScore() {
-        List<Integer> scores = new ArrayList<>();
-        for (Player player : players) {
-            scores.add(player.getScore());
-        }
-        return scores;
-    }
-
-    /**
-     * Retrieves the inventory of letters for a specific player.
-     *
-     * @param playerId The ID of the player whose inventory is requested.
-     * @return A List<Letter> representing the player's current inventory of letters.
-     */
-    @JsonIgnore
-    public List<Letter> getPlayerInventory(int playerId) {
-        return players.get(playerId).getInventory();
     }
 
     /**
@@ -274,18 +182,10 @@ public class Game implements Serializable {
         startTurn();
     }
 
-    /**
-     * Returns the board of the game.
-     *
-     * @return the board of the game
-     */
-    public Board getBoard(){ return board; }
+    public Board getBoard(){ 
+        return board; 
+    }
 
-    /**
-     * Returns the list of players in the game.
-     *
-     * @return the list of players in the game
-     */
     public List<Player> getPlayers() {
         return players;
     }
@@ -305,15 +205,6 @@ public class Game implements Serializable {
     }
 
     /**
-     * Sets the leaderboard.
-     *
-     * @param leaderboard the leaderboard to set
-     */
-    public void setLeaderboard(List<Player> leaderboard) {
-        this.leaderboard = leaderboard;
-    }
-
-    /**
      * Starts a new turn by setting the endTurn flag to false and
      * updating the current player to the next player in the list,
      * skipping any players who have failed a contest.
@@ -329,13 +220,10 @@ public class Game implements Serializable {
      * Increments the number of contest failures for the specified player
      * and adjusts the current player's score based on contest results.
      *
-     * @param PlayerNumber the number of the player whose contest failure count is being updated
+     * @param playerNumber the number of the player whose contest failure count is being updated
      */
-    public void contestFailureUpdate(int PlayerNumber) {
-        int CurrentFailure = numContestFailed.get(PlayerNumber);
-        numContestFailed.set(PlayerNumber, CurrentFailure + 1);
-        Player currentPlayer = getCurrentPlayer();
-        currentPlayer.resetTempScore();
+    public void contestFailureUpdate(int playerNumber) {
+        numContestFailed.set(playerNumber, numContestFailed.get(playerNumber) + 1);
     }
 
     /**
@@ -356,25 +244,9 @@ public class Game implements Serializable {
      */
     public void dealContest(boolean ContestSucceed) {
         if (ContestSucceed){
-            numContestFailed.set((playerNumber), numContestFailed.get((playerNumber)));
+            numContestFailed.set((playerNumber), numContestFailed.get(playerNumber) + 1);
         }
         this.getCurrentPlayer().confirmTempScore();
-    }
-
-    /**
-     * Updates the list of players by adding a new player.
-     *
-     * @param name the name of the player to be added
-     */
-    public Player addPlayer(String name) {
-        Player player = new Player(name, playerIDCounter++);
-        for (Letter letter : letterBag.drawLetters(7)){
-            player.addLetter(letter);
-        };
-        players.add(player);
-        leaderboard.add(player);
-        numContestFailed.add(0);
-        return player;
     }
 
     /**
@@ -396,20 +268,10 @@ public class Game implements Serializable {
         return numContestFailed.get(PlayerNumber);
     }
 
-    /**
-     * Returns the number of the current player.
-     *
-     * @return the number of the current player
-     */
     public int getPlayerNumber() {
         return playerNumber;
     }
 
-    /**
-     * Returns the current play.
-     *
-     * @return the current play
-     */
     public Play getCurrentPlay() {
         return currentPlay;
     }
@@ -421,7 +283,7 @@ public class Game implements Serializable {
     public int getNumContests() {
         return numContests;
     }
-
+    
     public int getPlayerIDCounter() {
         return playerIDCounter;
     }
@@ -459,7 +321,7 @@ public class Game implements Serializable {
                 (endTurn == other.endTurn) &&
                 (playerNumber == other.playerNumber) &&
                 (numContestFailed.equals(other.numContestFailed)) &&
-                (Objects.equals(currentPlay,other.currentPlay)) &&
+                (Objects.equals(currentPlay, other.currentPlay)) &&
                 (numContests == other.numContests) &&
                 (playerIDCounter == other.playerIDCounter);
     }

@@ -22,7 +22,7 @@ public class RemoveLetterInteractor implements RemoveLetterInputBoundary{
         Play play = game.getCurrentPlay();
         Player player = play.getPlayer();
         Board board = game.getBoard();
-        Tile selectedTile = board.getCell(data.getX(), data.getY());
+        Tile selectedTile = board.getTile(data.getX(), data.getY());
         int x = data.getX();
         int y = data.getY();
         boolean isValidClick = false;

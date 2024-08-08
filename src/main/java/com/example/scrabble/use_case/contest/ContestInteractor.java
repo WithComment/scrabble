@@ -51,7 +51,7 @@ public class ContestInteractor implements ContestInputBoundary {
                     .header("Content-Type", "application/json")
                     .timeout(Duration.ofSeconds(5))
                     .build();
-            HttpResponse<String> response= HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
             return new JSONObject(response.body()).getBoolean("v");
         } catch (URISyntaxException e) {
             throw new WordValidationException("Wrong URL", e);
@@ -62,63 +62,39 @@ public class ContestInteractor implements ContestInputBoundary {
         }
     }
 
-    public void fail() {
-        game.contestFailureUpdate(player.getId());
-    }
-
     @Override
     public ContestOutputData execute(ContestInputData contestInputData) throws ContestException {
-        int gameId = contestInputData.getGameId();
-        game = gameDAO.get(contestInputData.getGameId());
-        Board board = game.getBoard();
-        if (game == null) {
-            throw new ContestException("Game not found");
-        }
+        int gameID = contestInputData.getGameId();
+        game = gameDAO.get(gameID);
+        Play currentPlay = game.getCurrentPlay();
+        EndTurnInteractor endTurnInteractor = new EndTurnInteractor(gameDAO);
+        List<String> invalidWords = new LinkedList<>();
         if (contestInputData.getIsContest()) {
             player = game.getPlayer(contestInputData.getPlayerId());
-            List<String> words = game.getLastPlay().getWords();
-            List<String> invalidWords = new LinkedList<>();
-
-            //try {
-                for (String word : words) {
-                    if (!wordIsValid(word)) {
-                        invalidWords.add(word);
-                    }
+            List<String> words = currentPlay.getWords();
+            for (String word : words) {
+                if (!wordIsValid(word)) {
+                    invalidWords.add(word);
                 }
-                if (!invalidWords.isEmpty()) {
-                    RemoveLetterInteractor removeLetterInteractor = new RemoveLetterInteractor(gameDAO);
-                    Play lastPlay = game.removeLastPlay();
-                    Player contestedPlayer = lastPlay.getPlayer();
-                    RemoveLetterInputData removeLetterInputData;
-                    for (Move move : lastPlay.getMoves()) {
-                        game = gameDAO.get(gameId);
-                        removeLetterInputData = new RemoveLetterInputData(game.getId(), move.getX(), move.getY());
-                        removeLetterInteractor.execute(removeLetterInputData);
-                    }
-                    contestedPlayer.resetTempScore();
-                } else {
-                    fail();
-//                    throw new ContestException("All words in last move are valid.");
+            }
+            if (!invalidWords.isEmpty()) {
+                RemoveLetterInteractor removeLetterInteractor = new RemoveLetterInteractor(gameDAO);
+                Play lastPlay = game.removeLastPlay();
+                for (Move move : lastPlay.getMoves()) {
+                    removeLetterInteractor.execute(new RemoveLetterInputData(game.getId(), move.getX(), move.getY()));
                 }
-//            } catch (WordValidationException e) {
-//                fail();
-//                throw new ContestException("Word validation failed.", e);
-//            }
-            game = gameDAO.get(gameId);
-            gameDAO.update(game);
-            EndTurnInteractor endTurnInteractor = new EndTurnInteractor(gameDAO);
-            endTurnInteractor.execute(new EndTurnInputData(game.getId()));
-            return new ContestOutputData(invalidWords, true);
+            } else {
+                game.contestFailureUpdate(player.getId());
+            }
+            currentPlay.getPlayer().resetTempScore();
         }
         game.increaseNumContests();
         gameDAO.update(game);
-        if (game.getNumContests() >= game.getNumPlayers() - 1) {
-            EndTurnInteractor endTurnInteractor = new EndTurnInteractor(gameDAO);
-            endTurnInteractor.execute(new EndTurnInputData(game.getId()));
-            game = gameDAO.get(game.getId());
-            return new ContestOutputData(new ArrayList<>(), true);
+        if (game.getNumContests() >= game.getNumPlayers() - 1 || contestInputData.getIsContest()) {
+            endTurnInteractor.execute(new EndTurnInputData(gameID));
+            return new ContestOutputData(invalidWords, true);
         } else {
-            return new ContestOutputData(new ArrayList<>(), false);
+            return new ContestOutputData(invalidWords, false);
         }
     }
 }
