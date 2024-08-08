@@ -54,7 +54,11 @@ class ViewModel{
             this.addNewEvent('- Game Started');
             this.setNewTurn(game.currentPlay.player.name, game.currentPlay.player.id);
         } else if (message.type === 'valid-confirm-play'){
-            this.setGameState('Contest');
+            if (this.gameState === 'Your Turn'){
+                this.updateGameState('Inactive');
+            } else{
+                this.updateGameState('Contest');
+            }
         } else if (message.type === 'contest-success'){
             this.addNewEvent('- Contest Successful');
             this.setNewTurn(game.currentPlay.player.name, game.currentPlay.player.id);
@@ -120,6 +124,11 @@ class ViewModel{
 
     setTile(x, y, letter){
         this.board[x][y] = letter;
+    }
+
+    updateGameState(newState){
+        this.setGameState(newState);
+        this.gameState = newState;
     }
 
     updateBoard(board){
@@ -244,11 +253,11 @@ class ViewModel{
             response = await response.json();
             console.log('received response')
             console.log(response);
+            console.log(this.gameState);
             if (response.valid){
                 response = await fetch(`${this.baseUrl}broadcast_valid_play/`, {
                     method: 'POST'
                 })
-                this.setGameState('Contest')
             }
 
         } else{
@@ -300,9 +309,9 @@ class ViewModel{
     }
 
     setNewTurn(name, id){
-        this.setGameState(name + 's Turn');
+        this.updateGameState(name + 's Turn');
         if (id === this.playerId){
-            this.setGameState('Your Turn');
+            this.updateGameState('Your Turn');
         }
         this.addNewEvent('- ' + name + '\'s Turn');
     }

@@ -91,7 +91,7 @@ function Login(){
         let tempData = {
             leaderboard: leaderboard,
             hand: hand,
-            tilesLeft: 93,
+            tilesLeft: 91,
             board: newBoard,
             gameId: newGameId,
             playerId: newPlayerId,

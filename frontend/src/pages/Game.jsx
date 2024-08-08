@@ -18,7 +18,7 @@ function Game() {
       const audio = new Audio('/ScrabbleSerenade.mp3');
       audio.load();
       audio.loop = true;
-      audio.play();
+      // audio.play();
   }, []);
     const { state } = useLocation();
     console.log(state.hand)
@@ -78,9 +78,9 @@ function Game() {
         </div>
         <div class='inputs-container'>
             <div class='buttons-container'>
-            {(gameState === 'Your Turn') && <><Redraw ButtonViewModel={viewModel}/><ConfirmPlay ButtonViewModel={viewModel}/></>}
+            {!(gameState === 'Inactive') && <>{(gameState === 'Your Turn') && <><Redraw ButtonViewModel={viewModel}/><ConfirmPlay ButtonViewModel={viewModel}/></>}
             {(gameState === 'Contest') && <><Contest ButtonViewModel={viewModel}/> <DontContest ButtonViewModel={viewModel}/></>}
-            {(gameState === 'Not Started') && <StartGame ButtonViewModel={viewModel}/>}
+            {(gameState === 'Not Started') && <StartGame ButtonViewModel={viewModel}/>}</>}
             </div>
             <Hand handLetters={hand} handViewModel={viewModel}/>
         </div>
