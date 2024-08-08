@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.*;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class Board implements Serializable, Iterable<Tile> {
     private Tile[][] board;
@@ -139,15 +140,16 @@ public class Board implements Serializable, Iterable<Tile> {
             Iterator<Tile> iterator1 = this.iterator();
             Iterator<Tile> iterator2 = otherBoard.iterator();
             while (iterator1.hasNext() && iterator2.hasNext()) {
-                if (!iterator1.next().equals(iterator2.next())) {
+                if (!Objects.equals(iterator1.next(), iterator2.next())) {
                     return false;
                 }
-                return true;
             }
+
         }
         return true;
     }
 
+    
 
     @Override
     public Iterator<Tile> iterator() {

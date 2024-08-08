@@ -2,12 +2,9 @@ package com.example.scrabble.use_case.get_leaderboard;
 
 import com.example.scrabble.entity.Game;
 import com.example.scrabble.entity.Player;
-import com.example.scrabble.entity.LeaderboardEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import com.example.scrabble.data_access.GameDataAccess;
