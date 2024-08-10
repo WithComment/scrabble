@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.f3c8054f.css",
-    "main.js": "/static/js/main.85be5361.js",
-    "static/js/453.d855a71b.chunk.js": "/static/js/453.d855a71b.chunk.js",
-    "static/media/diceBag.png": "/static/media/diceBag.681304a346ef0daa8832.png",
-    "static/media/scrabblebackgroud.png": "/static/media/scrabblebackgroud.380cf2971ad9433e32c5.png",
-    "index.html": "/index.html",
-    "main.f3c8054f.css.map": "/static/css/main.f3c8054f.css.map",
-    "main.85be5361.js.map": "/static/js/main.85be5361.js.map",
-    "453.d855a71b.chunk.js.map": "/static/js/453.d855a71b.chunk.js.map"
+    "main.css": "/scrabble/static/css/main.3b896b00.css",
+    "main.js": "/scrabble/static/js/main.51303b1f.js",
+    "static/js/453.d855a71b.chunk.js": "/scrabble/static/js/453.d855a71b.chunk.js",
+    "static/media/diceBag.png": "/scrabble/static/media/diceBag.681304a346ef0daa8832.png",
+    "static/media/scrabblebackgroud.png": "/scrabble/static/media/scrabblebackgroud.380cf2971ad9433e32c5.png",
+    "index.html": "/scrabble/index.html",
+    "main.3b896b00.css.map": "/scrabble/static/css/main.3b896b00.css.map",
+    "main.51303b1f.js.map": "/scrabble/static/js/main.51303b1f.js.map",
+    "453.d855a71b.chunk.js.map": "/scrabble/static/js/453.d855a71b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f3c8054f.css",
-    "static/js/main.85be5361.js"
+    "static/css/main.3b896b00.css",
+    "static/js/main.51303b1f.js"
   ]
 }
