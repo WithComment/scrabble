@@ -5,7 +5,7 @@ class ViewModel{
     constructor(gameId, playerId, board, hand, leaderboard, tilesLeft, gameState, events, setHand, setBoard, setLeaderboard, setTilesLeft,  setGameState, setEvents){
         this.playerId = playerId;
         this.gameId = gameId;
-        this.baseUrl = `http://localhost:8080/game/${this.gameId}/`;
+        this.baseUrl = `https://scrabble-2ii47ihutq-ue.a.run.app/game/${this.gameId}/`;
         this.board = board;
         this.hand = hand;
         this.leaderboard = leaderboard;
@@ -25,10 +25,14 @@ class ViewModel{
     }
 
     connectWebSocket() {
-        const socket = new SockJS('http://localhost:8080/ws', null, {withCredentials: true});
+        const socket = new SockJS('https://scrabble-2ii47ihutq-ue.a.run.app/ws', null, {withCredentials: true});
         this.stompClient = Stomp.over(socket);
 
         this.stompClient.connect({}, (frame) => {
+              // Send a ping message every 5 minutes to keep the connection alive
+            setInterval(() => {
+                this.stompClient.send('/app/ping', {}, JSON.stringify({ message: 'ping' }));
+            }, 150000); // 300000 ms = 5 minutes
             this.stompClient.subscribe(`/topic/game/${this.gameId}`, (message) => {
                 this.handleWebSocketMessage(JSON.parse(message.body));
             }, (error) => {

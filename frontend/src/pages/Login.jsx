@@ -3,12 +3,12 @@ import { Navigate } from 'react-router-dom';
 import ViewModel from '../ViewModel';
 
 function Login(){
-    const createUrl = 'http://localhost:8080/game/create/'
+    const createUrl = 'https://scrabble-2ii47ihutq-ue.a.run.app/game/create/'
     const [name, setName] = useState('Username');
     const [gameId, setGameId] = useState(0);
     const [submitted, setSubmitted] = useState(false);
     const [data, setData] = useState({});
-    const joinUrl = `http://localhost:8080/game/${gameId}/join/`
+    const joinUrl = `https://scrabble-2ii47ihutq-ue.a.run.app/game/${gameId}/join/`
 
     function handleNameChange(e){
         setName(e.target.value);

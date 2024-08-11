@@ -4,11 +4,15 @@ import java.io.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import com.example.scrabble.entity.Game;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 
 /**
  * Represents a data access object for the Game entity.
@@ -19,35 +23,35 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class GameDao implements GameDataAccess {
 
     private static final Logger log = LoggerFactory.getLogger(GameDao.class);
-    private static final String directoryPath = "database";
+    private static final String bucketName = "scrabble-server-431817_cloudbuild"; // Replace with your bucket name
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Storage storage;
+
 
     public GameDao() {
-        File directory = new File(directoryPath);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
+        this.storage = StorageOptions.getDefaultInstance().getService();
     }
 
     private String makeFilePath(int gameId) {
-        return directoryPath + "/" + gameId + ".json";
+        return "games/" + gameId + ".json";
     }
 
     private void writeGame(Game game) {
         try {
-            if (!gameExists(game.getId())) {
-                new File(makeFilePath(game.getId())).createNewFile();
-            }
-            FileOutputStream fileOutputStream = new FileOutputStream(makeFilePath(game.getId()));
-            objectMapper.writeValue(fileOutputStream, game);
-            fileOutputStream.close();
+            String filePath = makeFilePath(game.getId());
+            byte[] data = objectMapper.writeValueAsBytes(game);
+            BlobId blobId = BlobId.of(bucketName, filePath);
+            BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+            storage.create(blobInfo, data);
         } catch (IOException e) {
             throw new GameDaoException("Error writing game to file", e);
         }
     }
 
     private boolean gameExists(int gameId) {
-        return new File(makeFilePath(gameId)).isFile();
+        String filePath = makeFilePath(gameId);
+        Blob blob = storage.get(BlobId.of(bucketName, filePath));
+        return blob != null && blob.exists();
     }
 
     /**
@@ -65,23 +69,17 @@ public class GameDao implements GameDataAccess {
         return game;
     }
 
-    /**
-     * Load a specific Game from a file based on gameId.
-     * If there the of DAO has a Game with the same gameId, return the Game in memory.
-     * @param gameId the ID of the Game to be loaded.
-     * @return the Game object.
-     */
-    @Override
-    @Cacheable(value = "game", key = "#gameId")
-    public Game get(int gameId) {
-        log.debug("Loading game " + gameId);
-        if (!gameExists(gameId)) {
-            throw new IllegalArgumentException("Game with the specified ID does not exist.");
-        }
+    private Game get(int gameId) {
         try {
-            return objectMapper.readValue(new File(makeFilePath(gameId)), Game.class);
-        } catch (Exception e) {
-            throw new GameDaoException("Error loading game from file", e);
+            String filePath = makeFilePath(gameId);
+            Blob blob = storage.get(BlobId.of(bucketName, filePath));
+            if (blob == null || !blob.exists()) {
+                throw new GameDaoException("Game not found");
+            }
+            byte[] data = blob.getContent();
+            return objectMapper.readValue(data, Game.class);
+        } catch (IOException e) {
+            throw new GameDaoException("Error reading game from file", e);
         }
     }
 

@@ -6,7 +6,7 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/scrabble">
       <Routes>
         <Route path='/' element={<Login/>}/>
         <Route path='/game/:gameId/:playerId' element={<Game/>}/>
