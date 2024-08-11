@@ -14,14 +14,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Represents a Player's turn.
  */
 public class Play {
-  private Player player;
+  private final Player player;
   private List<Move> moves;
   private List<String> words;
   private boolean failedContest;
 
-
   /**
    * Constructs a new Play for the specified player.
+   *
    * @param player The player making the play.
    */
   public Play(Player player) {
@@ -30,6 +30,14 @@ public class Play {
       this.failedContest = false;
   }
 
+  /**
+   * Constructs a new Play with the specified properties.
+   *
+   * @param player The player making the play.
+   * @param moves The list of moves made in the play.
+   * @param words The list of words formed in the play.
+   * @param failedContest Whether the play failed a contest.
+   */
   @JsonCreator
   public Play(@JsonProperty("player") Player player, @JsonProperty("moves") List<Move> moves, @JsonProperty("words") List<String> words, @JsonProperty("failedContest") boolean failedContest) {
     this.player = player;
@@ -40,6 +48,7 @@ public class Play {
 
   /**
    * Adds a move to the play.
+   *
    * @param move The move to add.
    */
   public void addMove(Move move) {
@@ -48,6 +57,7 @@ public class Play {
 
   /**
    * Undoes the last move made in the play.
+   *
    * @return The move that was undone.
    */
   public Move removeMove() {
@@ -56,6 +66,7 @@ public class Play {
 
   /**
    * Removes a move from the play based on its coordinates.
+   *
    * @param x The x-coordinate of the move to remove.
    * @param y The y-coordinate of the move to remove.
    * @return The move that was removed, or null if no move was found at the specified coordinates.
@@ -69,6 +80,11 @@ public class Play {
     return null;
   }
 
+  /**
+   * Checks if the moves in the play are vertical.
+   *
+   * @return true if the moves are vertical, false otherwise.
+   */
   @JsonIgnore
   public boolean isVertical() {
     if (moves.size() < 2) {
@@ -79,30 +95,34 @@ public class Play {
 
   /**
    * Gets the player making the play.
+   *
    * @return The player making the play.
    */
   public Player getPlayer() {
     return player;
   }
 
-    /**
-     * Gets the list of moves made in the play.
-     * @return A LinkedList of moves made in the play.
-     */
+  /**
+   * Gets the list of moves made in the play.
+   *
+   * @return A LinkedList of moves made in the play.
+   */
   public List<Move> getMoves() {
     return moves;
   }
 
-    /**
-     * Sets the list of moves made in the play.
-     * @param moves The list of moves made in the play.
-     */
+  /**
+   * Sets the list of moves made in the play.
+   *
+   * @param moves The list of moves made in the play.
+   */
   public void setMoves(List<Move> moves) {
     this.moves = moves;
   }
 
   /**
    * Sets the list of words formed in the play.
+   *
    * @param words The list of words formed in the play.
    */
   public void setWords(List<String> words) {
@@ -111,20 +131,36 @@ public class Play {
 
   /**
    * Gets the list of words formed in the play.
+   *
    * @return A list of words formed in the play.
    */
   public List<String> getWords() {
     return words;
   }
 
+  /**
+   * Sets whether the play failed a contest.
+   *
+   * @param failedContest Whether the play failed a contest.
+   */
   public void setFailedContest(boolean failedContest) {
     this.failedContest = failedContest;
   }
 
+  /**
+   * Gets whether the play failed a contest.
+   *
+   * @return true if the play failed a contest, false otherwise.
+   */
   public boolean getFailedContest() {
     return failedContest;
   }
 
+  /**
+   * Returns a string representation of the play.
+   *
+   * @return A string representation of the play.
+   */
   @Override
   public String toString() {
     try {
@@ -134,6 +170,12 @@ public class Play {
     }
   }
 
+  /**
+   * Compares this Play to another object for equality.
+   *
+   * @param obj The object to compare to.
+   * @return true if the plays are equal, false otherwise.
+   */
   @Override
   public boolean equals(Object obj) {
     if (this == obj){return true;}

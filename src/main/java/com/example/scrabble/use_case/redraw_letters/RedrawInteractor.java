@@ -13,15 +13,31 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles the logic for redrawing letters.
+ * Implements the RedrawInputBoundary interface.
+ */
 @Service
-public class RedrawInteractor implements RedrawInputBoundary{
+public class RedrawInteractor implements RedrawInputBoundary {
     private final GameDataAccess gameDao;
 
+    /**
+     * Constructs a RedrawInteractor with the specified GameDataAccess.
+     *
+     * @param gameDao the data access object for game entities
+     */
     @Autowired
     public RedrawInteractor(GameDataAccess gameDao) {
         this.gameDao = gameDao;
     }
 
+    /**
+     * Retrieves letters from the player's inventory that match the specified characters.
+     *
+     * @param inventory the player's current inventory of letters
+     * @param characters the list of characters to match against the inventory
+     * @return a list of letters that match the specified characters
+     */
     private List<Letter> getLetters(List<Letter> inventory, List<String> characters) {
         List<Letter> letters = new ArrayList<>();
         List<Letter> toRemove = new ArrayList<>();
@@ -43,8 +59,13 @@ public class RedrawInteractor implements RedrawInputBoundary{
         return letters;
     }
 
-
-
+    /**
+     * Executes the use case to redraw letters.
+     * Validates the redraw, updates the game state, and returns the output data.
+     *
+     * @param redrawInputData the input data containing the game ID and characters to redraw
+     * @return the output data indicating whether the redraw was successful and the new letters
+     */
     @Override
     public RedrawOutputData execute(RedrawInputData redrawInputData) {
         Game game = gameDao.get(redrawInputData.getGameId());
@@ -55,10 +76,10 @@ public class RedrawInteractor implements RedrawInputBoundary{
 
         List<Letter> newLetters = new ArrayList<>();
 
-        if(letterBag.getLength() > 6) {
+        if (letterBag.getLength() > 6) {
             int numToRedraw = letters.size();
             letterBag.addLetters(letters);
-            player.removeLetter((ArrayList<Letter>) ((ArrayList<Letter>)letters).clone());
+            player.removeLetter((ArrayList<Letter>) ((ArrayList<Letter>) letters).clone());
             newLetters = letterBag.drawLetters(numToRedraw);
             player.addLetter(newLetters);
             drawSuccessful = true;

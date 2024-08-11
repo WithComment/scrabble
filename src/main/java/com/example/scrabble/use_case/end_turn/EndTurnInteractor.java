@@ -30,6 +30,11 @@ public class EndTurnInteractor implements EndTurnInputBoundary {
         this.gameDataAccess = gameDataAccess;
     }
 
+    /**
+     * Executes the end turn use case.
+     * @param getEndTurnInputData The input data for the end turn use case.
+     * @return The output data for the end turn use case.
+     */
     @Override
     public EndTurnOutputData execute(EndTurnInputData getEndTurnInputData) {
         int gameID = getEndTurnInputData.getGameId();

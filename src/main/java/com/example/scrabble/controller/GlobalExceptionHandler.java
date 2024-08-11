@@ -12,11 +12,20 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 import com.example.scrabble.data_access.GameDataAccess.GameDaoException;
 import com.example.scrabble.use_case.InvalidPlayException;
 
+/**
+ * Global exception handler for handling various exceptions across the application.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-  Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+  private final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+  /**
+   * Handles generic exceptions.
+   *
+   * @param ex the exception to handle
+   * @return a ResponseEntity containing the error response
+   */
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleException(Exception ex) {
     logger.error("An unexpected error occurred", ex);
@@ -27,6 +36,12 @@ public class GlobalExceptionHandler {
         .body(error);
   }
 
+  /**
+   * Handles GameDaoException.
+   *
+   * @param ex the exception to handle
+   * @return a ResponseEntity containing the error response
+   */
   @ExceptionHandler(GameDaoException.class)
   public ResponseEntity<ErrorResponse> handleException(GameDaoException ex) {
     logger.error(ex.getMessage(), ex);
@@ -37,6 +52,12 @@ public class GlobalExceptionHandler {
         .body(error);
   }
 
+  /**
+   * Handles NoResourceFoundException.
+   *
+   * @param ex the exception to handle
+   * @return a ResponseEntity containing the error response
+   */
   @ExceptionHandler(NoResourceFoundException.class)
   public ResponseEntity<ErrorResponse> handleException(NoResourceFoundException ex) {
     ErrorResponse error = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
@@ -46,6 +67,12 @@ public class GlobalExceptionHandler {
         .body(error);
   }
 
+  /**
+   * Handles InvalidPlayException.
+   *
+   * @param ex the exception to handle
+   * @return a ResponseEntity containing the error response
+   */
   @ExceptionHandler(InvalidPlayException.class)
   public ResponseEntity<ErrorResponse> handleException(InvalidPlayException ex) {
     ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());

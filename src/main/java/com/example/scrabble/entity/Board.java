@@ -8,22 +8,34 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+/**
+ * Represents the Scrabble board.
+ * Implements Serializable and Iterable\<Tile\>.
+ */
 public class Board implements Serializable, Iterable<Tile> {
-    private Tile[][] board;
-    private int height = 15;
-    private int width = 15;
+    private final Tile[][] board;
+    private final int height = 15;
+    private final int width = 15;
 
+    /**
+     * Constructs a new Board with a blank state.
+     */
     public Board() {
         board = getBlankBoard();
     }
 
+    /**
+     * Constructs a new Board with a specified state.
+     *
+     * @param board the 2D array of Tiles representing the board
+     */
     @JsonCreator
     public Board(@JsonProperty("board") Tile[][] board) {
         this.board = board;
     }
 
     /**
-     * Constructs a new Board with a specified state.
+     * Returns a blank Scrabble board with predefined multipliers.
      *
      * @return a 2D array of Tiles representing the board
      */
@@ -55,11 +67,11 @@ public class Board implements Serializable, Iterable<Tile> {
     /**
      * Adds a tile to the board and its 7 other symmetric positions.
      *
-     * @param x        the x-coordinate of the tile
-     * @param y       the y-coordinate of the tile
+     * @param x the x-coordinate of the tile
+     * @param y the y-coordinate of the tile
      * @param wordMult the word multiplier of the tile
      * @param letterMult the letter multiplier of the tile
-     * @param board   the board to add the tile to
+     * @param board the board to add the tile to
      */
     private static void addToBoardSymmetrically(int x, int y, int wordMult, int letterMult, Tile[][] board) {
         board[x][y] = new Tile(wordMult, letterMult, null);
@@ -72,14 +84,29 @@ public class Board implements Serializable, Iterable<Tile> {
         board[14 - y][14 - x] = new Tile(wordMult, letterMult, null);
     }
 
+    /**
+     * Returns the 2D array of Tiles representing the board.
+     *
+     * @return the 2D array of Tiles
+     */
     public Tile[][] getBoard() {
         return board;
     }
 
+    /**
+     * Returns the height of the board.
+     *
+     * @return the height of the board
+     */
     public int getHeight() {
         return this.height;
     }
 
+    /**
+     * Returns the width of the board.
+     *
+     * @return the width of the board
+     */
     public int getWidth() {
         return this.width;
     }
@@ -95,30 +122,43 @@ public class Board implements Serializable, Iterable<Tile> {
         this.board[y][x].setLetter(letter);
     }
 
+    /**
+     * Returns the tile at the specified position on the board.
+     *
+     * @param x the x-coordinate of the tile
+     * @param y the y-coordinate of the tile
+     * @return the tile at the specified position
+     */
     public Tile getTile(int x, int y) {
         return this.board[y][x];
     }
 
     /**
-     * Set the state of the tile at the specified position to confirmed.
+     * Sets the state of the tile at the specified position to confirmed.
      *
-     * @param x the x-coordinate of the letter
-     * @param y the y-coordinate of the letter
+     * @param x the x-coordinate of the tile
+     * @param y the y-coordinate of the tile
      */
     public void confirm(int x, int y) {
         this.board[y][x].confirm();
     }
-    
+
     /**
-     * Return whether the tile at a specified position on the board is confirmed.
+     * Returns whether the tile at a specified position on the board is confirmed.
      *
-     * @param x the x-coordinate of the letter
-     * @param y the y-coordinate of the letter
+     * @param x the x-coordinate of the tile
+     * @param y the y-coordinate of the tile
+     * @return true if the tile is confirmed, false otherwise
      */
     public boolean isConfirmed(int x, int y) {
         return this.board[y][x].isConfirmed();
     }
 
+    /**
+     * Returns a string representation of the board.
+     *
+     * @return a string representation of the board
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 15; i++) {
@@ -130,10 +170,15 @@ public class Board implements Serializable, Iterable<Tile> {
         return sb.toString();
     }
 
+    /**
+     * Compares this board to another object for equality.
+     *
+     * @param other the object to compare to
+     * @return true if the boards are equal, false otherwise
+     */
     @Override
     public boolean equals(Object other) {
-        if (other instanceof Board) {
-            Board otherBoard = (Board) other;
+        if (other instanceof Board otherBoard) {
             if (this.height != otherBoard.getHeight() || this.width != otherBoard.getWidth()) {
                 return false;
             }
@@ -144,24 +189,34 @@ public class Board implements Serializable, Iterable<Tile> {
                     return false;
                 }
             }
-
         }
         return true;
     }
 
-    
-
+    /**
+     * Returns an iterator over the tiles in the board.
+     *
+     * @return an iterator over the tiles
+     */
     @Override
     public Iterator<Tile> iterator() {
         return new BoardIterator(this);
     }
 }
 
+/**
+ * Iterator for the Board class.
+ */
 class BoardIterator implements Iterator<Tile> {
-    private int h, w;
+    private final int h, w;
     private int count;
-    private Tile[][] board;
+    private final Tile[][] board;
 
+    /**
+     * Constructs a BoardIterator for the specified board.
+     *
+     * @param board the board to iterate over
+     */
     public BoardIterator(Board board) {
         this.count = 0;
         this.h = board.getHeight();
@@ -169,11 +224,22 @@ class BoardIterator implements Iterator<Tile> {
         this.board = board.getBoard();
     }
 
+    /**
+     * Returns whether there are more tiles to iterate over.
+     *
+     * @return true if there are more tiles, false otherwise
+     */
     @Override
     public boolean hasNext() {
         return count < h * w;
     }
 
+    /**
+     * Returns the next tile in the iteration.
+     *
+     * @return the next tile
+     * @throws NoSuchElementException if there are no more tiles
+     */
     @Override
     public Tile next() {
         if (!hasNext()) {

@@ -55,6 +55,13 @@ public class Game implements Serializable {
         this.playerIDCounter = 0;
     }
 
+    /**
+     * Constructs a new Game instance with a specified number of players.
+     * Initializes the game with a unique ID, a new board, and a new letter bag.
+     * Adds the specified number of players to the game and distributes letters to each player.
+     *
+     * @param numOfPlayers the number of players to add to the game
+     */
     public Game(int numOfPlayers) {
         this();
         for (int i = 0; i < numOfPlayers; i++) {
@@ -66,6 +73,13 @@ public class Game implements Serializable {
         }
     }
 
+    /**
+     * Constructs a new Game instance with a specified list of player names.
+     * Initializes the game with a unique ID, a new board, and a new letter bag.
+     * Adds players with the specified names to the game and distributes letters to each player.
+     *
+     * @param playerNames the list of player names to add to the game
+     */
     public Game(List<String> playerNames) {
         this();
         for (String playerName : playerNames) {
@@ -77,6 +91,23 @@ public class Game implements Serializable {
         }
     }
 
+    /**
+     * Constructs a new Game instance with the specified properties.
+     * Used for deserialization.
+     *
+     * @param id the unique ID of the game
+     * @param letterBag the letter bag of the game
+     * @param board the board of the game
+     * @param players the list of players in the game
+     * @param history the history of plays made during the game
+     * @param leaderboard the leaderboard of the game
+     * @param endTurn the end turn status of the game
+     * @param playerNumber the current player number
+     * @param numContestFailed the list of contest failures for each player
+     * @param currentPlay the current play in the game
+     * @param numContests the number of contests in the game
+     * @param playerIdCounter the player ID counter
+     */
     @JsonCreator
     public Game(@JsonProperty("id") int id,
                 @JsonProperty("letterBag") LetterBag letterBag,
@@ -103,15 +134,30 @@ public class Game implements Serializable {
         this.numContests = numContests;
         this.playerIDCounter = playerIdCounter;
     }
-    
+
+    /**
+     * Returns the unique ID of the game.
+     *
+     * @return the unique ID of the game
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Returns the history of plays made during the game.
+     *
+     * @return the history of plays made during the game
+     */
     public List<Play> getHistory() {
         return history;
     }
 
+    /**
+     * Returns the letter bag of the game.
+     *
+     * @return the letter bag of the game
+     */
     public LetterBag getLetterBag() {
         return letterBag;
     }
@@ -131,12 +177,13 @@ public class Game implements Serializable {
      * Updates the list of players by adding a new player.
      *
      * @param name the name of the player to be added
+     * @return the added player
      */
     public Player addPlayer(String name) {
         Player player = new Player(name, playerIDCounter++);
         for (Letter letter : letterBag.drawLetters(7)) {
             player.addLetter(letter);
-        };
+        }
         players.add(player);
         leaderboard.add(player);
         numContestFailed.add(0);
@@ -151,7 +198,6 @@ public class Game implements Serializable {
     public void addPlay(Play play) {
         history.add(play);
     }
-    
 
     /**
      * Removes and returns the last play from the game's history.
@@ -162,14 +208,24 @@ public class Game implements Serializable {
         if (history.isEmpty()) {
             return null;
         }
-        return history.removeLast();
+        return history.remove(history.size() - 1);
     }
 
+    /**
+     * Returns the number of players in the game.
+     *
+     * @return the number of players in the game
+     */
     @JsonIgnore
     public int getNumPlayers() {
         return players.size();
     }
-    
+
+    /**
+     * Returns the list of contest failures for each player.
+     *
+     * @return the list of contest failures for each player
+     */
     public List<Integer> getNumContestFailed() {
         return numContestFailed;
     }
@@ -182,10 +238,20 @@ public class Game implements Serializable {
         startTurn();
     }
 
-    public Board getBoard(){ 
-        return board; 
+    /**
+     * Returns the game board.
+     *
+     * @return the game board
+     */
+    public Board getBoard(){
+        return board;
     }
 
+    /**
+     * Returns the list of players in the game.
+     *
+     * @return the list of players in the game
+     */
     public List<Player> getPlayers() {
         return players;
     }
@@ -209,7 +275,6 @@ public class Game implements Serializable {
      * updating the current player to the next player in the list,
      * skipping any players who have failed a contest.
      */
-
     public void startTurn(){
         currentPlay = new Play(getCurrentPlayer());
         this.endTurn = false;
@@ -227,7 +292,7 @@ public class Game implements Serializable {
     }
 
     /**
-     * Returns the dealContest(turnManagerInputData.isContestSucceed); current player.
+     * Returns the current player.
      *
      * @return the current player
      */
@@ -268,22 +333,45 @@ public class Game implements Serializable {
         return numContestFailed.get(PlayerNumber);
     }
 
+    /**
+     * Returns the current player number.
+     *
+     * @return the current player number
+     */
     public int getPlayerNumber() {
         return playerNumber;
     }
 
+    /**
+     * Returns the current play in the game.
+     *
+     * @return the current play in the game
+     */
     public Play getCurrentPlay() {
         return currentPlay;
     }
 
+    /**
+     * Increases the number of contests in the game.
+     */
     public void increaseNumContests() {
         numContests++;
     }
 
+    /**
+     * Returns the number of contests in the game.
+     *
+     * @return the number of contests in the game
+     */
     public int getNumContests() {
         return numContests;
     }
-    
+
+    /**
+     * Returns the player ID counter.
+     *
+     * @return the player ID counter
+     */
     public int getPlayerIDCounter() {
         return playerIDCounter;
     }
@@ -304,6 +392,12 @@ public class Game implements Serializable {
         numContests = 0;
     }
 
+    /**
+     * Compares this game to another object for equality.
+     *
+     * @param obj the object to compare to
+     * @return true if the games are equal, false otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj){return true;}
@@ -326,6 +420,11 @@ public class Game implements Serializable {
                 (playerIDCounter == other.playerIDCounter);
     }
 
+    /**
+     * Returns a string representation of the game.
+     *
+     * @return a string representation of the game
+     */
     @Override
     public String toString() {
         return "Game" + id;

@@ -23,6 +23,8 @@ public class Player implements Serializable, Comparable<Player> {
 
     /**
      * Constructs a Player with a specified ID.
+     *
+     * @param id the ID of the player
      */
     public Player(int id) {
         this.id = id;
@@ -32,6 +34,12 @@ public class Player implements Serializable, Comparable<Player> {
         this.tempScore = 0;
     }
 
+    /**
+     * Constructs a Player with a specified name and ID.
+     *
+     * @param name the name of the player
+     * @param id the ID of the player
+     */
     public Player(String name, int id) {
         this.name = name;
         this.id = id;
@@ -40,6 +48,15 @@ public class Player implements Serializable, Comparable<Player> {
         this.tempScore = 0;
     }
 
+    /**
+     * Constructs a Player with specified properties.
+     *
+     * @param id the ID of the player
+     * @param name the name of the player
+     * @param inventory the inventory of letters
+     * @param score the score of the player
+     * @param tempScore the unstable score of the player
+     */
     @JsonCreator
     public Player(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("inventory") List<Letter> inventory, @JsonProperty("score") int score, @JsonProperty("tempScore") int tempScore) {
         this.id = id;
@@ -49,11 +66,20 @@ public class Player implements Serializable, Comparable<Player> {
         this.tempScore = tempScore;
     }
 
+    /**
+     * Constructs a Player from a JSON object.
+     *
+     * @param json the JSON object containing player data
+     */
     public Player(JSONObject json){
         this.parseJSON(json);
     }
 
-
+    /**
+     * Parses the JSON object to set the player's properties.
+     *
+     * @param json the JSON object containing player data
+     */
     private void parseJSON(JSONObject json) {
         this.name = json.getString("name");
         this.id = json.getInt("id");
@@ -62,13 +88,25 @@ public class Player implements Serializable, Comparable<Player> {
         this.tempScore = 0;
     }
 
-
+    /**
+     * Serializes this Player object.
+     *
+     * @param out the output stream to which the object is to be written
+     * @throws IOException if an I/O error occurs while writing the object
+     */
     @Serial
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         JSONObject jsonObject = new JSONObject(this);
         out.writeChars(jsonObject.toString());
     }
 
+    /**
+     * Deserializes a Player object from the specified input stream.
+     *
+     * @param in the input stream from which the object is to be read
+     * @throws IOException if an I/O error occurs while reading the object
+     * @throws ClassNotFoundException if the class of a serialized object cannot be found
+     */
     @Serial
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         JSONObject json = new JSONObject(in.readUTF());
@@ -95,10 +133,21 @@ public class Player implements Serializable, Comparable<Player> {
         this.inventory.remove(letter);
     }
 
+    /**
+     * Adds a specified score to the player's total score.
+     *
+     * @param score the score to be added
+     */
     public void addScore(int score) {
         this.score += score;
     }
 
+    /**
+     * Removes a specified letter from the player's inventory based on the character.
+     *
+     * @param letter the character of the letter to be removed
+     * @return the removed letter, or null if not found
+     */
     public Letter removeLetter(char letter) {
         for (int i = 0; i < inventory.size(); i++) {
             if (inventory.get(i).getLetter() == letter) {
@@ -109,7 +158,9 @@ public class Player implements Serializable, Comparable<Player> {
     }
 
     /**
-     * Gets the list of words formed in the play.
+     * Adds a letter to the player's inventory.
+     *
+     * @param letter the letter to be added
      */
     public void addLetter(Letter letter) {
         this.inventory.add(letter);
@@ -124,8 +175,11 @@ public class Player implements Serializable, Comparable<Player> {
         this.inventory.addAll(tiles);
     }
 
-    
-
+    /**
+     * Sets the player's unstable score.
+     *
+     * @param score the unstable score to be set
+     */
     public void setTempScore(int score) {
         this.tempScore = score;
     }
@@ -202,18 +256,27 @@ public class Player implements Serializable, Comparable<Player> {
 
     /**
      * Compares this Player with another based on their scores.
-     * @param o The other Player to compare to.
-     * @return A negative integer, zero, or a positive integer as this object
-     *         is less than, equal to, or greater than the specified object.
+     *
+     * @param o the other Player to compare to
+     * @return a negative integer, zero, or a positive integer as this object
+     *         is less than, equal to, or greater than the specified object
      */
-    public int compareTo(Player o)
-    {
+    public int compareTo(Player o) {
         return this.score - o.getScore();
     }
 
+    /**
+     * Erases the player's unstable score.
+     */
     public void eraseTempScore() {
     }
 
+    /**
+     * Compares this Player to another object for equality.
+     *
+     * @param obj the object to compare to
+     * @return true if the players are equal, false otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj){return true;}
@@ -229,5 +292,3 @@ public class Player implements Serializable, Comparable<Player> {
                 (tempScore == other.tempScore);
     }
 }
-
-

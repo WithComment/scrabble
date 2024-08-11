@@ -19,6 +19,10 @@ import com.example.scrabble.entity.Player;
 import com.example.scrabble.entity.Tile;
 import com.example.scrabble.use_case.InvalidPlayException;
 
+/**
+ * Handles the logic for placing a letter on the board.
+ * Implements the PlaceLetterInputBoundary interface.
+ */
 @Service
 public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
 
@@ -26,8 +30,13 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
   public static final String NO_LETTER = "You don't have the letter in your inventory!";
 
   private final GameDataAccess gameDao;
-  private final static Logger logger = LoggerFactory.getLogger(PlaceLetterInteractor.class);
+//  private final static Logger logger = LoggerFactory.getLogger(PlaceLetterInteractor.class);
 
+  /**
+   * Constructs a PlaceLetterInteractor with the specified GameDataAccess.
+   *
+   * @param gameDao the data access object for game entities
+   */
   @Autowired
   public PlaceLetterInteractor(
     GameDataAccess gameDao
@@ -35,6 +44,13 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     this.gameDao = gameDao;
   }
 
+  /**
+   * Retrieves the vertical tiles forming a word from the given move.
+   *
+   * @param move the move to start from
+   * @param board the game board
+   * @return a list of tiles forming the vertical word, or null if no word is formed
+   */
   private List<Tile> getVTiles(Move move, Board board) {
     int x = move.getX();
     int y = move.getY();
@@ -51,6 +67,13 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     return tiles;
   }
 
+  /**
+   * Retrieves the horizontal tiles forming a word from the given move.
+   *
+   * @param move the move to start from
+   * @param board the game board
+   * @return a list of tiles forming the horizontal word, or null if no word is formed
+   */
   private List<Tile> getHTiles(Move move, Board board) {
     int x = move.getX();
     int y = move.getY();
@@ -64,6 +87,13 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     return tiles;
   }
 
+  /**
+   * Retrieves all words formed on the board by the given play.
+   *
+   * @param play the play containing the moves
+   * @param board the game board
+   * @return a list of lists of tiles, each representing a word
+   */
   private List<List<Tile>> getWordsOnTiles(Play play, Board board) {
     List<Move> moves = play.getMoves();
     List<List<Tile>> words = new LinkedList<>();
@@ -93,13 +123,19 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
       }
     }
 
-    // If the move standsalone, add it to the list of words.
+    // If the move stands alone, add it to the list of words.
     if (words.isEmpty()) {
       words.add(Arrays.asList(board.getTile(fMove.getX(), fMove.getY())));
     }
     return words;
   }
 
+  /**
+   * Converts a list of lists of tiles into a list of words as strings.
+   *
+   * @param words the list of lists of tiles
+   * @return a list of words as strings
+   */
   private List<String> getWords(List<List<Tile>> words) {
     List<String> wordStrings = new LinkedList<>();
     StringBuilder word;
@@ -113,6 +149,12 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     return wordStrings;
   }
 
+  /**
+   * Calculates the total score for a list of words formed on the board.
+   *
+   * @param words the list of lists of tiles representing words
+   * @return the total score
+   */
   private int calcScore(List<List<Tile>> words) {
     int total = 0;
     int wordScore, wordMult;
@@ -128,6 +170,13 @@ public class PlaceLetterInteractor implements PlaceLetterInputBoundary {
     return total;
   }
 
+  /**
+   * Executes the use case to place a letter on the board.
+   * Validates the move, updates the game state, and returns the output data.
+   *
+   * @param data the input data containing the game ID, coordinates, and letter to place
+   * @return the output data containing the updated board, player's inventory, score, and words formed
+   */
   @Override
   public PlaceLetterOutputData execute(PlaceLetterInputData data) {
     int x = data.getX();

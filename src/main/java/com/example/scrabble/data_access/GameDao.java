@@ -28,6 +28,10 @@ public class GameDao implements GameDataAccess {
     private final Storage storage;
 
 
+    /**
+     * Create a GameDao object.
+     * If the directory for storing Game files does not exist, create it.
+     */
     public GameDao() {
         this.storage = StorageOptions.getDefaultInstance().getService();
     }
