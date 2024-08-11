@@ -17,7 +17,7 @@ public class SecurityConfig {
     http.cors(httpSecurityCorsConfigurer ->
       httpSecurityCorsConfigurer.configurationSource(request -> {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin("http://localhost:3000");
+        corsConfiguration.addAllowedOrigin("https://withcomment.github.io");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.setAllowCredentials(true);
@@ -33,7 +33,7 @@ public class SecurityConfig {
           @Override
           public void addCorsMappings(@NonNull CorsRegistry registry) {
               registry.addMapping("/**")
-                      .allowedOrigins("http://localhost:3000")
+                      .allowedOrigins("https://withcomment.github.io")
                       .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                       .allowedHeaders("*")
                       .allowCredentials(true);

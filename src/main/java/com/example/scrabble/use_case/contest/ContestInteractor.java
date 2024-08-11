@@ -78,10 +78,14 @@ public class ContestInteractor implements ContestInputBoundary {
                 }
             }
             if (!invalidWords.isEmpty()) {
-                RemoveLetterInteractor removeLetterInteractor = new RemoveLetterInteractor(gameDAO);
                 Play lastPlay = game.removeLastPlay();
+                Player contestedPlayer = game.getCurrentPlayer();
+                contestedPlayer.setTempScore(0);
+                gameDAO.update(game);
+                RemoveLetterInteractor removeLetterInteractor = new RemoveLetterInteractor(gameDAO);
                 for (Move move : lastPlay.getMoves()) {
                     removeLetterInteractor.execute(new RemoveLetterInputData(game.getId(), move.getX(), move.getY()));
+                    game = gameDAO.get(gameID);
                 }
             } else {
                 game.contestFailureUpdate(player.getId());

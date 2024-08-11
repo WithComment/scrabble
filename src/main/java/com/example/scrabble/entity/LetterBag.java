@@ -26,7 +26,7 @@ public class LetterBag implements Serializable {
    */
   public LetterBag() {
     bag = new ArrayList<>();
-    initializeBag(Paths.get("static", "letters.txt"));
+    initializeBag();
   }
 
   /**
@@ -43,23 +43,71 @@ public class LetterBag implements Serializable {
    * Initializes the bag with letters from a specified file.
    * Each line in the file should contain a letter, its points, and its count separated by spaces.
    *
-   * @param filePath the path of the file containing the letters information.
    */
-  private void initializeBag(Path filePath) {
-    try (BufferedReader br = Files.newBufferedReader(filePath)) {
-      String line;
-      while ((line = br.readLine()) != null) {
-        String[] parts = line.split(" ");
-        char letter = parts[0].charAt(0);
-        int points = Integer.parseInt(parts[1]);
-        int count = Integer.parseInt(parts[2]);
-        addLetters(letter, points, count);
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
+  private void initializeBag() {
+    // Define the default Scrabble letter distribution
+    char[] letters = {
+            'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
+            'B', 'B',
+            'C', 'C',
+            'D', 'D', 'D', 'D',
+            'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E',
+            'F', 'F',
+            'G', 'G', 'G',
+            'H', 'H',
+            'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I',
+            'J',
+            'K',
+            'L', 'L', 'L', 'L',
+            'M', 'M',
+            'N', 'N', 'N', 'N', 'N', 'N',
+            'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
+            'P', 'P',
+            'Q',
+            'R', 'R', 'R', 'R', 'R', 'R',
+            'S', 'S', 'S', 'S',
+            'T', 'T', 'T', 'T', 'T', 'T',
+            'U', 'U', 'U', 'U',
+            'V', 'V',
+            'W', 'W',
+            'X',
+            'Y', 'Y',
+            'Z'
+    };
+
+    int[] points = {
+            1, 1, 1, 1, 1, 1, 1, 1, 1, // A
+            3, 3, // B
+            3, 3, // C
+            2, 2, 2, 2, // D
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, // E
+            4, 4, // F
+            2, 2, 2, // G
+            4, 4, // H
+            1, 1, 1, 1, 1, 1, 1, 1, 1, // I
+            8, // J
+            5, // K
+            1, 1, 1, 1, // L
+            3, 3, // M
+            1, 1, 1, 1, 1, 1, // N
+            1, 1, 1, 1, 1, 1, 1, 1, // O
+            3, 3, // P
+            10, // Q
+            1, 1, 1, 1, 1, 1, // R
+            1, 1, 1, 1, // S
+            1, 1, 1, 1, 1, 1, // T
+            1, 1, 1, 1, // U
+            4, 4, // V
+            4, 4, // W
+            8, // X
+            4, 4, // Y
+            10 // Z
+    };
+
+    for (int i = 0; i < letters.length; i++) {
+      addLetters(letters[i], points[i], 1);
     }
   }
-
   /**
    * Adds the specified number of letters with the given points to the bag.
    *
@@ -172,7 +220,7 @@ public class LetterBag implements Serializable {
   @Serial
   private void readObjectNoData() throws ObjectStreamException {
     bag = new ArrayList<>();
-    initializeBag(Paths.get("static", "letters.txt"));
+    initializeBag();
   }
 
   /**
