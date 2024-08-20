@@ -17,7 +17,6 @@ Controls: <ul>
   <br>
 <li>Hard Way: if you want to run this locally, follow these steps: <ul>
   <li>Clone this repo</li>
-  <li><strong>server setup, might need maven?</strong></li>
   <li>Run ScrabbleApplication.java</li>
   <li>Now that the server is running navigate to /frontend</li>
   <li>Make sure you have Nodejs installed on your system (if not, download it here https://nodejs.org/en/download/prebuilt-installer). Run node -v in the terminal to see if it works</li>
